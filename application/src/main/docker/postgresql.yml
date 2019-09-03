@@ -1,0 +1,11 @@
+version: '2'
+services:
+  bcra-postgresql:
+    image: postgres:11.4
+    # volumes:
+    #     - ~/volumes/jhipster/bcra/postgresql/:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=bcra
+      - POSTGRES_PASSWORD=
+    ports:
+      - 5432:5432

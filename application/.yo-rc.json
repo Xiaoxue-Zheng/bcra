@@ -1,0 +1,38 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "uk.ac.herc.bcra"
+    },
+    "jhipsterVersion": "6.2.0",
+    "applicationType": "monolith",
+    "baseName": "bcra",
+    "packageName": "uk.ac.herc.bcra",
+    "packageFolder": "uk/ac/herc/bcra",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "postgresql",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "NDU2YWMyOWZjZDliZmI0M2JiOGVhYTVhMmUyN2FjOGI3Zjg3YjkwM2ViZmY3NGJhZGM1NzA0NjBlMmJmM2M2OThlYmFhMzcxZTQ3ZDU4NTg4YTM0NTU3ODg2OGM0YjEzNjE1YmFkOGVkNjAzMzA1YWY5OGE4YWM0YjRlYTQ5ZTY=",
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "clientFramework": "angularX",
+    "clientTheme": "materia",
+    "clientThemeVariant": "primary",
+    "testFrameworks": ["gatling", "cucumber", "protractor"],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": false,
+    "blueprints": []
+  }
+}

@@ -1,0 +1,64 @@
+{
+    "name": "CheckboxQuestionItem",
+    "fields": [
+        {
+            "fieldName": "uuid",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "unique"
+            ]
+        },
+        {
+            "fieldName": "questionUuid",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "label",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "descriptor",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "checkboxQuestion",
+            "otherEntityRelationshipName": "checkboxQuestionItem",
+            "relationshipName": "checkboxQuestion",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "checkboxAnswerItem",
+            "otherEntityRelationshipName": "checkboxQuestionItem",
+            "relationshipName": "checkboxAnswerItem"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "checkboxDisplayCondition",
+            "otherEntityRelationshipName": "checkboxQuestionItem",
+            "relationshipName": "checkboxDisplayCondition"
+        }
+    ],
+    "changelogDate": "20190917100705",
+    "entityTableName": "checkbox_question_item",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

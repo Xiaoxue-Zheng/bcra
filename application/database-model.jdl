@@ -1,0 +1,127 @@
+/* Questionnaire, QuestionGroup, Question */
+entity Questionnaire {
+	uuid String required unique
+}
+
+entity QuestionGroup {
+	uuid String required unique
+}
+relationship OneToMany {
+	QuestionGroup to DisplayCondition
+}
+
+entity QuestionnaireQuestionGroup {
+	uuid String required unique
+    questionnaireUuid String required
+    questionGroupUuid String required
+    order Integer required
+}
+relationship ManyToOne {
+	QuestionnaireQuestionGroup to Questionnaire
+    QuestionnaireQuestionGroup to QuestionGroup
+}
+
+entity Question {
+	uuid String required unique
+	text String required
+}
+
+entity QuestionGroupQuestion {
+	uuid String required unique
+    questionGroupUuid String required
+    questionUuid String required
+    order Integer required
+}
+relationship ManyToOne {
+    QuestionGroupQuestion to QuestionGroup
+    QuestionGroupQuestion to Question
+}
+
+/* Question Types (decended from Question) */
+entity CheckboxQuestion
+entity CheckboxQuestionItem {
+    uuid String required unique
+    questionUuid String required
+    label String required
+    descriptor String required
+}
+relationship ManyToOne {
+    CheckboxQuestionItem to CheckboxQuestion
+}
+
+entity RadioQuestion
+entity RadioQuestionItem {  
+    uuid String required unique
+    questionUuid String required
+    label String required
+    descriptor String required
+}
+relationship ManyToOne {
+    RadioQuestionItem to RadioQuestion
+}
+
+entity NumberCheckboxQuestion {
+    minimum Integer required
+    maximum Integer required
+}
+
+entity RepeatQuestion {
+    maximum Integer required
+}
+
+/* AnswerResponse, AnswerGroup, Answer */
+entity AnswerResponse
+entity AnswerGroup 
+entity Answer
+
+relationship ManyToOne {
+    AnswerGroup to AnswerResponse
+    Answer to AnswerGroup
+
+    AnswerResponse to Questionnaire
+    AnswerGroup to QuestionGroup
+    Answer to Question
+}
+
+/* Answer Types (decended from Answer) */
+entity CheckboxAnswer 
+entity CheckboxAnswerItem
+relationship ManyToOne {
+    CheckboxAnswerItem to CheckboxAnswer
+    CheckboxAnswerItem to CheckboxQuestionItem
+ }
+
+entity RadioAnswer 
+entity RadioAnswerItem
+relationship OneToOne {
+    RadioAnswerItem to RadioAnswer
+}
+relationship ManyToOne {
+    CheckboxAnswerItem to CheckboxQuestionItem
+}
+
+entity NumberCheckboxAnswer {
+    number Integer
+    check Boolean
+}
+
+entity RepeatAnswer {
+    quantity Integer required
+}
+
+/* Display Conditions */
+entity DisplayCondition
+
+entity CheckboxDisplayCondition
+entity RepeatDisplayCondition
+
+relationship ManyToOne {
+    CheckboxDisplayCondition to CheckboxQuestionItem
+    RepeatDisplayCondition to RepeatQuestion
+}
+
+/* Generation */
+dto * with mapstruct
+service * with serviceImpl
+paginate * with pagination
+filter *

@@ -1,0 +1,48 @@
+{
+    "name": "QuestionGroup",
+    "fields": [
+        {
+            "fieldName": "uuid",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "unique"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "displayCondition",
+            "otherEntityRelationshipName": "questionGroup",
+            "relationshipName": "displayCondition"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "questionnaireQuestionGroup",
+            "otherEntityRelationshipName": "questionGroup",
+            "relationshipName": "questionnaireQuestionGroup"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "questionGroupQuestion",
+            "otherEntityRelationshipName": "questionGroup",
+            "relationshipName": "questionGroupQuestion"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "answerGroup",
+            "otherEntityRelationshipName": "questionGroup",
+            "relationshipName": "answerGroup"
+        }
+    ],
+    "changelogDate": "20190917100700",
+    "entityTableName": "question_group",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

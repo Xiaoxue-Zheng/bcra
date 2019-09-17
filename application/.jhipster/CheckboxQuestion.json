@@ -1,0 +1,21 @@
+{
+    "name": "CheckboxQuestion",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "checkboxQuestionItem",
+            "otherEntityRelationshipName": "checkboxQuestion",
+            "relationshipName": "checkboxQuestionItem"
+        }
+    ],
+    "changelogDate": "20190917100704",
+    "entityTableName": "checkbox_question",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

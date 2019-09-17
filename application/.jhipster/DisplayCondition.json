@@ -1,0 +1,22 @@
+{
+    "name": "DisplayCondition",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "questionGroup",
+            "otherEntityRelationshipName": "displayCondition",
+            "relationshipName": "questionGroup",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190917100719",
+    "entityTableName": "display_condition",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

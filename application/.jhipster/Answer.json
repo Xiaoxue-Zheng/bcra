@@ -1,0 +1,29 @@
+{
+    "name": "Answer",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "answerGroup",
+            "otherEntityRelationshipName": "answer",
+            "relationshipName": "answerGroup",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "question",
+            "otherEntityRelationshipName": "answer",
+            "relationshipName": "question",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190917100712",
+    "entityTableName": "answer",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

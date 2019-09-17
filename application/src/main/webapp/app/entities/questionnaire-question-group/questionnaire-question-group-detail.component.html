@@ -1,0 +1,51 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="questionnaireQuestionGroup">
+            <h2><span>Questionnaire Question Group</span> {{questionnaireQuestionGroup.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Uuid</span></dt>
+                <dd>
+                    <span>{{questionnaireQuestionGroup.uuid}}</span>
+                </dd>
+                <dt><span>Questionnaire Uuid</span></dt>
+                <dd>
+                    <span>{{questionnaireQuestionGroup.questionnaireUuid}}</span>
+                </dd>
+                <dt><span>Question Group Uuid</span></dt>
+                <dd>
+                    <span>{{questionnaireQuestionGroup.questionGroupUuid}}</span>
+                </dd>
+                <dt><span>Order</span></dt>
+                <dd>
+                    <span>{{questionnaireQuestionGroup.order}}</span>
+                </dd>
+                <dt><span>Questionnaire</span></dt>
+                <dd>
+                    <div *ngIf="questionnaireQuestionGroup.questionnaireId">
+                        <a [routerLink]="['/questionnaire', questionnaireQuestionGroup.questionnaireId, 'view']">{{questionnaireQuestionGroup.questionnaireId}}</a>
+                    </div>
+                </dd>
+                <dt><span>Question Group</span></dt>
+                <dd>
+                    <div *ngIf="questionnaireQuestionGroup.questionGroupId">
+                        <a [routerLink]="['/question-group', questionnaireQuestionGroup.questionGroupId, 'view']">{{questionnaireQuestionGroup.questionGroupId}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/questionnaire-question-group', questionnaireQuestionGroup.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

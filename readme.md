@@ -46,3 +46,13 @@ Launch front-end: `npm run serve`
 Build front-end: `npm run build`
 
 This will place a **.war** file in the **dist** folder.
+
+### Changing the Database Model
+```
+psql -U postgres
+drop database bcra;
+create database bcra;
+grant all privileges on database bcra to bcra;
+\q
+mvnw liquibase:clearCheckSums
+```

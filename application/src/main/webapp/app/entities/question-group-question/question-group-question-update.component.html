@@ -1,0 +1,64 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-question-group-question-heading">Create or edit a Question Group Question</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!editForm.get('id').value">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                        readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_uuid">Uuid</label>
+                    <input type="text" class="form-control" name="uuid" id="field_uuid"
+                           formControlName="uuid"/>
+                    <div *ngIf="editForm.get('uuid').invalid && (editForm.get('uuid').dirty || editForm.get('uuid').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('uuid').errors.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_order">Order</label>
+                    <input type="number" class="form-control" name="order" id="field_order"
+                           formControlName="order"/>
+                    <div *ngIf="editForm.get('order').invalid && (editForm.get('order').dirty || editForm.get('order').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('order').errors.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('order')?.errors?.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_questionGroup">Question Group</label>
+                    <select class="form-control" id="field_questionGroup" name="questionGroup" formControlName="questionGroupId">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="questionGroupOption.id" *ngFor="let questionGroupOption of questiongroups; trackBy: trackQuestionGroupById">{{questionGroupOption.id}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_question">Question</label>
+                    <select class="form-control" id="field_question" name="question" formControlName="questionId">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="questionOption.id" *ngFor="let questionOption of questions; trackBy: trackQuestionById">{{questionOption.id}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

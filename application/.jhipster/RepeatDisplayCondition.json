@@ -1,0 +1,22 @@
+{
+    "name": "RepeatDisplayCondition",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "repeatQuestion",
+            "otherEntityRelationshipName": "repeatDisplayCondition",
+            "relationshipName": "repeatQuestion",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190917100721",
+    "entityTableName": "repeat_display_condition",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,75 @@
+<div>
+    <h2 id="page-heading">
+        <span>Checkbox Question Items</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-checkbox-question-item" [routerLink]="['/checkbox-question-item/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span >
+            Create a new Checkbox Question Item
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="alert alert-warning" *ngIf="checkboxQuestionItems?.length === 0">
+        <span>No checkboxQuestionItems found</span>
+    </div>
+    <div class="table-responsive" *ngIf="checkboxQuestionItems?.length > 0">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="id"><span>ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="uuid"><span>Uuid</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="label"><span>Label</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="descriptor"><span>Descriptor</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="checkboxQuestionId"><span>Checkbox Question</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let checkboxQuestionItem of checkboxQuestionItems ;trackBy: trackId">
+                <td><a [routerLink]="['/checkbox-question-item', checkboxQuestionItem.id, 'view' ]">{{checkboxQuestionItem.id}}</a></td>
+                <td>{{checkboxQuestionItem.uuid}}</td>
+                <td>{{checkboxQuestionItem.label}}</td>
+                <td>{{checkboxQuestionItem.descriptor}}</td>
+                <td>
+                    <div *ngIf="checkboxQuestionItem.checkboxQuestionId">
+                        <a [routerLink]="['/checkbox-question', checkboxQuestionItem.checkboxQuestionId , 'view' ]" >{{checkboxQuestionItem.checkboxQuestionId}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group">
+                        <button type="submit"
+                                [routerLink]="['/checkbox-question-item', checkboxQuestionItem.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/checkbox-question-item', checkboxQuestionItem.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/checkbox-question-item', { outlets: { popup: checkboxQuestionItem.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div [hidden]="checkboxQuestionItems?.length === 0">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="totalItems" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+</div>

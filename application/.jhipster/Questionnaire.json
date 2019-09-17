@@ -1,0 +1,36 @@
+{
+    "name": "Questionnaire",
+    "fields": [
+        {
+            "fieldName": "uuid",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "unique"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "questionnaireQuestionGroup",
+            "otherEntityRelationshipName": "questionnaire",
+            "relationshipName": "questionnaireQuestionGroup"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "answerResponse",
+            "otherEntityRelationshipName": "questionnaire",
+            "relationshipName": "answerResponse"
+        }
+    ],
+    "changelogDate": "20190917100659",
+    "entityTableName": "questionnaire",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

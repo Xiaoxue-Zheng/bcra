@@ -1,0 +1,23 @@
+{
+    "name": "RadioAnswerItem",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "radioAnswer",
+            "otherEntityRelationshipName": "radioAnswerItem",
+            "relationshipName": "radioAnswer",
+            "otherEntityField": "id",
+            "ownerSide": true
+        }
+    ],
+    "changelogDate": "20190917100716",
+    "entityTableName": "radio_answer_item",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

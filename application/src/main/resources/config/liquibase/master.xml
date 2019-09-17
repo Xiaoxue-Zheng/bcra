@@ -14,6 +14,41 @@
     <property name="uuidType" value="uuid" dbms="h2, postgresql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124728_added_entity_Questionnaire.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124729_added_entity_QuestionGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124730_added_entity_QuestionnaireQuestionGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124731_added_entity_Question.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124732_added_entity_QuestionGroupQuestion.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124733_added_entity_CheckboxQuestion.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124734_added_entity_CheckboxQuestionItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124735_added_entity_RadioQuestion.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124736_added_entity_RadioQuestionItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124737_added_entity_NumberCheckboxQuestion.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124738_added_entity_RepeatQuestion.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124739_added_entity_AnswerResponse.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124740_added_entity_AnswerGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124741_added_entity_Answer.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124742_added_entity_CheckboxAnswer.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124743_added_entity_CheckboxAnswerItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124744_added_entity_RadioAnswer.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124745_added_entity_RadioAnswerItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124746_added_entity_NumberCheckboxAnswer.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124747_added_entity_RepeatAnswer.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124748_added_entity_DisplayCondition.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124749_added_entity_CheckboxDisplayCondition.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124750_added_entity_RepeatDisplayCondition.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20190918124730_added_entity_constraints_QuestionnaireQuestionGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124732_added_entity_constraints_QuestionGroupQuestion.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124734_added_entity_constraints_CheckboxQuestionItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124736_added_entity_constraints_RadioQuestionItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124739_added_entity_constraints_AnswerResponse.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124740_added_entity_constraints_AnswerGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124741_added_entity_constraints_Answer.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124743_added_entity_constraints_CheckboxAnswerItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124745_added_entity_constraints_RadioAnswerItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124748_added_entity_constraints_DisplayCondition.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124749_added_entity_constraints_CheckboxDisplayCondition.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190918124750_added_entity_constraints_RepeatDisplayCondition.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

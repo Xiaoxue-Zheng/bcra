@@ -1,18 +1,30 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Question text="How old are you?"/>
+    <pre>{{ questionnaire | formatJson}}</pre>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import { mapState } from 'vuex'
+import Question from '@/components/Question.vue'
 
 export default {
   name: 'home',
   components: {
-    HelloWorld
+    Question
+  },
+  computed: mapState({
+    questionnaire: state => state.questionnaire
+  }),
+  created () {
+    this.$store.dispatch('questionnaire/getQuestionnaire')
+  },
+  filters: {
+    formatJson: function (value) {
+      return JSON.stringify(value, null, 2)
+    }
   }
 }
 </script>

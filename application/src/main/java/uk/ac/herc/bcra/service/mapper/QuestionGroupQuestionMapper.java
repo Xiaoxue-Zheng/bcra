@@ -11,12 +11,8 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {QuestionGroupMapper.class, QuestionMapper.class})
 public interface QuestionGroupQuestionMapper extends EntityMapper<QuestionGroupQuestionDTO, QuestionGroupQuestion> {
 
-    @Mapping(source = "questionGroup.id", target = "questionGroupId")
-    @Mapping(source = "question.id", target = "questionId")
     QuestionGroupQuestionDTO toDto(QuestionGroupQuestion questionGroupQuestion);
 
-    @Mapping(source = "questionGroupId", target = "questionGroup")
-    @Mapping(source = "questionId", target = "question")
     QuestionGroupQuestion toEntity(QuestionGroupQuestionDTO questionGroupQuestionDTO);
 
     default QuestionGroupQuestion fromId(Long id) {

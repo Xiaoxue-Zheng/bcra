@@ -1,7 +1,10 @@
 package uk.ac.herc.bcra.service.dto;
+
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A DTO for the {@link uk.ac.herc.bcra.domain.QuestionGroup} entity.
@@ -13,6 +16,7 @@ public class QuestionGroupDTO implements Serializable {
     @NotNull
     private String uuid;
 
+    private Set<QuestionGroupQuestionDTO> questionGroupQuestions = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -28,6 +32,14 @@ public class QuestionGroupDTO implements Serializable {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public Set<QuestionGroupQuestionDTO> getQuestionGroupQuestions() {
+        return questionGroupQuestions;
+    }
+
+    public void setQuestionGroupQuestions(Set<QuestionGroupQuestionDTO> questionGroupQuestions) {
+        this.questionGroupQuestions = questionGroupQuestions;
     }
 
     @Override
@@ -56,6 +68,7 @@ public class QuestionGroupDTO implements Serializable {
         return "QuestionGroupDTO{" +
             "id=" + getId() +
             ", uuid='" + getUuid() + "'" +
+            ", questionGroupQuestions='" + getQuestionGroupQuestions() + "'" +
             "}";
     }
 }

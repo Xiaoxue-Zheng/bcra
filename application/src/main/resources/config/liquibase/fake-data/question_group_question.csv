@@ -1,11 +1,2 @@
-id;uuid;question_group_uuid;question_uuid;jhi_order
-1;Fiji Dollar Profound Bacon;Macao Equatorial Guinea Vision-oriented;Agent;55829
-2;THX pink even-keeled;bus Internal AI;THX bypassing Marketing;78534
-3;New Zealand Dollar Alabama transform;invoice Home Gloves;Buckinghamshire Ports;99445
-4;Fish;Networked;Fish;36646
-5;program alarm;Nevada;Berkshire;63633
-6;Ergonomic;Strategist target;Investor users dot-com;64510
-7;Libyan Dinar CSS;sensor;Alaska;76855
-8;Intelligent Frozen Sausages Villages;Human;back up Factors;33075
-9;Venezuela Wisconsin;SDD disintermediate reinvent;eco-centric Bedfordshire mesh;39469
-10;calculating Intranet Ergonomic Concrete Soap;Director Concrete Bedfordshire;portal calculating Metal;70891
+id;uuid;question_group_uuid;question_uuid;jhi_order;question_group_id;question_id  
+1;65622df2-8ee5-4baf-858a-46f3f39f8e72;c5dd5a2c-4c47-417f-888a-59b9b209e2b1;a849fc7c-9c30-424a-b566-20011782043a;1;1;1

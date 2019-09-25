@@ -11,21 +11,9 @@ public class QuestionGroupQuestionDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private String uuid;
-
-    @NotNull
-    private String questionGroupUuid;
-
-    @NotNull
-    private String questionUuid;
-
-    @NotNull
     private Integer order;
 
-
-    private Long questionGroupId;
-
-    private Long questionId;
+    private QuestionDTO question;
 
     public Long getId() {
         return id;
@@ -33,30 +21,6 @@ public class QuestionGroupQuestionDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    public String getQuestionGroupUuid() {
-        return questionGroupUuid;
-    }
-
-    public void setQuestionGroupUuid(String questionGroupUuid) {
-        this.questionGroupUuid = questionGroupUuid;
-    }
-
-    public String getQuestionUuid() {
-        return questionUuid;
-    }
-
-    public void setQuestionUuid(String questionUuid) {
-        this.questionUuid = questionUuid;
     }
 
     public Integer getOrder() {
@@ -67,20 +31,12 @@ public class QuestionGroupQuestionDTO implements Serializable {
         this.order = order;
     }
 
-    public Long getQuestionGroupId() {
-        return questionGroupId;
+    public QuestionDTO getQuestion() {
+        return question;
     }
 
-    public void setQuestionGroupId(Long questionGroupId) {
-        this.questionGroupId = questionGroupId;
-    }
-
-    public Long getQuestionId() {
-        return questionId;
-    }
-
-    public void setQuestionId(Long questionId) {
-        this.questionId = questionId;
+    public void setQuestion(QuestionDTO question) {
+        this.question = question;
     }
 
     @Override
@@ -108,12 +64,8 @@ public class QuestionGroupQuestionDTO implements Serializable {
     public String toString() {
         return "QuestionGroupQuestionDTO{" +
             "id=" + getId() +
-            ", uuid='" + getUuid() + "'" +
-            ", questionGroupUuid='" + getQuestionGroupUuid() + "'" +
-            ", questionUuid='" + getQuestionUuid() + "'" +
             ", order=" + getOrder() +
-            ", questionGroup=" + getQuestionGroupId() +
-            ", question=" + getQuestionId() +
+            ", question=" + getQuestion() +
             "}";
     }
 }

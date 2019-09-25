@@ -1,5 +1,9 @@
 package uk.ac.herc.bcra.service.dto;
+
 import javax.validation.constraints.*;
+
+import uk.ac.herc.bcra.domain.QuestionGroup;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -11,21 +15,9 @@ public class QuestionnaireQuestionGroupDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private String uuid;
-
-    @NotNull
-    private String questionnaireUuid;
-
-    @NotNull
-    private String questionGroupUuid;
-
-    @NotNull
     private Integer order;
 
-
-    private Long questionnaireId;
-
-    private Long questionGroupId;
+    private QuestionGroupDTO questionGroup;
 
     public Long getId() {
         return id;
@@ -33,30 +25,6 @@ public class QuestionnaireQuestionGroupDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    public String getQuestionnaireUuid() {
-        return questionnaireUuid;
-    }
-
-    public void setQuestionnaireUuid(String questionnaireUuid) {
-        this.questionnaireUuid = questionnaireUuid;
-    }
-
-    public String getQuestionGroupUuid() {
-        return questionGroupUuid;
-    }
-
-    public void setQuestionGroupUuid(String questionGroupUuid) {
-        this.questionGroupUuid = questionGroupUuid;
     }
 
     public Integer getOrder() {
@@ -67,20 +35,12 @@ public class QuestionnaireQuestionGroupDTO implements Serializable {
         this.order = order;
     }
 
-    public Long getQuestionnaireId() {
-        return questionnaireId;
+    public QuestionGroupDTO getQuestionGroup() {
+        return questionGroup;
     }
 
-    public void setQuestionnaireId(Long questionnaireId) {
-        this.questionnaireId = questionnaireId;
-    }
-
-    public Long getQuestionGroupId() {
-        return questionGroupId;
-    }
-
-    public void setQuestionGroupId(Long questionGroupId) {
-        this.questionGroupId = questionGroupId;
+    public void setQuestionGroup(QuestionGroupDTO questionGroup) {
+        this.questionGroup = questionGroup;
     }
 
     @Override
@@ -108,12 +68,8 @@ public class QuestionnaireQuestionGroupDTO implements Serializable {
     public String toString() {
         return "QuestionnaireQuestionGroupDTO{" +
             "id=" + getId() +
-            ", uuid='" + getUuid() + "'" +
-            ", questionnaireUuid='" + getQuestionnaireUuid() + "'" +
-            ", questionGroupUuid='" + getQuestionGroupUuid() + "'" +
             ", order=" + getOrder() +
-            ", questionnaire=" + getQuestionnaireId() +
-            ", questionGroup=" + getQuestionGroupId() +
+            ", questionGroup=" + getQuestionGroup() +
             "}";
     }
 }

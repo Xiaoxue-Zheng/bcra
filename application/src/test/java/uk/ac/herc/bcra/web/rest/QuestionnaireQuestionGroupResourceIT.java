@@ -130,27 +130,28 @@ public class QuestionnaireQuestionGroupResourceIT {
         questionnaireQuestionGroup = createEntity(em);
     }
 
-    @Test
-    @Transactional
-    public void createQuestionnaireQuestionGroup() throws Exception {
-        int databaseSizeBeforeCreate = questionnaireQuestionGroupRepository.findAll().size();
+    // Commented for now, as we will not be posting Questionnaires, etc.
+    // @Test
+    // @Transactional
+    // public void createQuestionnaireQuestionGroup() throws Exception {
+    //     int databaseSizeBeforeCreate = questionnaireQuestionGroupRepository.findAll().size();
 
-        // Create the QuestionnaireQuestionGroup
-        QuestionnaireQuestionGroupDTO questionnaireQuestionGroupDTO = questionnaireQuestionGroupMapper.toDto(questionnaireQuestionGroup);
-        restQuestionnaireQuestionGroupMockMvc.perform(post("/api/questionnaire-question-groups")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(questionnaireQuestionGroupDTO)))
-            .andExpect(status().isCreated());
+    //     // Create the QuestionnaireQuestionGroup
+    //     QuestionnaireQuestionGroupDTO questionnaireQuestionGroupDTO = questionnaireQuestionGroupMapper.toDto(questionnaireQuestionGroup);
+    //     restQuestionnaireQuestionGroupMockMvc.perform(post("/api/questionnaire-question-groups")
+    //         .contentType(TestUtil.APPLICATION_JSON_UTF8)
+    //         .content(TestUtil.convertObjectToJsonBytes(questionnaireQuestionGroupDTO)))
+    //         .andExpect(status().isCreated());
 
-        // Validate the QuestionnaireQuestionGroup in the database
-        List<QuestionnaireQuestionGroup> questionnaireQuestionGroupList = questionnaireQuestionGroupRepository.findAll();
-        assertThat(questionnaireQuestionGroupList).hasSize(databaseSizeBeforeCreate + 1);
-        QuestionnaireQuestionGroup testQuestionnaireQuestionGroup = questionnaireQuestionGroupList.get(questionnaireQuestionGroupList.size() - 1);
-        assertThat(testQuestionnaireQuestionGroup.getUuid()).isEqualTo(DEFAULT_UUID);
-        assertThat(testQuestionnaireQuestionGroup.getQuestionnaireUuid()).isEqualTo(DEFAULT_QUESTIONNAIRE_UUID);
-        assertThat(testQuestionnaireQuestionGroup.getQuestionGroupUuid()).isEqualTo(DEFAULT_QUESTION_GROUP_UUID);
-        assertThat(testQuestionnaireQuestionGroup.getOrder()).isEqualTo(DEFAULT_ORDER);
-    }
+    //     // Validate the QuestionnaireQuestionGroup in the database
+    //     List<QuestionnaireQuestionGroup> questionnaireQuestionGroupList = questionnaireQuestionGroupRepository.findAll();
+    //     assertThat(questionnaireQuestionGroupList).hasSize(databaseSizeBeforeCreate + 1);
+    //     QuestionnaireQuestionGroup testQuestionnaireQuestionGroup = questionnaireQuestionGroupList.get(questionnaireQuestionGroupList.size() - 1);
+    //     assertThat(testQuestionnaireQuestionGroup.getUuid()).isEqualTo(DEFAULT_UUID);
+    //     assertThat(testQuestionnaireQuestionGroup.getQuestionnaireUuid()).isEqualTo(DEFAULT_QUESTIONNAIRE_UUID);
+    //     assertThat(testQuestionnaireQuestionGroup.getQuestionGroupUuid()).isEqualTo(DEFAULT_QUESTION_GROUP_UUID);
+    //     assertThat(testQuestionnaireQuestionGroup.getOrder()).isEqualTo(DEFAULT_ORDER);
+    // }
 
     @Test
     @Transactional
@@ -170,64 +171,6 @@ public class QuestionnaireQuestionGroupResourceIT {
         // Validate the QuestionnaireQuestionGroup in the database
         List<QuestionnaireQuestionGroup> questionnaireQuestionGroupList = questionnaireQuestionGroupRepository.findAll();
         assertThat(questionnaireQuestionGroupList).hasSize(databaseSizeBeforeCreate);
-    }
-
-
-    @Test
-    @Transactional
-    public void checkUuidIsRequired() throws Exception {
-        int databaseSizeBeforeTest = questionnaireQuestionGroupRepository.findAll().size();
-        // set the field null
-        questionnaireQuestionGroup.setUuid(null);
-
-        // Create the QuestionnaireQuestionGroup, which fails.
-        QuestionnaireQuestionGroupDTO questionnaireQuestionGroupDTO = questionnaireQuestionGroupMapper.toDto(questionnaireQuestionGroup);
-
-        restQuestionnaireQuestionGroupMockMvc.perform(post("/api/questionnaire-question-groups")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(questionnaireQuestionGroupDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<QuestionnaireQuestionGroup> questionnaireQuestionGroupList = questionnaireQuestionGroupRepository.findAll();
-        assertThat(questionnaireQuestionGroupList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkQuestionnaireUuidIsRequired() throws Exception {
-        int databaseSizeBeforeTest = questionnaireQuestionGroupRepository.findAll().size();
-        // set the field null
-        questionnaireQuestionGroup.setQuestionnaireUuid(null);
-
-        // Create the QuestionnaireQuestionGroup, which fails.
-        QuestionnaireQuestionGroupDTO questionnaireQuestionGroupDTO = questionnaireQuestionGroupMapper.toDto(questionnaireQuestionGroup);
-
-        restQuestionnaireQuestionGroupMockMvc.perform(post("/api/questionnaire-question-groups")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(questionnaireQuestionGroupDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<QuestionnaireQuestionGroup> questionnaireQuestionGroupList = questionnaireQuestionGroupRepository.findAll();
-        assertThat(questionnaireQuestionGroupList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkQuestionGroupUuidIsRequired() throws Exception {
-        int databaseSizeBeforeTest = questionnaireQuestionGroupRepository.findAll().size();
-        // set the field null
-        questionnaireQuestionGroup.setQuestionGroupUuid(null);
-
-        // Create the QuestionnaireQuestionGroup, which fails.
-        QuestionnaireQuestionGroupDTO questionnaireQuestionGroupDTO = questionnaireQuestionGroupMapper.toDto(questionnaireQuestionGroup);
-
-        restQuestionnaireQuestionGroupMockMvc.perform(post("/api/questionnaire-question-groups")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(questionnaireQuestionGroupDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<QuestionnaireQuestionGroup> questionnaireQuestionGroupList = questionnaireQuestionGroupRepository.findAll();
-        assertThat(questionnaireQuestionGroupList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -260,9 +203,6 @@ public class QuestionnaireQuestionGroupResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(questionnaireQuestionGroup.getId().intValue())))
-            .andExpect(jsonPath("$.[*].uuid").value(hasItem(DEFAULT_UUID.toString())))
-            .andExpect(jsonPath("$.[*].questionnaireUuid").value(hasItem(DEFAULT_QUESTIONNAIRE_UUID.toString())))
-            .andExpect(jsonPath("$.[*].questionGroupUuid").value(hasItem(DEFAULT_QUESTION_GROUP_UUID.toString())))
             .andExpect(jsonPath("$.[*].order").value(hasItem(DEFAULT_ORDER)));
     }
     
@@ -277,9 +217,6 @@ public class QuestionnaireQuestionGroupResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(questionnaireQuestionGroup.getId().intValue()))
-            .andExpect(jsonPath("$.uuid").value(DEFAULT_UUID.toString()))
-            .andExpect(jsonPath("$.questionnaireUuid").value(DEFAULT_QUESTIONNAIRE_UUID.toString()))
-            .andExpect(jsonPath("$.questionGroupUuid").value(DEFAULT_QUESTION_GROUP_UUID.toString()))
             .andExpect(jsonPath("$.order").value(DEFAULT_ORDER));
     }
 
@@ -539,9 +476,6 @@ public class QuestionnaireQuestionGroupResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(questionnaireQuestionGroup.getId().intValue())))
-            .andExpect(jsonPath("$.[*].uuid").value(hasItem(DEFAULT_UUID)))
-            .andExpect(jsonPath("$.[*].questionnaireUuid").value(hasItem(DEFAULT_QUESTIONNAIRE_UUID)))
-            .andExpect(jsonPath("$.[*].questionGroupUuid").value(hasItem(DEFAULT_QUESTION_GROUP_UUID)))
             .andExpect(jsonPath("$.[*].order").value(hasItem(DEFAULT_ORDER)));
 
         // Check, that the count call also returns 1
@@ -577,39 +511,40 @@ public class QuestionnaireQuestionGroupResourceIT {
             .andExpect(status().isNotFound());
     }
 
-    @Test
-    @Transactional
-    public void updateQuestionnaireQuestionGroup() throws Exception {
-        // Initialize the database
-        questionnaireQuestionGroupRepository.saveAndFlush(questionnaireQuestionGroup);
+    // Commented for now, as we will not be updating Questionnaires, etc.
+    // @Test
+    // @Transactional
+    // public void updateQuestionnaireQuestionGroup() throws Exception {
+    //     // Initialize the database
+    //     questionnaireQuestionGroupRepository.saveAndFlush(questionnaireQuestionGroup);
 
-        int databaseSizeBeforeUpdate = questionnaireQuestionGroupRepository.findAll().size();
+    //     int databaseSizeBeforeUpdate = questionnaireQuestionGroupRepository.findAll().size();
 
-        // Update the questionnaireQuestionGroup
-        QuestionnaireQuestionGroup updatedQuestionnaireQuestionGroup = questionnaireQuestionGroupRepository.findById(questionnaireQuestionGroup.getId()).get();
-        // Disconnect from session so that the updates on updatedQuestionnaireQuestionGroup are not directly saved in db
-        em.detach(updatedQuestionnaireQuestionGroup);
-        updatedQuestionnaireQuestionGroup
-            .uuid(UPDATED_UUID)
-            .questionnaireUuid(UPDATED_QUESTIONNAIRE_UUID)
-            .questionGroupUuid(UPDATED_QUESTION_GROUP_UUID)
-            .order(UPDATED_ORDER);
-        QuestionnaireQuestionGroupDTO questionnaireQuestionGroupDTO = questionnaireQuestionGroupMapper.toDto(updatedQuestionnaireQuestionGroup);
+    //     // Update the questionnaireQuestionGroup
+    //     QuestionnaireQuestionGroup updatedQuestionnaireQuestionGroup = questionnaireQuestionGroupRepository.findById(questionnaireQuestionGroup.getId()).get();
+    //     // Disconnect from session so that the updates on updatedQuestionnaireQuestionGroup are not directly saved in db
+    //     em.detach(updatedQuestionnaireQuestionGroup);
+    //     updatedQuestionnaireQuestionGroup
+    //         .uuid(UPDATED_UUID)
+    //         .questionnaireUuid(UPDATED_QUESTIONNAIRE_UUID)
+    //         .questionGroupUuid(UPDATED_QUESTION_GROUP_UUID)
+    //         .order(UPDATED_ORDER);
+    //     QuestionnaireQuestionGroupDTO questionnaireQuestionGroupDTO = questionnaireQuestionGroupMapper.toDto(updatedQuestionnaireQuestionGroup);
 
-        restQuestionnaireQuestionGroupMockMvc.perform(put("/api/questionnaire-question-groups")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(questionnaireQuestionGroupDTO)))
-            .andExpect(status().isOk());
+    //     restQuestionnaireQuestionGroupMockMvc.perform(put("/api/questionnaire-question-groups")
+    //         .contentType(TestUtil.APPLICATION_JSON_UTF8)
+    //         .content(TestUtil.convertObjectToJsonBytes(questionnaireQuestionGroupDTO)))
+    //         .andExpect(status().isOk());
 
-        // Validate the QuestionnaireQuestionGroup in the database
-        List<QuestionnaireQuestionGroup> questionnaireQuestionGroupList = questionnaireQuestionGroupRepository.findAll();
-        assertThat(questionnaireQuestionGroupList).hasSize(databaseSizeBeforeUpdate);
-        QuestionnaireQuestionGroup testQuestionnaireQuestionGroup = questionnaireQuestionGroupList.get(questionnaireQuestionGroupList.size() - 1);
-        assertThat(testQuestionnaireQuestionGroup.getUuid()).isEqualTo(UPDATED_UUID);
-        assertThat(testQuestionnaireQuestionGroup.getQuestionnaireUuid()).isEqualTo(UPDATED_QUESTIONNAIRE_UUID);
-        assertThat(testQuestionnaireQuestionGroup.getQuestionGroupUuid()).isEqualTo(UPDATED_QUESTION_GROUP_UUID);
-        assertThat(testQuestionnaireQuestionGroup.getOrder()).isEqualTo(UPDATED_ORDER);
-    }
+    //     // Validate the QuestionnaireQuestionGroup in the database
+    //     List<QuestionnaireQuestionGroup> questionnaireQuestionGroupList = questionnaireQuestionGroupRepository.findAll();
+    //     assertThat(questionnaireQuestionGroupList).hasSize(databaseSizeBeforeUpdate);
+    //     QuestionnaireQuestionGroup testQuestionnaireQuestionGroup = questionnaireQuestionGroupList.get(questionnaireQuestionGroupList.size() - 1);
+    //     assertThat(testQuestionnaireQuestionGroup.getUuid()).isEqualTo(UPDATED_UUID);
+    //     assertThat(testQuestionnaireQuestionGroup.getQuestionnaireUuid()).isEqualTo(UPDATED_QUESTIONNAIRE_UUID);
+    //     assertThat(testQuestionnaireQuestionGroup.getQuestionGroupUuid()).isEqualTo(UPDATED_QUESTION_GROUP_UUID);
+    //     assertThat(testQuestionnaireQuestionGroup.getOrder()).isEqualTo(UPDATED_ORDER);
+    // }
 
     @Test
     @Transactional

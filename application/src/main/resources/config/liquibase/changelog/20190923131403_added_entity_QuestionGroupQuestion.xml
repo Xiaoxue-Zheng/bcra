@@ -67,6 +67,8 @@
             <column name="question_group_uuid" type="string"/>
             <column name="question_uuid" type="string"/>
             <column name="jhi_order" type="numeric"/>
+            <column name="question_group_id" type="numeric"/>
+            <column name="question_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

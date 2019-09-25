@@ -130,27 +130,28 @@ public class QuestionGroupQuestionResourceIT {
         questionGroupQuestion = createEntity(em);
     }
 
-    @Test
-    @Transactional
-    public void createQuestionGroupQuestion() throws Exception {
-        int databaseSizeBeforeCreate = questionGroupQuestionRepository.findAll().size();
+    // Commented for now, as we will not be posting Questionnaires, etc.
+    // @Test
+    // @Transactional
+    // public void createQuestionGroupQuestion() throws Exception {
+    //     int databaseSizeBeforeCreate = questionGroupQuestionRepository.findAll().size();
 
-        // Create the QuestionGroupQuestion
-        QuestionGroupQuestionDTO questionGroupQuestionDTO = questionGroupQuestionMapper.toDto(questionGroupQuestion);
-        restQuestionGroupQuestionMockMvc.perform(post("/api/question-group-questions")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(questionGroupQuestionDTO)))
-            .andExpect(status().isCreated());
+    //     // Create the QuestionGroupQuestion
+    //     QuestionGroupQuestionDTO questionGroupQuestionDTO = questionGroupQuestionMapper.toDto(questionGroupQuestion);
+    //     restQuestionGroupQuestionMockMvc.perform(post("/api/question-group-questions")
+    //         .contentType(TestUtil.APPLICATION_JSON_UTF8)
+    //         .content(TestUtil.convertObjectToJsonBytes(questionGroupQuestionDTO)))
+    //         .andExpect(status().isCreated());
 
-        // Validate the QuestionGroupQuestion in the database
-        List<QuestionGroupQuestion> questionGroupQuestionList = questionGroupQuestionRepository.findAll();
-        assertThat(questionGroupQuestionList).hasSize(databaseSizeBeforeCreate + 1);
-        QuestionGroupQuestion testQuestionGroupQuestion = questionGroupQuestionList.get(questionGroupQuestionList.size() - 1);
-        assertThat(testQuestionGroupQuestion.getUuid()).isEqualTo(DEFAULT_UUID);
-        assertThat(testQuestionGroupQuestion.getQuestionGroupUuid()).isEqualTo(DEFAULT_QUESTION_GROUP_UUID);
-        assertThat(testQuestionGroupQuestion.getQuestionUuid()).isEqualTo(DEFAULT_QUESTION_UUID);
-        assertThat(testQuestionGroupQuestion.getOrder()).isEqualTo(DEFAULT_ORDER);
-    }
+    //     // Validate the QuestionGroupQuestion in the database
+    //     List<QuestionGroupQuestion> questionGroupQuestionList = questionGroupQuestionRepository.findAll();
+    //     assertThat(questionGroupQuestionList).hasSize(databaseSizeBeforeCreate + 1);
+    //     QuestionGroupQuestion testQuestionGroupQuestion = questionGroupQuestionList.get(questionGroupQuestionList.size() - 1);
+    //     assertThat(testQuestionGroupQuestion.getUuid()).isEqualTo(DEFAULT_UUID);
+    //     assertThat(testQuestionGroupQuestion.getQuestionGroupUuid()).isEqualTo(DEFAULT_QUESTION_GROUP_UUID);
+    //     assertThat(testQuestionGroupQuestion.getQuestionUuid()).isEqualTo(DEFAULT_QUESTION_UUID);
+    //     assertThat(testQuestionGroupQuestion.getOrder()).isEqualTo(DEFAULT_ORDER);
+    // }
 
     @Test
     @Transactional
@@ -170,64 +171,6 @@ public class QuestionGroupQuestionResourceIT {
         // Validate the QuestionGroupQuestion in the database
         List<QuestionGroupQuestion> questionGroupQuestionList = questionGroupQuestionRepository.findAll();
         assertThat(questionGroupQuestionList).hasSize(databaseSizeBeforeCreate);
-    }
-
-
-    @Test
-    @Transactional
-    public void checkUuidIsRequired() throws Exception {
-        int databaseSizeBeforeTest = questionGroupQuestionRepository.findAll().size();
-        // set the field null
-        questionGroupQuestion.setUuid(null);
-
-        // Create the QuestionGroupQuestion, which fails.
-        QuestionGroupQuestionDTO questionGroupQuestionDTO = questionGroupQuestionMapper.toDto(questionGroupQuestion);
-
-        restQuestionGroupQuestionMockMvc.perform(post("/api/question-group-questions")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(questionGroupQuestionDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<QuestionGroupQuestion> questionGroupQuestionList = questionGroupQuestionRepository.findAll();
-        assertThat(questionGroupQuestionList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkQuestionGroupUuidIsRequired() throws Exception {
-        int databaseSizeBeforeTest = questionGroupQuestionRepository.findAll().size();
-        // set the field null
-        questionGroupQuestion.setQuestionGroupUuid(null);
-
-        // Create the QuestionGroupQuestion, which fails.
-        QuestionGroupQuestionDTO questionGroupQuestionDTO = questionGroupQuestionMapper.toDto(questionGroupQuestion);
-
-        restQuestionGroupQuestionMockMvc.perform(post("/api/question-group-questions")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(questionGroupQuestionDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<QuestionGroupQuestion> questionGroupQuestionList = questionGroupQuestionRepository.findAll();
-        assertThat(questionGroupQuestionList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkQuestionUuidIsRequired() throws Exception {
-        int databaseSizeBeforeTest = questionGroupQuestionRepository.findAll().size();
-        // set the field null
-        questionGroupQuestion.setQuestionUuid(null);
-
-        // Create the QuestionGroupQuestion, which fails.
-        QuestionGroupQuestionDTO questionGroupQuestionDTO = questionGroupQuestionMapper.toDto(questionGroupQuestion);
-
-        restQuestionGroupQuestionMockMvc.perform(post("/api/question-group-questions")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(questionGroupQuestionDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<QuestionGroupQuestion> questionGroupQuestionList = questionGroupQuestionRepository.findAll();
-        assertThat(questionGroupQuestionList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -260,9 +203,6 @@ public class QuestionGroupQuestionResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(questionGroupQuestion.getId().intValue())))
-            .andExpect(jsonPath("$.[*].uuid").value(hasItem(DEFAULT_UUID.toString())))
-            .andExpect(jsonPath("$.[*].questionGroupUuid").value(hasItem(DEFAULT_QUESTION_GROUP_UUID.toString())))
-            .andExpect(jsonPath("$.[*].questionUuid").value(hasItem(DEFAULT_QUESTION_UUID.toString())))
             .andExpect(jsonPath("$.[*].order").value(hasItem(DEFAULT_ORDER)));
     }
     
@@ -277,9 +217,6 @@ public class QuestionGroupQuestionResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(questionGroupQuestion.getId().intValue()))
-            .andExpect(jsonPath("$.uuid").value(DEFAULT_UUID.toString()))
-            .andExpect(jsonPath("$.questionGroupUuid").value(DEFAULT_QUESTION_GROUP_UUID.toString()))
-            .andExpect(jsonPath("$.questionUuid").value(DEFAULT_QUESTION_UUID.toString()))
             .andExpect(jsonPath("$.order").value(DEFAULT_ORDER));
     }
 
@@ -539,9 +476,6 @@ public class QuestionGroupQuestionResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(questionGroupQuestion.getId().intValue())))
-            .andExpect(jsonPath("$.[*].uuid").value(hasItem(DEFAULT_UUID)))
-            .andExpect(jsonPath("$.[*].questionGroupUuid").value(hasItem(DEFAULT_QUESTION_GROUP_UUID)))
-            .andExpect(jsonPath("$.[*].questionUuid").value(hasItem(DEFAULT_QUESTION_UUID)))
             .andExpect(jsonPath("$.[*].order").value(hasItem(DEFAULT_ORDER)));
 
         // Check, that the count call also returns 1
@@ -577,39 +511,40 @@ public class QuestionGroupQuestionResourceIT {
             .andExpect(status().isNotFound());
     }
 
-    @Test
-    @Transactional
-    public void updateQuestionGroupQuestion() throws Exception {
-        // Initialize the database
-        questionGroupQuestionRepository.saveAndFlush(questionGroupQuestion);
+    // Commented for now, as we will not be updating Questionnaires, etc.
+    // @Test
+    // @Transactional
+    // public void updateQuestionGroupQuestion() throws Exception {
+    //     // Initialize the database
+    //     questionGroupQuestionRepository.saveAndFlush(questionGroupQuestion);
 
-        int databaseSizeBeforeUpdate = questionGroupQuestionRepository.findAll().size();
+    //     int databaseSizeBeforeUpdate = questionGroupQuestionRepository.findAll().size();
 
-        // Update the questionGroupQuestion
-        QuestionGroupQuestion updatedQuestionGroupQuestion = questionGroupQuestionRepository.findById(questionGroupQuestion.getId()).get();
-        // Disconnect from session so that the updates on updatedQuestionGroupQuestion are not directly saved in db
-        em.detach(updatedQuestionGroupQuestion);
-        updatedQuestionGroupQuestion
-            .uuid(UPDATED_UUID)
-            .questionGroupUuid(UPDATED_QUESTION_GROUP_UUID)
-            .questionUuid(UPDATED_QUESTION_UUID)
-            .order(UPDATED_ORDER);
-        QuestionGroupQuestionDTO questionGroupQuestionDTO = questionGroupQuestionMapper.toDto(updatedQuestionGroupQuestion);
+    //     // Update the questionGroupQuestion
+    //     QuestionGroupQuestion updatedQuestionGroupQuestion = questionGroupQuestionRepository.findById(questionGroupQuestion.getId()).get();
+    //     // Disconnect from session so that the updates on updatedQuestionGroupQuestion are not directly saved in db
+    //     em.detach(updatedQuestionGroupQuestion);
+    //     updatedQuestionGroupQuestion
+    //         .uuid(UPDATED_UUID)
+    //         .questionGroupUuid(UPDATED_QUESTION_GROUP_UUID)
+    //         .questionUuid(UPDATED_QUESTION_UUID)
+    //         .order(UPDATED_ORDER);
+    //     QuestionGroupQuestionDTO questionGroupQuestionDTO = questionGroupQuestionMapper.toDto(updatedQuestionGroupQuestion);
 
-        restQuestionGroupQuestionMockMvc.perform(put("/api/question-group-questions")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(questionGroupQuestionDTO)))
-            .andExpect(status().isOk());
+    //     restQuestionGroupQuestionMockMvc.perform(put("/api/question-group-questions")
+    //         .contentType(TestUtil.APPLICATION_JSON_UTF8)
+    //         .content(TestUtil.convertObjectToJsonBytes(questionGroupQuestionDTO)))
+    //         .andExpect(status().isOk());
 
-        // Validate the QuestionGroupQuestion in the database
-        List<QuestionGroupQuestion> questionGroupQuestionList = questionGroupQuestionRepository.findAll();
-        assertThat(questionGroupQuestionList).hasSize(databaseSizeBeforeUpdate);
-        QuestionGroupQuestion testQuestionGroupQuestion = questionGroupQuestionList.get(questionGroupQuestionList.size() - 1);
-        assertThat(testQuestionGroupQuestion.getUuid()).isEqualTo(UPDATED_UUID);
-        assertThat(testQuestionGroupQuestion.getQuestionGroupUuid()).isEqualTo(UPDATED_QUESTION_GROUP_UUID);
-        assertThat(testQuestionGroupQuestion.getQuestionUuid()).isEqualTo(UPDATED_QUESTION_UUID);
-        assertThat(testQuestionGroupQuestion.getOrder()).isEqualTo(UPDATED_ORDER);
-    }
+    //     // Validate the QuestionGroupQuestion in the database
+    //     List<QuestionGroupQuestion> questionGroupQuestionList = questionGroupQuestionRepository.findAll();
+    //     assertThat(questionGroupQuestionList).hasSize(databaseSizeBeforeUpdate);
+    //     QuestionGroupQuestion testQuestionGroupQuestion = questionGroupQuestionList.get(questionGroupQuestionList.size() - 1);
+    //     assertThat(testQuestionGroupQuestion.getUuid()).isEqualTo(UPDATED_UUID);
+    //     assertThat(testQuestionGroupQuestion.getQuestionGroupUuid()).isEqualTo(UPDATED_QUESTION_GROUP_UUID);
+    //     assertThat(testQuestionGroupQuestion.getQuestionUuid()).isEqualTo(UPDATED_QUESTION_UUID);
+    //     assertThat(testQuestionGroupQuestion.getOrder()).isEqualTo(UPDATED_ORDER);
+    // }
 
     @Test
     @Transactional

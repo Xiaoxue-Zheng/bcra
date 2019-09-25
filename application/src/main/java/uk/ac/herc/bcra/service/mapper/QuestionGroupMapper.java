@@ -2,6 +2,9 @@ package uk.ac.herc.bcra.service.mapper;
 
 import uk.ac.herc.bcra.domain.*;
 import uk.ac.herc.bcra.service.dto.QuestionGroupDTO;
+import uk.ac.herc.bcra.service.dto.QuestionGroupQuestionDTO;
+
+import java.util.Set;
 
 import org.mapstruct.*;
 
@@ -11,6 +14,7 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {})
 public interface QuestionGroupMapper extends EntityMapper<QuestionGroupDTO, QuestionGroup> {
 
+    Set<QuestionGroupQuestionDTO> questionGroupQuestionToQuestionGroupQuestionDTOs(Set<QuestionGroupQuestion> questionGroupQuestions);
 
     @Mapping(target = "displayConditions", ignore = true)
     @Mapping(target = "removeDisplayCondition", ignore = true)

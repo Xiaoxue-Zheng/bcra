@@ -1,6 +1,9 @@
 package uk.ac.herc.bcra.service.dto;
+
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A DTO for the {@link uk.ac.herc.bcra.domain.AnswerGroup} entity.
@@ -9,10 +12,11 @@ public class AnswerGroupDTO implements Serializable {
 
     private Long id;
 
-
     private Long answerResponseId;
 
     private Long questionGroupId;
+
+    private Set<AnswerDTO> answers = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -36,6 +40,14 @@ public class AnswerGroupDTO implements Serializable {
 
     public void setQuestionGroupId(Long questionGroupId) {
         this.questionGroupId = questionGroupId;
+    }
+
+    public Set<AnswerDTO> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(Set<AnswerDTO> answers) {
+        this.answers = answers;
     }
 
     @Override
@@ -65,6 +77,9 @@ public class AnswerGroupDTO implements Serializable {
             "id=" + getId() +
             ", answerResponse=" + getAnswerResponseId() +
             ", questionGroup=" + getQuestionGroupId() +
+            ", answers=" + getAnswers() +
             "}";
     }
+
+
 }

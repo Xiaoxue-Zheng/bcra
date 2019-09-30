@@ -20,6 +20,15 @@ export default {
   }),
   created () {
     this.$store.dispatch('questionnaire/getQuestionnaire')
+    this.$store.dispatch('answer/saveAnswers', {
+      'questionnaireId': 1,
+      'answerGroups': [{
+        'questionGroupId': 1,
+        'answers': [{
+          'questionId': 1
+        }]
+      }]
+    })
   },
   filters: {
     formatJson: function (value) {

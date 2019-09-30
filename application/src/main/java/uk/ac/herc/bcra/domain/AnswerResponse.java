@@ -28,7 +28,7 @@ public class AnswerResponse implements Serializable {
     @JsonIgnoreProperties("answerResponses")
     private Questionnaire questionnaire;
 
-    @OneToMany(mappedBy = "answerResponse")
+    @OneToMany(mappedBy = "answerResponse", cascade = CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<AnswerGroup> answerGroups = new HashSet<>();
 
@@ -76,6 +76,9 @@ public class AnswerResponse implements Serializable {
     }
 
     public void setAnswerGroups(Set<AnswerGroup> answerGroups) {
+        for (AnswerGroup answerGroup: answerGroups) {
+            answerGroup.setAnswerResponse(this);
+        }
         this.answerGroups = answerGroups;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove

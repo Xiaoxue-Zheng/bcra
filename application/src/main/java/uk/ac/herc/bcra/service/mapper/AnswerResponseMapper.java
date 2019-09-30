@@ -8,14 +8,14 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link AnswerResponse} and its DTO {@link AnswerResponseDTO}.
  */
-@Mapper(componentModel = "spring", uses = {QuestionnaireMapper.class})
+@Mapper(componentModel = "spring", uses = {QuestionnaireMapper.class, AnswerGroupMapper.class})
 public interface AnswerResponseMapper extends EntityMapper<AnswerResponseDTO, AnswerResponse> {
 
     @Mapping(source = "questionnaire.id", target = "questionnaireId")
     AnswerResponseDTO toDto(AnswerResponse answerResponse);
 
     @Mapping(source = "questionnaireId", target = "questionnaire")
-    @Mapping(target = "answerGroups", ignore = true)
+    @Mapping(source = "answerGroups", target = "answerGroups")
     @Mapping(target = "removeAnswerGroup", ignore = true)
     AnswerResponse toEntity(AnswerResponseDTO answerResponseDTO);
 
@@ -25,6 +25,7 @@ public interface AnswerResponseMapper extends EntityMapper<AnswerResponseDTO, An
         }
         AnswerResponse answerResponse = new AnswerResponse();
         answerResponse.setId(id);
+
         return answerResponse;
     }
 }

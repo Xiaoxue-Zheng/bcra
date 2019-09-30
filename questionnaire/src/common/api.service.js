@@ -17,13 +17,16 @@ const ApiService = {
     })
   },
 
-  get (resource, slug = '') {
-    var template
+  getTemplateFromSlug (slug, resource) {
     if (slug === '') {
-      template = `${resource}`
+      return `${resource}`
     } else {
-      template = `${resource}/${slug}`
+      return `${resource}/${slug}`
     }
+  },
+
+  get (resource, slug = '') {
+    var template = this.getTemplateFromSlug(slug, resource)
     return axios.get(template).catch(error => {
       throw new Error(`BCRA ApiService ${error}`)
     })
@@ -53,5 +56,11 @@ export default ApiService
 export const QuestionnaireService = {
   get () {
     return ApiService.get('questionnaires')
+  }
+}
+
+export const AnswerService = {
+  create (answerResponse) {
+    return ApiService.post('answer-responses', answerResponse)
   }
 }

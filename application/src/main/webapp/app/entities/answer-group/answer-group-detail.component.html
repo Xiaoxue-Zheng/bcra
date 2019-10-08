@@ -5,16 +5,14 @@
             <hr>
             <jhi-alert-error></jhi-alert-error>
             <dl class="row-md jh-entity-details">
-                <dt><span>Answer Response</span></dt>
+                <dt><span>Order</span></dt>
                 <dd>
-                    <div *ngIf="answerGroup.answerResponseId">
-                        <a [routerLink]="['/answer-response', answerGroup.answerResponseId, 'view']">{{answerGroup.answerResponseId}}</a>
-                    </div>
+                    <span>{{answerGroup.order}}</span>
                 </dd>
-                <dt><span>Question Group</span></dt>
+                <dt><span>Answer Section</span></dt>
                 <dd>
-                    <div *ngIf="answerGroup.questionGroupId">
-                        <a [routerLink]="['/question-group', answerGroup.questionGroupId, 'view']">{{answerGroup.questionGroupId}}</a>
+                    <div *ngIf="answerGroup.answerSectionId">
+                        <a [routerLink]="['/answer-section', answerGroup.answerSectionId, 'view']">{{answerGroup.answerSectionId}}</a>
                     </div>
                 </dd>
             </dl>

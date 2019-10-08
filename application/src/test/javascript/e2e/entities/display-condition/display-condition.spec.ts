@@ -39,7 +39,14 @@ describe('DisplayCondition e2e test', () => {
     const nbButtonsBeforeCreate = await displayConditionComponentsPage.countDeleteButtons();
 
     await displayConditionComponentsPage.clickOnCreateButton();
-    await promise.all([displayConditionUpdatePage.questionGroupSelectLastOption()]);
+    await promise.all([
+      displayConditionUpdatePage.displayConditionTypeSelectLastOption(),
+      displayConditionUpdatePage.conditionSectionIdentifierSelectLastOption(),
+      displayConditionUpdatePage.conditionQuestionIdentifierSelectLastOption(),
+      displayConditionUpdatePage.conditionQuestionItemIdentifierSelectLastOption(),
+      displayConditionUpdatePage.displayQuestionSectionSelectLastOption(),
+      displayConditionUpdatePage.displayQuestionSelectLastOption()
+    ]);
     await displayConditionUpdatePage.save();
     expect(await displayConditionUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 

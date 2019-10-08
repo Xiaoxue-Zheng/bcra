@@ -5,7 +5,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 import { QuestionGroupService } from 'app/entities/question-group/question-group.service';
-import { IQuestionGroup, QuestionGroup } from 'app/shared/model/question-group.model';
+import { IQuestionGroup, QuestionGroup, QuestionGroupIdentifier } from 'app/shared/model/question-group.model';
 
 describe('Service Tests', () => {
   describe('QuestionGroup Service', () => {
@@ -23,7 +23,7 @@ describe('Service Tests', () => {
       service = injector.get(QuestionGroupService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new QuestionGroup(0, 'AAAAAAA');
+      elemDefault = new QuestionGroup(0, QuestionGroupIdentifier.PERSONAL_HISTORY_QUESTIONS);
     });
 
     describe('Service methods', () => {
@@ -59,7 +59,7 @@ describe('Service Tests', () => {
       it('should update a QuestionGroup', async () => {
         const returnedFromService = Object.assign(
           {
-            uuid: 'BBBBBB'
+            identifier: 'BBBBBB'
           },
           elemDefault
         );
@@ -77,7 +77,7 @@ describe('Service Tests', () => {
       it('should return a list of QuestionGroup', async () => {
         const returnedFromService = Object.assign(
           {
-            uuid: 'BBBBBB'
+            identifier: 'BBBBBB'
           },
           elemDefault
         );

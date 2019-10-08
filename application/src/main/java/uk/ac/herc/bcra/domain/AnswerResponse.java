@@ -4,6 +4,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -24,13 +25,14 @@ public class AnswerResponse implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties("answerResponses")
     private Questionnaire questionnaire;
 
     @OneToMany(mappedBy = "answerResponse", cascade = CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<AnswerGroup> answerGroups = new HashSet<>();
+    private Set<AnswerSection> answerSections = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -54,32 +56,32 @@ public class AnswerResponse implements Serializable {
         this.questionnaire = questionnaire;
     }
 
-    public Set<AnswerGroup> getAnswerGroups() {
-        return answerGroups;
+    public Set<AnswerSection> getAnswerSections() {
+        return answerSections;
     }
 
-    public AnswerResponse answerGroups(Set<AnswerGroup> answerGroups) {
-        this.answerGroups = answerGroups;
+    public AnswerResponse answerSections(Set<AnswerSection> answerSections) {
+        this.answerSections = answerSections;
         return this;
     }
 
-    public AnswerResponse addAnswerGroup(AnswerGroup answerGroup) {
-        this.answerGroups.add(answerGroup);
-        answerGroup.setAnswerResponse(this);
+    public AnswerResponse addAnswerSection(AnswerSection answerSection) {
+        this.answerSections.add(answerSection);
+        answerSection.setAnswerResponse(this);
         return this;
     }
 
-    public AnswerResponse removeAnswerGroup(AnswerGroup answerGroup) {
-        this.answerGroups.remove(answerGroup);
-        answerGroup.setAnswerResponse(null);
+    public AnswerResponse removeAnswerSection(AnswerSection answerSection) {
+        this.answerSections.remove(answerSection);
+        answerSection.setAnswerResponse(null);
         return this;
     }
 
-    public void setAnswerGroups(Set<AnswerGroup> answerGroups) {
-        for (AnswerGroup answerGroup: answerGroups) {
-            answerGroup.setAnswerResponse(this);
+    public void setAnswerSections(Set<AnswerSection> answerSections) {
+        for (AnswerSection answerSection: answerSections) {
+            answerSection.setAnswerResponse(this);
         }
-        this.answerGroups = answerGroups;
+        this.answerSections = answerSections;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

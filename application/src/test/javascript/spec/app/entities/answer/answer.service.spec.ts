@@ -5,7 +5,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 import { AnswerService } from 'app/entities/answer/answer.service';
-import { IAnswer, Answer } from 'app/shared/model/answer.model';
+import { IAnswer, Answer, AnswerUnits } from 'app/shared/model/answer.model';
 
 describe('Service Tests', () => {
   describe('Answer Service', () => {
@@ -23,7 +23,7 @@ describe('Service Tests', () => {
       service = injector.get(AnswerService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new Answer(0);
+      elemDefault = new Answer(0, 0, AnswerUnits.GRAMS);
     });
 
     describe('Service methods', () => {
@@ -57,7 +57,13 @@ describe('Service Tests', () => {
       });
 
       it('should update a Answer', async () => {
-        const returnedFromService = Object.assign({}, elemDefault);
+        const returnedFromService = Object.assign(
+          {
+            number: 1,
+            units: 'BBBBBB'
+          },
+          elemDefault
+        );
 
         const expected = Object.assign({}, returnedFromService);
         service
@@ -70,7 +76,13 @@ describe('Service Tests', () => {
       });
 
       it('should return a list of Answer', async () => {
-        const returnedFromService = Object.assign({}, elemDefault);
+        const returnedFromService = Object.assign(
+          {
+            number: 1,
+            units: 'BBBBBB'
+          },
+          elemDefault
+        );
         const expected = Object.assign({}, returnedFromService);
         service
           .query(expected)

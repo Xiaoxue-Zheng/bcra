@@ -39,8 +39,7 @@ describe('QuestionGroup e2e test', () => {
     const nbButtonsBeforeCreate = await questionGroupComponentsPage.countDeleteButtons();
 
     await questionGroupComponentsPage.clickOnCreateButton();
-    await promise.all([questionGroupUpdatePage.setUuidInput('uuid')]);
-    expect(await questionGroupUpdatePage.getUuidInput()).to.eq('uuid', 'Expected Uuid value to be equals to uuid');
+    await promise.all([questionGroupUpdatePage.identifierSelectLastOption()]);
     await questionGroupUpdatePage.save();
     expect(await questionGroupUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 

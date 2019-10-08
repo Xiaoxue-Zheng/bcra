@@ -1,6 +1,11 @@
 package uk.ac.herc.bcra.service.dto;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
+import uk.ac.herc.bcra.domain.enumeration.DisplayConditionType;
+import uk.ac.herc.bcra.domain.enumeration.QuestionSectionIdentifier;
+import uk.ac.herc.bcra.domain.enumeration.QuestionIdentifier;
+import uk.ac.herc.bcra.domain.enumeration.QuestionItemIdentifier;
 
 /**
  * A DTO for the {@link uk.ac.herc.bcra.domain.DisplayCondition} entity.
@@ -9,8 +14,14 @@ public class DisplayConditionDTO implements Serializable {
 
     private Long id;
 
+    @NotNull
+    private DisplayConditionType displayConditionType;
 
-    private Long questionGroupId;
+    private QuestionSectionIdentifier conditionSectionIdentifier;
+
+    private QuestionIdentifier conditionQuestionIdentifier;
+
+    private QuestionItemIdentifier conditionQuestionItemIdentifier;
 
     public Long getId() {
         return id;
@@ -20,12 +31,36 @@ public class DisplayConditionDTO implements Serializable {
         this.id = id;
     }
 
-    public Long getQuestionGroupId() {
-        return questionGroupId;
+    public DisplayConditionType getDisplayConditionType() {
+        return displayConditionType;
     }
 
-    public void setQuestionGroupId(Long questionGroupId) {
-        this.questionGroupId = questionGroupId;
+    public void setDisplayConditionType(DisplayConditionType displayConditionType) {
+        this.displayConditionType = displayConditionType;
+    }
+
+    public QuestionSectionIdentifier getConditionSectionIdentifier() {
+        return conditionSectionIdentifier;
+    }
+
+    public void setConditionSectionIdentifier(QuestionSectionIdentifier conditionSectionIdentifier) {
+        this.conditionSectionIdentifier = conditionSectionIdentifier;
+    }
+
+    public QuestionIdentifier getConditionQuestionIdentifier() {
+        return conditionQuestionIdentifier;
+    }
+
+    public void setConditionQuestionIdentifier(QuestionIdentifier conditionQuestionIdentifier) {
+        this.conditionQuestionIdentifier = conditionQuestionIdentifier;
+    }
+
+    public QuestionItemIdentifier getConditionQuestionItemIdentifier() {
+        return conditionQuestionItemIdentifier;
+    }
+
+    public void setConditionQuestionItemIdentifier(QuestionItemIdentifier conditionQuestionItemIdentifier) {
+        this.conditionQuestionItemIdentifier = conditionQuestionItemIdentifier;
     }
 
     @Override
@@ -53,7 +88,10 @@ public class DisplayConditionDTO implements Serializable {
     public String toString() {
         return "DisplayConditionDTO{" +
             "id=" + getId() +
-            ", questionGroup=" + getQuestionGroupId() +
+            ", displayConditionType='" + getDisplayConditionType() + "'" +
+            ", conditionSectionIdentifier='" + getConditionSectionIdentifier() + "'" +
+            ", conditionQuestionIdentifier='" + getConditionQuestionIdentifier() + "'" +
+            ", conditionQuestionItemIdentifier='" + getConditionQuestionItemIdentifier() + "'" +
             "}";
     }
 }

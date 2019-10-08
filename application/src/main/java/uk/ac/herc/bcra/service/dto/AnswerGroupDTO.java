@@ -1,5 +1,6 @@
 package uk.ac.herc.bcra.service.dto;
 
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
@@ -12,9 +13,10 @@ public class AnswerGroupDTO implements Serializable {
 
     private Long id;
 
-    private Long answerResponseId;
+    @NotNull
+    private Integer order;
 
-    private Long questionGroupId;
+    private Long answerSectionId;
 
     private Set<AnswerDTO> answers = new HashSet<>();
 
@@ -26,20 +28,20 @@ public class AnswerGroupDTO implements Serializable {
         this.id = id;
     }
 
-    public Long getAnswerResponseId() {
-        return answerResponseId;
+    public Integer getOrder() {
+        return order;
     }
 
-    public void setAnswerResponseId(Long answerResponseId) {
-        this.answerResponseId = answerResponseId;
+    public void setOrder(Integer order) {
+        this.order = order;
     }
 
-    public Long getQuestionGroupId() {
-        return questionGroupId;
+    public Long getAnswerSectionId() {
+        return answerSectionId;
     }
 
-    public void setQuestionGroupId(Long questionGroupId) {
-        this.questionGroupId = questionGroupId;
+    public void setAnswerSectionId(Long answerSectionId) {
+        this.answerSectionId = answerSectionId;
     }
 
     public Set<AnswerDTO> getAnswers() {
@@ -75,11 +77,9 @@ public class AnswerGroupDTO implements Serializable {
     public String toString() {
         return "AnswerGroupDTO{" +
             "id=" + getId() +
-            ", answerResponse=" + getAnswerResponseId() +
-            ", questionGroup=" + getQuestionGroupId() +
+            ", order=" + getOrder() +
+            ", answerSection=" + getAnswerSectionId() +
             ", answers=" + getAnswers() +
             "}";
     }
-
-
 }

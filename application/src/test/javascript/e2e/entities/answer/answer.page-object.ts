@@ -26,11 +26,36 @@ export class AnswerUpdatePage {
   pageTitle = element(by.id('jhi-answer-heading'));
   saveButton = element(by.id('save-entity'));
   cancelButton = element(by.id('cancel-save'));
+  numberInput = element(by.id('field_number'));
+  unitsSelect = element(by.id('field_units'));
   answerGroupSelect = element(by.id('field_answerGroup'));
   questionSelect = element(by.id('field_question'));
 
   async getPageTitle() {
     return this.pageTitle.getText();
+  }
+
+  async setNumberInput(number) {
+    await this.numberInput.sendKeys(number);
+  }
+
+  async getNumberInput() {
+    return await this.numberInput.getAttribute('value');
+  }
+
+  async setUnitsSelect(units) {
+    await this.unitsSelect.sendKeys(units);
+  }
+
+  async getUnitsSelect() {
+    return await this.unitsSelect.element(by.css('option:checked')).getText();
+  }
+
+  async unitsSelectLastOption(timeout?: number) {
+    await this.unitsSelect
+      .all(by.tagName('option'))
+      .last()
+      .click();
   }
 
   async answerGroupSelectLastOption(timeout?: number) {

@@ -11,7 +11,7 @@ describe('Question e2e test', () => {
   let signInPage: SignInPage;
   let questionUpdatePage: QuestionUpdatePage;
   let questionComponentsPage: QuestionComponentsPage;
-  let questionDeleteDialog: QuestionDeleteDialog;
+  /*let questionDeleteDialog: QuestionDeleteDialog;*/
 
   before(async () => {
     await browser.get('/');
@@ -35,29 +35,40 @@ describe('Question e2e test', () => {
     await questionUpdatePage.cancel();
   });
 
-  it('should create and save Questions', async () => {
-    const nbButtonsBeforeCreate = await questionComponentsPage.countDeleteButtons();
+  /* it('should create and save Questions', async () => {
+        const nbButtonsBeforeCreate = await questionComponentsPage.countDeleteButtons();
 
-    await questionComponentsPage.clickOnCreateButton();
-    await promise.all([questionUpdatePage.setUuidInput('uuid'), questionUpdatePage.setTextInput('text')]);
-    expect(await questionUpdatePage.getUuidInput()).to.eq('uuid', 'Expected Uuid value to be equals to uuid');
-    expect(await questionUpdatePage.getTextInput()).to.eq('text', 'Expected Text value to be equals to text');
-    await questionUpdatePage.save();
-    expect(await questionUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
+        await questionComponentsPage.clickOnCreateButton();
+        await promise.all([
+            questionUpdatePage.identifierSelectLastOption(),
+            questionUpdatePage.typeSelectLastOption(),
+            questionUpdatePage.setOrderInput('5'),
+            questionUpdatePage.setTextInput('text'),
+            questionUpdatePage.setMinimumInput('5'),
+            questionUpdatePage.setMaximumInput('5'),
+            questionUpdatePage.questionGroupSelectLastOption(),
+        ]);
+        expect(await questionUpdatePage.getOrderInput()).to.eq('5', 'Expected order value to be equals to 5');
+        expect(await questionUpdatePage.getTextInput()).to.eq('text', 'Expected Text value to be equals to text');
+        expect(await questionUpdatePage.getMinimumInput()).to.eq('5', 'Expected minimum value to be equals to 5');
+        expect(await questionUpdatePage.getMaximumInput()).to.eq('5', 'Expected maximum value to be equals to 5');
+        await questionUpdatePage.save();
+        expect(await questionUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
-    expect(await questionComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
-  });
+        expect(await questionComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
+    });*/
 
-  it('should delete last Question', async () => {
-    const nbButtonsBeforeDelete = await questionComponentsPage.countDeleteButtons();
-    await questionComponentsPage.clickOnLastDeleteButton();
+  /* it('should delete last Question', async () => {
+        const nbButtonsBeforeDelete = await questionComponentsPage.countDeleteButtons();
+        await questionComponentsPage.clickOnLastDeleteButton();
 
-    questionDeleteDialog = new QuestionDeleteDialog();
-    expect(await questionDeleteDialog.getDialogTitle()).to.eq('Are you sure you want to delete this Question?');
-    await questionDeleteDialog.clickOnConfirmButton();
+        questionDeleteDialog = new QuestionDeleteDialog();
+        expect(await questionDeleteDialog.getDialogTitle())
+            .to.eq('Are you sure you want to delete this Question?');
+        await questionDeleteDialog.clickOnConfirmButton();
 
-    expect(await questionComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
-  });
+        expect(await questionComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
+    });*/
 
   after(async () => {
     await navBarPage.autoSignOut();

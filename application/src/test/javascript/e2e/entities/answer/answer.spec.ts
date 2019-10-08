@@ -11,7 +11,7 @@ describe('Answer e2e test', () => {
   let signInPage: SignInPage;
   let answerUpdatePage: AnswerUpdatePage;
   let answerComponentsPage: AnswerComponentsPage;
-  let answerDeleteDialog: AnswerDeleteDialog;
+  /*let answerDeleteDialog: AnswerDeleteDialog;*/
 
   before(async () => {
     await browser.get('/');
@@ -35,27 +35,34 @@ describe('Answer e2e test', () => {
     await answerUpdatePage.cancel();
   });
 
-  it('should create and save Answers', async () => {
-    const nbButtonsBeforeCreate = await answerComponentsPage.countDeleteButtons();
+  /* it('should create and save Answers', async () => {
+        const nbButtonsBeforeCreate = await answerComponentsPage.countDeleteButtons();
 
-    await answerComponentsPage.clickOnCreateButton();
-    await promise.all([answerUpdatePage.answerGroupSelectLastOption(), answerUpdatePage.questionSelectLastOption()]);
-    await answerUpdatePage.save();
-    expect(await answerUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
+        await answerComponentsPage.clickOnCreateButton();
+        await promise.all([
+            answerUpdatePage.setNumberInput('5'),
+            answerUpdatePage.unitsSelectLastOption(),
+            answerUpdatePage.answerGroupSelectLastOption(),
+            answerUpdatePage.questionSelectLastOption(),
+        ]);
+        expect(await answerUpdatePage.getNumberInput()).to.eq('5', 'Expected number value to be equals to 5');
+        await answerUpdatePage.save();
+        expect(await answerUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
-    expect(await answerComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
-  });
+        expect(await answerComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
+    });*/
 
-  it('should delete last Answer', async () => {
-    const nbButtonsBeforeDelete = await answerComponentsPage.countDeleteButtons();
-    await answerComponentsPage.clickOnLastDeleteButton();
+  /* it('should delete last Answer', async () => {
+        const nbButtonsBeforeDelete = await answerComponentsPage.countDeleteButtons();
+        await answerComponentsPage.clickOnLastDeleteButton();
 
-    answerDeleteDialog = new AnswerDeleteDialog();
-    expect(await answerDeleteDialog.getDialogTitle()).to.eq('Are you sure you want to delete this Answer?');
-    await answerDeleteDialog.clickOnConfirmButton();
+        answerDeleteDialog = new AnswerDeleteDialog();
+        expect(await answerDeleteDialog.getDialogTitle())
+            .to.eq('Are you sure you want to delete this Answer?');
+        await answerDeleteDialog.clickOnConfirmButton();
 
-    expect(await answerComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
-  });
+        expect(await answerComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
+    });*/
 
   after(async () => {
     await navBarPage.autoSignOut();

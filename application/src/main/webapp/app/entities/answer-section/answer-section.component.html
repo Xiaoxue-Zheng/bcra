@@ -1,0 +1,67 @@
+<div>
+    <h2 id="page-heading">
+        <span>Answer Sections</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-answer-section" [routerLink]="['/answer-section/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span >
+            Create a new Answer Section
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="alert alert-warning" *ngIf="answerSections?.length === 0">
+        <span>No answerSections found</span>
+    </div>
+    <div class="table-responsive" *ngIf="answerSections?.length > 0">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span>ID</span></th>
+            <th><span>Answer Response</span></th>
+            <th><span>Question Section</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let answerSection of answerSections ;trackBy: trackId">
+                <td><a [routerLink]="['/answer-section', answerSection.id, 'view' ]">{{answerSection.id}}</a></td>
+                <td>
+                    <div *ngIf="answerSection.answerResponseId">
+                        <a [routerLink]="['/answer-response', answerSection.answerResponseId , 'view' ]" >{{answerSection.answerResponseId}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="answerSection.questionSectionId">
+                        <a [routerLink]="['/question-section', answerSection.questionSectionId , 'view' ]" >{{answerSection.questionSectionId}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group">
+                        <button type="submit"
+                                [routerLink]="['/answer-section', answerSection.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/answer-section', answerSection.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/answer-section', { outlets: { popup: answerSection.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

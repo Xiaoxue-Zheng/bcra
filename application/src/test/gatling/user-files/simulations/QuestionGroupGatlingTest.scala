@@ -72,7 +72,7 @@ class QuestionGroupGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "uuid":"SAMPLE_TEXT"
+                , "identifier":"PERSONAL_HISTORY_QUESTIONS"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_questionGroup_url"))).exitHereIfFailed

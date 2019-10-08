@@ -72,7 +72,11 @@ class QuestionnaireGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "uuid":"SAMPLE_TEXT"
+                , "identifier":"TYRER_CUZICK_IV1"
+                , "algorithm":"TYRER_CUZICK"
+                , "algorithmMinimum":"0"
+                , "algorithmMaximum":"0"
+                , "implementationVersion":"0"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_questionnaire_url"))).exitHereIfFailed

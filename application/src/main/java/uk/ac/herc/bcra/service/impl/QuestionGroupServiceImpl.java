@@ -8,12 +8,13 @@ import uk.ac.herc.bcra.service.mapper.QuestionGroupMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link QuestionGroup}.
@@ -50,15 +51,15 @@ public class QuestionGroupServiceImpl implements QuestionGroupService {
     /**
      * Get all the questionGroups.
      *
-     * @param pageable the pagination information.
      * @return the list of entities.
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<QuestionGroupDTO> findAll(Pageable pageable) {
+    public List<QuestionGroupDTO> findAll() {
         log.debug("Request to get all QuestionGroups");
-        return questionGroupRepository.findAll(pageable)
-            .map(questionGroupMapper::toDto);
+        return questionGroupRepository.findAll().stream()
+            .map(questionGroupMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
     }
 
 

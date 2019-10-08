@@ -1,11 +1,22 @@
 {
     "name": "Answer",
-    "fields": [],
+    "fields": [
+        {
+            "fieldName": "number",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "units",
+            "fieldType": "AnswerUnits",
+            "fieldValues": "GRAMS,POUNDS,CENTIMETERS,INCHES"
+        }
+    ],
     "relationships": [
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "answerGroup",
             "otherEntityRelationshipName": "answer",
+            "relationshipValidateRules": "required",
             "relationshipName": "answerGroup",
             "otherEntityField": "id"
         },
@@ -13,16 +24,23 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "question",
             "otherEntityRelationshipName": "answer",
+            "relationshipValidateRules": "required",
             "relationshipName": "question",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "answerItem",
+            "otherEntityRelationshipName": "answer",
+            "relationshipName": "answerItem"
         }
     ],
-    "changelogDate": "20190917100712",
+    "changelogDate": "20191008133430",
     "entityTableName": "answer",
     "dto": "mapstruct",
-    "pagination": "pagination",
+    "pagination": "no",
     "service": "serviceImpl",
-    "jpaMetamodelFiltering": true,
+    "jpaMetamodelFiltering": false,
     "fluentMethods": true,
     "clientRootFolder": "",
     "applications": "*"

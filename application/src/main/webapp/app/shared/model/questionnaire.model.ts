@@ -1,18 +1,31 @@
-import { IQuestionnaireQuestionGroup } from 'app/shared/model/questionnaire-question-group.model';
-import { IAnswerResponse } from 'app/shared/model/answer-response.model';
+import { IQuestionSection } from 'app/shared/model/question-section.model';
+
+export const enum QuestionnaireIdentifier {
+  TYRER_CUZICK_IV1 = 'TYRER_CUZICK_IV1'
+}
+
+export const enum Algorithm {
+  TYRER_CUZICK = 'TYRER_CUZICK'
+}
 
 export interface IQuestionnaire {
   id?: number;
-  uuid?: string;
-  questionnaireQuestionGroups?: IQuestionnaireQuestionGroup[];
-  answerResponses?: IAnswerResponse[];
+  identifier?: QuestionnaireIdentifier;
+  algorithm?: Algorithm;
+  algorithmMinimum?: number;
+  algorithmMaximum?: number;
+  implementationVersion?: number;
+  questionSections?: IQuestionSection[];
 }
 
 export class Questionnaire implements IQuestionnaire {
   constructor(
     public id?: number,
-    public uuid?: string,
-    public questionnaireQuestionGroups?: IQuestionnaireQuestionGroup[],
-    public answerResponses?: IAnswerResponse[]
+    public identifier?: QuestionnaireIdentifier,
+    public algorithm?: Algorithm,
+    public algorithmMinimum?: number,
+    public algorithmMaximum?: number,
+    public implementationVersion?: number,
+    public questionSections?: IQuestionSection[]
   ) {}
 }

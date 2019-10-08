@@ -18,7 +18,6 @@ drop database bcra;
 create database bcra;
 grant all privileges on database bcra to bcra;
 \q
-mvnw liquibase:clearCheckSums
 ```
 
 ### Recreate Database

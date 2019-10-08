@@ -15,7 +15,7 @@ export class QuestionGroupUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    uuid: [null, [Validators.required]]
+    identifier: [null, [Validators.required]]
   });
 
   constructor(protected questionGroupService: QuestionGroupService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
@@ -30,7 +30,7 @@ export class QuestionGroupUpdateComponent implements OnInit {
   updateForm(questionGroup: IQuestionGroup) {
     this.editForm.patchValue({
       id: questionGroup.id,
-      uuid: questionGroup.uuid
+      identifier: questionGroup.identifier
     });
   }
 
@@ -52,7 +52,7 @@ export class QuestionGroupUpdateComponent implements OnInit {
     return {
       ...new QuestionGroup(),
       id: this.editForm.get(['id']).value,
-      uuid: this.editForm.get(['uuid']).value
+      identifier: this.editForm.get(['identifier']).value
     };
   }
 

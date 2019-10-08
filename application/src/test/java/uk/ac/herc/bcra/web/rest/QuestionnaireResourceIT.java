@@ -2,15 +2,11 @@ package uk.ac.herc.bcra.web.rest;
 
 import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.Questionnaire;
-import uk.ac.herc.bcra.domain.QuestionnaireQuestionGroup;
-import uk.ac.herc.bcra.domain.AnswerResponse;
 import uk.ac.herc.bcra.repository.QuestionnaireRepository;
 import uk.ac.herc.bcra.service.QuestionnaireService;
 import uk.ac.herc.bcra.service.dto.QuestionnaireDTO;
 import uk.ac.herc.bcra.service.mapper.QuestionnaireMapper;
 import uk.ac.herc.bcra.web.rest.errors.ExceptionTranslator;
-import uk.ac.herc.bcra.service.dto.QuestionnaireCriteria;
-import uk.ac.herc.bcra.service.QuestionnaireQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
-import java.util.List;
 
 import static uk.ac.herc.bcra.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,14 +29,28 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import uk.ac.herc.bcra.domain.enumeration.QuestionnaireIdentifier;
+import uk.ac.herc.bcra.domain.enumeration.Algorithm;
 /**
  * Integration tests for the {@link QuestionnaireResource} REST controller.
  */
 @SpringBootTest(classes = BcraApp.class)
 public class QuestionnaireResourceIT {
 
-    private static final String DEFAULT_UUID = "AAAAAAAAAA";
-    private static final String UPDATED_UUID = "BBBBBBBBBB";
+    private static final QuestionnaireIdentifier DEFAULT_IDENTIFIER = QuestionnaireIdentifier.TYRER_CUZICK_IV1;
+    private static final QuestionnaireIdentifier UPDATED_IDENTIFIER = QuestionnaireIdentifier.TYRER_CUZICK_IV1;
+
+    private static final Algorithm DEFAULT_ALGORITHM = Algorithm.TYRER_CUZICK;
+    private static final Algorithm UPDATED_ALGORITHM = Algorithm.TYRER_CUZICK;
+
+    private static final Integer DEFAULT_ALGORITHM_MINIMUM = 1;
+    private static final Integer UPDATED_ALGORITHM_MINIMUM = 2;
+
+    private static final Integer DEFAULT_ALGORITHM_MAXIMUM = 1;
+    private static final Integer UPDATED_ALGORITHM_MAXIMUM = 2;
+
+    private static final Integer DEFAULT_IMPLEMENTATION_VERSION = 1;
+    private static final Integer UPDATED_IMPLEMENTATION_VERSION = 2;
 
     @Autowired
     private QuestionnaireRepository questionnaireRepository;
@@ -51,9 +60,6 @@ public class QuestionnaireResourceIT {
 
     @Autowired
     private QuestionnaireService questionnaireService;
-
-    @Autowired
-    private QuestionnaireQueryService questionnaireQueryService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -77,7 +83,7 @@ public class QuestionnaireResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final QuestionnaireResource questionnaireResource = new QuestionnaireResource(questionnaireService, questionnaireQueryService);
+        final QuestionnaireResource questionnaireResource = new QuestionnaireResource(questionnaireService);
         this.restQuestionnaireMockMvc = MockMvcBuilders.standaloneSetup(questionnaireResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -94,7 +100,11 @@ public class QuestionnaireResourceIT {
      */
     public static Questionnaire createEntity(EntityManager em) {
         Questionnaire questionnaire = new Questionnaire()
-            .uuid(DEFAULT_UUID);
+            .identifier(DEFAULT_IDENTIFIER)
+            .algorithm(DEFAULT_ALGORITHM)
+            .algorithmMinimum(DEFAULT_ALGORITHM_MINIMUM)
+            .algorithmMaximum(DEFAULT_ALGORITHM_MAXIMUM)
+            .implementationVersion(DEFAULT_IMPLEMENTATION_VERSION);
         return questionnaire;
     }
     /**
@@ -105,72 +115,17 @@ public class QuestionnaireResourceIT {
      */
     public static Questionnaire createUpdatedEntity(EntityManager em) {
         Questionnaire questionnaire = new Questionnaire()
-            .uuid(UPDATED_UUID);
+            .identifier(UPDATED_IDENTIFIER)
+            .algorithm(UPDATED_ALGORITHM)
+            .algorithmMinimum(UPDATED_ALGORITHM_MINIMUM)
+            .algorithmMaximum(UPDATED_ALGORITHM_MAXIMUM)
+            .implementationVersion(UPDATED_IMPLEMENTATION_VERSION);
         return questionnaire;
     }
 
     @BeforeEach
     public void initTest() {
         questionnaire = createEntity(em);
-    }
-
-    @Test
-    @Transactional
-    public void createQuestionnaire() throws Exception {
-        int databaseSizeBeforeCreate = questionnaireRepository.findAll().size();
-
-        // Create the Questionnaire
-        QuestionnaireDTO questionnaireDTO = questionnaireMapper.toDto(questionnaire);
-        restQuestionnaireMockMvc.perform(post("/api/questionnaires")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(questionnaireDTO)))
-            .andExpect(status().isCreated());
-
-        // Validate the Questionnaire in the database
-        List<Questionnaire> questionnaireList = questionnaireRepository.findAll();
-        assertThat(questionnaireList).hasSize(databaseSizeBeforeCreate + 1);
-        Questionnaire testQuestionnaire = questionnaireList.get(questionnaireList.size() - 1);
-        assertThat(testQuestionnaire.getUuid()).isEqualTo(DEFAULT_UUID);
-    }
-
-    @Test
-    @Transactional
-    public void createQuestionnaireWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = questionnaireRepository.findAll().size();
-
-        // Create the Questionnaire with an existing ID
-        questionnaire.setId(1L);
-        QuestionnaireDTO questionnaireDTO = questionnaireMapper.toDto(questionnaire);
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restQuestionnaireMockMvc.perform(post("/api/questionnaires")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(questionnaireDTO)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the Questionnaire in the database
-        List<Questionnaire> questionnaireList = questionnaireRepository.findAll();
-        assertThat(questionnaireList).hasSize(databaseSizeBeforeCreate);
-    }
-
-
-    @Test
-    @Transactional
-    public void checkUuidIsRequired() throws Exception {
-        int databaseSizeBeforeTest = questionnaireRepository.findAll().size();
-        // set the field null
-        questionnaire.setUuid(null);
-
-        // Create the Questionnaire, which fails.
-        QuestionnaireDTO questionnaireDTO = questionnaireMapper.toDto(questionnaire);
-
-        restQuestionnaireMockMvc.perform(post("/api/questionnaires")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(questionnaireDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<Questionnaire> questionnaireList = questionnaireRepository.findAll();
-        assertThat(questionnaireList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -184,7 +139,7 @@ public class QuestionnaireResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(questionnaire.getId().intValue())))
-            .andExpect(jsonPath("$.[*].uuid").value(hasItem(DEFAULT_UUID.toString())));
+            .andExpect(jsonPath("$.[*].identifier").value(hasItem(DEFAULT_IDENTIFIER.toString())));
     }
     
     @Test
@@ -198,121 +153,8 @@ public class QuestionnaireResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(questionnaire.getId().intValue()))
-            .andExpect(jsonPath("$.uuid").value(DEFAULT_UUID.toString()));
+            .andExpect(jsonPath("$.identifier").value(DEFAULT_IDENTIFIER.toString()));
     }
-
-    @Test
-    @Transactional
-    public void getAllQuestionnairesByUuidIsEqualToSomething() throws Exception {
-        // Initialize the database
-        questionnaireRepository.saveAndFlush(questionnaire);
-
-        // Get all the questionnaireList where uuid equals to DEFAULT_UUID
-        defaultQuestionnaireShouldBeFound("uuid.equals=" + DEFAULT_UUID);
-
-        // Get all the questionnaireList where uuid equals to UPDATED_UUID
-        defaultQuestionnaireShouldNotBeFound("uuid.equals=" + UPDATED_UUID);
-    }
-
-    @Test
-    @Transactional
-    public void getAllQuestionnairesByUuidIsInShouldWork() throws Exception {
-        // Initialize the database
-        questionnaireRepository.saveAndFlush(questionnaire);
-
-        // Get all the questionnaireList where uuid in DEFAULT_UUID or UPDATED_UUID
-        defaultQuestionnaireShouldBeFound("uuid.in=" + DEFAULT_UUID + "," + UPDATED_UUID);
-
-        // Get all the questionnaireList where uuid equals to UPDATED_UUID
-        defaultQuestionnaireShouldNotBeFound("uuid.in=" + UPDATED_UUID);
-    }
-
-    @Test
-    @Transactional
-    public void getAllQuestionnairesByUuidIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        questionnaireRepository.saveAndFlush(questionnaire);
-
-        // Get all the questionnaireList where uuid is not null
-        defaultQuestionnaireShouldBeFound("uuid.specified=true");
-
-        // Get all the questionnaireList where uuid is null
-        defaultQuestionnaireShouldNotBeFound("uuid.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllQuestionnairesByQuestionnaireQuestionGroupIsEqualToSomething() throws Exception {
-        // Initialize the database
-        questionnaireRepository.saveAndFlush(questionnaire);
-        QuestionnaireQuestionGroup questionnaireQuestionGroup = QuestionnaireQuestionGroupResourceIT.createEntity(em);
-        em.persist(questionnaireQuestionGroup);
-        em.flush();
-        questionnaire.addQuestionnaireQuestionGroup(questionnaireQuestionGroup);
-        questionnaireRepository.saveAndFlush(questionnaire);
-        Long questionnaireQuestionGroupId = questionnaireQuestionGroup.getId();
-
-        // Get all the questionnaireList where questionnaireQuestionGroup equals to questionnaireQuestionGroupId
-        defaultQuestionnaireShouldBeFound("questionnaireQuestionGroupId.equals=" + questionnaireQuestionGroupId);
-
-        // Get all the questionnaireList where questionnaireQuestionGroup equals to questionnaireQuestionGroupId + 1
-        defaultQuestionnaireShouldNotBeFound("questionnaireQuestionGroupId.equals=" + (questionnaireQuestionGroupId + 1));
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllQuestionnairesByAnswerResponseIsEqualToSomething() throws Exception {
-        // Initialize the database
-        questionnaireRepository.saveAndFlush(questionnaire);
-        AnswerResponse answerResponse = AnswerResponseResourceIT.createEntity(em);
-        em.persist(answerResponse);
-        em.flush();
-        questionnaire.addAnswerResponse(answerResponse);
-        questionnaireRepository.saveAndFlush(questionnaire);
-        Long answerResponseId = answerResponse.getId();
-
-        // Get all the questionnaireList where answerResponse equals to answerResponseId
-        defaultQuestionnaireShouldBeFound("answerResponseId.equals=" + answerResponseId);
-
-        // Get all the questionnaireList where answerResponse equals to answerResponseId + 1
-        defaultQuestionnaireShouldNotBeFound("answerResponseId.equals=" + (answerResponseId + 1));
-    }
-
-    /**
-     * Executes the search, and checks that the default entity is returned.
-     */
-    private void defaultQuestionnaireShouldBeFound(String filter) throws Exception {
-        restQuestionnaireMockMvc.perform(get("/api/questionnaires?sort=id,desc&" + filter))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(questionnaire.getId().intValue())))
-            .andExpect(jsonPath("$.[*].uuid").value(hasItem(DEFAULT_UUID)));
-
-        // Check, that the count call also returns 1
-        restQuestionnaireMockMvc.perform(get("/api/questionnaires/count?sort=id,desc&" + filter))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(content().string("1"));
-    }
-
-    /**
-     * Executes the search, and checks that the default entity is not returned.
-     */
-    private void defaultQuestionnaireShouldNotBeFound(String filter) throws Exception {
-        restQuestionnaireMockMvc.perform(get("/api/questionnaires?sort=id,desc&" + filter))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$").isArray())
-            .andExpect(jsonPath("$").isEmpty());
-
-        // Check, that the count call also returns 0
-        restQuestionnaireMockMvc.perform(get("/api/questionnaires/count?sort=id,desc&" + filter))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(content().string("0"));
-    }
-
 
     @Test
     @Transactional
@@ -320,71 +162,6 @@ public class QuestionnaireResourceIT {
         // Get the questionnaire
         restQuestionnaireMockMvc.perform(get("/api/questionnaires/{id}", Long.MAX_VALUE))
             .andExpect(status().isNotFound());
-    }
-
-    @Test
-    @Transactional
-    public void updateQuestionnaire() throws Exception {
-        // Initialize the database
-        questionnaireRepository.saveAndFlush(questionnaire);
-
-        int databaseSizeBeforeUpdate = questionnaireRepository.findAll().size();
-
-        // Update the questionnaire
-        Questionnaire updatedQuestionnaire = questionnaireRepository.findById(questionnaire.getId()).get();
-        // Disconnect from session so that the updates on updatedQuestionnaire are not directly saved in db
-        em.detach(updatedQuestionnaire);
-        updatedQuestionnaire
-            .uuid(UPDATED_UUID);
-        QuestionnaireDTO questionnaireDTO = questionnaireMapper.toDto(updatedQuestionnaire);
-
-        restQuestionnaireMockMvc.perform(put("/api/questionnaires")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(questionnaireDTO)))
-            .andExpect(status().isOk());
-
-        // Validate the Questionnaire in the database
-        List<Questionnaire> questionnaireList = questionnaireRepository.findAll();
-        assertThat(questionnaireList).hasSize(databaseSizeBeforeUpdate);
-        Questionnaire testQuestionnaire = questionnaireList.get(questionnaireList.size() - 1);
-        assertThat(testQuestionnaire.getUuid()).isEqualTo(UPDATED_UUID);
-    }
-
-    @Test
-    @Transactional
-    public void updateNonExistingQuestionnaire() throws Exception {
-        int databaseSizeBeforeUpdate = questionnaireRepository.findAll().size();
-
-        // Create the Questionnaire
-        QuestionnaireDTO questionnaireDTO = questionnaireMapper.toDto(questionnaire);
-
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restQuestionnaireMockMvc.perform(put("/api/questionnaires")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(questionnaireDTO)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the Questionnaire in the database
-        List<Questionnaire> questionnaireList = questionnaireRepository.findAll();
-        assertThat(questionnaireList).hasSize(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    @Transactional
-    public void deleteQuestionnaire() throws Exception {
-        // Initialize the database
-        questionnaireRepository.saveAndFlush(questionnaire);
-
-        int databaseSizeBeforeDelete = questionnaireRepository.findAll().size();
-
-        // Delete the questionnaire
-        restQuestionnaireMockMvc.perform(delete("/api/questionnaires/{id}", questionnaire.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
-            .andExpect(status().isNoContent());
-
-        // Validate the database contains one less item
-        List<Questionnaire> questionnaireList = questionnaireRepository.findAll();
-        assertThat(questionnaireList).hasSize(databaseSizeBeforeDelete - 1);
     }
 
     @Test

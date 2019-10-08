@@ -9,20 +9,15 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import uk.ac.herc.bcra.domain.enumeration.QuestionnaireIdentifier;
+
+import uk.ac.herc.bcra.domain.enumeration.Algorithm;
+
 /**
  * A Questionnaire.
  */
 @Entity
-@Table(
-    name = "questionnaire",
-    indexes = {
-        @Index(
-            name = "questionnaire_uuid_index",
-            columnList = "uuid",
-            unique = true
-        )
-    }
-)
+@Table(name = "questionnaire")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Questionnaire implements Serializable {
 
@@ -34,16 +29,30 @@ public class Questionnaire implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "uuid", nullable = false, unique = true)
-    private String uuid;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "identifier", nullable = false, unique = true)
+    private QuestionnaireIdentifier identifier;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "algorithm", nullable = false)
+    private Algorithm algorithm;
+
+    @NotNull
+    @Column(name = "algorithm_minimum", nullable = false)
+    private Integer algorithmMinimum;
+
+    @NotNull
+    @Column(name = "algorithm_maximum", nullable = false)
+    private Integer algorithmMaximum;
+
+    @NotNull
+    @Column(name = "implementation_version", nullable = false)
+    private Integer implementationVersion;
 
     @OneToMany(mappedBy = "questionnaire")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<QuestionnaireQuestionGroup> questionnaireQuestionGroups = new HashSet<>();
-
-    @OneToMany(mappedBy = "questionnaire")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<AnswerResponse> answerResponses = new HashSet<>();
+    private Set<QuestionSection> questionSections = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -54,67 +63,94 @@ public class Questionnaire implements Serializable {
         this.id = id;
     }
 
-    public String getUuid() {
-        return uuid;
+    public QuestionnaireIdentifier getIdentifier() {
+        return identifier;
     }
 
-    public Questionnaire uuid(String uuid) {
-        this.uuid = uuid;
+    public Questionnaire identifier(QuestionnaireIdentifier identifier) {
+        this.identifier = identifier;
         return this;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setIdentifier(QuestionnaireIdentifier identifier) {
+        this.identifier = identifier;
     }
 
-    public Set<QuestionnaireQuestionGroup> getQuestionnaireQuestionGroups() {
-        return questionnaireQuestionGroups;
+    public Algorithm getAlgorithm() {
+        return algorithm;
     }
 
-    public Questionnaire questionnaireQuestionGroups(Set<QuestionnaireQuestionGroup> questionnaireQuestionGroups) {
-        this.questionnaireQuestionGroups = questionnaireQuestionGroups;
+    public Questionnaire algorithm(Algorithm algorithm) {
+        this.algorithm = algorithm;
         return this;
     }
 
-    public Questionnaire addQuestionnaireQuestionGroup(QuestionnaireQuestionGroup questionnaireQuestionGroup) {
-        this.questionnaireQuestionGroups.add(questionnaireQuestionGroup);
-        questionnaireQuestionGroup.setQuestionnaire(this);
+    public void setAlgorithm(Algorithm algorithm) {
+        this.algorithm = algorithm;
+    }
+
+    public Integer getAlgorithmMinimum() {
+        return algorithmMinimum;
+    }
+
+    public Questionnaire algorithmMinimum(Integer algorithmMinimum) {
+        this.algorithmMinimum = algorithmMinimum;
         return this;
     }
 
-    public Questionnaire removeQuestionnaireQuestionGroup(QuestionnaireQuestionGroup questionnaireQuestionGroup) {
-        this.questionnaireQuestionGroups.remove(questionnaireQuestionGroup);
-        questionnaireQuestionGroup.setQuestionnaire(null);
+    public void setAlgorithmMinimum(Integer algorithmMinimum) {
+        this.algorithmMinimum = algorithmMinimum;
+    }
+
+    public Integer getAlgorithmMaximum() {
+        return algorithmMaximum;
+    }
+
+    public Questionnaire algorithmMaximum(Integer algorithmMaximum) {
+        this.algorithmMaximum = algorithmMaximum;
         return this;
     }
 
-    public void setQuestionnaireQuestionGroups(Set<QuestionnaireQuestionGroup> questionnaireQuestionGroups) {
-        this.questionnaireQuestionGroups = questionnaireQuestionGroups;
+    public void setAlgorithmMaximum(Integer algorithmMaximum) {
+        this.algorithmMaximum = algorithmMaximum;
     }
 
-    public Set<AnswerResponse> getAnswerResponses() {
-        return answerResponses;
+    public Integer getImplementationVersion() {
+        return implementationVersion;
     }
 
-    public Questionnaire answerResponses(Set<AnswerResponse> answerResponses) {
-        this.answerResponses = answerResponses;
+    public Questionnaire implementationVersion(Integer implementationVersion) {
+        this.implementationVersion = implementationVersion;
         return this;
     }
 
-    public Questionnaire addAnswerResponse(AnswerResponse answerResponse) {
-        this.answerResponses.add(answerResponse);
-        answerResponse.setQuestionnaire(this);
+    public void setImplementationVersion(Integer implementationVersion) {
+        this.implementationVersion = implementationVersion;
+    }
+
+    public Set<QuestionSection> getQuestionSections() {
+        return questionSections;
+    }
+
+    public Questionnaire questionSections(Set<QuestionSection> questionSections) {
+        this.questionSections = questionSections;
         return this;
     }
 
-    public Questionnaire removeAnswerResponse(AnswerResponse answerResponse) {
-        this.answerResponses.remove(answerResponse);
-        answerResponse.setQuestionnaire(null);
+    public Questionnaire addQuestionSection(QuestionSection questionSection) {
+        this.questionSections.add(questionSection);
+        questionSection.setQuestionnaire(this);
         return this;
     }
 
-    public void setAnswerResponses(Set<AnswerResponse> answerResponses) {
-        this.answerResponses = answerResponses;
+    public Questionnaire removeQuestionSection(QuestionSection questionSection) {
+        this.questionSections.remove(questionSection);
+        questionSection.setQuestionnaire(null);
+        return this;
+    }
+
+    public void setQuestionSections(Set<QuestionSection> questionSections) {
+        this.questionSections = questionSections;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -138,7 +174,11 @@ public class Questionnaire implements Serializable {
     public String toString() {
         return "Questionnaire{" +
             "id=" + getId() +
-            ", uuid='" + getUuid() + "'" +
+            ", identifier='" + getIdentifier() + "'" +
+            ", algorithm='" + getAlgorithm() + "'" +
+            ", algorithmMinimum=" + getAlgorithmMinimum() +
+            ", algorithmMaximum=" + getAlgorithmMaximum() +
+            ", implementationVersion=" + getImplementationVersion() +
             "}";
     }
 }

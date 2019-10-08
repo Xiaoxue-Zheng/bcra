@@ -1,0 +1,61 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-answer-item-heading">Create or edit a Answer Item</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!editForm.get('id').value">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                        readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_selected">Selected</label>
+                    <input type="checkbox" class="form-control" name="selected" id="field_selected"
+                           formControlName="selected"/>
+                    <div *ngIf="editForm.get('selected').invalid && (editForm.get('selected').dirty || editForm.get('selected').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('selected').errors.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_answer">Answer</label>
+                    <select class="form-control" id="field_answer" name="answer" formControlName="answerId">
+                        <option *ngIf="!editForm.get('answerId').value" [ngValue]="null" selected></option>
+                        <option [ngValue]="answerOption.id" *ngFor="let answerOption of answers; trackBy: trackAnswerById">{{answerOption.id}}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('answerId').invalid && (editForm.get('answerId').dirty || editForm.get('answerId').touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('answerId').errors.required">
+                        This field is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_questionItem">Question Item</label>
+                    <select class="form-control" id="field_questionItem" name="questionItem" formControlName="questionItemId">
+                        <option *ngIf="!editForm.get('questionItemId').value" [ngValue]="null" selected></option>
+                        <option [ngValue]="questionItemOption.id" *ngFor="let questionItemOption of questionitems; trackBy: trackQuestionItemById">{{questionItemOption.id}}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('questionItemId').invalid && (editForm.get('questionItemId').dirty || editForm.get('questionItemId').touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('questionItemId').errors.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -2,11 +2,27 @@
     "name": "Question",
     "fields": [
         {
-            "fieldName": "uuid",
-            "fieldType": "String",
+            "fieldName": "identifier",
+            "fieldType": "QuestionIdentifier",
+            "fieldValues": "SELF_FIRST_PERIOD,SELF_PREMENOPAUSAL,SELF_MENOPAUSAL_AGE,SELF_PREGNANCIES,SELF_PREGNANCY_FIRST_AGE,SELF_HEIGHT,SELF_WEIGHT,SELF_BREAST_BIOPSY,SELF_BREAST_BIOPSY_DIAGNOSIS_RISK,SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES,SELF_ASHKENAZI,FAMILY_BLOOD_RELATIVES,FAMILY_MATERNAL_RELATIVES,FAMILY_PATERNAL_RELATIVES,RELATIVE_HOW_MANY,RELATIVE_DIAGNOSIS,RELATIVE_FIRST_DIAGNOSIS_AGE,RELATIVE_SECOND_DIAGNOSIS_AGE,RELATIVE_GENETIC_TESTING,RELATIVE_GENETIC_TESTING_RESULT,RELATIVE_OVARIAN_CANCER,RELATIVE_OVARIAN_CANCER_AGE,FATHER_BREAST_CANCER,BROTHER_BREAST_CANCER",
             "fieldValidateRules": [
                 "required",
                 "unique"
+            ]
+        },
+        {
+            "fieldName": "type",
+            "fieldType": "QuestionType",
+            "fieldValues": "NUMBER,NUMBER_WEIGHT,NUMBER_HEIGHT,NUMBER_UNKNOWN,DROPDOWN_NUMBER,CHECKBOX,RADIO",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "order",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
             ]
         },
         {
@@ -15,28 +31,44 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "minimum",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "maximum",
+            "fieldType": "Integer"
         }
     ],
     "relationships": [
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "questionGroupQuestion",
+            "otherEntityName": "displayCondition",
+            "otherEntityRelationshipName": "displayQuestion",
+            "relationshipName": "displayCondition"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "questionGroup",
             "otherEntityRelationshipName": "question",
-            "relationshipName": "questionGroupQuestion"
+            "relationshipValidateRules": "required",
+            "relationshipName": "questionGroup",
+            "otherEntityField": "id"
         },
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "answer",
+            "otherEntityName": "questionItem",
             "otherEntityRelationshipName": "question",
-            "relationshipName": "answer"
+            "relationshipName": "questionItem"
         }
     ],
-    "changelogDate": "20190917100702",
+    "changelogDate": "20191008133425",
     "entityTableName": "question",
     "dto": "mapstruct",
-    "pagination": "pagination",
+    "pagination": "no",
     "service": "serviceImpl",
-    "jpaMetamodelFiltering": true,
+    "jpaMetamodelFiltering": false,
     "fluentMethods": true,
     "clientRootFolder": "",
     "applications": "*"

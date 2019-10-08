@@ -13,9 +13,15 @@
                 <div class="form-group">
                     <label class="form-control-label" for="field_questionnaire">Questionnaire</label>
                     <select class="form-control" id="field_questionnaire" name="questionnaire" formControlName="questionnaireId">
-                        <option [ngValue]="null"></option>
+                        <option *ngIf="!editForm.get('questionnaireId').value" [ngValue]="null" selected></option>
                         <option [ngValue]="questionnaireOption.id" *ngFor="let questionnaireOption of questionnaires; trackBy: trackQuestionnaireById">{{questionnaireOption.id}}</option>
                     </select>
+                </div>
+                <div *ngIf="editForm.get('questionnaireId').invalid && (editForm.get('questionnaireId').dirty || editForm.get('questionnaireId').touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('questionnaireId').errors.required">
+                        This field is required.
+                    </small>
                 </div>
             </div>
             <div>

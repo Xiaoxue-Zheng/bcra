@@ -8,12 +8,13 @@ import uk.ac.herc.bcra.service.mapper.DisplayConditionMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link DisplayCondition}.
@@ -50,15 +51,15 @@ public class DisplayConditionServiceImpl implements DisplayConditionService {
     /**
      * Get all the displayConditions.
      *
-     * @param pageable the pagination information.
      * @return the list of entities.
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<DisplayConditionDTO> findAll(Pageable pageable) {
+    public List<DisplayConditionDTO> findAll() {
         log.debug("Request to get all DisplayConditions");
-        return displayConditionRepository.findAll(pageable)
-            .map(displayConditionMapper::toDto);
+        return displayConditionRepository.findAll().stream()
+            .map(displayConditionMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
     }
 
 

@@ -8,12 +8,13 @@ import uk.ac.herc.bcra.service.mapper.AnswerMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link Answer}.
@@ -50,15 +51,15 @@ public class AnswerServiceImpl implements AnswerService {
     /**
      * Get all the answers.
      *
-     * @param pageable the pagination information.
      * @return the list of entities.
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<AnswerDTO> findAll(Pageable pageable) {
+    public List<AnswerDTO> findAll() {
         log.debug("Request to get all Answers");
-        return answerRepository.findAll(pageable)
-            .map(answerMapper::toDto);
+        return answerRepository.findAll().stream()
+            .map(answerMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
     }
 
 

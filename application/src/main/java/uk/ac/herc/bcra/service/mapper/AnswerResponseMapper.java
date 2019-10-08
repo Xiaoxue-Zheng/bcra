@@ -1,22 +1,23 @@
 package uk.ac.herc.bcra.service.mapper;
 
-import uk.ac.herc.bcra.domain.*;
-import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-import org.mapstruct.*;
+import uk.ac.herc.bcra.domain.AnswerResponse;
+import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
 
 /**
  * Mapper for the entity {@link AnswerResponse} and its DTO {@link AnswerResponseDTO}.
  */
-@Mapper(componentModel = "spring", uses = {QuestionnaireMapper.class, AnswerGroupMapper.class})
+@Mapper(componentModel = "spring", uses = {QuestionnaireMapper.class, AnswerSectionMapper.class})
 public interface AnswerResponseMapper extends EntityMapper<AnswerResponseDTO, AnswerResponse> {
 
     @Mapping(source = "questionnaire.id", target = "questionnaireId")
     AnswerResponseDTO toDto(AnswerResponse answerResponse);
 
     @Mapping(source = "questionnaireId", target = "questionnaire")
-    @Mapping(source = "answerGroups", target = "answerGroups")
-    @Mapping(target = "removeAnswerGroup", ignore = true)
+    @Mapping(source = "answerSections", target="answerSections")
+    @Mapping(target = "removeAnswerSection", ignore = true)
     AnswerResponse toEntity(AnswerResponseDTO answerResponseDTO);
 
     default AnswerResponse fromId(Long id) {
@@ -25,7 +26,6 @@ public interface AnswerResponseMapper extends EntityMapper<AnswerResponseDTO, An
         }
         AnswerResponse answerResponse = new AnswerResponse();
         answerResponse.setId(id);
-
         return answerResponse;
     }
 }

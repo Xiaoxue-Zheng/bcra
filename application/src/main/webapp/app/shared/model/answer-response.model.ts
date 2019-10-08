@@ -1,11 +1,11 @@
-import { IAnswerGroup } from 'app/shared/model/answer-group.model';
+import { IAnswerSection } from 'app/shared/model/answer-section.model';
 
 export interface IAnswerResponse {
   id?: number;
   questionnaireId?: number;
-  answerGroups?: IAnswerGroup[];
+  answerSections?: IAnswerSection[];
 }
 
 export class AnswerResponse implements IAnswerResponse {
-  constructor(public id?: number, public questionnaireId?: number, public answerGroups?: IAnswerGroup[]) {}
+  constructor(public id?: number, public questionnaireId?: number, public answerSections?: IAnswerSection[]) {}
 }

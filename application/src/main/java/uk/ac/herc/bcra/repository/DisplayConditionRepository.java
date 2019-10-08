@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface DisplayConditionRepository extends JpaRepository<DisplayCondition, Long>, JpaSpecificationExecutor<DisplayCondition> {
+public interface DisplayConditionRepository extends JpaRepository<DisplayCondition, Long> {
 
 }

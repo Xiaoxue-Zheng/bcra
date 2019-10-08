@@ -3,14 +3,11 @@ package uk.ac.herc.bcra.web.rest;
 import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.AnswerResponse;
 import uk.ac.herc.bcra.domain.Questionnaire;
-import uk.ac.herc.bcra.domain.AnswerGroup;
 import uk.ac.herc.bcra.repository.AnswerResponseRepository;
 import uk.ac.herc.bcra.service.AnswerResponseService;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
 import uk.ac.herc.bcra.service.mapper.AnswerResponseMapper;
 import uk.ac.herc.bcra.web.rest.errors.ExceptionTranslator;
-import uk.ac.herc.bcra.service.dto.AnswerResponseCriteria;
-import uk.ac.herc.bcra.service.AnswerResponseQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,9 +47,6 @@ public class AnswerResponseResourceIT {
     private AnswerResponseService answerResponseService;
 
     @Autowired
-    private AnswerResponseQueryService answerResponseQueryService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -74,7 +68,7 @@ public class AnswerResponseResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AnswerResponseResource answerResponseResource = new AnswerResponseResource(answerResponseService, answerResponseQueryService);
+        final AnswerResponseResource answerResponseResource = new AnswerResponseResource(answerResponseService);
         this.restAnswerResponseMockMvc = MockMvcBuilders.standaloneSetup(answerResponseResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -91,6 +85,16 @@ public class AnswerResponseResourceIT {
      */
     public static AnswerResponse createEntity(EntityManager em) {
         AnswerResponse answerResponse = new AnswerResponse();
+        // Add required entity
+        Questionnaire questionnaire;
+        if (TestUtil.findAll(em, Questionnaire.class).isEmpty()) {
+            questionnaire = QuestionnaireResourceIT.createEntity(em);
+            em.persist(questionnaire);
+            em.flush();
+        } else {
+            questionnaire = TestUtil.findAll(em, Questionnaire.class).get(0);
+        }
+        answerResponse.setQuestionnaire(questionnaire);
         return answerResponse;
     }
     /**
@@ -101,6 +105,16 @@ public class AnswerResponseResourceIT {
      */
     public static AnswerResponse createUpdatedEntity(EntityManager em) {
         AnswerResponse answerResponse = new AnswerResponse();
+        // Add required entity
+        Questionnaire questionnaire;
+        if (TestUtil.findAll(em, Questionnaire.class).isEmpty()) {
+            questionnaire = QuestionnaireResourceIT.createUpdatedEntity(em);
+            em.persist(questionnaire);
+            em.flush();
+        } else {
+            questionnaire = TestUtil.findAll(em, Questionnaire.class).get(0);
+        }
+        answerResponse.setQuestionnaire(questionnaire);
         return answerResponse;
     }
 
@@ -124,7 +138,6 @@ public class AnswerResponseResourceIT {
         // Validate the AnswerResponse in the database
         List<AnswerResponse> answerResponseList = answerResponseRepository.findAll();
         assertThat(answerResponseList).hasSize(databaseSizeBeforeCreate + 1);
-        AnswerResponse testAnswerResponse = answerResponseList.get(answerResponseList.size() - 1);
     }
 
     @Test
@@ -176,79 +189,6 @@ public class AnswerResponseResourceIT {
 
     @Test
     @Transactional
-    public void getAllAnswerResponsesByQuestionnaireIsEqualToSomething() throws Exception {
-        // Initialize the database
-        answerResponseRepository.saveAndFlush(answerResponse);
-        Questionnaire questionnaire = QuestionnaireResourceIT.createEntity(em);
-        em.persist(questionnaire);
-        em.flush();
-        answerResponse.setQuestionnaire(questionnaire);
-        answerResponseRepository.saveAndFlush(answerResponse);
-        Long questionnaireId = questionnaire.getId();
-
-        // Get all the answerResponseList where questionnaire equals to questionnaireId
-        defaultAnswerResponseShouldBeFound("questionnaireId.equals=" + questionnaireId);
-
-        // Get all the answerResponseList where questionnaire equals to questionnaireId + 1
-        defaultAnswerResponseShouldNotBeFound("questionnaireId.equals=" + (questionnaireId + 1));
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllAnswerResponsesByAnswerGroupIsEqualToSomething() throws Exception {
-        // Initialize the database
-        answerResponseRepository.saveAndFlush(answerResponse);
-        AnswerGroup answerGroup = AnswerGroupResourceIT.createEntity(em);
-        em.persist(answerGroup);
-        em.flush();
-        answerResponse.addAnswerGroup(answerGroup);
-        answerResponseRepository.saveAndFlush(answerResponse);
-        Long answerGroupId = answerGroup.getId();
-
-        // Get all the answerResponseList where answerGroup equals to answerGroupId
-        defaultAnswerResponseShouldBeFound("answerGroupId.equals=" + answerGroupId);
-
-        // Get all the answerResponseList where answerGroup equals to answerGroupId + 1
-        defaultAnswerResponseShouldNotBeFound("answerGroupId.equals=" + (answerGroupId + 1));
-    }
-
-    /**
-     * Executes the search, and checks that the default entity is returned.
-     */
-    private void defaultAnswerResponseShouldBeFound(String filter) throws Exception {
-        restAnswerResponseMockMvc.perform(get("/api/answer-responses?sort=id,desc&" + filter))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(answerResponse.getId().intValue())));
-
-        // Check, that the count call also returns 1
-        restAnswerResponseMockMvc.perform(get("/api/answer-responses/count?sort=id,desc&" + filter))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(content().string("1"));
-    }
-
-    /**
-     * Executes the search, and checks that the default entity is not returned.
-     */
-    private void defaultAnswerResponseShouldNotBeFound(String filter) throws Exception {
-        restAnswerResponseMockMvc.perform(get("/api/answer-responses?sort=id,desc&" + filter))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$").isArray())
-            .andExpect(jsonPath("$").isEmpty());
-
-        // Check, that the count call also returns 0
-        restAnswerResponseMockMvc.perform(get("/api/answer-responses/count?sort=id,desc&" + filter))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(content().string("0"));
-    }
-
-
-    @Test
-    @Transactional
     public void getNonExistingAnswerResponse() throws Exception {
         // Get the answerResponse
         restAnswerResponseMockMvc.perform(get("/api/answer-responses/{id}", Long.MAX_VALUE))
@@ -277,7 +217,6 @@ public class AnswerResponseResourceIT {
         // Validate the AnswerResponse in the database
         List<AnswerResponse> answerResponseList = answerResponseRepository.findAll();
         assertThat(answerResponseList).hasSize(databaseSizeBeforeUpdate);
-        AnswerResponse testAnswerResponse = answerResponseList.get(answerResponseList.size() - 1);
     }
 
     @Test

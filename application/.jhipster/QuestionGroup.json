@@ -2,8 +2,9 @@
     "name": "QuestionGroup",
     "fields": [
         {
-            "fieldName": "uuid",
-            "fieldType": "String",
+            "fieldName": "identifier",
+            "fieldType": "QuestionGroupIdentifier",
+            "fieldValues": "PERSONAL_HISTORY_QUESTIONS,FAMILY_HISTORY_QUESTIONS,RELATIVE_QUESTIONS,RELATIVE_COUNT_QUESTIONS,MALE_BREAST_CANCER_QUESTIONS",
             "fieldValidateRules": [
                 "required",
                 "unique"
@@ -13,35 +14,23 @@
     "relationships": [
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "displayCondition",
+            "otherEntityName": "questionSection",
             "otherEntityRelationshipName": "questionGroup",
-            "relationshipName": "displayCondition"
+            "relationshipName": "questionSection"
         },
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "questionnaireQuestionGroup",
+            "otherEntityName": "question",
             "otherEntityRelationshipName": "questionGroup",
-            "relationshipName": "questionnaireQuestionGroup"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "questionGroupQuestion",
-            "otherEntityRelationshipName": "questionGroup",
-            "relationshipName": "questionGroupQuestion"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "answerGroup",
-            "otherEntityRelationshipName": "questionGroup",
-            "relationshipName": "answerGroup"
+            "relationshipName": "question"
         }
     ],
-    "changelogDate": "20190917100700",
+    "changelogDate": "20191008133424",
     "entityTableName": "question_group",
     "dto": "mapstruct",
-    "pagination": "pagination",
+    "pagination": "no",
     "service": "serviceImpl",
-    "jpaMetamodelFiltering": true,
+    "jpaMetamodelFiltering": false,
     "fluentMethods": true,
     "clientRootFolder": "",
     "applications": "*"

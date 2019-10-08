@@ -1,19 +1,21 @@
 {
     "name": "AnswerGroup",
-    "fields": [],
+    "fields": [
+        {
+            "fieldName": "order",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
     "relationships": [
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "answerResponse",
+            "otherEntityName": "answerSection",
             "otherEntityRelationshipName": "answerGroup",
-            "relationshipName": "answerResponse",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "questionGroup",
-            "otherEntityRelationshipName": "answerGroup",
-            "relationshipName": "questionGroup",
+            "relationshipValidateRules": "required",
+            "relationshipName": "answerSection",
             "otherEntityField": "id"
         },
         {
@@ -23,12 +25,12 @@
             "relationshipName": "answer"
         }
     ],
-    "changelogDate": "20190917100711",
+    "changelogDate": "20191008133429",
     "entityTableName": "answer_group",
     "dto": "mapstruct",
-    "pagination": "pagination",
+    "pagination": "no",
     "service": "serviceImpl",
-    "jpaMetamodelFiltering": true,
+    "jpaMetamodelFiltering": false,
     "fluentMethods": true,
     "clientRootFolder": "",
     "applications": "*"

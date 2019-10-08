@@ -26,49 +26,38 @@ export class AnswerGroupUpdatePage {
   pageTitle = element(by.id('jhi-answer-group-heading'));
   saveButton = element(by.id('save-entity'));
   cancelButton = element(by.id('cancel-save'));
-  answerResponseSelect = element(by.id('field_answerResponse'));
-  questionGroupSelect = element(by.id('field_questionGroup'));
+  orderInput = element(by.id('field_order'));
+  answerSectionSelect = element(by.id('field_answerSection'));
 
   async getPageTitle() {
     return this.pageTitle.getText();
   }
 
-  async answerResponseSelectLastOption(timeout?: number) {
-    await this.answerResponseSelect
+  async setOrderInput(order) {
+    await this.orderInput.sendKeys(order);
+  }
+
+  async getOrderInput() {
+    return await this.orderInput.getAttribute('value');
+  }
+
+  async answerSectionSelectLastOption(timeout?: number) {
+    await this.answerSectionSelect
       .all(by.tagName('option'))
       .last()
       .click();
   }
 
-  async answerResponseSelectOption(option) {
-    await this.answerResponseSelect.sendKeys(option);
+  async answerSectionSelectOption(option) {
+    await this.answerSectionSelect.sendKeys(option);
   }
 
-  getAnswerResponseSelect(): ElementFinder {
-    return this.answerResponseSelect;
+  getAnswerSectionSelect(): ElementFinder {
+    return this.answerSectionSelect;
   }
 
-  async getAnswerResponseSelectedOption() {
-    return await this.answerResponseSelect.element(by.css('option:checked')).getText();
-  }
-
-  async questionGroupSelectLastOption(timeout?: number) {
-    await this.questionGroupSelect
-      .all(by.tagName('option'))
-      .last()
-      .click();
-  }
-
-  async questionGroupSelectOption(option) {
-    await this.questionGroupSelect.sendKeys(option);
-  }
-
-  getQuestionGroupSelect(): ElementFinder {
-    return this.questionGroupSelect;
-  }
-
-  async getQuestionGroupSelectedOption() {
-    return await this.questionGroupSelect.element(by.css('option:checked')).getText();
+  async getAnswerSectionSelectedOption() {
+    return await this.answerSectionSelect.element(by.css('option:checked')).getText();
   }
 
   async save(timeout?: number) {

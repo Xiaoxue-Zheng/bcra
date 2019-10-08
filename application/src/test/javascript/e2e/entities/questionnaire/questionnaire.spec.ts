@@ -39,8 +39,19 @@ describe('Questionnaire e2e test', () => {
     const nbButtonsBeforeCreate = await questionnaireComponentsPage.countDeleteButtons();
 
     await questionnaireComponentsPage.clickOnCreateButton();
-    await promise.all([questionnaireUpdatePage.setUuidInput('uuid')]);
-    expect(await questionnaireUpdatePage.getUuidInput()).to.eq('uuid', 'Expected Uuid value to be equals to uuid');
+    await promise.all([
+      questionnaireUpdatePage.identifierSelectLastOption(),
+      questionnaireUpdatePage.algorithmSelectLastOption(),
+      questionnaireUpdatePage.setAlgorithmMinimumInput('5'),
+      questionnaireUpdatePage.setAlgorithmMaximumInput('5'),
+      questionnaireUpdatePage.setImplementationVersionInput('5')
+    ]);
+    expect(await questionnaireUpdatePage.getAlgorithmMinimumInput()).to.eq('5', 'Expected algorithmMinimum value to be equals to 5');
+    expect(await questionnaireUpdatePage.getAlgorithmMaximumInput()).to.eq('5', 'Expected algorithmMaximum value to be equals to 5');
+    expect(await questionnaireUpdatePage.getImplementationVersionInput()).to.eq(
+      '5',
+      'Expected implementationVersion value to be equals to 5'
+    );
     await questionnaireUpdatePage.save();
     expect(await questionnaireUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 

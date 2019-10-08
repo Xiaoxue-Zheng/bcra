@@ -1,2 +1,25 @@
-id;uuid;text
-1;a849fc7c-9c30-424a-b566-20011782043a;How are you feeling
+id,identifier,type,jhi_order,minimum,maximum,question_group_id,text
+1,SELF_FIRST_PERIOD,NUMBER_UNKNOWN,1,5,30,1,Approximately how old were you when you had your first period?
+2,SELF_PREMENOPAUSAL,RADIO,2,,,1,Are you premenopausal?
+3,SELF_MENOPAUSAL_AGE,NUMBER,3,20,45,1,At approximately what age did you become menopausal?
+4,SELF_PREGNANCIES,DROPDOWN_NUMBER,4,,,1,How many pregnancies have you had that have continued into the third trimester (more than 28 weeks)?
+5,SELF_PREGNANCY_FIRST_AGE,NUMBER,5,10,45,1,How old were you when you had your first pregnancy that continued into the third trimester (more than 28 weeks)?
+6,SELF_HEIGHT,NUMBER_HEIGHT,6,100,300,1,What is your approximate height?
+7,SELF_WEIGHT,NUMBER_WEIGHT,7,30,300,1,What is your approximate weight?
+8,SELF_BREAST_BIOPSY,RADIO,8,,,1,Have you ever had a breast biopsy?
+9,SELF_BREAST_BIOPSY_DIAGNOSIS_RISK,RADIO,9,,,1,Were you told that the diagnosis made on the removed tissue increased your risk of developing breast cancer?
+10,SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES,CHECKBOX,10,,,1,Which of the following diagnosis were made?
+11,SELF_ASHKENAZI,RADIO,11,,,1,Are you of Ashkenazi Jewish heritage?
+12,FAMILY_BLOOD_RELATIVES,CHECKBOX,12,,,2,"Have any blood relatives in your family been diagnosed with breast cancer? Please select all that apply. If you're not sure, just leave answers unchecked."
+13,FAMILY_MATERNAL_RELATIVES,CHECKBOX,13,,,2,Have any relatives on your mother's side been diagnosed with breast cancer?
+14,FAMILY_PATERNAL_RELATIVES,CHECKBOX,14,,,2,Have any relatives on your father's side been diagnosed with breast cancer?
+15,RELATIVE_HOW_MANY,NUMBER,15,0,10,4,How many {{relative}}s have been diagnosed?
+16,RELATIVE_DIAGNOSIS,RADIO,16,,,3,Was your first {{relative}}'s diagnosis unilateral or bilateral (one side or both)?
+17,RELATIVE_FIRST_DIAGNOSIS_AGE,NUMBER,17,10,130,3,Your {{relative}}'s age at first diagnosis
+18,RELATIVE_SECOND_DIAGNOSIS_AGE,NUMBER,18,10,130,3,Your {{relative}}'s age at second diagnosis
+19,RELATIVE_GENETIC_TESTING,RADIO,19,,,3,Has your {{relative}} had genetic testing for mutations in BRCA1 and BRCA2?
+20,RELATIVE_GENETIC_TESTING_RESULT,CHECKBOX,20,,,3,What was the result of your {{relative}}'s genetic testing?
+21,RELATIVE_OVARIAN_CANCER,RADIO,21,,,3,Has your {{relative}} been diagonised with ovarian cancer?
+22,RELATIVE_OVARIAN_CANCER_AGE,NUMBER,22,10,130,3,At what age was your {{relative}} diagnosed with ovarian cancer?
+23,FATHER_BREAST_CANCER,RADIO,23,,,5,Has your father had breast cancer?
+24,BROTHER_BREAST_CANCER,RADIO,24,,,5,Have any of your brothers ever had breast cancer?

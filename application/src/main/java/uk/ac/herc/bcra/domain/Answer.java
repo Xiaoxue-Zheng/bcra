@@ -4,8 +4,13 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
+import uk.ac.herc.bcra.domain.enumeration.AnswerUnits;
 
 /**
  * A Answer.
@@ -13,7 +18,6 @@ import java.io.Serializable;
 @Entity
 @Table(name = "answer")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Inheritance(strategy=InheritanceType.JOINED)
 public class Answer implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -23,13 +27,26 @@ public class Answer implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @ManyToOne
+    @Column(name = "number")
+    private Integer number;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "units")
+    private AnswerUnits units;
+
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties("answers")
     private AnswerGroup answerGroup;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties("answers")
     private Question question;
+
+    @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL)
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<AnswerItem> answerItems = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -38,6 +55,32 @@ public class Answer implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public Answer number(Integer number) {
+        this.number = number;
+        return this;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+
+    public AnswerUnits getUnits() {
+        return units;
+    }
+
+    public Answer units(AnswerUnits units) {
+        this.units = units;
+        return this;
+    }
+
+    public void setUnits(AnswerUnits units) {
+        this.units = units;
     }
 
     public AnswerGroup getAnswerGroup() {
@@ -65,6 +108,34 @@ public class Answer implements Serializable {
     public void setQuestion(Question question) {
         this.question = question;
     }
+
+    public Set<AnswerItem> getAnswerItems() {
+        return answerItems;
+    }
+
+    public Answer answerItems(Set<AnswerItem> answerItems) {
+        this.answerItems = answerItems;
+        return this;
+    }
+
+    public Answer addAnswerItem(AnswerItem answerItem) {
+        this.answerItems.add(answerItem);
+        answerItem.setAnswer(this);
+        return this;
+    }
+
+    public Answer removeAnswerItem(AnswerItem answerItem) {
+        this.answerItems.remove(answerItem);
+        answerItem.setAnswer(null);
+        return this;
+    }
+
+    public void setAnswerItems(Set<AnswerItem> answerItems) {
+        for (AnswerItem answerItem: answerItems) {
+            answerItem.setAnswer(this);
+        }
+        this.answerItems = answerItems;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -87,6 +158,8 @@ public class Answer implements Serializable {
     public String toString() {
         return "Answer{" +
             "id=" + getId() +
+            ", number=" + getNumber() +
+            ", units='" + getUnits() + "'" +
             "}";
     }
 }

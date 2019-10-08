@@ -16,24 +16,20 @@
     <div class="table-responsive" *ngIf="answerGroups?.length > 0">
         <table class="table table-striped">
             <thead>
-            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span>ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="answerResponseId"><span>Answer Response</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="questionGroupId"><span>Question Group</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <tr>
+            <th><span>ID</span></th>
+            <th><span>Order</span></th>
+            <th><span>Answer Section</span></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let answerGroup of answerGroups ;trackBy: trackId">
                 <td><a [routerLink]="['/answer-group', answerGroup.id, 'view' ]">{{answerGroup.id}}</a></td>
+                <td>{{answerGroup.order}}</td>
                 <td>
-                    <div *ngIf="answerGroup.answerResponseId">
-                        <a [routerLink]="['/answer-response', answerGroup.answerResponseId , 'view' ]" >{{answerGroup.answerResponseId}}</a>
-                    </div>
-                </td>
-                <td>
-                    <div *ngIf="answerGroup.questionGroupId">
-                        <a [routerLink]="['/question-group', answerGroup.questionGroupId , 'view' ]" >{{answerGroup.questionGroupId}}</a>
+                    <div *ngIf="answerGroup.answerSectionId">
+                        <a [routerLink]="['/answer-section', answerGroup.answerSectionId , 'view' ]" >{{answerGroup.answerSectionId}}</a>
                     </div>
                 </td>
                 <td class="text-right">
@@ -63,13 +59,5 @@
             </tr>
             </tbody>
         </table>
-    </div>
-    <div [hidden]="answerGroups?.length === 0">
-        <div class="row justify-content-center">
-            <jhi-item-count [page]="page" [total]="totalItems" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
-        </div>
-        <div class="row justify-content-center">
-            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
-        </div>
     </div>
 </div>

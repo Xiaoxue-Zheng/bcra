@@ -5,7 +5,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 import { QuestionnaireService } from 'app/entities/questionnaire/questionnaire.service';
-import { IQuestionnaire, Questionnaire } from 'app/shared/model/questionnaire.model';
+import { IQuestionnaire, Questionnaire, QuestionnaireIdentifier, Algorithm } from 'app/shared/model/questionnaire.model';
 
 describe('Service Tests', () => {
   describe('Questionnaire Service', () => {
@@ -23,7 +23,7 @@ describe('Service Tests', () => {
       service = injector.get(QuestionnaireService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new Questionnaire(0, 'AAAAAAA');
+      elemDefault = new Questionnaire(0, QuestionnaireIdentifier.TYRER_CUZICK_IV1, Algorithm.TYRER_CUZICK, 0, 0, 0);
     });
 
     describe('Service methods', () => {
@@ -59,7 +59,11 @@ describe('Service Tests', () => {
       it('should update a Questionnaire', async () => {
         const returnedFromService = Object.assign(
           {
-            uuid: 'BBBBBB'
+            identifier: 'BBBBBB',
+            algorithm: 'BBBBBB',
+            algorithmMinimum: 1,
+            algorithmMaximum: 1,
+            implementationVersion: 1
           },
           elemDefault
         );
@@ -77,7 +81,11 @@ describe('Service Tests', () => {
       it('should return a list of Questionnaire', async () => {
         const returnedFromService = Object.assign(
           {
-            uuid: 'BBBBBB'
+            identifier: 'BBBBBB',
+            algorithm: 'BBBBBB',
+            algorithmMinimum: 1,
+            algorithmMaximum: 1,
+            implementationVersion: 1
           },
           elemDefault
         );

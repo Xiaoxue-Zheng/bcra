@@ -22,10 +22,19 @@ export default {
     this.$store.dispatch('questionnaire/getQuestionnaire')
     this.$store.dispatch('answer/saveAnswers', {
       'questionnaireId': 1,
-      'answerGroups': [{
-        'questionGroupId': 1,
-        'answers': [{
-          'questionId': 1
+      'answerSections': [{
+        'questionSectionId': 1,
+        'answerGroups': [{
+          'order': 0,
+          'answers': [{
+            'number': 0,
+            'questionId': 1,
+            'units': 'GRAMS',
+            'answerItems': [{
+              'questionItemId': 1,
+              'selected': true
+            }]
+          }]
         }]
       }]
     })

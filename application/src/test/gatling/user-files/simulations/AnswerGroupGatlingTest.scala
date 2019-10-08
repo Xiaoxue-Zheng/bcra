@@ -72,6 +72,7 @@ class AnswerGroupGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "order":"0"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_answerGroup_url"))).exitHereIfFailed

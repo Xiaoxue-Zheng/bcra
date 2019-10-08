@@ -1,24 +1,26 @@
-import { IDisplayCondition } from 'app/shared/model/display-condition.model';
-import { IQuestionnaireQuestionGroup } from 'app/shared/model/questionnaire-question-group.model';
-import { IQuestionGroupQuestion } from 'app/shared/model/question-group-question.model';
-import { IAnswerGroup } from 'app/shared/model/answer-group.model';
+import { IQuestionSection } from 'app/shared/model/question-section.model';
+import { IQuestion } from 'app/shared/model/question.model';
+
+export const enum QuestionGroupIdentifier {
+  PERSONAL_HISTORY_QUESTIONS = 'PERSONAL_HISTORY_QUESTIONS',
+  FAMILY_HISTORY_QUESTIONS = 'FAMILY_HISTORY_QUESTIONS',
+  RELATIVE_QUESTIONS = 'RELATIVE_QUESTIONS',
+  RELATIVE_COUNT_QUESTIONS = 'RELATIVE_COUNT_QUESTIONS',
+  MALE_BREAST_CANCER_QUESTIONS = 'MALE_BREAST_CANCER_QUESTIONS'
+}
 
 export interface IQuestionGroup {
   id?: number;
-  uuid?: string;
-  displayConditions?: IDisplayCondition[];
-  questionnaireQuestionGroups?: IQuestionnaireQuestionGroup[];
-  questionGroupQuestions?: IQuestionGroupQuestion[];
-  answerGroups?: IAnswerGroup[];
+  identifier?: QuestionGroupIdentifier;
+  questionSections?: IQuestionSection[];
+  questions?: IQuestion[];
 }
 
 export class QuestionGroup implements IQuestionGroup {
   constructor(
     public id?: number,
-    public uuid?: string,
-    public displayConditions?: IDisplayCondition[],
-    public questionnaireQuestionGroups?: IQuestionnaireQuestionGroup[],
-    public questionGroupQuestions?: IQuestionGroupQuestion[],
-    public answerGroups?: IAnswerGroup[]
+    public identifier?: QuestionGroupIdentifier,
+    public questionSections?: IQuestionSection[],
+    public questions?: IQuestion[]
   ) {}
 }

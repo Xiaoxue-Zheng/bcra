@@ -21,7 +21,7 @@ export class AnswerResponseUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    questionnaireId: []
+    questionnaireId: [null, Validators.required]
   });
 
   constructor(

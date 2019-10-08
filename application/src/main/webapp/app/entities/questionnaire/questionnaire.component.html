@@ -16,16 +16,24 @@
     <div class="table-responsive" *ngIf="questionnaires?.length > 0">
         <table class="table table-striped">
             <thead>
-            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span>ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="uuid"><span>Uuid</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <tr>
+            <th><span>ID</span></th>
+            <th><span>Identifier</span></th>
+            <th><span>Algorithm</span></th>
+            <th><span>Algorithm Minimum</span></th>
+            <th><span>Algorithm Maximum</span></th>
+            <th><span>Implementation Version</span></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let questionnaire of questionnaires ;trackBy: trackId">
                 <td><a [routerLink]="['/questionnaire', questionnaire.id, 'view' ]">{{questionnaire.id}}</a></td>
-                <td>{{questionnaire.uuid}}</td>
+                <td>{{questionnaire.identifier}}</td>
+                <td>{{questionnaire.algorithm}}</td>
+                <td>{{questionnaire.algorithmMinimum}}</td>
+                <td>{{questionnaire.algorithmMaximum}}</td>
+                <td>{{questionnaire.implementationVersion}}</td>
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"
@@ -53,13 +61,5 @@
             </tr>
             </tbody>
         </table>
-    </div>
-    <div [hidden]="questionnaires?.length === 0">
-        <div class="row justify-content-center">
-            <jhi-item-count [page]="page" [total]="totalItems" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
-        </div>
-        <div class="row justify-content-center">
-            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
-        </div>
     </div>
 </div>

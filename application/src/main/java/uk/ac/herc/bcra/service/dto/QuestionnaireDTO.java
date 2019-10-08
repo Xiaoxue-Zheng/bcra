@@ -6,6 +6,9 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import uk.ac.herc.bcra.domain.enumeration.QuestionnaireIdentifier;
+import uk.ac.herc.bcra.domain.enumeration.Algorithm;
+
 /**
  * A DTO for the {@link uk.ac.herc.bcra.domain.Questionnaire} entity.
  */
@@ -14,9 +17,9 @@ public class QuestionnaireDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private String uuid;
+    private QuestionnaireIdentifier identifier;
 
-    private Set<QuestionnaireQuestionGroupDTO> questionnaireQuestionGroups = new HashSet<>();
+    private Set<QuestionSectionDTO> questionSections = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -26,20 +29,20 @@ public class QuestionnaireDTO implements Serializable {
         this.id = id;
     }
 
-    public String getUuid() {
-        return uuid;
+    public QuestionnaireIdentifier getIdentifier() {
+        return identifier;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setIdentifier(QuestionnaireIdentifier identifier) {
+        this.identifier = identifier;
     }
-    
-    public Set<QuestionnaireQuestionGroupDTO> getQuestionnaireQuestionGroups() {
-        return questionnaireQuestionGroups;
-    }   
 
-    public void setQuestionnaireQuestionGroups(Set<QuestionnaireQuestionGroupDTO> questionnaireQuestionGroups) {
-        this.questionnaireQuestionGroups = questionnaireQuestionGroups;
+    public Set<QuestionSectionDTO> getQuestionSections() {
+        return questionSections;
+    }
+
+    public void setQuestionSections(Set<QuestionSectionDTO> questionSections) {
+        this.questionSections = questionSections;
     }
 
     @Override
@@ -67,8 +70,8 @@ public class QuestionnaireDTO implements Serializable {
     public String toString() {
         return "QuestionnaireDTO{" +
             "id=" + getId() +
-            ", uuid='" + getUuid() + "'" +
-            ", questionnaireQuestionGroups='" + getQuestionnaireQuestionGroups() + "'" +
+            ", identifier='" + getIdentifier() + "'" +
+            ", questionSections=" + getQuestionSections() +
             "}";
     }
 }

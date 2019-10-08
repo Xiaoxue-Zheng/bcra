@@ -23,7 +23,7 @@ describe('Service Tests', () => {
       service = injector.get(AnswerGroupService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new AnswerGroup(0);
+      elemDefault = new AnswerGroup(0, 0);
     });
 
     describe('Service methods', () => {
@@ -57,7 +57,12 @@ describe('Service Tests', () => {
       });
 
       it('should update a AnswerGroup', async () => {
-        const returnedFromService = Object.assign({}, elemDefault);
+        const returnedFromService = Object.assign(
+          {
+            order: 1
+          },
+          elemDefault
+        );
 
         const expected = Object.assign({}, returnedFromService);
         service
@@ -70,7 +75,12 @@ describe('Service Tests', () => {
       });
 
       it('should return a list of AnswerGroup', async () => {
-        const returnedFromService = Object.assign({}, elemDefault);
+        const returnedFromService = Object.assign(
+          {
+            order: 1
+          },
+          elemDefault
+        );
         const expected = Object.assign({}, returnedFromService);
         service
           .query(expected)

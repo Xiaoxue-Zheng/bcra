@@ -3,23 +3,16 @@ package uk.ac.herc.bcra.web.rest;
 import uk.ac.herc.bcra.service.AnswerResponseService;
 import uk.ac.herc.bcra.web.rest.errors.BadRequestAlertException;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
-import uk.ac.herc.bcra.service.dto.AnswerResponseCriteria;
-import uk.ac.herc.bcra.service.AnswerResponseQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
-import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -42,11 +35,8 @@ public class AnswerResponseResource {
 
     private final AnswerResponseService answerResponseService;
 
-    private final AnswerResponseQueryService answerResponseQueryService;
-
-    public AnswerResponseResource(AnswerResponseService answerResponseService, AnswerResponseQueryService answerResponseQueryService) {
+    public AnswerResponseResource(AnswerResponseService answerResponseService) {
         this.answerResponseService = answerResponseService;
-        this.answerResponseQueryService = answerResponseQueryService;
     }
 
     /**
@@ -57,7 +47,7 @@ public class AnswerResponseResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/answer-responses")
-    public ResponseEntity<AnswerResponseDTO> createAnswerResponse(@RequestBody AnswerResponseDTO answerResponseDTO) throws URISyntaxException {
+    public ResponseEntity<AnswerResponseDTO> createAnswerResponse(@Valid @RequestBody AnswerResponseDTO answerResponseDTO) throws URISyntaxException {
         log.debug("REST request to save AnswerResponse : {}", answerResponseDTO);
         if (answerResponseDTO.getId() != null) {
             throw new BadRequestAlertException("A new answerResponse cannot already have an ID", ENTITY_NAME, "idexists");
@@ -78,7 +68,7 @@ public class AnswerResponseResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/answer-responses")
-    public ResponseEntity<AnswerResponseDTO> updateAnswerResponse(@RequestBody AnswerResponseDTO answerResponseDTO) throws URISyntaxException {
+    public ResponseEntity<AnswerResponseDTO> updateAnswerResponse(@Valid @RequestBody AnswerResponseDTO answerResponseDTO) throws URISyntaxException {
         log.debug("REST request to update AnswerResponse : {}", answerResponseDTO);
         if (answerResponseDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -93,29 +83,12 @@ public class AnswerResponseResource {
      * {@code GET  /answer-responses} : get all the answerResponses.
      *
 
-     * @param pageable the pagination information.
-
-     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of answerResponses in body.
      */
     @GetMapping("/answer-responses")
-    public ResponseEntity<List<AnswerResponseDTO>> getAllAnswerResponses(AnswerResponseCriteria criteria, Pageable pageable) {
-        log.debug("REST request to get AnswerResponses by criteria: {}", criteria);
-        Page<AnswerResponseDTO> page = answerResponseQueryService.findByCriteria(criteria, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
-    }
-
-    /**
-    * {@code GET  /answer-responses/count} : count all the answerResponses.
-    *
-    * @param criteria the criteria which the requested entities should match.
-    * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
-    */
-    @GetMapping("/answer-responses/count")
-    public ResponseEntity<Long> countAnswerResponses(AnswerResponseCriteria criteria) {
-        log.debug("REST request to count AnswerResponses by criteria: {}", criteria);
-        return ResponseEntity.ok().body(answerResponseQueryService.countByCriteria(criteria));
+    public List<AnswerResponseDTO> getAllAnswerResponses() {
+        log.debug("REST request to get all AnswerResponses");
+        return answerResponseService.findAll();
     }
 
     /**

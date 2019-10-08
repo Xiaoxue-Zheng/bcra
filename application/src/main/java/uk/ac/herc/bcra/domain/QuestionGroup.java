@@ -9,20 +9,13 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import uk.ac.herc.bcra.domain.enumeration.QuestionGroupIdentifier;
+
 /**
  * A QuestionGroup.
  */
 @Entity
-@Table(
-    name = "question_group",
-    indexes = {
-        @Index(
-            name = "question_group_uuid_index",
-            columnList = "uuid",
-            unique = true
-        )
-    }
-)
+@Table(name = "question_group")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class QuestionGroup implements Serializable {
 
@@ -34,24 +27,17 @@ public class QuestionGroup implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "uuid", nullable = false, unique = true)
-    private String uuid;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "identifier", nullable = false, unique = true)
+    private QuestionGroupIdentifier identifier;
 
     @OneToMany(mappedBy = "questionGroup")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<DisplayCondition> displayConditions = new HashSet<>();
+    private Set<QuestionSection> questionSections = new HashSet<>();
 
     @OneToMany(mappedBy = "questionGroup")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<QuestionnaireQuestionGroup> questionnaireQuestionGroups = new HashSet<>();
-
-    @OneToMany(mappedBy = "questionGroup")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<QuestionGroupQuestion> questionGroupQuestions = new HashSet<>();
-
-    @OneToMany(mappedBy = "questionGroup")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<AnswerGroup> answerGroups = new HashSet<>();
+    private Set<Question> questions = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -62,117 +48,67 @@ public class QuestionGroup implements Serializable {
         this.id = id;
     }
 
-    public String getUuid() {
-        return uuid;
+    public QuestionGroupIdentifier getIdentifier() {
+        return identifier;
     }
 
-    public QuestionGroup uuid(String uuid) {
-        this.uuid = uuid;
+    public QuestionGroup identifier(QuestionGroupIdentifier identifier) {
+        this.identifier = identifier;
         return this;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setIdentifier(QuestionGroupIdentifier identifier) {
+        this.identifier = identifier;
     }
 
-    public Set<DisplayCondition> getDisplayConditions() {
-        return displayConditions;
+    public Set<QuestionSection> getQuestionSections() {
+        return questionSections;
     }
 
-    public QuestionGroup displayConditions(Set<DisplayCondition> displayConditions) {
-        this.displayConditions = displayConditions;
+    public QuestionGroup questionSections(Set<QuestionSection> questionSections) {
+        this.questionSections = questionSections;
         return this;
     }
 
-    public QuestionGroup addDisplayCondition(DisplayCondition displayCondition) {
-        this.displayConditions.add(displayCondition);
-        displayCondition.setQuestionGroup(this);
+    public QuestionGroup addQuestionSection(QuestionSection questionSection) {
+        this.questionSections.add(questionSection);
+        questionSection.setQuestionGroup(this);
         return this;
     }
 
-    public QuestionGroup removeDisplayCondition(DisplayCondition displayCondition) {
-        this.displayConditions.remove(displayCondition);
-        displayCondition.setQuestionGroup(null);
+    public QuestionGroup removeQuestionSection(QuestionSection questionSection) {
+        this.questionSections.remove(questionSection);
+        questionSection.setQuestionGroup(null);
         return this;
     }
 
-    public void setDisplayConditions(Set<DisplayCondition> displayConditions) {
-        this.displayConditions = displayConditions;
+    public void setQuestionSections(Set<QuestionSection> questionSections) {
+        this.questionSections = questionSections;
     }
 
-    public Set<QuestionnaireQuestionGroup> getQuestionnaireQuestionGroups() {
-        return questionnaireQuestionGroups;
+    public Set<Question> getQuestions() {
+        return questions;
     }
 
-    public QuestionGroup questionnaireQuestionGroups(Set<QuestionnaireQuestionGroup> questionnaireQuestionGroups) {
-        this.questionnaireQuestionGroups = questionnaireQuestionGroups;
+    public QuestionGroup questions(Set<Question> questions) {
+        this.questions = questions;
         return this;
     }
 
-    public QuestionGroup addQuestionnaireQuestionGroup(QuestionnaireQuestionGroup questionnaireQuestionGroup) {
-        this.questionnaireQuestionGroups.add(questionnaireQuestionGroup);
-        questionnaireQuestionGroup.setQuestionGroup(this);
+    public QuestionGroup addQuestion(Question question) {
+        this.questions.add(question);
+        question.setQuestionGroup(this);
         return this;
     }
 
-    public QuestionGroup removeQuestionnaireQuestionGroup(QuestionnaireQuestionGroup questionnaireQuestionGroup) {
-        this.questionnaireQuestionGroups.remove(questionnaireQuestionGroup);
-        questionnaireQuestionGroup.setQuestionGroup(null);
+    public QuestionGroup removeQuestion(Question question) {
+        this.questions.remove(question);
+        question.setQuestionGroup(null);
         return this;
     }
 
-    public void setQuestionnaireQuestionGroups(Set<QuestionnaireQuestionGroup> questionnaireQuestionGroups) {
-        this.questionnaireQuestionGroups = questionnaireQuestionGroups;
-    }
-
-    public Set<QuestionGroupQuestion> getQuestionGroupQuestions() {
-        return questionGroupQuestions;
-    }
-
-    public QuestionGroup questionGroupQuestions(Set<QuestionGroupQuestion> questionGroupQuestions) {
-        this.questionGroupQuestions = questionGroupQuestions;
-        return this;
-    }
-
-    public QuestionGroup addQuestionGroupQuestion(QuestionGroupQuestion questionGroupQuestion) {
-        this.questionGroupQuestions.add(questionGroupQuestion);
-        questionGroupQuestion.setQuestionGroup(this);
-        return this;
-    }
-
-    public QuestionGroup removeQuestionGroupQuestion(QuestionGroupQuestion questionGroupQuestion) {
-        this.questionGroupQuestions.remove(questionGroupQuestion);
-        questionGroupQuestion.setQuestionGroup(null);
-        return this;
-    }
-
-    public void setQuestionGroupQuestions(Set<QuestionGroupQuestion> questionGroupQuestions) {
-        this.questionGroupQuestions = questionGroupQuestions;
-    }
-
-    public Set<AnswerGroup> getAnswerGroups() {
-        return answerGroups;
-    }
-
-    public QuestionGroup answerGroups(Set<AnswerGroup> answerGroups) {
-        this.answerGroups = answerGroups;
-        return this;
-    }
-
-    public QuestionGroup addAnswerGroup(AnswerGroup answerGroup) {
-        this.answerGroups.add(answerGroup);
-        answerGroup.setQuestionGroup(this);
-        return this;
-    }
-
-    public QuestionGroup removeAnswerGroup(AnswerGroup answerGroup) {
-        this.answerGroups.remove(answerGroup);
-        answerGroup.setQuestionGroup(null);
-        return this;
-    }
-
-    public void setAnswerGroups(Set<AnswerGroup> answerGroups) {
-        this.answerGroups = answerGroups;
+    public void setQuestions(Set<Question> questions) {
+        this.questions = questions;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -196,7 +132,7 @@ public class QuestionGroup implements Serializable {
     public String toString() {
         return "QuestionGroup{" +
             "id=" + getId() +
-            ", uuid='" + getUuid() + "'" +
+            ", identifier='" + getIdentifier() + "'" +
             "}";
     }
 }

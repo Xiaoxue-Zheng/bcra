@@ -26,18 +26,68 @@ export class QuestionnaireUpdatePage {
   pageTitle = element(by.id('jhi-questionnaire-heading'));
   saveButton = element(by.id('save-entity'));
   cancelButton = element(by.id('cancel-save'));
-  uuidInput = element(by.id('field_uuid'));
+  identifierSelect = element(by.id('field_identifier'));
+  algorithmSelect = element(by.id('field_algorithm'));
+  algorithmMinimumInput = element(by.id('field_algorithmMinimum'));
+  algorithmMaximumInput = element(by.id('field_algorithmMaximum'));
+  implementationVersionInput = element(by.id('field_implementationVersion'));
 
   async getPageTitle() {
     return this.pageTitle.getText();
   }
 
-  async setUuidInput(uuid) {
-    await this.uuidInput.sendKeys(uuid);
+  async setIdentifierSelect(identifier) {
+    await this.identifierSelect.sendKeys(identifier);
   }
 
-  async getUuidInput() {
-    return await this.uuidInput.getAttribute('value');
+  async getIdentifierSelect() {
+    return await this.identifierSelect.element(by.css('option:checked')).getText();
+  }
+
+  async identifierSelectLastOption(timeout?: number) {
+    await this.identifierSelect
+      .all(by.tagName('option'))
+      .last()
+      .click();
+  }
+
+  async setAlgorithmSelect(algorithm) {
+    await this.algorithmSelect.sendKeys(algorithm);
+  }
+
+  async getAlgorithmSelect() {
+    return await this.algorithmSelect.element(by.css('option:checked')).getText();
+  }
+
+  async algorithmSelectLastOption(timeout?: number) {
+    await this.algorithmSelect
+      .all(by.tagName('option'))
+      .last()
+      .click();
+  }
+
+  async setAlgorithmMinimumInput(algorithmMinimum) {
+    await this.algorithmMinimumInput.sendKeys(algorithmMinimum);
+  }
+
+  async getAlgorithmMinimumInput() {
+    return await this.algorithmMinimumInput.getAttribute('value');
+  }
+
+  async setAlgorithmMaximumInput(algorithmMaximum) {
+    await this.algorithmMaximumInput.sendKeys(algorithmMaximum);
+  }
+
+  async getAlgorithmMaximumInput() {
+    return await this.algorithmMaximumInput.getAttribute('value');
+  }
+
+  async setImplementationVersionInput(implementationVersion) {
+    await this.implementationVersionInput.sendKeys(implementationVersion);
+  }
+
+  async getImplementationVersionInput() {
+    return await this.implementationVersionInput.getAttribute('value');
   }
 
   async save(timeout?: number) {

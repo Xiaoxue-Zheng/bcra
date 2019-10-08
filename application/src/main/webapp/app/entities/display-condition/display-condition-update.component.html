@@ -9,12 +9,134 @@
                     <input type="text" class="form-control" id="id" name="id" formControlName="id"
                         readonly />
                 </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_displayConditionType">Display Condition Type</label>
+                    <select class="form-control" name="displayConditionType" formControlName="displayConditionType" id="field_displayConditionType">
+                        <option value="DISPLAY_SECTION_CONDITION_QUESTION">DISPLAY_SECTION_CONDITION_QUESTION</option>
+                        <option value="DISPLAY_QUESTION_CONDITION_QUESTION">DISPLAY_QUESTION_CONDITION_QUESTION</option>
+                        <option value="DISPLAY_SECTION_CONDITION_ITEM">DISPLAY_SECTION_CONDITION_ITEM</option>
+                        <option value="DISPLAY_QUESTION_CONDITION_ITEM">DISPLAY_QUESTION_CONDITION_ITEM</option>
+                    </select>
+                    <div *ngIf="editForm.get('displayConditionType').invalid && (editForm.get('displayConditionType').dirty || editForm.get('displayConditionType').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('displayConditionType').errors.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_conditionSectionIdentifier">Condition Section Identifier</label>
+                    <select class="form-control" name="conditionSectionIdentifier" formControlName="conditionSectionIdentifier" id="field_conditionSectionIdentifier">
+                        <option value="PERSONAL_HISTORY">PERSONAL_HISTORY</option>
+                        <option value="FAMILY_HISTORY">FAMILY_HISTORY</option>
+                        <option value="MOTHER">MOTHER</option>
+                        <option value="SISTER_COUNT">SISTER_COUNT</option>
+                        <option value="SISTERS">SISTERS</option>
+                        <option value="NIECE_COUNT">NIECE_COUNT</option>
+                        <option value="NIECES">NIECES</option>
+                        <option value="MATERNAL_HALF_SISTER_COUNT">MATERNAL_HALF_SISTER_COUNT</option>
+                        <option value="MATERNAL_HALF_SISTERS">MATERNAL_HALF_SISTERS</option>
+                        <option value="MATERNAL_GRANDMOTHER">MATERNAL_GRANDMOTHER</option>
+                        <option value="MATERNAL_AUNT_COUNT">MATERNAL_AUNT_COUNT</option>
+                        <option value="MATERNAL_AUNTS">MATERNAL_AUNTS</option>
+                        <option value="MATERNAL_COUSIN_COUNT">MATERNAL_COUSIN_COUNT</option>
+                        <option value="MATERNAL_COUSINS">MATERNAL_COUSINS</option>
+                        <option value="PATERNAL_HALF_SISTER_COUNT">PATERNAL_HALF_SISTER_COUNT</option>
+                        <option value="PATERNAL_HALF_SISTERS">PATERNAL_HALF_SISTERS</option>
+                        <option value="PATERNAL_GRANDMOTHER">PATERNAL_GRANDMOTHER</option>
+                        <option value="PATERNAL_AUNT_COUNT">PATERNAL_AUNT_COUNT</option>
+                        <option value="PATERNAL_AUNTS">PATERNAL_AUNTS</option>
+                        <option value="PATERNAL_COUSIN_COUNT">PATERNAL_COUSIN_COUNT</option>
+                        <option value="PATERNAL_COUSINS">PATERNAL_COUSINS</option>
+                        <option value="MALE_BREAST_CANCER">MALE_BREAST_CANCER</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_conditionQuestionIdentifier">Condition Question Identifier</label>
+                    <select class="form-control" name="conditionQuestionIdentifier" formControlName="conditionQuestionIdentifier" id="field_conditionQuestionIdentifier">
+                        <option value="SELF_FIRST_PERIOD">SELF_FIRST_PERIOD</option>
+                        <option value="SELF_PREMENOPAUSAL">SELF_PREMENOPAUSAL</option>
+                        <option value="SELF_MENOPAUSAL_AGE">SELF_MENOPAUSAL_AGE</option>
+                        <option value="SELF_PREGNANCIES">SELF_PREGNANCIES</option>
+                        <option value="SELF_PREGNANCY_FIRST_AGE">SELF_PREGNANCY_FIRST_AGE</option>
+                        <option value="SELF_HEIGHT">SELF_HEIGHT</option>
+                        <option value="SELF_WEIGHT">SELF_WEIGHT</option>
+                        <option value="SELF_BREAST_BIOPSY">SELF_BREAST_BIOPSY</option>
+                        <option value="SELF_BREAST_BIOPSY_DIAGNOSIS_RISK">SELF_BREAST_BIOPSY_DIAGNOSIS_RISK</option>
+                        <option value="SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES">SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES</option>
+                        <option value="SELF_ASHKENAZI">SELF_ASHKENAZI</option>
+                        <option value="FAMILY_BLOOD_RELATIVES">FAMILY_BLOOD_RELATIVES</option>
+                        <option value="FAMILY_MATERNAL_RELATIVES">FAMILY_MATERNAL_RELATIVES</option>
+                        <option value="FAMILY_PATERNAL_RELATIVES">FAMILY_PATERNAL_RELATIVES</option>
+                        <option value="RELATIVE_HOW_MANY">RELATIVE_HOW_MANY</option>
+                        <option value="RELATIVE_DIAGNOSIS">RELATIVE_DIAGNOSIS</option>
+                        <option value="RELATIVE_FIRST_DIAGNOSIS_AGE">RELATIVE_FIRST_DIAGNOSIS_AGE</option>
+                        <option value="RELATIVE_SECOND_DIAGNOSIS_AGE">RELATIVE_SECOND_DIAGNOSIS_AGE</option>
+                        <option value="RELATIVE_GENETIC_TESTING">RELATIVE_GENETIC_TESTING</option>
+                        <option value="RELATIVE_GENETIC_TESTING_RESULT">RELATIVE_GENETIC_TESTING_RESULT</option>
+                        <option value="RELATIVE_OVARIAN_CANCER">RELATIVE_OVARIAN_CANCER</option>
+                        <option value="RELATIVE_OVARIAN_CANCER_AGE">RELATIVE_OVARIAN_CANCER_AGE</option>
+                        <option value="FATHER_BREAST_CANCER">FATHER_BREAST_CANCER</option>
+                        <option value="BROTHER_BREAST_CANCER">BROTHER_BREAST_CANCER</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_conditionQuestionItemIdentifier">Condition Question Item Identifier</label>
+                    <select class="form-control" name="conditionQuestionItemIdentifier" formControlName="conditionQuestionItemIdentifier" id="field_conditionQuestionItemIdentifier">
+                        <option value="SELF_PREMENOPAUSAL_YES">SELF_PREMENOPAUSAL_YES</option>
+                        <option value="SELF_PREMENOPAUSAL_NO">SELF_PREMENOPAUSAL_NO</option>
+                        <option value="SELF_PREMENOPAUSAL_UNKNOWN">SELF_PREMENOPAUSAL_UNKNOWN</option>
+                        <option value="SELF_BREAST_BIOPSY_YES">SELF_BREAST_BIOPSY_YES</option>
+                        <option value="SELF_BREAST_BIOPSY_NO">SELF_BREAST_BIOPSY_NO</option>
+                        <option value="SELF_BREAST_BIOPSY_UNKNOWN">SELF_BREAST_BIOPSY_UNKNOWN</option>
+                        <option value="SELF_BREAST_BIOPSY_DIAGNOSIS_RISK_YES">SELF_BREAST_BIOPSY_DIAGNOSIS_RISK_YES</option>
+                        <option value="SELF_BREAST_BIOPSY_DIAGNOSIS_RISK_NO">SELF_BREAST_BIOPSY_DIAGNOSIS_RISK_NO</option>
+                        <option value="SELF_BREAST_BIOPSY_DIAGNOSIS_RISK_UNKNOWN">SELF_BREAST_BIOPSY_DIAGNOSIS_RISK_UNKNOWN</option>
+                        <option value="SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_ADH">SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_ADH</option>
+                        <option value="SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_LCIS">SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_LCIS</option>
+                        <option value="SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_ALH">SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_ALH</option>
+                        <option value="SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_OTHER">SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_OTHER</option>
+                        <option value="SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_FORGOT">SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_FORGOT</option>
+                        <option value="SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_UNKNOWN">SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_UNKNOWN</option>
+                        <option value="SELF_ASHKENAZI_YES">SELF_ASHKENAZI_YES</option>
+                        <option value="SELF_ASHKENAZI_NO">SELF_ASHKENAZI_NO</option>
+                        <option value="SELF_ASHKENAZI_UNKNOWN">SELF_ASHKENAZI_UNKNOWN</option>
+                        <option value="FAMILY_BLOOD_RELATIVES_MOTHER">FAMILY_BLOOD_RELATIVES_MOTHER</option>
+                        <option value="FAMILY_BLOOD_RELATIVES_SISTERS">FAMILY_BLOOD_RELATIVES_SISTERS</option>
+                        <option value="FAMILY_BLOOD_RELATIVES_NIECES">FAMILY_BLOOD_RELATIVES_NIECES</option>
+                        <option value="FAMILY_MATERNAL_RELATIVES_HALF_SISTERS">FAMILY_MATERNAL_RELATIVES_HALF_SISTERS</option>
+                        <option value="FAMILY_MATERNAL_RELATIVES_GRANDMOTHER">FAMILY_MATERNAL_RELATIVES_GRANDMOTHER</option>
+                        <option value="FAMILY_MATERNAL_RELATIVES_AUNTS">FAMILY_MATERNAL_RELATIVES_AUNTS</option>
+                        <option value="FAMILY_MATERNAL_RELATIVES_COUSINS">FAMILY_MATERNAL_RELATIVES_COUSINS</option>
+                        <option value="FAMILY_PATERNAL_RELATIVES_HALF_SISTERS">FAMILY_PATERNAL_RELATIVES_HALF_SISTERS</option>
+                        <option value="FAMILY_PATERNAL_RELATIVES_GRANDMOTHER">FAMILY_PATERNAL_RELATIVES_GRANDMOTHER</option>
+                        <option value="FAMILY_PATERNAL_RELATIVES_AUNTS">FAMILY_PATERNAL_RELATIVES_AUNTS</option>
+                        <option value="FAMILY_PATERNAL_RELATIVES_COUSINS">FAMILY_PATERNAL_RELATIVES_COUSINS</option>
+                        <option value="RELATIVE_DIAGNOSIS_UNILATERAL">RELATIVE_DIAGNOSIS_UNILATERAL</option>
+                        <option value="RELATIVE_DIAGNOSIS_BILATERAL">RELATIVE_DIAGNOSIS_BILATERAL</option>
+                        <option value="RELATIVE_DIAGNOSIS_UNKNOWN">RELATIVE_DIAGNOSIS_UNKNOWN</option>
+                        <option value="RELATIVE_GENETIC_TESTING_YES">RELATIVE_GENETIC_TESTING_YES</option>
+                        <option value="RELATIVE_GENETIC_TESTING_NO">RELATIVE_GENETIC_TESTING_NO</option>
+                        <option value="RELATIVE_GENETIC_TESTING_UNKNOWN">RELATIVE_GENETIC_TESTING_UNKNOWN</option>
+                        <option value="RELATIVE_GENETIC_TESTING_RESULT_BRCA1">RELATIVE_GENETIC_TESTING_RESULT_BRCA1</option>
+                        <option value="RELATIVE_GENETIC_TESTING_RESULT_BRCA2">RELATIVE_GENETIC_TESTING_RESULT_BRCA2</option>
+                        <option value="RELATIVE_GENETIC_TESTING_RESULT_NONE">RELATIVE_GENETIC_TESTING_RESULT_NONE</option>
+                        <option value="RELATIVE_GENETIC_TESTING_RESULT_UNKNOWN">RELATIVE_GENETIC_TESTING_RESULT_UNKNOWN</option>
+                    </select>
+                </div>
 
                 <div class="form-group">
-                    <label class="form-control-label" for="field_questionGroup">Question Group</label>
-                    <select class="form-control" id="field_questionGroup" name="questionGroup" formControlName="questionGroupId">
+                    <label class="form-control-label" for="field_displayQuestionSection">Display Question Section</label>
+                    <select class="form-control" id="field_displayQuestionSection" name="displayQuestionSection" formControlName="displayQuestionSectionId">
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="questionGroupOption.id" *ngFor="let questionGroupOption of questiongroups; trackBy: trackQuestionGroupById">{{questionGroupOption.id}}</option>
+                        <option [ngValue]="questionSectionOption.id" *ngFor="let questionSectionOption of questionsections; trackBy: trackQuestionSectionById">{{questionSectionOption.id}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_displayQuestion">Display Question</label>
+                    <select class="form-control" id="field_displayQuestion" name="displayQuestion" formControlName="displayQuestionId">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="questionOption.id" *ngFor="let questionOption of questions; trackBy: trackQuestionById">{{questionOption.id}}</option>
                     </select>
                 </div>
             </div>

@@ -1,0 +1,103 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-question-section-heading">Create or edit a Question Section</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!editForm.get('id').value">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                        readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_identifier">Identifier</label>
+                    <select class="form-control" name="identifier" formControlName="identifier" id="field_identifier">
+                        <option value="PERSONAL_HISTORY">PERSONAL_HISTORY</option>
+                        <option value="FAMILY_HISTORY">FAMILY_HISTORY</option>
+                        <option value="MOTHER">MOTHER</option>
+                        <option value="SISTER_COUNT">SISTER_COUNT</option>
+                        <option value="SISTERS">SISTERS</option>
+                        <option value="NIECE_COUNT">NIECE_COUNT</option>
+                        <option value="NIECES">NIECES</option>
+                        <option value="MATERNAL_HALF_SISTER_COUNT">MATERNAL_HALF_SISTER_COUNT</option>
+                        <option value="MATERNAL_HALF_SISTERS">MATERNAL_HALF_SISTERS</option>
+                        <option value="MATERNAL_GRANDMOTHER">MATERNAL_GRANDMOTHER</option>
+                        <option value="MATERNAL_AUNT_COUNT">MATERNAL_AUNT_COUNT</option>
+                        <option value="MATERNAL_AUNTS">MATERNAL_AUNTS</option>
+                        <option value="MATERNAL_COUSIN_COUNT">MATERNAL_COUSIN_COUNT</option>
+                        <option value="MATERNAL_COUSINS">MATERNAL_COUSINS</option>
+                        <option value="PATERNAL_HALF_SISTER_COUNT">PATERNAL_HALF_SISTER_COUNT</option>
+                        <option value="PATERNAL_HALF_SISTERS">PATERNAL_HALF_SISTERS</option>
+                        <option value="PATERNAL_GRANDMOTHER">PATERNAL_GRANDMOTHER</option>
+                        <option value="PATERNAL_AUNT_COUNT">PATERNAL_AUNT_COUNT</option>
+                        <option value="PATERNAL_AUNTS">PATERNAL_AUNTS</option>
+                        <option value="PATERNAL_COUSIN_COUNT">PATERNAL_COUSIN_COUNT</option>
+                        <option value="PATERNAL_COUSINS">PATERNAL_COUSINS</option>
+                        <option value="MALE_BREAST_CANCER">MALE_BREAST_CANCER</option>
+                    </select>
+                    <div *ngIf="editForm.get('identifier').invalid && (editForm.get('identifier').dirty || editForm.get('identifier').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('identifier').errors.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_order">Order</label>
+                    <input type="number" class="form-control" name="order" id="field_order"
+                           formControlName="order"/>
+                    <div *ngIf="editForm.get('order').invalid && (editForm.get('order').dirty || editForm.get('order').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('order').errors.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('order')?.errors?.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_relativeName">Relative Name</label>
+                    <input type="text" class="form-control" name="relativeName" id="field_relativeName"
+                           formControlName="relativeName"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_questionnaire">Questionnaire</label>
+                    <select class="form-control" id="field_questionnaire" name="questionnaire" formControlName="questionnaireId">
+                        <option *ngIf="!editForm.get('questionnaireId').value" [ngValue]="null" selected></option>
+                        <option [ngValue]="questionnaireOption.id" *ngFor="let questionnaireOption of questionnaires; trackBy: trackQuestionnaireById">{{questionnaireOption.id}}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('questionnaireId').invalid && (editForm.get('questionnaireId').dirty || editForm.get('questionnaireId').touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('questionnaireId').errors.required">
+                        This field is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_questionGroup">Question Group</label>
+                    <select class="form-control" id="field_questionGroup" name="questionGroup" formControlName="questionGroupId">
+                        <option *ngIf="!editForm.get('questionGroupId').value" [ngValue]="null" selected></option>
+                        <option [ngValue]="questionGroupOption.id" *ngFor="let questionGroupOption of questiongroups; trackBy: trackQuestionGroupById">{{questionGroupOption.id}}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('questionGroupId').invalid && (editForm.get('questionGroupId').dirty || editForm.get('questionGroupId').touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('questionGroupId').errors.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

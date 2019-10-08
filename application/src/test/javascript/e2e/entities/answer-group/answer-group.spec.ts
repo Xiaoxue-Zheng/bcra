@@ -11,7 +11,7 @@ describe('AnswerGroup e2e test', () => {
   let signInPage: SignInPage;
   let answerGroupUpdatePage: AnswerGroupUpdatePage;
   let answerGroupComponentsPage: AnswerGroupComponentsPage;
-  let answerGroupDeleteDialog: AnswerGroupDeleteDialog;
+  /*let answerGroupDeleteDialog: AnswerGroupDeleteDialog;*/
 
   before(async () => {
     await browser.get('/');
@@ -35,27 +35,32 @@ describe('AnswerGroup e2e test', () => {
     await answerGroupUpdatePage.cancel();
   });
 
-  it('should create and save AnswerGroups', async () => {
-    const nbButtonsBeforeCreate = await answerGroupComponentsPage.countDeleteButtons();
+  /* it('should create and save AnswerGroups', async () => {
+        const nbButtonsBeforeCreate = await answerGroupComponentsPage.countDeleteButtons();
 
-    await answerGroupComponentsPage.clickOnCreateButton();
-    await promise.all([answerGroupUpdatePage.answerResponseSelectLastOption(), answerGroupUpdatePage.questionGroupSelectLastOption()]);
-    await answerGroupUpdatePage.save();
-    expect(await answerGroupUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
+        await answerGroupComponentsPage.clickOnCreateButton();
+        await promise.all([
+            answerGroupUpdatePage.setOrderInput('5'),
+            answerGroupUpdatePage.answerSectionSelectLastOption(),
+        ]);
+        expect(await answerGroupUpdatePage.getOrderInput()).to.eq('5', 'Expected order value to be equals to 5');
+        await answerGroupUpdatePage.save();
+        expect(await answerGroupUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
-    expect(await answerGroupComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
-  });
+        expect(await answerGroupComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
+    });*/
 
-  it('should delete last AnswerGroup', async () => {
-    const nbButtonsBeforeDelete = await answerGroupComponentsPage.countDeleteButtons();
-    await answerGroupComponentsPage.clickOnLastDeleteButton();
+  /* it('should delete last AnswerGroup', async () => {
+        const nbButtonsBeforeDelete = await answerGroupComponentsPage.countDeleteButtons();
+        await answerGroupComponentsPage.clickOnLastDeleteButton();
 
-    answerGroupDeleteDialog = new AnswerGroupDeleteDialog();
-    expect(await answerGroupDeleteDialog.getDialogTitle()).to.eq('Are you sure you want to delete this Answer Group?');
-    await answerGroupDeleteDialog.clickOnConfirmButton();
+        answerGroupDeleteDialog = new AnswerGroupDeleteDialog();
+        expect(await answerGroupDeleteDialog.getDialogTitle())
+            .to.eq('Are you sure you want to delete this Answer Group?');
+        await answerGroupDeleteDialog.clickOnConfirmButton();
 
-    expect(await answerGroupComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
-  });
+        expect(await answerGroupComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
+    });*/
 
   after(async () => {
     await navBarPage.autoSignOut();

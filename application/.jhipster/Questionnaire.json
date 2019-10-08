@@ -2,34 +2,58 @@
     "name": "Questionnaire",
     "fields": [
         {
-            "fieldName": "uuid",
-            "fieldType": "String",
+            "fieldName": "identifier",
+            "fieldType": "QuestionnaireIdentifier",
+            "fieldValues": "TYRER_CUZICK_IV1",
             "fieldValidateRules": [
                 "required",
                 "unique"
+            ]
+        },
+        {
+            "fieldName": "algorithm",
+            "fieldType": "Algorithm",
+            "fieldValues": "TYRER_CUZICK",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "algorithmMinimum",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "algorithmMaximum",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "implementationVersion",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
             ]
         }
     ],
     "relationships": [
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "questionnaireQuestionGroup",
+            "otherEntityName": "questionSection",
             "otherEntityRelationshipName": "questionnaire",
-            "relationshipName": "questionnaireQuestionGroup"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "answerResponse",
-            "otherEntityRelationshipName": "questionnaire",
-            "relationshipName": "answerResponse"
+            "relationshipName": "questionSection"
         }
     ],
-    "changelogDate": "20190917100659",
+    "changelogDate": "20191008133422",
     "entityTableName": "questionnaire",
     "dto": "mapstruct",
-    "pagination": "pagination",
+    "pagination": "no",
     "service": "serviceImpl",
-    "jpaMetamodelFiltering": true,
+    "jpaMetamodelFiltering": false,
     "fluentMethods": true,
     "clientRootFolder": "",
     "applications": "*"

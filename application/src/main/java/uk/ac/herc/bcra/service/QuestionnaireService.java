@@ -2,9 +2,7 @@ package uk.ac.herc.bcra.service;
 
 import uk.ac.herc.bcra.service.dto.QuestionnaireDTO;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -23,10 +21,9 @@ public interface QuestionnaireService {
     /**
      * Get all the questionnaires.
      *
-     * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<QuestionnaireDTO> findAll(Pageable pageable);
+    List<QuestionnaireDTO> findAll();
 
 
     /**

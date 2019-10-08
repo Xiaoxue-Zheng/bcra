@@ -26,18 +26,25 @@ export class QuestionGroupUpdatePage {
   pageTitle = element(by.id('jhi-question-group-heading'));
   saveButton = element(by.id('save-entity'));
   cancelButton = element(by.id('cancel-save'));
-  uuidInput = element(by.id('field_uuid'));
+  identifierSelect = element(by.id('field_identifier'));
 
   async getPageTitle() {
     return this.pageTitle.getText();
   }
 
-  async setUuidInput(uuid) {
-    await this.uuidInput.sendKeys(uuid);
+  async setIdentifierSelect(identifier) {
+    await this.identifierSelect.sendKeys(identifier);
   }
 
-  async getUuidInput() {
-    return await this.uuidInput.getAttribute('value');
+  async getIdentifierSelect() {
+    return await this.identifierSelect.element(by.css('option:checked')).getText();
+  }
+
+  async identifierSelectLastOption(timeout?: number) {
+    await this.identifierSelect
+      .all(by.tagName('option'))
+      .last()
+      .click();
   }
 
   async save(timeout?: number) {

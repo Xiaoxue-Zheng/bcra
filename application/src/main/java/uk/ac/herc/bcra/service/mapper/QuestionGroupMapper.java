@@ -1,8 +1,8 @@
 package uk.ac.herc.bcra.service.mapper;
 
 import uk.ac.herc.bcra.domain.*;
+import uk.ac.herc.bcra.service.dto.QuestionDTO;
 import uk.ac.herc.bcra.service.dto.QuestionGroupDTO;
-import uk.ac.herc.bcra.service.dto.QuestionGroupQuestionDTO;
 
 import java.util.Set;
 
@@ -14,16 +14,12 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {})
 public interface QuestionGroupMapper extends EntityMapper<QuestionGroupDTO, QuestionGroup> {
 
-    Set<QuestionGroupQuestionDTO> questionGroupQuestionToQuestionGroupQuestionDTOs(Set<QuestionGroupQuestion> questionGroupQuestions);
+    Set<QuestionDTO> questionsToQuestionDTOs(Set<Question> questions);
 
-    @Mapping(target = "displayConditions", ignore = true)
-    @Mapping(target = "removeDisplayCondition", ignore = true)
-    @Mapping(target = "questionnaireQuestionGroups", ignore = true)
-    @Mapping(target = "removeQuestionnaireQuestionGroup", ignore = true)
-    @Mapping(target = "questionGroupQuestions", ignore = true)
-    @Mapping(target = "removeQuestionGroupQuestion", ignore = true)
-    @Mapping(target = "answerGroups", ignore = true)
-    @Mapping(target = "removeAnswerGroup", ignore = true)
+    @Mapping(target = "questionSections", ignore = true)
+    @Mapping(target = "removeQuestionSection", ignore = true)
+    @Mapping(target = "questions", ignore = true)
+    @Mapping(target = "removeQuestion", ignore = true)
     QuestionGroup toEntity(QuestionGroupDTO questionGroupDTO);
 
     default QuestionGroup fromId(Long id) {

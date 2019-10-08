@@ -5,7 +5,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 import { QuestionService } from 'app/entities/question/question.service';
-import { IQuestion, Question } from 'app/shared/model/question.model';
+import { IQuestion, Question, QuestionIdentifier, QuestionType } from 'app/shared/model/question.model';
 
 describe('Service Tests', () => {
   describe('Question Service', () => {
@@ -23,7 +23,7 @@ describe('Service Tests', () => {
       service = injector.get(QuestionService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new Question(0, 'AAAAAAA', 'AAAAAAA');
+      elemDefault = new Question(0, QuestionIdentifier.SELF_FIRST_PERIOD, QuestionType.NUMBER, 0, 'AAAAAAA', 0, 0);
     });
 
     describe('Service methods', () => {
@@ -59,8 +59,12 @@ describe('Service Tests', () => {
       it('should update a Question', async () => {
         const returnedFromService = Object.assign(
           {
-            uuid: 'BBBBBB',
-            text: 'BBBBBB'
+            identifier: 'BBBBBB',
+            type: 'BBBBBB',
+            order: 1,
+            text: 'BBBBBB',
+            minimum: 1,
+            maximum: 1
           },
           elemDefault
         );
@@ -78,8 +82,12 @@ describe('Service Tests', () => {
       it('should return a list of Question', async () => {
         const returnedFromService = Object.assign(
           {
-            uuid: 'BBBBBB',
-            text: 'BBBBBB'
+            identifier: 'BBBBBB',
+            type: 'BBBBBB',
+            order: 1,
+            text: 'BBBBBB',
+            minimum: 1,
+            maximum: 1
           },
           elemDefault
         );

@@ -8,13 +8,11 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link DisplayCondition} and its DTO {@link DisplayConditionDTO}.
  */
-@Mapper(componentModel = "spring", uses = {QuestionGroupMapper.class})
+@Mapper(componentModel = "spring", uses = {QuestionSectionMapper.class, QuestionMapper.class})
 public interface DisplayConditionMapper extends EntityMapper<DisplayConditionDTO, DisplayCondition> {
 
-    @Mapping(source = "questionGroup.id", target = "questionGroupId")
     DisplayConditionDTO toDto(DisplayCondition displayCondition);
 
-    @Mapping(source = "questionGroupId", target = "questionGroup")
     DisplayCondition toEntity(DisplayConditionDTO displayConditionDTO);
 
     default DisplayCondition fromId(Long id) {

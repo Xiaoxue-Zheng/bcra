@@ -1,22 +1,21 @@
 package uk.ac.herc.bcra.service.mapper;
 
-import uk.ac.herc.bcra.domain.*;
-import uk.ac.herc.bcra.service.dto.AnswerGroupDTO;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-import org.mapstruct.*;
+import uk.ac.herc.bcra.domain.AnswerGroup;
+import uk.ac.herc.bcra.service.dto.AnswerGroupDTO;
 
 /**
  * Mapper for the entity {@link AnswerGroup} and its DTO {@link AnswerGroupDTO}.
  */
-@Mapper(componentModel = "spring", uses = {AnswerResponseMapper.class, QuestionGroupMapper.class, AnswerMapper.class})
+@Mapper(componentModel = "spring", uses = {AnswerSectionMapper.class, AnswerMapper.class})
 public interface AnswerGroupMapper extends EntityMapper<AnswerGroupDTO, AnswerGroup> {
 
-    @Mapping(source = "answerResponse.id", target = "answerResponseId")
-    @Mapping(source = "questionGroup.id", target = "questionGroupId")
+    @Mapping(source = "answerSection.id", target = "answerSectionId")
     AnswerGroupDTO toDto(AnswerGroup answerGroup);
 
-    @Mapping(source = "answerResponseId", target = "answerResponse")
-    @Mapping(source = "questionGroupId", target = "questionGroup")
+    @Mapping(source = "answerSectionId", target = "answerSection")
     @Mapping(source = "answers", target = "answers")
     @Mapping(target = "removeAnswer", ignore = true)
     AnswerGroup toEntity(AnswerGroupDTO answerGroupDTO);

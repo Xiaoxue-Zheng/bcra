@@ -1,10 +1,13 @@
 package uk.ac.herc.bcra.service.dto;
 
 import javax.validation.constraints.*;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+
+import uk.ac.herc.bcra.domain.enumeration.QuestionGroupIdentifier;
 
 /**
  * A DTO for the {@link uk.ac.herc.bcra.domain.QuestionGroup} entity.
@@ -14,9 +17,9 @@ public class QuestionGroupDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private String uuid;
+    private QuestionGroupIdentifier identifier;
 
-    private Set<QuestionGroupQuestionDTO> questionGroupQuestions = new HashSet<>();
+    private Set<QuestionDTO> questions = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -26,20 +29,20 @@ public class QuestionGroupDTO implements Serializable {
         this.id = id;
     }
 
-    public String getUuid() {
-        return uuid;
+    public QuestionGroupIdentifier getIdentifier() {
+        return identifier;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setIdentifier(QuestionGroupIdentifier identifier) {
+        this.identifier = identifier;
     }
 
-    public Set<QuestionGroupQuestionDTO> getQuestionGroupQuestions() {
-        return questionGroupQuestions;
+    public Set<QuestionDTO> getQuestions() {
+        return questions;
     }
 
-    public void setQuestionGroupQuestions(Set<QuestionGroupQuestionDTO> questionGroupQuestions) {
-        this.questionGroupQuestions = questionGroupQuestions;
+    public void setQuestions(Set<QuestionDTO> questions) {
+        this.questions = questions;
     }
 
     @Override
@@ -67,8 +70,9 @@ public class QuestionGroupDTO implements Serializable {
     public String toString() {
         return "QuestionGroupDTO{" +
             "id=" + getId() +
-            ", uuid='" + getUuid() + "'" +
-            ", questionGroupQuestions='" + getQuestionGroupQuestions() + "'" +
+            ", identifier='" + getIdentifier() + "'" +
+            ", questions='" + getQuestions() + "'" +
             "}";
     }
+
 }

@@ -4,6 +4,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -24,13 +25,14 @@ public class AnswerGroup implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @ManyToOne
-    @JsonIgnoreProperties("answerGroups")
-    private AnswerResponse answerResponse;
+    @NotNull
+    @Column(name = "jhi_order", nullable = false)
+    private Integer order;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties("answerGroups")
-    private QuestionGroup questionGroup;
+    private AnswerSection answerSection;
 
     @OneToMany(mappedBy = "answerGroup", cascade = CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -45,30 +47,30 @@ public class AnswerGroup implements Serializable {
         this.id = id;
     }
 
-    public AnswerResponse getAnswerResponse() {
-        return answerResponse;
+    public Integer getOrder() {
+        return order;
     }
 
-    public AnswerGroup answerResponse(AnswerResponse answerResponse) {
-        this.answerResponse = answerResponse;
+    public AnswerGroup order(Integer order) {
+        this.order = order;
         return this;
     }
 
-    public void setAnswerResponse(AnswerResponse answerResponse) {
-        this.answerResponse = answerResponse;
+    public void setOrder(Integer order) {
+        this.order = order;
     }
 
-    public QuestionGroup getQuestionGroup() {
-        return questionGroup;
+    public AnswerSection getAnswerSection() {
+        return answerSection;
     }
 
-    public AnswerGroup questionGroup(QuestionGroup questionGroup) {
-        this.questionGroup = questionGroup;
+    public AnswerGroup answerSection(AnswerSection answerSection) {
+        this.answerSection = answerSection;
         return this;
     }
 
-    public void setQuestionGroup(QuestionGroup questionGroup) {
-        this.questionGroup = questionGroup;
+    public void setAnswerSection(AnswerSection answerSection) {
+        this.answerSection = answerSection;
     }
 
     public Set<Answer> getAnswers() {
@@ -120,6 +122,7 @@ public class AnswerGroup implements Serializable {
     public String toString() {
         return "AnswerGroup{" +
             "id=" + getId() +
+            ", order=" + getOrder() +
             "}";
     }
 }

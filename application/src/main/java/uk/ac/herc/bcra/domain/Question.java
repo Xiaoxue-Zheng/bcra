@@ -1,4 +1,5 @@
 package uk.ac.herc.bcra.domain;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -9,22 +10,16 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import uk.ac.herc.bcra.domain.enumeration.QuestionIdentifier;
+
+import uk.ac.herc.bcra.domain.enumeration.QuestionType;
+
 /**
  * A Question.
  */
 @Entity
-@Table(
-    name = "question",
-    indexes = {
-        @Index(
-            name = "question_uuid_index",
-            columnList = "uuid",
-            unique = true
-        )
-    }
-)
+@Table(name = "question")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Inheritance(strategy=InheritanceType.JOINED)
 public class Question implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -35,20 +30,41 @@ public class Question implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "uuid", nullable = false, unique = true)
-    private String uuid;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "identifier", nullable = false, unique = true)
+    private QuestionIdentifier identifier;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
+    private QuestionType type;
+
+    @NotNull
+    @Column(name = "jhi_order", nullable = false)
+    private Integer order;
 
     @NotNull
     @Column(name = "text", nullable = false)
     private String text;
 
-    @OneToMany(mappedBy = "question")
+    @Column(name = "minimum")
+    private Integer minimum;
+
+    @Column(name = "maximum")
+    private Integer maximum;
+
+    @OneToMany(mappedBy = "displayQuestion")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<QuestionGroupQuestion> questionGroupQuestions = new HashSet<>();
+    private Set<DisplayCondition> displayConditions = new HashSet<>();
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("questions")
+    private QuestionGroup questionGroup;
 
     @OneToMany(mappedBy = "question")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Answer> answers = new HashSet<>();
+    private Set<QuestionItem> questionItems = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -59,17 +75,43 @@ public class Question implements Serializable {
         this.id = id;
     }
 
-    public String getUuid() {
-        return uuid;
+    public QuestionIdentifier getIdentifier() {
+        return identifier;
     }
 
-    public Question uuid(String uuid) {
-        this.uuid = uuid;
+    public Question identifier(QuestionIdentifier identifier) {
+        this.identifier = identifier;
         return this;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setIdentifier(QuestionIdentifier identifier) {
+        this.identifier = identifier;
+    }
+
+    public QuestionType getType() {
+        return type;
+    }
+
+    public Question type(QuestionType type) {
+        this.type = type;
+        return this;
+    }
+
+    public void setType(QuestionType type) {
+        this.type = type;
+    }
+
+    public Integer getOrder() {
+        return order;
+    }
+
+    public Question order(Integer order) {
+        this.order = order;
+        return this;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
     }
 
     public String getText() {
@@ -85,54 +127,93 @@ public class Question implements Serializable {
         this.text = text;
     }
 
-    public Set<QuestionGroupQuestion> getQuestionGroupQuestions() {
-        return questionGroupQuestions;
+    public Integer getMinimum() {
+        return minimum;
     }
 
-    public Question questionGroupQuestions(Set<QuestionGroupQuestion> questionGroupQuestions) {
-        this.questionGroupQuestions = questionGroupQuestions;
+    public Question minimum(Integer minimum) {
+        this.minimum = minimum;
         return this;
     }
 
-    public Question addQuestionGroupQuestion(QuestionGroupQuestion questionGroupQuestion) {
-        this.questionGroupQuestions.add(questionGroupQuestion);
-        questionGroupQuestion.setQuestion(this);
+    public void setMinimum(Integer minimum) {
+        this.minimum = minimum;
+    }
+
+    public Integer getMaximum() {
+        return maximum;
+    }
+
+    public Question maximum(Integer maximum) {
+        this.maximum = maximum;
         return this;
     }
 
-    public Question removeQuestionGroupQuestion(QuestionGroupQuestion questionGroupQuestion) {
-        this.questionGroupQuestions.remove(questionGroupQuestion);
-        questionGroupQuestion.setQuestion(null);
+    public void setMaximum(Integer maximum) {
+        this.maximum = maximum;
+    }
+
+    public Set<DisplayCondition> getDisplayConditions() {
+        return displayConditions;
+    }
+
+    public Question displayConditions(Set<DisplayCondition> displayConditions) {
+        this.displayConditions = displayConditions;
         return this;
     }
 
-    public void setQuestionGroupQuestions(Set<QuestionGroupQuestion> questionGroupQuestions) {
-        this.questionGroupQuestions = questionGroupQuestions;
-    }
-
-    public Set<Answer> getAnswers() {
-        return answers;
-    }
-
-    public Question answers(Set<Answer> answers) {
-        this.answers = answers;
+    public Question addDisplayCondition(DisplayCondition displayCondition) {
+        this.displayConditions.add(displayCondition);
+        displayCondition.setDisplayQuestion(this);
         return this;
     }
 
-    public Question addAnswer(Answer answer) {
-        this.answers.add(answer);
-        answer.setQuestion(this);
+    public Question removeDisplayCondition(DisplayCondition displayCondition) {
+        this.displayConditions.remove(displayCondition);
+        displayCondition.setDisplayQuestion(null);
         return this;
     }
 
-    public Question removeAnswer(Answer answer) {
-        this.answers.remove(answer);
-        answer.setQuestion(null);
+    public void setDisplayConditions(Set<DisplayCondition> displayConditions) {
+        this.displayConditions = displayConditions;
+    }
+
+    public QuestionGroup getQuestionGroup() {
+        return questionGroup;
+    }
+
+    public Question questionGroup(QuestionGroup questionGroup) {
+        this.questionGroup = questionGroup;
         return this;
     }
 
-    public void setAnswers(Set<Answer> answers) {
-        this.answers = answers;
+    public void setQuestionGroup(QuestionGroup questionGroup) {
+        this.questionGroup = questionGroup;
+    }
+
+    public Set<QuestionItem> getQuestionItems() {
+        return questionItems;
+    }
+
+    public Question questionItems(Set<QuestionItem> questionItems) {
+        this.questionItems = questionItems;
+        return this;
+    }
+
+    public Question addQuestionItem(QuestionItem questionItem) {
+        this.questionItems.add(questionItem);
+        questionItem.setQuestion(this);
+        return this;
+    }
+
+    public Question removeQuestionItem(QuestionItem questionItem) {
+        this.questionItems.remove(questionItem);
+        questionItem.setQuestion(null);
+        return this;
+    }
+
+    public void setQuestionItems(Set<QuestionItem> questionItems) {
+        this.questionItems = questionItems;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -156,8 +237,12 @@ public class Question implements Serializable {
     public String toString() {
         return "Question{" +
             "id=" + getId() +
-            ", uuid='" + getUuid() + "'" +
+            ", identifier='" + getIdentifier() + "'" +
+            ", type='" + getType() + "'" +
+            ", order=" + getOrder() +
             ", text='" + getText() + "'" +
+            ", minimum=" + getMinimum() +
+            ", maximum=" + getMaximum() +
             "}";
     }
 }

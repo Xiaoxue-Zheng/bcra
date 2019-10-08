@@ -1,0 +1,39 @@
+{
+    "name": "AnswerItem",
+    "fields": [
+        {
+            "fieldName": "selected",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "answer",
+            "otherEntityRelationshipName": "answerItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "answer",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "questionItem",
+            "otherEntityRelationshipName": "answerItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "questionItem",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20191008133431",
+    "entityTableName": "answer_item",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

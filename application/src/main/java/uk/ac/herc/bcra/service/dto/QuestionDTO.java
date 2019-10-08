@@ -1,7 +1,13 @@
 package uk.ac.herc.bcra.service.dto;
+
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+
+import uk.ac.herc.bcra.domain.enumeration.QuestionIdentifier;
+import uk.ac.herc.bcra.domain.enumeration.QuestionType;
 
 /**
  * A DTO for the {@link uk.ac.herc.bcra.domain.Question} entity.
@@ -11,11 +17,24 @@ public class QuestionDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private String uuid;
+    private QuestionIdentifier identifier;
+
+    @NotNull
+    private QuestionType type;
+
+    @NotNull
+    private Integer order;
 
     @NotNull
     private String text;
 
+    private Integer minimum;
+
+    private Integer maximum;
+
+    private Set<QuestionItemDTO> questionItems = new HashSet<>();
+
+    private Set<DisplayConditionDTO> displayConditions = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -25,12 +44,28 @@ public class QuestionDTO implements Serializable {
         this.id = id;
     }
 
-    public String getUuid() {
-        return uuid;
+    public QuestionIdentifier getIdentifier() {
+        return identifier;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setIdentifier(QuestionIdentifier identifier) {
+        this.identifier = identifier;
+    }
+
+    public QuestionType getType() {
+        return type;
+    }
+
+    public void setType(QuestionType type) {
+        this.type = type;
+    }
+
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
     }
 
     public String getText() {
@@ -39,6 +74,38 @@ public class QuestionDTO implements Serializable {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public Integer getMinimum() {
+        return minimum;
+    }
+
+    public void setMinimum(Integer minimum) {
+        this.minimum = minimum;
+    }
+
+    public Integer getMaximum() {
+        return maximum;
+    }
+
+    public void setMaximum(Integer maximum) {
+        this.maximum = maximum;
+    }
+
+    public Set<QuestionItemDTO> getQuestionItems() {
+        return questionItems;
+    }
+
+    public void setQuestionItems(Set<QuestionItemDTO> questionItems) {
+        this.questionItems = questionItems;
+    }
+
+    public Set<DisplayConditionDTO> getDisplayConditions() {
+        return displayConditions;
+    }
+
+    public void setDisplayConditions(Set<DisplayConditionDTO> displayConditions) {
+        this.displayConditions = displayConditions;
     }
 
     @Override
@@ -66,8 +133,14 @@ public class QuestionDTO implements Serializable {
     public String toString() {
         return "QuestionDTO{" +
             "id=" + getId() +
-            ", uuid='" + getUuid() + "'" +
+            ", identifier='" + getIdentifier() + "'" +
+            ", type='" + getType() + "'" +
+            ", order=" + getOrder() +
             ", text='" + getText() + "'" +
+            ", minimum=" + getMinimum() +
+            ", maximum=" + getMaximum() +
+            ", questionItems=" + getQuestionItems() +
+            ", displayConditions=" + getDisplayConditions() +
             "}";
     }
 }

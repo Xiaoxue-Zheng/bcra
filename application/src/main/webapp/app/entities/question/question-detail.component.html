@@ -5,13 +5,35 @@
             <hr>
             <jhi-alert-error></jhi-alert-error>
             <dl class="row-md jh-entity-details">
-                <dt><span>Uuid</span></dt>
+                <dt><span>Identifier</span></dt>
                 <dd>
-                    <span>{{question.uuid}}</span>
+                    <span>{{question.identifier}}</span>
+                </dd>
+                <dt><span>Type</span></dt>
+                <dd>
+                    <span>{{question.type}}</span>
+                </dd>
+                <dt><span>Order</span></dt>
+                <dd>
+                    <span>{{question.order}}</span>
                 </dd>
                 <dt><span>Text</span></dt>
                 <dd>
                     <span>{{question.text}}</span>
+                </dd>
+                <dt><span>Minimum</span></dt>
+                <dd>
+                    <span>{{question.minimum}}</span>
+                </dd>
+                <dt><span>Maximum</span></dt>
+                <dd>
+                    <span>{{question.maximum}}</span>
+                </dd>
+                <dt><span>Question Group</span></dt>
+                <dd>
+                    <div *ngIf="question.questionGroupId">
+                        <a [routerLink]="['/question-group', question.questionGroupId, 'view']">{{question.questionGroupId}}</a>
+                    </div>
                 </dd>
             </dl>
 

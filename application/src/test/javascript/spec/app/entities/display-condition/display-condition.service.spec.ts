@@ -5,7 +5,14 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 import { DisplayConditionService } from 'app/entities/display-condition/display-condition.service';
-import { IDisplayCondition, DisplayCondition } from 'app/shared/model/display-condition.model';
+import {
+  IDisplayCondition,
+  DisplayCondition,
+  DisplayConditionType,
+  QuestionSectionIdentifier,
+  QuestionIdentifier,
+  QuestionItemIdentifier
+} from 'app/shared/model/display-condition.model';
 
 describe('Service Tests', () => {
   describe('DisplayCondition Service', () => {
@@ -23,7 +30,13 @@ describe('Service Tests', () => {
       service = injector.get(DisplayConditionService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new DisplayCondition(0);
+      elemDefault = new DisplayCondition(
+        0,
+        DisplayConditionType.DISPLAY_SECTION_CONDITION_QUESTION,
+        QuestionSectionIdentifier.PERSONAL_HISTORY,
+        QuestionIdentifier.SELF_FIRST_PERIOD,
+        QuestionItemIdentifier.SELF_PREMENOPAUSAL_YES
+      );
     });
 
     describe('Service methods', () => {
@@ -57,7 +70,15 @@ describe('Service Tests', () => {
       });
 
       it('should update a DisplayCondition', async () => {
-        const returnedFromService = Object.assign({}, elemDefault);
+        const returnedFromService = Object.assign(
+          {
+            displayConditionType: 'BBBBBB',
+            conditionSectionIdentifier: 'BBBBBB',
+            conditionQuestionIdentifier: 'BBBBBB',
+            conditionQuestionItemIdentifier: 'BBBBBB'
+          },
+          elemDefault
+        );
 
         const expected = Object.assign({}, returnedFromService);
         service
@@ -70,7 +91,15 @@ describe('Service Tests', () => {
       });
 
       it('should return a list of DisplayCondition', async () => {
-        const returnedFromService = Object.assign({}, elemDefault);
+        const returnedFromService = Object.assign(
+          {
+            displayConditionType: 'BBBBBB',
+            conditionSectionIdentifier: 'BBBBBB',
+            conditionQuestionIdentifier: 'BBBBBB',
+            conditionQuestionItemIdentifier: 'BBBBBB'
+          },
+          elemDefault
+        );
         const expected = Object.assign({}, returnedFromService);
         service
           .query(expected)

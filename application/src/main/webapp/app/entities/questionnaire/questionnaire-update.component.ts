@@ -15,7 +15,11 @@ export class QuestionnaireUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    uuid: [null, [Validators.required]]
+    identifier: [null, [Validators.required]],
+    algorithm: [null, [Validators.required]],
+    algorithmMinimum: [null, [Validators.required]],
+    algorithmMaximum: [null, [Validators.required]],
+    implementationVersion: [null, [Validators.required]]
   });
 
   constructor(protected questionnaireService: QuestionnaireService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
@@ -30,7 +34,11 @@ export class QuestionnaireUpdateComponent implements OnInit {
   updateForm(questionnaire: IQuestionnaire) {
     this.editForm.patchValue({
       id: questionnaire.id,
-      uuid: questionnaire.uuid
+      identifier: questionnaire.identifier,
+      algorithm: questionnaire.algorithm,
+      algorithmMinimum: questionnaire.algorithmMinimum,
+      algorithmMaximum: questionnaire.algorithmMaximum,
+      implementationVersion: questionnaire.implementationVersion
     });
   }
 
@@ -52,7 +60,11 @@ export class QuestionnaireUpdateComponent implements OnInit {
     return {
       ...new Questionnaire(),
       id: this.editForm.get(['id']).value,
-      uuid: this.editForm.get(['uuid']).value
+      identifier: this.editForm.get(['identifier']).value,
+      algorithm: this.editForm.get(['algorithm']).value,
+      algorithmMinimum: this.editForm.get(['algorithmMinimum']).value,
+      algorithmMaximum: this.editForm.get(['algorithmMaximum']).value,
+      implementationVersion: this.editForm.get(['implementationVersion']).value
     };
   }
 

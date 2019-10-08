@@ -7,10 +7,8 @@ import { filter, map } from 'rxjs/operators';
 import { JhiAlertService } from 'ng-jhipster';
 import { IAnswerGroup, AnswerGroup } from 'app/shared/model/answer-group.model';
 import { AnswerGroupService } from './answer-group.service';
-import { IAnswerResponse } from 'app/shared/model/answer-response.model';
-import { AnswerResponseService } from 'app/entities/answer-response';
-import { IQuestionGroup } from 'app/shared/model/question-group.model';
-import { QuestionGroupService } from 'app/entities/question-group';
+import { IAnswerSection } from 'app/shared/model/answer-section.model';
+import { AnswerSectionService } from 'app/entities/answer-section';
 
 @Component({
   selector: 'jhi-answer-group-update',
@@ -19,21 +17,18 @@ import { QuestionGroupService } from 'app/entities/question-group';
 export class AnswerGroupUpdateComponent implements OnInit {
   isSaving: boolean;
 
-  answerresponses: IAnswerResponse[];
-
-  questiongroups: IQuestionGroup[];
+  answersections: IAnswerSection[];
 
   editForm = this.fb.group({
     id: [],
-    answerResponseId: [],
-    questionGroupId: []
+    order: [null, [Validators.required]],
+    answerSectionId: [null, Validators.required]
   });
 
   constructor(
     protected jhiAlertService: JhiAlertService,
     protected answerGroupService: AnswerGroupService,
-    protected answerResponseService: AnswerResponseService,
-    protected questionGroupService: QuestionGroupService,
+    protected answerSectionService: AnswerSectionService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
@@ -43,27 +38,20 @@ export class AnswerGroupUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ answerGroup }) => {
       this.updateForm(answerGroup);
     });
-    this.answerResponseService
+    this.answerSectionService
       .query()
       .pipe(
-        filter((mayBeOk: HttpResponse<IAnswerResponse[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IAnswerResponse[]>) => response.body)
+        filter((mayBeOk: HttpResponse<IAnswerSection[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IAnswerSection[]>) => response.body)
       )
-      .subscribe((res: IAnswerResponse[]) => (this.answerresponses = res), (res: HttpErrorResponse) => this.onError(res.message));
-    this.questionGroupService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IQuestionGroup[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IQuestionGroup[]>) => response.body)
-      )
-      .subscribe((res: IQuestionGroup[]) => (this.questiongroups = res), (res: HttpErrorResponse) => this.onError(res.message));
+      .subscribe((res: IAnswerSection[]) => (this.answersections = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
   updateForm(answerGroup: IAnswerGroup) {
     this.editForm.patchValue({
       id: answerGroup.id,
-      answerResponseId: answerGroup.answerResponseId,
-      questionGroupId: answerGroup.questionGroupId
+      order: answerGroup.order,
+      answerSectionId: answerGroup.answerSectionId
     });
   }
 
@@ -85,8 +73,8 @@ export class AnswerGroupUpdateComponent implements OnInit {
     return {
       ...new AnswerGroup(),
       id: this.editForm.get(['id']).value,
-      answerResponseId: this.editForm.get(['answerResponseId']).value,
-      questionGroupId: this.editForm.get(['questionGroupId']).value
+      order: this.editForm.get(['order']).value,
+      answerSectionId: this.editForm.get(['answerSectionId']).value
     };
   }
 
@@ -106,11 +94,7 @@ export class AnswerGroupUpdateComponent implements OnInit {
     this.jhiAlertService.error(errorMessage, null, null);
   }
 
-  trackAnswerResponseById(index: number, item: IAnswerResponse) {
-    return item.id;
-  }
-
-  trackQuestionGroupById(index: number, item: IQuestionGroup) {
+  trackAnswerSectionById(index: number, item: IAnswerSection) {
     return item.id;
   }
 }

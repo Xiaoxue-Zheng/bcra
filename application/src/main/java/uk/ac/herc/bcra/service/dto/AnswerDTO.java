@@ -1,6 +1,13 @@
 package uk.ac.herc.bcra.service.dto;
+
+import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+
+import uk.ac.herc.bcra.domain.enumeration.QuestionIdentifier;
+import uk.ac.herc.bcra.domain.enumeration.AnswerUnits;
 
 /**
  * A DTO for the {@link uk.ac.herc.bcra.domain.Answer} entity.
@@ -9,10 +16,15 @@ public class AnswerDTO implements Serializable {
 
     private Long id;
 
+    private Integer number;
+
+    private AnswerUnits units;
 
     private Long answerGroupId;
 
     private Long questionId;
+
+    private Set<AnswerItemDTO> answerItems = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -20,6 +32,22 @@ public class AnswerDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+
+    public AnswerUnits getUnits() {
+        return units;
+    }
+
+    public void setUnits(AnswerUnits units) {
+        this.units = units;
     }
 
     public Long getAnswerGroupId() {
@@ -36,6 +64,14 @@ public class AnswerDTO implements Serializable {
 
     public void setQuestionId(Long questionId) {
         this.questionId = questionId;
+    }
+
+    public Set<AnswerItemDTO> getAnswerItems() {
+        return answerItems;
+    }
+
+    public void setAnswerItems(Set<AnswerItemDTO> answerItems) {
+        this.answerItems = answerItems;
     }
 
     @Override
@@ -63,8 +99,11 @@ public class AnswerDTO implements Serializable {
     public String toString() {
         return "AnswerDTO{" +
             "id=" + getId() +
+            ", number=" + getNumber() +
+            ", units='" + getUnits() + "'" +
             ", answerGroup=" + getAnswerGroupId() +
             ", question=" + getQuestionId() +
+            ", answerItems=" + getAnswerItems() +
             "}";
     }
 }

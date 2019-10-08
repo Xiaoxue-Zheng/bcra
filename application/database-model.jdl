@@ -1,127 +1,267 @@
-/* Questionnaire, QuestionGroup, Question */
+/* Questionnaire, QuestionSection, QuestionGroup, Question, QuestionItem */
 entity Questionnaire {
-	uuid String required unique
+	identifier QuestionnaireIdentifier required unique
+    algorithm Algorithm required
+    algorithmMinimum Integer required
+    algorithmMaximum Integer required
+    implementationVersion Integer required
+}
+
+enum QuestionnaireIdentifier {
+    TYRER_CUZICK_IV1
+}
+
+enum Algorithm {
+    TYRER_CUZICK
+}
+
+entity QuestionSection {
+	identifier QuestionSectionIdentifier required unique
+    order Integer required
+    relativeName String    
+}
+
+relationship ManyToOne {
+    QuestionSection{questionnaire required} to Questionnaire{questionSection}
+}
+
+relationship OneToMany {
+    QuestionSection{displayCondition} to DisplayCondition{displayQuestionSection}
+}
+
+enum QuestionSectionIdentifier {
+    PERSONAL_HISTORY,
+    FAMILY_HISTORY,
+
+    MOTHER,
+    SISTER_COUNT,
+    SISTERS,
+    NIECE_COUNT,
+    NIECES,
+    
+    MATERNAL_HALF_SISTER_COUNT,
+    MATERNAL_HALF_SISTERS,
+    MATERNAL_GRANDMOTHER,
+    MATERNAL_AUNT_COUNT,
+    MATERNAL_AUNTS,
+    MATERNAL_COUSIN_COUNT,
+    MATERNAL_COUSINS,
+
+    PATERNAL_HALF_SISTER_COUNT,
+    PATERNAL_HALF_SISTERS,
+    PATERNAL_GRANDMOTHER,
+    PATERNAL_AUNT_COUNT,
+    PATERNAL_AUNTS,
+    PATERNAL_COUSIN_COUNT,
+    PATERNAL_COUSINS,
+
+    MALE_BREAST_CANCER
 }
 
 entity QuestionGroup {
-	uuid String required unique
-}
-relationship OneToMany {
-	QuestionGroup to DisplayCondition
+	identifier QuestionGroupIdentifier required unique
 }
 
-entity QuestionnaireQuestionGroup {
-	uuid String required unique
-    questionnaireUuid String required
-    questionGroupUuid String required
-    order Integer required
+relationship OneToMany {
+    QuestionGroup{questionSection} to QuestionSection{questionGroup required}
 }
-relationship ManyToOne {
-	QuestionnaireQuestionGroup to Questionnaire
-    QuestionnaireQuestionGroup to QuestionGroup
+
+enum QuestionGroupIdentifier {
+    PERSONAL_HISTORY_QUESTIONS,
+    FAMILY_HISTORY_QUESTIONS,
+    RELATIVE_QUESTIONS,
+    RELATIVE_COUNT_QUESTIONS,
+    MALE_BREAST_CANCER_QUESTIONS
 }
 
 entity Question {
-	uuid String required unique
+    identifier QuestionIdentifier required unique
+    type QuestionType required
+    order Integer required
 	text String required
+
+    minimum Integer
+    maximum Integer
 }
 
-entity QuestionGroupQuestion {
-	uuid String required unique
-    questionGroupUuid String required
-    questionUuid String required
+relationship ManyToOne {
+    Question{questionGroup required} to QuestionGroup{question}
+}
+
+relationship OneToMany {
+    Question{displayCondition} to DisplayCondition{displayQuestion}
+}
+
+enum QuestionIdentifier {
+    SELF_FIRST_PERIOD,
+    SELF_PREMENOPAUSAL,
+    SELF_MENOPAUSAL_AGE,
+    SELF_PREGNANCIES,
+    SELF_PREGNANCY_FIRST_AGE,
+    SELF_HEIGHT,
+    SELF_WEIGHT,
+    SELF_BREAST_BIOPSY,
+    SELF_BREAST_BIOPSY_DIAGNOSIS_RISK,
+    SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES,
+    SELF_ASHKENAZI,
+
+    FAMILY_BLOOD_RELATIVES,
+    FAMILY_MATERNAL_RELATIVES,
+    FAMILY_PATERNAL_RELATIVES,
+
+    RELATIVE_HOW_MANY,
+
+    RELATIVE_DIAGNOSIS,
+    RELATIVE_FIRST_DIAGNOSIS_AGE,
+    RELATIVE_SECOND_DIAGNOSIS_AGE,
+    RELATIVE_GENETIC_TESTING,
+    RELATIVE_GENETIC_TESTING_RESULT,
+    RELATIVE_OVARIAN_CANCER,
+    RELATIVE_OVARIAN_CANCER_AGE,
+
+    FATHER_BREAST_CANCER,
+    BROTHER_BREAST_CANCER
+}
+
+enum QuestionType {
+    NUMBER,
+    NUMBER_WEIGHT,
+    NUMBER_HEIGHT,
+    NUMBER_UNKNOWN,
+    DROPDOWN_NUMBER,
+    CHECKBOX,
+    RADIO
+}
+
+entity QuestionItem {
+    identifier QuestionItemIdentifier required unique
+    order Integer required    
+    label String required
+}
+
+relationship ManyToOne {
+    QuestionItem{question required} to Question{questionItem}
+}
+
+enum QuestionItemIdentifier {
+    SELF_PREMENOPAUSAL_YES,
+    SELF_PREMENOPAUSAL_NO,
+    SELF_PREMENOPAUSAL_UNKNOWN,
+
+    SELF_BREAST_BIOPSY_YES,
+    SELF_BREAST_BIOPSY_NO,
+    SELF_BREAST_BIOPSY_UNKNOWN,
+
+    SELF_BREAST_BIOPSY_DIAGNOSIS_RISK_YES,
+    SELF_BREAST_BIOPSY_DIAGNOSIS_RISK_NO,
+    SELF_BREAST_BIOPSY_DIAGNOSIS_RISK_UNKNOWN,
+
+    SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_ADH,
+    SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_LCIS,
+    SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_ALH,
+    SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_OTHER,
+    SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_FORGOT,
+    SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_UNKNOWN,
+
+    SELF_ASHKENAZI_YES,
+    SELF_ASHKENAZI_NO,
+    SELF_ASHKENAZI_UNKNOWN,
+
+    FAMILY_BLOOD_RELATIVES_MOTHER,
+    FAMILY_BLOOD_RELATIVES_SISTERS,
+    FAMILY_BLOOD_RELATIVES_NIECES,
+
+    FAMILY_MATERNAL_RELATIVES_HALF_SISTERS,
+    FAMILY_MATERNAL_RELATIVES_GRANDMOTHER,
+    FAMILY_MATERNAL_RELATIVES_AUNTS,
+    FAMILY_MATERNAL_RELATIVES_COUSINS,
+
+    FAMILY_PATERNAL_RELATIVES_HALF_SISTERS,
+    FAMILY_PATERNAL_RELATIVES_GRANDMOTHER,
+    FAMILY_PATERNAL_RELATIVES_AUNTS,
+    FAMILY_PATERNAL_RELATIVES_COUSINS,
+
+    RELATIVE_DIAGNOSIS_UNILATERAL,
+    RELATIVE_DIAGNOSIS_BILATERAL,
+    RELATIVE_DIAGNOSIS_UNKNOWN,
+
+    RELATIVE_GENETIC_TESTING_YES,
+    RELATIVE_GENETIC_TESTING_NO,
+    RELATIVE_GENETIC_TESTING_UNKNOWN,
+
+    RELATIVE_GENETIC_TESTING_RESULT_BRCA1,
+    RELATIVE_GENETIC_TESTING_RESULT_BRCA2,
+    RELATIVE_GENETIC_TESTING_RESULT_NONE,
+    RELATIVE_GENETIC_TESTING_RESULT_UNKNOWN
+}
+
+
+/* AnswerResponse, AnswerSection, AnswerGroup, Answer, AnswerItem */
+entity AnswerResponse {
+}
+
+relationship ManyToOne {
+    AnswerResponse{questionnaire required} to Questionnaire
+}
+
+entity AnswerSection {
+}
+
+relationship ManyToOne {
+    AnswerSection{answerResponse required} to AnswerResponse{answerSection}
+    AnswerSection{questionSection required} to QuestionSection
+}
+
+entity AnswerGroup {
     order Integer required
 }
-relationship ManyToOne {
-    QuestionGroupQuestion to QuestionGroup
-    QuestionGroupQuestion to Question
-}
-
-/* Question Types (decended from Question) */
-entity CheckboxQuestion
-entity CheckboxQuestionItem {
-    uuid String required unique
-    questionUuid String required
-    label String required
-    descriptor String required
-}
-relationship ManyToOne {
-    CheckboxQuestionItem to CheckboxQuestion
-}
-
-entity RadioQuestion
-entity RadioQuestionItem {  
-    uuid String required unique
-    questionUuid String required
-    label String required
-    descriptor String required
-}
-relationship ManyToOne {
-    RadioQuestionItem to RadioQuestion
-}
-
-entity NumberCheckboxQuestion {
-    minimum Integer required
-    maximum Integer required
-}
-
-entity RepeatQuestion {
-    maximum Integer required
-}
-
-/* AnswerResponse, AnswerGroup, Answer */
-entity AnswerResponse
-entity AnswerGroup 
-entity Answer
 
 relationship ManyToOne {
-    AnswerGroup to AnswerResponse
-    Answer to AnswerGroup
-
-    AnswerResponse to Questionnaire
-    AnswerGroup to QuestionGroup
-    Answer to Question
+    AnswerGroup{answerSection required} to AnswerSection{answerGroup}
 }
 
-/* Answer Types (decended from Answer) */
-entity CheckboxAnswer 
-entity CheckboxAnswerItem
-relationship ManyToOne {
-    CheckboxAnswerItem to CheckboxAnswer
-    CheckboxAnswerItem to CheckboxQuestionItem
- }
-
-entity RadioAnswer 
-entity RadioAnswerItem
-relationship OneToOne {
-    RadioAnswerItem to RadioAnswer
-}
-relationship ManyToOne {
-    CheckboxAnswerItem to CheckboxQuestionItem
-}
-
-entity NumberCheckboxAnswer {
+entity Answer {
     number Integer
-    check Boolean
+    units AnswerUnits
 }
 
-entity RepeatAnswer {
-    quantity Integer required
+relationship ManyToOne {
+    Answer{answerGroup required} to AnswerGroup{answer}
+    Answer{question required} to Question
 }
+
+enum AnswerUnits {
+    GRAMS,
+    POUNDS,
+    CENTIMETERS,
+    INCHES
+}
+
+entity AnswerItem {
+    selected Boolean required
+}
+
+relationship ManyToOne {
+    AnswerItem{answer required} to Answer{answerItem}
+    AnswerItem{questionItem required} to QuestionItem
+}
+
 
 /* Display Conditions */
-entity DisplayCondition
+entity DisplayCondition {
+    displayConditionType DisplayConditionType required
+    conditionSectionIdentifier QuestionSectionIdentifier
+    conditionQuestionIdentifier QuestionIdentifier
+    conditionQuestionItemIdentifier QuestionItemIdentifier
+}
 
-entity CheckboxDisplayCondition
-entity RepeatDisplayCondition
-
-relationship ManyToOne {
-    CheckboxDisplayCondition to CheckboxQuestionItem
-    RepeatDisplayCondition to RepeatQuestion
+enum DisplayConditionType {
+    DISPLAY_SECTION_CONDITION_QUESTION,
+    DISPLAY_QUESTION_CONDITION_QUESTION,
+    DISPLAY_SECTION_CONDITION_ITEM,
+    DISPLAY_QUESTION_CONDITION_ITEM
 }
 
 /* Generation */
 dto * with mapstruct
 service * with serviceImpl
-paginate * with pagination
-filter *

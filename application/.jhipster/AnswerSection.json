@@ -1,0 +1,37 @@
+{
+    "name": "AnswerSection",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "answerResponse",
+            "otherEntityRelationshipName": "answerSection",
+            "relationshipValidateRules": "required",
+            "relationshipName": "answerResponse",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "questionSection",
+            "otherEntityRelationshipName": "answerSection",
+            "relationshipValidateRules": "required",
+            "relationshipName": "questionSection",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "answerGroup",
+            "otherEntityRelationshipName": "answerSection",
+            "relationshipName": "answerGroup"
+        }
+    ],
+    "changelogDate": "20191008133428",
+    "entityTableName": "answer_section",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -2,9 +2,7 @@ package uk.ac.herc.bcra.service;
 
 import uk.ac.herc.bcra.service.dto.AnswerDTO;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -23,10 +21,9 @@ public interface AnswerService {
     /**
      * Get all the answers.
      *
-     * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<AnswerDTO> findAll(Pageable pageable);
+    List<AnswerDTO> findAll();
 
 
     /**

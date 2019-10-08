@@ -6,22 +6,23 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "questionnaire",
             "otherEntityRelationshipName": "answerResponse",
+            "relationshipValidateRules": "required",
             "relationshipName": "questionnaire",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "answerGroup",
+            "otherEntityName": "answerSection",
             "otherEntityRelationshipName": "answerResponse",
-            "relationshipName": "answerGroup"
+            "relationshipName": "answerSection"
         }
     ],
-    "changelogDate": "20190917100710",
+    "changelogDate": "20191008133427",
     "entityTableName": "answer_response",
     "dto": "mapstruct",
-    "pagination": "pagination",
+    "pagination": "no",
     "service": "serviceImpl",
-    "jpaMetamodelFiltering": true,
+    "jpaMetamodelFiltering": false,
     "fluentMethods": true,
     "clientRootFolder": "",
     "applications": "*"

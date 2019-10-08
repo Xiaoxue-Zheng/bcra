@@ -72,8 +72,12 @@ class QuestionGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "uuid":"SAMPLE_TEXT"
+                , "identifier":"SELF_FIRST_PERIOD"
+                , "type":"NUMBER"
+                , "order":"0"
                 , "text":"SAMPLE_TEXT"
+                , "minimum":"0"
+                , "maximum":"0"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_question_url"))).exitHereIfFailed

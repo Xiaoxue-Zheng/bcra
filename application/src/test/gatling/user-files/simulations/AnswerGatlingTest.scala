@@ -72,6 +72,8 @@ class AnswerGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "number":"0"
+                , "units":"GRAMS"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_answer_url"))).exitHereIfFailed

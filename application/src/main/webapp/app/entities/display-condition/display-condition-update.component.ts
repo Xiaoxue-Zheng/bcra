@@ -7,8 +7,10 @@ import { filter, map } from 'rxjs/operators';
 import { JhiAlertService } from 'ng-jhipster';
 import { IDisplayCondition, DisplayCondition } from 'app/shared/model/display-condition.model';
 import { DisplayConditionService } from './display-condition.service';
-import { IQuestionGroup } from 'app/shared/model/question-group.model';
-import { QuestionGroupService } from 'app/entities/question-group';
+import { IQuestionSection } from 'app/shared/model/question-section.model';
+import { QuestionSectionService } from 'app/entities/question-section';
+import { IQuestion } from 'app/shared/model/question.model';
+import { QuestionService } from 'app/entities/question';
 
 @Component({
   selector: 'jhi-display-condition-update',
@@ -17,17 +19,25 @@ import { QuestionGroupService } from 'app/entities/question-group';
 export class DisplayConditionUpdateComponent implements OnInit {
   isSaving: boolean;
 
-  questiongroups: IQuestionGroup[];
+  questionsections: IQuestionSection[];
+
+  questions: IQuestion[];
 
   editForm = this.fb.group({
     id: [],
-    questionGroupId: []
+    displayConditionType: [null, [Validators.required]],
+    conditionSectionIdentifier: [],
+    conditionQuestionIdentifier: [],
+    conditionQuestionItemIdentifier: [],
+    displayQuestionSectionId: [],
+    displayQuestionId: []
   });
 
   constructor(
     protected jhiAlertService: JhiAlertService,
     protected displayConditionService: DisplayConditionService,
-    protected questionGroupService: QuestionGroupService,
+    protected questionSectionService: QuestionSectionService,
+    protected questionService: QuestionService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
@@ -37,19 +47,31 @@ export class DisplayConditionUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ displayCondition }) => {
       this.updateForm(displayCondition);
     });
-    this.questionGroupService
+    this.questionSectionService
       .query()
       .pipe(
-        filter((mayBeOk: HttpResponse<IQuestionGroup[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IQuestionGroup[]>) => response.body)
+        filter((mayBeOk: HttpResponse<IQuestionSection[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IQuestionSection[]>) => response.body)
       )
-      .subscribe((res: IQuestionGroup[]) => (this.questiongroups = res), (res: HttpErrorResponse) => this.onError(res.message));
+      .subscribe((res: IQuestionSection[]) => (this.questionsections = res), (res: HttpErrorResponse) => this.onError(res.message));
+    this.questionService
+      .query()
+      .pipe(
+        filter((mayBeOk: HttpResponse<IQuestion[]>) => mayBeOk.ok),
+        map((response: HttpResponse<IQuestion[]>) => response.body)
+      )
+      .subscribe((res: IQuestion[]) => (this.questions = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
   updateForm(displayCondition: IDisplayCondition) {
     this.editForm.patchValue({
       id: displayCondition.id,
-      questionGroupId: displayCondition.questionGroupId
+      displayConditionType: displayCondition.displayConditionType,
+      conditionSectionIdentifier: displayCondition.conditionSectionIdentifier,
+      conditionQuestionIdentifier: displayCondition.conditionQuestionIdentifier,
+      conditionQuestionItemIdentifier: displayCondition.conditionQuestionItemIdentifier,
+      displayQuestionSectionId: displayCondition.displayQuestionSectionId,
+      displayQuestionId: displayCondition.displayQuestionId
     });
   }
 
@@ -71,7 +93,12 @@ export class DisplayConditionUpdateComponent implements OnInit {
     return {
       ...new DisplayCondition(),
       id: this.editForm.get(['id']).value,
-      questionGroupId: this.editForm.get(['questionGroupId']).value
+      displayConditionType: this.editForm.get(['displayConditionType']).value,
+      conditionSectionIdentifier: this.editForm.get(['conditionSectionIdentifier']).value,
+      conditionQuestionIdentifier: this.editForm.get(['conditionQuestionIdentifier']).value,
+      conditionQuestionItemIdentifier: this.editForm.get(['conditionQuestionItemIdentifier']).value,
+      displayQuestionSectionId: this.editForm.get(['displayQuestionSectionId']).value,
+      displayQuestionId: this.editForm.get(['displayQuestionId']).value
     };
   }
 
@@ -91,7 +118,11 @@ export class DisplayConditionUpdateComponent implements OnInit {
     this.jhiAlertService.error(errorMessage, null, null);
   }
 
-  trackQuestionGroupById(index: number, item: IQuestionGroup) {
+  trackQuestionSectionById(index: number, item: IQuestionSection) {
+    return item.id;
+  }
+
+  trackQuestionById(index: number, item: IQuestion) {
     return item.id;
   }
 }

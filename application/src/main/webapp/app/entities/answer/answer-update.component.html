@@ -9,20 +9,46 @@
                     <input type="text" class="form-control" id="id" name="id" formControlName="id"
                         readonly />
                 </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_number">Number</label>
+                    <input type="number" class="form-control" name="number" id="field_number"
+                           formControlName="number"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_units">Units</label>
+                    <select class="form-control" name="units" formControlName="units" id="field_units">
+                        <option value="GRAMS">GRAMS</option>
+                        <option value="POUNDS">POUNDS</option>
+                        <option value="CENTIMETERS">CENTIMETERS</option>
+                        <option value="INCHES">INCHES</option>
+                    </select>
+                </div>
 
                 <div class="form-group">
                     <label class="form-control-label" for="field_answerGroup">Answer Group</label>
                     <select class="form-control" id="field_answerGroup" name="answerGroup" formControlName="answerGroupId">
-                        <option [ngValue]="null"></option>
+                        <option *ngIf="!editForm.get('answerGroupId').value" [ngValue]="null" selected></option>
                         <option [ngValue]="answerGroupOption.id" *ngFor="let answerGroupOption of answergroups; trackBy: trackAnswerGroupById">{{answerGroupOption.id}}</option>
                     </select>
+                </div>
+                <div *ngIf="editForm.get('answerGroupId').invalid && (editForm.get('answerGroupId').dirty || editForm.get('answerGroupId').touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('answerGroupId').errors.required">
+                        This field is required.
+                    </small>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="field_question">Question</label>
                     <select class="form-control" id="field_question" name="question" formControlName="questionId">
-                        <option [ngValue]="null"></option>
+                        <option *ngIf="!editForm.get('questionId').value" [ngValue]="null" selected></option>
                         <option [ngValue]="questionOption.id" *ngFor="let questionOption of questions; trackBy: trackQuestionById">{{questionOption.id}}</option>
                     </select>
+                </div>
+                <div *ngIf="editForm.get('questionId').invalid && (editForm.get('questionId').dirty || editForm.get('questionId').touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('questionId').errors.required">
+                        This field is required.
+                    </small>
                 </div>
             </div>
             <div>

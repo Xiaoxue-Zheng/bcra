@@ -72,10 +72,8 @@ class DisplayConditionGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "displayConditionType":"DISPLAY_SECTION_CONDITION_QUESTION"
-                , "conditionSectionIdentifier":"PERSONAL_HISTORY"
-                , "conditionQuestionIdentifier":"SELF_FIRST_PERIOD"
-                , "conditionQuestionItemIdentifier":"SELF_PREMENOPAUSAL_YES"
+                , "questionIdentifier":"CONSENT_INFO_SHEET"
+                , "itemIdentifier":"CONSENT_INFO_SHEET_2_YES"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_displayCondition_url"))).exitHereIfFailed

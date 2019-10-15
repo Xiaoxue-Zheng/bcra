@@ -44,14 +44,20 @@ describe('Question e2e test', () => {
             questionUpdatePage.typeSelectLastOption(),
             questionUpdatePage.setOrderInput('5'),
             questionUpdatePage.setTextInput('text'),
+            questionUpdatePage.setVariableNameInput('variableName'),
             questionUpdatePage.setMinimumInput('5'),
             questionUpdatePage.setMaximumInput('5'),
+            questionUpdatePage.setHintInput('hint'),
+            questionUpdatePage.setHintTextInput('hintText'),
             questionUpdatePage.questionGroupSelectLastOption(),
         ]);
         expect(await questionUpdatePage.getOrderInput()).to.eq('5', 'Expected order value to be equals to 5');
         expect(await questionUpdatePage.getTextInput()).to.eq('text', 'Expected Text value to be equals to text');
+        expect(await questionUpdatePage.getVariableNameInput()).to.eq('variableName', 'Expected VariableName value to be equals to variableName');
         expect(await questionUpdatePage.getMinimumInput()).to.eq('5', 'Expected minimum value to be equals to 5');
         expect(await questionUpdatePage.getMaximumInput()).to.eq('5', 'Expected maximum value to be equals to 5');
+        expect(await questionUpdatePage.getHintInput()).to.eq('hint', 'Expected Hint value to be equals to hint');
+        expect(await questionUpdatePage.getHintTextInput()).to.eq('hintText', 'Expected HintText value to be equals to hintText');
         await questionUpdatePage.save();
         expect(await questionUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 

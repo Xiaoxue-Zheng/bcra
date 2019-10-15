@@ -25,12 +25,10 @@ export class DisplayConditionUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    displayConditionType: [null, [Validators.required]],
-    conditionSectionIdentifier: [],
-    conditionQuestionIdentifier: [],
-    conditionQuestionItemIdentifier: [],
-    displayQuestionSectionId: [],
-    displayQuestionId: []
+    questionIdentifier: [],
+    itemIdentifier: [],
+    questionSectionId: [],
+    questionId: []
   });
 
   constructor(
@@ -66,12 +64,10 @@ export class DisplayConditionUpdateComponent implements OnInit {
   updateForm(displayCondition: IDisplayCondition) {
     this.editForm.patchValue({
       id: displayCondition.id,
-      displayConditionType: displayCondition.displayConditionType,
-      conditionSectionIdentifier: displayCondition.conditionSectionIdentifier,
-      conditionQuestionIdentifier: displayCondition.conditionQuestionIdentifier,
-      conditionQuestionItemIdentifier: displayCondition.conditionQuestionItemIdentifier,
-      displayQuestionSectionId: displayCondition.displayQuestionSectionId,
-      displayQuestionId: displayCondition.displayQuestionId
+      questionIdentifier: displayCondition.questionIdentifier,
+      itemIdentifier: displayCondition.itemIdentifier,
+      questionSectionId: displayCondition.questionSectionId,
+      questionId: displayCondition.questionId
     });
   }
 
@@ -93,12 +89,10 @@ export class DisplayConditionUpdateComponent implements OnInit {
     return {
       ...new DisplayCondition(),
       id: this.editForm.get(['id']).value,
-      displayConditionType: this.editForm.get(['displayConditionType']).value,
-      conditionSectionIdentifier: this.editForm.get(['conditionSectionIdentifier']).value,
-      conditionQuestionIdentifier: this.editForm.get(['conditionQuestionIdentifier']).value,
-      conditionQuestionItemIdentifier: this.editForm.get(['conditionQuestionItemIdentifier']).value,
-      displayQuestionSectionId: this.editForm.get(['displayQuestionSectionId']).value,
-      displayQuestionId: this.editForm.get(['displayQuestionId']).value
+      questionIdentifier: this.editForm.get(['questionIdentifier']).value,
+      itemIdentifier: this.editForm.get(['itemIdentifier']).value,
+      questionSectionId: this.editForm.get(['questionSectionId']).value,
+      questionId: this.editForm.get(['questionId']).value
     };
   }
 

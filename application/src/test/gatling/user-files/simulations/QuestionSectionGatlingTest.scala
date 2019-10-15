@@ -72,9 +72,8 @@ class QuestionSectionGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "identifier":"PERSONAL_HISTORY"
+                , "identifier":"CONSENT_FORM"
                 , "order":"0"
-                , "relativeName":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_questionSection_url"))).exitHereIfFailed

@@ -72,9 +72,11 @@ class QuestionItemGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "identifier":"SELF_PREMENOPAUSAL_YES"
+                , "identifier":"CONSENT_INFO_SHEET_2_YES"
                 , "order":"0"
                 , "label":"SAMPLE_TEXT"
+                , "necessary":null
+                , "exclusive":null
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_questionItem_url"))).exitHereIfFailed

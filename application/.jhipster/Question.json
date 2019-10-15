@@ -4,7 +4,7 @@
         {
             "fieldName": "identifier",
             "fieldType": "QuestionIdentifier",
-            "fieldValues": "SELF_FIRST_PERIOD,SELF_PREMENOPAUSAL,SELF_MENOPAUSAL_AGE,SELF_PREGNANCIES,SELF_PREGNANCY_FIRST_AGE,SELF_HEIGHT,SELF_WEIGHT,SELF_BREAST_BIOPSY,SELF_BREAST_BIOPSY_DIAGNOSIS_RISK,SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES,SELF_ASHKENAZI,FAMILY_BLOOD_RELATIVES,FAMILY_MATERNAL_RELATIVES,FAMILY_PATERNAL_RELATIVES,RELATIVE_HOW_MANY,RELATIVE_DIAGNOSIS,RELATIVE_FIRST_DIAGNOSIS_AGE,RELATIVE_SECOND_DIAGNOSIS_AGE,RELATIVE_GENETIC_TESTING,RELATIVE_GENETIC_TESTING_RESULT,RELATIVE_OVARIAN_CANCER,RELATIVE_OVARIAN_CANCER_AGE,FATHER_BREAST_CANCER,BROTHER_BREAST_CANCER",
+            "fieldValues": "CONSENT_INFO_SHEET,CONSENT_WITHDRAWAL,CONSENT_DATA_TRUST,CONSENT_DATA_RESEARCH,CONSENT_DATA_UOM,CONSENT_DATA_COMMERCIAL,CONSENT_INFORM_GP,CONSENT_TAKE_PART,CONSENT_BY_LETTER,CONSENT_INFO_SHEET_2,CONSENT_FUTURE_RESEARCH,FAMILY_BREAST_AFFECTED,FAMILY_BREAST_HOW_MANY,FAMILY_BREAST_AGE,FAMILY_OVARIAN_AFFECTED,FAMILY_OVARIAN_HOW_MANY,FAMILY_OVARIAN_AGE,FAMILY_AFFECTED_GRANDMOTHER_SIDE,FAMILY_AFFECTED_GRANDMOTHER_MOTHERS_AGE,FAMILY_AFFECTED_AUNT_SIDE,FAMILY_AFFECTED_AUNT_MOTHERS_AGE,FAMILY_AFFECTED_NIECE_SIDE,FAMILY_AFFECTED_NIECE_SISTERS_AGE,FAMILY_AFFECTED_HALFSISTER_SIDE,FAMILY_AFFECTED_HALFSISTER_MOTHERS_AGE,SELF_FIRST_PERIOD,SELF_PREMENOPAUSAL,SELF_MENOPAUSAL_AGE,SELF_PREGNANCIES,SELF_PREGNANCY_FIRST_AGE,SELF_HEIGHT,SELF_WEIGHT,SELF_BREAST_BIOPSY,SELF_BREAST_BIOPSY_DIAGNOSIS_RISK,SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES,SELF_ASHKENAZI,FATHER_BREAST_CANCER,BROTHER_BREAST_CANCER",
             "fieldValidateRules": [
                 "required",
                 "unique"
@@ -13,7 +13,7 @@
         {
             "fieldName": "type",
             "fieldType": "QuestionType",
-            "fieldValues": "NUMBER,NUMBER_WEIGHT,NUMBER_HEIGHT,NUMBER_UNKNOWN,DROPDOWN_NUMBER,CHECKBOX,RADIO",
+            "fieldValues": "TICKBOX_CONSENT,CHECKBOX,RADIO,NUMBER,NUMBER_UNKNOWN,NUMBER_WEIGHT,NUMBER_HEIGHT,DROPDOWN_NUMBER",
             "fieldValidateRules": [
                 "required"
             ]
@@ -33,20 +33,38 @@
             ]
         },
         {
+            "fieldName": "variableName",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "minimum",
             "fieldType": "Integer"
         },
         {
             "fieldName": "maximum",
             "fieldType": "Integer"
+        },
+        {
+            "fieldName": "hint",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "hintText",
+            "fieldType": "String"
         }
     ],
     "relationships": [
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "displayCondition",
-            "otherEntityRelationshipName": "displayQuestion",
+            "otherEntityRelationshipName": "question",
             "relationshipName": "displayCondition"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "referralCondition",
+            "otherEntityRelationshipName": "question",
+            "relationshipName": "referralCondition"
         },
         {
             "relationshipType": "many-to-one",

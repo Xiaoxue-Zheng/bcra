@@ -23,7 +23,18 @@ describe('Service Tests', () => {
       service = injector.get(QuestionService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new Question(0, QuestionIdentifier.SELF_FIRST_PERIOD, QuestionType.NUMBER, 0, 'AAAAAAA', 0, 0);
+      elemDefault = new Question(
+        0,
+        QuestionIdentifier.CONSENT_INFO_SHEET,
+        QuestionType.TICKBOX_CONSENT,
+        0,
+        'AAAAAAA',
+        'AAAAAAA',
+        0,
+        0,
+        'AAAAAAA',
+        'AAAAAAA'
+      );
     });
 
     describe('Service methods', () => {
@@ -63,8 +74,11 @@ describe('Service Tests', () => {
             type: 'BBBBBB',
             order: 1,
             text: 'BBBBBB',
+            variableName: 'BBBBBB',
             minimum: 1,
-            maximum: 1
+            maximum: 1,
+            hint: 'BBBBBB',
+            hintText: 'BBBBBB'
           },
           elemDefault
         );
@@ -86,8 +100,11 @@ describe('Service Tests', () => {
             type: 'BBBBBB',
             order: 1,
             text: 'BBBBBB',
+            variableName: 'BBBBBB',
             minimum: 1,
-            maximum: 1
+            maximum: 1,
+            hint: 'BBBBBB',
+            hintText: 'BBBBBB'
           },
           elemDefault
         );

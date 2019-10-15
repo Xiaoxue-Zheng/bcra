@@ -23,7 +23,7 @@ describe('Service Tests', () => {
       service = injector.get(QuestionGroupService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new QuestionGroup(0, QuestionGroupIdentifier.PERSONAL_HISTORY_QUESTIONS);
+      elemDefault = new QuestionGroup(0, QuestionGroupIdentifier.CONSENT_FORM_QUESTIONS);
     });
 
     describe('Service methods', () => {

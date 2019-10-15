@@ -18,22 +18,16 @@
             <thead>
             <tr>
             <th><span>ID</span></th>
-            <th><span>Identifier</span></th>
-            <th><span>Algorithm</span></th>
-            <th><span>Algorithm Minimum</span></th>
-            <th><span>Algorithm Maximum</span></th>
-            <th><span>Implementation Version</span></th>
+            <th><span>Type</span></th>
+            <th><span>Version</span></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let questionnaire of questionnaires ;trackBy: trackId">
                 <td><a [routerLink]="['/questionnaire', questionnaire.id, 'view' ]">{{questionnaire.id}}</a></td>
-                <td>{{questionnaire.identifier}}</td>
-                <td>{{questionnaire.algorithm}}</td>
-                <td>{{questionnaire.algorithmMinimum}}</td>
-                <td>{{questionnaire.algorithmMaximum}}</td>
-                <td>{{questionnaire.implementationVersion}}</td>
+                <td>{{questionnaire.type}}</td>
+                <td>{{questionnaire.version}}</td>
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"

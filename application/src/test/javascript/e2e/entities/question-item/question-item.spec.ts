@@ -47,6 +47,22 @@ describe('QuestionItem e2e test', () => {
         ]);
         expect(await questionItemUpdatePage.getOrderInput()).to.eq('5', 'Expected order value to be equals to 5');
         expect(await questionItemUpdatePage.getLabelInput()).to.eq('label', 'Expected Label value to be equals to label');
+        const selectedNecessary = questionItemUpdatePage.getNecessaryInput();
+        if (await selectedNecessary.isSelected()) {
+            await questionItemUpdatePage.getNecessaryInput().click();
+            expect(await questionItemUpdatePage.getNecessaryInput().isSelected(), 'Expected necessary not to be selected').to.be.false;
+        } else {
+            await questionItemUpdatePage.getNecessaryInput().click();
+            expect(await questionItemUpdatePage.getNecessaryInput().isSelected(), 'Expected necessary to be selected').to.be.true;
+        }
+        const selectedExclusive = questionItemUpdatePage.getExclusiveInput();
+        if (await selectedExclusive.isSelected()) {
+            await questionItemUpdatePage.getExclusiveInput().click();
+            expect(await questionItemUpdatePage.getExclusiveInput().isSelected(), 'Expected exclusive not to be selected').to.be.false;
+        } else {
+            await questionItemUpdatePage.getExclusiveInput().click();
+            expect(await questionItemUpdatePage.getExclusiveInput().isSelected(), 'Expected exclusive to be selected').to.be.true;
+        }
         await questionItemUpdatePage.save();
         expect(await questionItemUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 

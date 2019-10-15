@@ -27,7 +27,6 @@ export class QuestionSectionUpdateComponent implements OnInit {
     id: [],
     identifier: [null, [Validators.required]],
     order: [null, [Validators.required]],
-    relativeName: [],
     questionnaireId: [null, Validators.required],
     questionGroupId: [null, Validators.required]
   });
@@ -67,7 +66,6 @@ export class QuestionSectionUpdateComponent implements OnInit {
       id: questionSection.id,
       identifier: questionSection.identifier,
       order: questionSection.order,
-      relativeName: questionSection.relativeName,
       questionnaireId: questionSection.questionnaireId,
       questionGroupId: questionSection.questionGroupId
     });
@@ -93,7 +91,6 @@ export class QuestionSectionUpdateComponent implements OnInit {
       id: this.editForm.get(['id']).value,
       identifier: this.editForm.get(['identifier']).value,
       order: this.editForm.get(['order']).value,
-      relativeName: this.editForm.get(['relativeName']).value,
       questionnaireId: this.editForm.get(['questionnaireId']).value,
       questionGroupId: this.editForm.get(['questionGroupId']).value
     };

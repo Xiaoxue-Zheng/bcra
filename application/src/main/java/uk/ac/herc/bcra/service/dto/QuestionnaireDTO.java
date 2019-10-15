@@ -6,8 +6,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import uk.ac.herc.bcra.domain.enumeration.QuestionnaireIdentifier;
-import uk.ac.herc.bcra.domain.enumeration.Algorithm;
+import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 
 /**
  * A DTO for the {@link uk.ac.herc.bcra.domain.Questionnaire} entity.
@@ -17,7 +16,10 @@ public class QuestionnaireDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private QuestionnaireIdentifier identifier;
+    private QuestionnaireType type;
+
+    @NotNull
+    private Integer version;
 
     private Set<QuestionSectionDTO> questionSections = new HashSet<>();
 
@@ -29,12 +31,20 @@ public class QuestionnaireDTO implements Serializable {
         this.id = id;
     }
 
-    public QuestionnaireIdentifier getIdentifier() {
-        return identifier;
+    public QuestionnaireType getType() {
+        return type;
     }
 
-    public void setIdentifier(QuestionnaireIdentifier identifier) {
-        this.identifier = identifier;
+    public void setType(QuestionnaireType type) {
+        this.type = type;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public Set<QuestionSectionDTO> getQuestionSections() {
@@ -70,7 +80,8 @@ public class QuestionnaireDTO implements Serializable {
     public String toString() {
         return "QuestionnaireDTO{" +
             "id=" + getId() +
-            ", identifier='" + getIdentifier() + "'" +
+            ", type='" + getType() + "'" +
+            ", version=" + getVersion() +
             ", questionSections=" + getQuestionSections() +
             "}";
     }

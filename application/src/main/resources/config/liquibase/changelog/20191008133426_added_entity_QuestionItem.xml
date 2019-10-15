@@ -27,6 +27,14 @@
                 <constraints nullable="false" />
             </column>
 
+            <column name="necessary" type="boolean">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="exclusive" type="boolean">
+                <constraints nullable="true" />
+            </column>
+
             <column name="question_id" type="bigint">
                 <constraints nullable="false" />
             </column>
@@ -51,7 +59,7 @@
     -->
     <changeSet id="20191008133426-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/question_item.csv"
+                  file="config/liquibase/questionnaires/question_item.csv"
                   separator=","
                   tableName="question_item">
             <column name="id" type="numeric"/>
@@ -59,6 +67,8 @@
             <column name="question_id" type="numeric"/>
             <column name="jhi_order" type="numeric"/>
             <column name="label" type="string"/>
+            <column name="necessary" type="boolean"/>
+            <column name="exclusive" type="boolean"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

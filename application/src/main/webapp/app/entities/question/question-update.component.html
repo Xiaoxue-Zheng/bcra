@@ -12,6 +12,31 @@
                 <div class="form-group">
                     <label class="form-control-label" for="field_identifier">Identifier</label>
                     <select class="form-control" name="identifier" formControlName="identifier" id="field_identifier">
+                        <option value="CONSENT_INFO_SHEET">CONSENT_INFO_SHEET</option>
+                        <option value="CONSENT_WITHDRAWAL">CONSENT_WITHDRAWAL</option>
+                        <option value="CONSENT_DATA_TRUST">CONSENT_DATA_TRUST</option>
+                        <option value="CONSENT_DATA_RESEARCH">CONSENT_DATA_RESEARCH</option>
+                        <option value="CONSENT_DATA_UOM">CONSENT_DATA_UOM</option>
+                        <option value="CONSENT_DATA_COMMERCIAL">CONSENT_DATA_COMMERCIAL</option>
+                        <option value="CONSENT_INFORM_GP">CONSENT_INFORM_GP</option>
+                        <option value="CONSENT_TAKE_PART">CONSENT_TAKE_PART</option>
+                        <option value="CONSENT_BY_LETTER">CONSENT_BY_LETTER</option>
+                        <option value="CONSENT_INFO_SHEET_2">CONSENT_INFO_SHEET_2</option>
+                        <option value="CONSENT_FUTURE_RESEARCH">CONSENT_FUTURE_RESEARCH</option>
+                        <option value="FAMILY_BREAST_AFFECTED">FAMILY_BREAST_AFFECTED</option>
+                        <option value="FAMILY_BREAST_HOW_MANY">FAMILY_BREAST_HOW_MANY</option>
+                        <option value="FAMILY_BREAST_AGE">FAMILY_BREAST_AGE</option>
+                        <option value="FAMILY_OVARIAN_AFFECTED">FAMILY_OVARIAN_AFFECTED</option>
+                        <option value="FAMILY_OVARIAN_HOW_MANY">FAMILY_OVARIAN_HOW_MANY</option>
+                        <option value="FAMILY_OVARIAN_AGE">FAMILY_OVARIAN_AGE</option>
+                        <option value="FAMILY_AFFECTED_GRANDMOTHER_SIDE">FAMILY_AFFECTED_GRANDMOTHER_SIDE</option>
+                        <option value="FAMILY_AFFECTED_GRANDMOTHER_MOTHERS_AGE">FAMILY_AFFECTED_GRANDMOTHER_MOTHERS_AGE</option>
+                        <option value="FAMILY_AFFECTED_AUNT_SIDE">FAMILY_AFFECTED_AUNT_SIDE</option>
+                        <option value="FAMILY_AFFECTED_AUNT_MOTHERS_AGE">FAMILY_AFFECTED_AUNT_MOTHERS_AGE</option>
+                        <option value="FAMILY_AFFECTED_NIECE_SIDE">FAMILY_AFFECTED_NIECE_SIDE</option>
+                        <option value="FAMILY_AFFECTED_NIECE_SISTERS_AGE">FAMILY_AFFECTED_NIECE_SISTERS_AGE</option>
+                        <option value="FAMILY_AFFECTED_HALFSISTER_SIDE">FAMILY_AFFECTED_HALFSISTER_SIDE</option>
+                        <option value="FAMILY_AFFECTED_HALFSISTER_MOTHERS_AGE">FAMILY_AFFECTED_HALFSISTER_MOTHERS_AGE</option>
                         <option value="SELF_FIRST_PERIOD">SELF_FIRST_PERIOD</option>
                         <option value="SELF_PREMENOPAUSAL">SELF_PREMENOPAUSAL</option>
                         <option value="SELF_MENOPAUSAL_AGE">SELF_MENOPAUSAL_AGE</option>
@@ -23,17 +48,6 @@
                         <option value="SELF_BREAST_BIOPSY_DIAGNOSIS_RISK">SELF_BREAST_BIOPSY_DIAGNOSIS_RISK</option>
                         <option value="SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES">SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES</option>
                         <option value="SELF_ASHKENAZI">SELF_ASHKENAZI</option>
-                        <option value="FAMILY_BLOOD_RELATIVES">FAMILY_BLOOD_RELATIVES</option>
-                        <option value="FAMILY_MATERNAL_RELATIVES">FAMILY_MATERNAL_RELATIVES</option>
-                        <option value="FAMILY_PATERNAL_RELATIVES">FAMILY_PATERNAL_RELATIVES</option>
-                        <option value="RELATIVE_HOW_MANY">RELATIVE_HOW_MANY</option>
-                        <option value="RELATIVE_DIAGNOSIS">RELATIVE_DIAGNOSIS</option>
-                        <option value="RELATIVE_FIRST_DIAGNOSIS_AGE">RELATIVE_FIRST_DIAGNOSIS_AGE</option>
-                        <option value="RELATIVE_SECOND_DIAGNOSIS_AGE">RELATIVE_SECOND_DIAGNOSIS_AGE</option>
-                        <option value="RELATIVE_GENETIC_TESTING">RELATIVE_GENETIC_TESTING</option>
-                        <option value="RELATIVE_GENETIC_TESTING_RESULT">RELATIVE_GENETIC_TESTING_RESULT</option>
-                        <option value="RELATIVE_OVARIAN_CANCER">RELATIVE_OVARIAN_CANCER</option>
-                        <option value="RELATIVE_OVARIAN_CANCER_AGE">RELATIVE_OVARIAN_CANCER_AGE</option>
                         <option value="FATHER_BREAST_CANCER">FATHER_BREAST_CANCER</option>
                         <option value="BROTHER_BREAST_CANCER">BROTHER_BREAST_CANCER</option>
                     </select>
@@ -47,13 +61,14 @@
                 <div class="form-group">
                     <label class="form-control-label" for="field_type">Type</label>
                     <select class="form-control" name="type" formControlName="type" id="field_type">
-                        <option value="NUMBER">NUMBER</option>
-                        <option value="NUMBER_WEIGHT">NUMBER_WEIGHT</option>
-                        <option value="NUMBER_HEIGHT">NUMBER_HEIGHT</option>
-                        <option value="NUMBER_UNKNOWN">NUMBER_UNKNOWN</option>
-                        <option value="DROPDOWN_NUMBER">DROPDOWN_NUMBER</option>
+                        <option value="TICKBOX_CONSENT">TICKBOX_CONSENT</option>
                         <option value="CHECKBOX">CHECKBOX</option>
                         <option value="RADIO">RADIO</option>
+                        <option value="NUMBER">NUMBER</option>
+                        <option value="NUMBER_UNKNOWN">NUMBER_UNKNOWN</option>
+                        <option value="NUMBER_WEIGHT">NUMBER_WEIGHT</option>
+                        <option value="NUMBER_HEIGHT">NUMBER_HEIGHT</option>
+                        <option value="DROPDOWN_NUMBER">DROPDOWN_NUMBER</option>
                     </select>
                     <div *ngIf="editForm.get('type').invalid && (editForm.get('type').dirty || editForm.get('type').touched)">
                         <small class="form-text text-danger"
@@ -89,6 +104,11 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="form-control-label" for="field_variableName">Variable Name</label>
+                    <input type="text" class="form-control" name="variableName" id="field_variableName"
+                           formControlName="variableName"/>
+                </div>
+                <div class="form-group">
                     <label class="form-control-label" for="field_minimum">Minimum</label>
                     <input type="number" class="form-control" name="minimum" id="field_minimum"
                            formControlName="minimum"/>
@@ -97,6 +117,16 @@
                     <label class="form-control-label" for="field_maximum">Maximum</label>
                     <input type="number" class="form-control" name="maximum" id="field_maximum"
                            formControlName="maximum"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_hint">Hint</label>
+                    <input type="text" class="form-control" name="hint" id="field_hint"
+                           formControlName="hint"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_hintText">Hint Text</label>
+                    <input type="text" class="form-control" name="hintText" id="field_hintText"
+                           formControlName="hintText"/>
                 </div>
 
                 <div class="form-group">

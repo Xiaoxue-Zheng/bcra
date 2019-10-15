@@ -5,6 +5,7 @@ import uk.ac.herc.bcra.domain.QuestionItem;
 import uk.ac.herc.bcra.domain.Question;
 import uk.ac.herc.bcra.service.dto.QuestionItemDTO;
 import uk.ac.herc.bcra.service.mapper.QuestionItemMapper;
+import uk.ac.herc.bcra.domain.enumeration.QuestionItemIdentifier;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,25 +13,29 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityManager;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import uk.ac.herc.bcra.domain.enumeration.QuestionItemIdentifier;
 /**
  * Integration tests for the {@link QuestionItemResource} REST controller.
  */
 @SpringBootTest(classes = BcraApp.class)
 public class QuestionItemResourceIT {
 
-    private static final QuestionItemIdentifier DEFAULT_IDENTIFIER = QuestionItemIdentifier.SELF_PREMENOPAUSAL_YES;
-    private static final QuestionItemIdentifier UPDATED_IDENTIFIER = QuestionItemIdentifier.SELF_PREMENOPAUSAL_NO;
+    private static final QuestionItemIdentifier DEFAULT_IDENTIFIER = QuestionItemIdentifier.CONSENT_INFO_SHEET_2_YES;
+    private static final QuestionItemIdentifier UPDATED_IDENTIFIER = QuestionItemIdentifier.CONSENT_INFO_SHEET_2_NO;
 
     private static final Integer DEFAULT_ORDER = 1;
     private static final Integer UPDATED_ORDER = 2;
-
+    
     private static final String DEFAULT_LABEL = "AAAAAAAAAA";
     private static final String UPDATED_LABEL = "BBBBBBBBBB";
+
+    private static final Boolean DEFAULT_NECESSARY = false;
+    private static final Boolean UPDATED_NECESSARY = true;
+
+    private static final Boolean DEFAULT_EXCLUSIVE = false;
+    private static final Boolean UPDATED_EXCLUSIVE = true;
 
     @Autowired
     private QuestionItemMapper questionItemMapper;
@@ -50,7 +55,9 @@ public class QuestionItemResourceIT {
         QuestionItem questionItem = new QuestionItem()
             .identifier(DEFAULT_IDENTIFIER)
             .order(DEFAULT_ORDER)
-            .label(DEFAULT_LABEL);
+            .label(DEFAULT_LABEL)
+            .necessary(DEFAULT_NECESSARY)
+            .exclusive(DEFAULT_EXCLUSIVE);
         // Add required entity
         Question question;
         if (TestUtil.findAll(em, Question.class).isEmpty()) {
@@ -73,7 +80,9 @@ public class QuestionItemResourceIT {
         QuestionItem questionItem = new QuestionItem()
             .identifier(UPDATED_IDENTIFIER)
             .order(UPDATED_ORDER)
-            .label(UPDATED_LABEL);
+            .label(UPDATED_LABEL)
+            .necessary(UPDATED_NECESSARY)
+            .exclusive(UPDATED_EXCLUSIVE);
         // Add required entity
         Question question;
         if (TestUtil.findAll(em, Question.class).isEmpty()) {

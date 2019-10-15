@@ -47,6 +47,10 @@ import { RouterModule } from '@angular/router';
       {
         path: 'display-condition',
         loadChildren: () => import('./display-condition/display-condition.module').then(m => m.BcraDisplayConditionModule)
+      },
+      {
+        path: 'referral-condition',
+        loadChildren: () => import('./referral-condition/referral-condition.module').then(m => m.BcraReferralConditionModule)
       }
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ])

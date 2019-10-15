@@ -4,6 +4,8 @@ import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.DisplayCondition;
 import uk.ac.herc.bcra.service.dto.DisplayConditionDTO;
 import uk.ac.herc.bcra.service.mapper.DisplayConditionMapper;
+import uk.ac.herc.bcra.domain.enumeration.QuestionIdentifier;
+import uk.ac.herc.bcra.domain.enumeration.QuestionItemIdentifier;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,31 +13,21 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityManager;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
-import uk.ac.herc.bcra.domain.enumeration.DisplayConditionType;
-import uk.ac.herc.bcra.domain.enumeration.QuestionSectionIdentifier;
-import uk.ac.herc.bcra.domain.enumeration.QuestionIdentifier;
-import uk.ac.herc.bcra.domain.enumeration.QuestionItemIdentifier;
 /**
  * Integration tests for the {@link DisplayConditionResource} REST controller.
  */
 @SpringBootTest(classes = BcraApp.class)
 public class DisplayConditionResourceIT {
 
-    private static final DisplayConditionType DEFAULT_DISPLAY_CONDITION_TYPE = DisplayConditionType.DISPLAY_SECTION_CONDITION_QUESTION;
-    private static final DisplayConditionType UPDATED_DISPLAY_CONDITION_TYPE = DisplayConditionType.DISPLAY_QUESTION_CONDITION_QUESTION;
+    private static final QuestionIdentifier DEFAULT_QUESTION_IDENTIFIER = QuestionIdentifier.CONSENT_INFO_SHEET;
+    private static final QuestionIdentifier UPDATED_QUESTION_IDENTIFIER = QuestionIdentifier.CONSENT_WITHDRAWAL;
 
-    private static final QuestionSectionIdentifier DEFAULT_CONDITION_SECTION_IDENTIFIER = QuestionSectionIdentifier.PERSONAL_HISTORY;
-    private static final QuestionSectionIdentifier UPDATED_CONDITION_SECTION_IDENTIFIER = QuestionSectionIdentifier.FAMILY_HISTORY;
-
-    private static final QuestionIdentifier DEFAULT_CONDITION_QUESTION_IDENTIFIER = QuestionIdentifier.SELF_FIRST_PERIOD;
-    private static final QuestionIdentifier UPDATED_CONDITION_QUESTION_IDENTIFIER = QuestionIdentifier.SELF_PREMENOPAUSAL;
-
-    private static final QuestionItemIdentifier DEFAULT_CONDITION_QUESTION_ITEM_IDENTIFIER = QuestionItemIdentifier.SELF_PREMENOPAUSAL_YES;
-    private static final QuestionItemIdentifier UPDATED_CONDITION_QUESTION_ITEM_IDENTIFIER = QuestionItemIdentifier.SELF_PREMENOPAUSAL_NO;
+    private static final QuestionItemIdentifier DEFAULT_ITEM_IDENTIFIER = QuestionItemIdentifier.CONSENT_INFO_SHEET_2_YES;
+    private static final QuestionItemIdentifier UPDATED_ITEM_IDENTIFIER = QuestionItemIdentifier.CONSENT_INFO_SHEET_2_NO;
 
     @Autowired
     private DisplayConditionMapper displayConditionMapper;
@@ -53,10 +45,8 @@ public class DisplayConditionResourceIT {
      */
     public static DisplayCondition createEntity(EntityManager em) {
         DisplayCondition displayCondition = new DisplayCondition()
-            .displayConditionType(DEFAULT_DISPLAY_CONDITION_TYPE)
-            .conditionSectionIdentifier(DEFAULT_CONDITION_SECTION_IDENTIFIER)
-            .conditionQuestionIdentifier(DEFAULT_CONDITION_QUESTION_IDENTIFIER)
-            .conditionQuestionItemIdentifier(DEFAULT_CONDITION_QUESTION_ITEM_IDENTIFIER);
+            .questionIdentifier(DEFAULT_QUESTION_IDENTIFIER)
+            .itemIdentifier(DEFAULT_ITEM_IDENTIFIER);
         return displayCondition;
     }
     /**
@@ -67,10 +57,8 @@ public class DisplayConditionResourceIT {
      */
     public static DisplayCondition createUpdatedEntity(EntityManager em) {
         DisplayCondition displayCondition = new DisplayCondition()
-            .displayConditionType(UPDATED_DISPLAY_CONDITION_TYPE)
-            .conditionSectionIdentifier(UPDATED_CONDITION_SECTION_IDENTIFIER)
-            .conditionQuestionIdentifier(UPDATED_CONDITION_QUESTION_IDENTIFIER)
-            .conditionQuestionItemIdentifier(UPDATED_CONDITION_QUESTION_ITEM_IDENTIFIER);
+            .questionIdentifier(UPDATED_QUESTION_IDENTIFIER)
+            .itemIdentifier(UPDATED_ITEM_IDENTIFIER);
         return displayCondition;
     }
 

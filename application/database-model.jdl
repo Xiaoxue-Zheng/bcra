@@ -1,14 +1,12 @@
 /* Questionnaire, QuestionSection, QuestionGroup, Question, QuestionItem */
 entity Questionnaire {
-	identifier QuestionnaireIdentifier required unique
-    algorithm Algorithm required
-    algorithmMinimum Integer required
-    algorithmMaximum Integer required
-    implementationVersion Integer required
+	type QuestionnaireType required
+    version Integer required
 }
 
-enum QuestionnaireIdentifier {
-    TYRER_CUZICK_IV1
+enum QuestionnaireType {
+    CONSENT_FORM,
+    RISK_ASSESMENT
 }
 
 enum Algorithm {
@@ -18,7 +16,6 @@ enum Algorithm {
 entity QuestionSection {
 	identifier QuestionSectionIdentifier required unique
     order Integer required
-    relativeName String    
 }
 
 relationship ManyToOne {
@@ -26,35 +23,22 @@ relationship ManyToOne {
 }
 
 relationship OneToMany {
-    QuestionSection{displayCondition} to DisplayCondition{displayQuestionSection}
+    QuestionSection{displayCondition} to DisplayCondition{questionSection}
 }
 
 enum QuestionSectionIdentifier {
+    CONSENT_FORM,
+    FAMILY_BREAST_AFFECTED,
+    FAMILY_BREAST_HOW_MANY,
+    FAMILY_BREAST_AGE,
+    FAMILY_OVARIAN_AFFECTED,
+    FAMILY_OVARIAN_HOW_MANY,
+    FAMILY_OVARIAN_AGE,
+    FAMILY_AFFECTED_GRANDMOTHER,
+    FAMILY_AFFECTED_AUNT,
+    FAMILY_AFFECTED_NIECE,
+    FAMILY_AFFECTED_HALF_SISTER,
     PERSONAL_HISTORY,
-    FAMILY_HISTORY,
-
-    MOTHER,
-    SISTER_COUNT,
-    SISTERS,
-    NIECE_COUNT,
-    NIECES,
-    
-    MATERNAL_HALF_SISTER_COUNT,
-    MATERNAL_HALF_SISTERS,
-    MATERNAL_GRANDMOTHER,
-    MATERNAL_AUNT_COUNT,
-    MATERNAL_AUNTS,
-    MATERNAL_COUSIN_COUNT,
-    MATERNAL_COUSINS,
-
-    PATERNAL_HALF_SISTER_COUNT,
-    PATERNAL_HALF_SISTERS,
-    PATERNAL_GRANDMOTHER,
-    PATERNAL_AUNT_COUNT,
-    PATERNAL_AUNTS,
-    PATERNAL_COUSIN_COUNT,
-    PATERNAL_COUSINS,
-
     MALE_BREAST_CANCER
 }
 
@@ -67,10 +51,18 @@ relationship OneToMany {
 }
 
 enum QuestionGroupIdentifier {
+    CONSENT_FORM_QUESTIONS,
+    FAMILY_BREAST_AFFECTED_QUESTIONS,
+    FAMILY_BREAST_HOW_MANY_QUESTIONS,
+    FAMILY_BREAST_AGE_QUESTIONS,
+    FAMILY_OVARIAN_AFFECTED_QUESTIONS,
+    FAMILY_OVARIAN_HOW_MANY_QUESTIONS,
+    FAMILY_OVARIAN_AGE_QUESTIONS,
+    FAMILY_AFFECTED_GRANDMOTHER_QUESTIONS,
+    FAMILY_AFFECTED_AUNT_QUESTIONS,
+    FAMILY_AFFECTED_NIECE_QUESTIONS,
+    FAMILY_AFFECTED_HALF_SISTER_QUESTIONS,
     PERSONAL_HISTORY_QUESTIONS,
-    FAMILY_HISTORY_QUESTIONS,
-    RELATIVE_QUESTIONS,
-    RELATIVE_COUNT_QUESTIONS,
     MALE_BREAST_CANCER_QUESTIONS
 }
 
@@ -79,9 +71,11 @@ entity Question {
     type QuestionType required
     order Integer required
 	text String required
-
+    variableName String
     minimum Integer
     maximum Integer
+    hint String
+    hintText String
 }
 
 relationship ManyToOne {
@@ -89,10 +83,38 @@ relationship ManyToOne {
 }
 
 relationship OneToMany {
-    Question{displayCondition} to DisplayCondition{displayQuestion}
+    Question{displayCondition} to DisplayCondition{question}
+    Question{referralCondition} to ReferralCondition{question}
 }
 
 enum QuestionIdentifier {
+    CONSENT_INFO_SHEET,
+    CONSENT_WITHDRAWAL,
+    CONSENT_DATA_TRUST,
+    CONSENT_DATA_RESEARCH,
+    CONSENT_DATA_UOM,
+    CONSENT_DATA_COMMERCIAL,
+    CONSENT_INFORM_GP,
+    CONSENT_TAKE_PART,
+    CONSENT_BY_LETTER,
+    CONSENT_INFO_SHEET_2,
+    CONSENT_FUTURE_RESEARCH,
+
+    FAMILY_BREAST_AFFECTED,
+    FAMILY_BREAST_HOW_MANY,
+    FAMILY_BREAST_AGE,
+    FAMILY_OVARIAN_AFFECTED,
+    FAMILY_OVARIAN_HOW_MANY,
+    FAMILY_OVARIAN_AGE,
+    FAMILY_AFFECTED_GRANDMOTHER_SIDE,
+    FAMILY_AFFECTED_GRANDMOTHER_MOTHERS_AGE,
+    FAMILY_AFFECTED_AUNT_SIDE,
+    FAMILY_AFFECTED_AUNT_MOTHERS_AGE,
+    FAMILY_AFFECTED_NIECE_SIDE,
+    FAMILY_AFFECTED_NIECE_SISTERS_AGE,
+    FAMILY_AFFECTED_HALFSISTER_SIDE,
+    FAMILY_AFFECTED_HALFSISTER_MOTHERS_AGE,
+
     SELF_FIRST_PERIOD,
     SELF_PREMENOPAUSAL,
     SELF_MENOPAUSAL_AGE,
@@ -105,38 +127,27 @@ enum QuestionIdentifier {
     SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES,
     SELF_ASHKENAZI,
 
-    FAMILY_BLOOD_RELATIVES,
-    FAMILY_MATERNAL_RELATIVES,
-    FAMILY_PATERNAL_RELATIVES,
-
-    RELATIVE_HOW_MANY,
-
-    RELATIVE_DIAGNOSIS,
-    RELATIVE_FIRST_DIAGNOSIS_AGE,
-    RELATIVE_SECOND_DIAGNOSIS_AGE,
-    RELATIVE_GENETIC_TESTING,
-    RELATIVE_GENETIC_TESTING_RESULT,
-    RELATIVE_OVARIAN_CANCER,
-    RELATIVE_OVARIAN_CANCER_AGE,
-
     FATHER_BREAST_CANCER,
     BROTHER_BREAST_CANCER
 }
 
 enum QuestionType {
+    TICKBOX_CONSENT,
+    CHECKBOX,
+    RADIO,
     NUMBER,
+    NUMBER_UNKNOWN,
     NUMBER_WEIGHT,
     NUMBER_HEIGHT,
-    NUMBER_UNKNOWN,
-    DROPDOWN_NUMBER,
-    CHECKBOX,
-    RADIO
+    DROPDOWN_NUMBER
 }
 
 entity QuestionItem {
     identifier QuestionItemIdentifier required unique
     order Integer required    
     label String required
+    necessary Boolean
+    exclusive Boolean
 }
 
 relationship ManyToOne {
@@ -144,6 +155,46 @@ relationship ManyToOne {
 }
 
 enum QuestionItemIdentifier {
+    CONSENT_INFO_SHEET_2_YES,
+    CONSENT_INFO_SHEET_2_NO,
+
+    CONSENT_FUTURE_RESEARCH_YES,
+    CONSENT_FUTURE_RESEARCH_NO,
+
+    FAMILY_BREAST_AFFECTED_MOTHER,
+    FAMILY_BREAST_AFFECTED_GRANDMOTHER,
+    FAMILY_BREAST_AFFECTED_SISTER,
+    FAMILY_BREAST_AFFECTED_HALFSISTER,
+    FAMILY_BREAST_AFFECTED_AUNT,
+    FAMILY_BREAST_AFFECTED_NIECE,
+    FAMILY_BREAST_AFFECTED_NONE,
+
+    FAMILY_BREAST_HOW_MANY_ONE,
+    FAMILY_BREAST_HOW_MANY_MORE,
+
+    FAMILY_OVARIAN_AFFECTED_MOTHER,
+    FAMILY_OVARIAN_AFFECTED_GRANDMOTHER,
+    FAMILY_OVARIAN_AFFECTED_SISTER,
+    FAMILY_OVARIAN_AFFECTED_HALFSISTER,
+    FAMILY_OVARIAN_AFFECTED_AUNT,
+    FAMILY_OVARIAN_AFFECTED_NIECE,
+    FAMILY_OVARIAN_AFFECTED_NONE,
+
+    FAMILY_OVARIAN_HOW_MANY_ONE,
+    FAMILY_OVARIAN_HOW_MANY_MORE,
+
+    FAMILY_AFFECTED_GRANDMOTHER_SIDE_MOTHER,
+    FAMILY_AFFECTED_GRANDMOTHER_SIDE_FATHER,
+
+    FAMILY_AFFECTED_AUNT_SIDE_MOTHER,
+    FAMILY_AFFECTED_AUNT_SIDE_FATHER,
+
+    FAMILY_AFFECTED_NIECE_SIDE_SISTER,
+    FAMILY_AFFECTED_NIECE_SIDE_BROTHER,
+
+    FAMILY_AFFECTED_HALFSISTER_SIDE_MOTHER,
+    FAMILY_AFFECTED_HALFSISTER_SIDE_FATHER,
+
     SELF_PREMENOPAUSAL_YES,
     SELF_PREMENOPAUSAL_NO,
     SELF_PREMENOPAUSAL_UNKNOWN,
@@ -160,39 +211,17 @@ enum QuestionItemIdentifier {
     SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_LCIS,
     SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_ALH,
     SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_OTHER,
-    SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_FORGOT,
     SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_UNKNOWN,
 
     SELF_ASHKENAZI_YES,
     SELF_ASHKENAZI_NO,
     SELF_ASHKENAZI_UNKNOWN,
 
-    FAMILY_BLOOD_RELATIVES_MOTHER,
-    FAMILY_BLOOD_RELATIVES_SISTERS,
-    FAMILY_BLOOD_RELATIVES_NIECES,
+    FATHER_BREAST_CANCER_YES,
+    FATHER_BREAST_CANCER_NO,
 
-    FAMILY_MATERNAL_RELATIVES_HALF_SISTERS,
-    FAMILY_MATERNAL_RELATIVES_GRANDMOTHER,
-    FAMILY_MATERNAL_RELATIVES_AUNTS,
-    FAMILY_MATERNAL_RELATIVES_COUSINS,
-
-    FAMILY_PATERNAL_RELATIVES_HALF_SISTERS,
-    FAMILY_PATERNAL_RELATIVES_GRANDMOTHER,
-    FAMILY_PATERNAL_RELATIVES_AUNTS,
-    FAMILY_PATERNAL_RELATIVES_COUSINS,
-
-    RELATIVE_DIAGNOSIS_UNILATERAL,
-    RELATIVE_DIAGNOSIS_BILATERAL,
-    RELATIVE_DIAGNOSIS_UNKNOWN,
-
-    RELATIVE_GENETIC_TESTING_YES,
-    RELATIVE_GENETIC_TESTING_NO,
-    RELATIVE_GENETIC_TESTING_UNKNOWN,
-
-    RELATIVE_GENETIC_TESTING_RESULT_BRCA1,
-    RELATIVE_GENETIC_TESTING_RESULT_BRCA2,
-    RELATIVE_GENETIC_TESTING_RESULT_NONE,
-    RELATIVE_GENETIC_TESTING_RESULT_UNKNOWN
+    BROTHER_BREAST_CANCER_YES,
+    BROTHER_BREAST_CANCER_NO
 }
 
 
@@ -247,19 +276,24 @@ relationship ManyToOne {
 }
 
 
-/* Display Conditions */
+/* Conditions */
 entity DisplayCondition {
-    displayConditionType DisplayConditionType required
-    conditionSectionIdentifier QuestionSectionIdentifier
-    conditionQuestionIdentifier QuestionIdentifier
-    conditionQuestionItemIdentifier QuestionItemIdentifier
+    questionIdentifier QuestionIdentifier
+    itemIdentifier QuestionItemIdentifier
 }
 
-enum DisplayConditionType {
-    DISPLAY_SECTION_CONDITION_QUESTION,
-    DISPLAY_QUESTION_CONDITION_QUESTION,
-    DISPLAY_SECTION_CONDITION_ITEM,
-    DISPLAY_QUESTION_CONDITION_ITEM
+entity ReferralCondition {
+    andGroup Integer
+    type ReferralConditionType required
+    questionIdentifier QuestionIdentifier
+    itemIdentifier QuestionItemIdentifier
+    number Integer
+}
+
+enum ReferralConditionType {
+    ITEMS_AT_LEAST,
+    ITEM_SPECIFIC,
+    VALUE_UNDER
 }
 
 /* Generation */

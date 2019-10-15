@@ -4,13 +4,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 import java.io.Serializable;
-
-import uk.ac.herc.bcra.domain.enumeration.DisplayConditionType;
-
-import uk.ac.herc.bcra.domain.enumeration.QuestionSectionIdentifier;
 
 import uk.ac.herc.bcra.domain.enumeration.QuestionIdentifier;
 
@@ -31,30 +26,21 @@ public class DisplayCondition implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "display_condition_type", nullable = false)
-    private DisplayConditionType displayConditionType;
+    @Column(name = "question_identifier")
+    private QuestionIdentifier questionIdentifier;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "condition_section_identifier")
-    private QuestionSectionIdentifier conditionSectionIdentifier;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "condition_question_identifier")
-    private QuestionIdentifier conditionQuestionIdentifier;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "condition_question_item_identifier")
-    private QuestionItemIdentifier conditionQuestionItemIdentifier;
+    @Column(name = "item_identifier")
+    private QuestionItemIdentifier itemIdentifier;
 
     @ManyToOne
     @JsonIgnoreProperties("displayConditions")
-    private QuestionSection displayQuestionSection;
+    private QuestionSection questionSection;
 
     @ManyToOne
     @JsonIgnoreProperties("displayConditions")
-    private Question displayQuestion;
+    private Question question;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -65,82 +51,56 @@ public class DisplayCondition implements Serializable {
         this.id = id;
     }
 
-    public DisplayConditionType getDisplayConditionType() {
-        return displayConditionType;
+    public QuestionIdentifier getQuestionIdentifier() {
+        return questionIdentifier;
     }
 
-    public DisplayCondition displayConditionType(DisplayConditionType displayConditionType) {
-        this.displayConditionType = displayConditionType;
+    public DisplayCondition questionIdentifier(QuestionIdentifier questionIdentifier) {
+        this.questionIdentifier = questionIdentifier;
         return this;
     }
 
-    public void setDisplayConditionType(DisplayConditionType displayConditionType) {
-        this.displayConditionType = displayConditionType;
+    public void setQuestionIdentifier(QuestionIdentifier questionIdentifier) {
+        this.questionIdentifier = questionIdentifier;
     }
 
-    public QuestionSectionIdentifier getConditionSectionIdentifier() {
-        return conditionSectionIdentifier;
+    public QuestionItemIdentifier getItemIdentifier() {
+        return itemIdentifier;
     }
 
-    public DisplayCondition conditionSectionIdentifier(QuestionSectionIdentifier conditionSectionIdentifier) {
-        this.conditionSectionIdentifier = conditionSectionIdentifier;
+    public DisplayCondition itemIdentifier(QuestionItemIdentifier itemIdentifier) {
+        this.itemIdentifier = itemIdentifier;
         return this;
     }
 
-    public void setConditionSectionIdentifier(QuestionSectionIdentifier conditionSectionIdentifier) {
-        this.conditionSectionIdentifier = conditionSectionIdentifier;
+    public void setItemIdentifier(QuestionItemIdentifier itemIdentifier) {
+        this.itemIdentifier = itemIdentifier;
     }
 
-    public QuestionIdentifier getConditionQuestionIdentifier() {
-        return conditionQuestionIdentifier;
+    public QuestionSection getQuestionSection() {
+        return questionSection;
     }
 
-    public DisplayCondition conditionQuestionIdentifier(QuestionIdentifier conditionQuestionIdentifier) {
-        this.conditionQuestionIdentifier = conditionQuestionIdentifier;
+    public DisplayCondition questionSection(QuestionSection questionSection) {
+        this.questionSection = questionSection;
         return this;
     }
 
-    public void setConditionQuestionIdentifier(QuestionIdentifier conditionQuestionIdentifier) {
-        this.conditionQuestionIdentifier = conditionQuestionIdentifier;
+    public void setQuestionSection(QuestionSection questionSection) {
+        this.questionSection = questionSection;
     }
 
-    public QuestionItemIdentifier getConditionQuestionItemIdentifier() {
-        return conditionQuestionItemIdentifier;
+    public Question getQuestion() {
+        return question;
     }
 
-    public DisplayCondition conditionQuestionItemIdentifier(QuestionItemIdentifier conditionQuestionItemIdentifier) {
-        this.conditionQuestionItemIdentifier = conditionQuestionItemIdentifier;
+    public DisplayCondition question(Question question) {
+        this.question = question;
         return this;
     }
 
-    public void setConditionQuestionItemIdentifier(QuestionItemIdentifier conditionQuestionItemIdentifier) {
-        this.conditionQuestionItemIdentifier = conditionQuestionItemIdentifier;
-    }
-
-    public QuestionSection getDisplayQuestionSection() {
-        return displayQuestionSection;
-    }
-
-    public DisplayCondition displayQuestionSection(QuestionSection questionSection) {
-        this.displayQuestionSection = questionSection;
-        return this;
-    }
-
-    public void setDisplayQuestionSection(QuestionSection questionSection) {
-        this.displayQuestionSection = questionSection;
-    }
-
-    public Question getDisplayQuestion() {
-        return displayQuestion;
-    }
-
-    public DisplayCondition displayQuestion(Question question) {
-        this.displayQuestion = question;
-        return this;
-    }
-
-    public void setDisplayQuestion(Question question) {
-        this.displayQuestion = question;
+    public void setQuestion(Question question) {
+        this.question = question;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -164,10 +124,8 @@ public class DisplayCondition implements Serializable {
     public String toString() {
         return "DisplayCondition{" +
             "id=" + getId() +
-            ", displayConditionType='" + getDisplayConditionType() + "'" +
-            ", conditionSectionIdentifier='" + getConditionSectionIdentifier() + "'" +
-            ", conditionQuestionIdentifier='" + getConditionQuestionIdentifier() + "'" +
-            ", conditionQuestionItemIdentifier='" + getConditionQuestionItemIdentifier() + "'" +
+            ", questionIdentifier='" + getQuestionIdentifier() + "'" +
+            ", itemIdentifier='" + getItemIdentifier() + "'" +
             "}";
     }
 }

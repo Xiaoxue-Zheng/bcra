@@ -2,38 +2,15 @@
     "name": "Questionnaire",
     "fields": [
         {
-            "fieldName": "identifier",
-            "fieldType": "QuestionnaireIdentifier",
-            "fieldValues": "TYRER_CUZICK_IV1",
-            "fieldValidateRules": [
-                "required",
-                "unique"
-            ]
-        },
-        {
-            "fieldName": "algorithm",
-            "fieldType": "Algorithm",
-            "fieldValues": "TYRER_CUZICK",
+            "fieldName": "type",
+            "fieldType": "QuestionnaireType",
+            "fieldValues": "CONSENT_FORM,RISK_ASSESMENT",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "algorithmMinimum",
-            "fieldType": "Integer",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "algorithmMaximum",
-            "fieldType": "Integer",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "implementationVersion",
+            "fieldName": "version",
             "fieldType": "Integer",
             "fieldValidateRules": [
                 "required"

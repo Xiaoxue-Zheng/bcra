@@ -42,12 +42,10 @@ describe('QuestionSection e2e test', () => {
         await promise.all([
             questionSectionUpdatePage.identifierSelectLastOption(),
             questionSectionUpdatePage.setOrderInput('5'),
-            questionSectionUpdatePage.setRelativeNameInput('relativeName'),
             questionSectionUpdatePage.questionnaireSelectLastOption(),
             questionSectionUpdatePage.questionGroupSelectLastOption(),
         ]);
         expect(await questionSectionUpdatePage.getOrderInput()).to.eq('5', 'Expected order value to be equals to 5');
-        expect(await questionSectionUpdatePage.getRelativeNameInput()).to.eq('relativeName', 'Expected RelativeName value to be equals to relativeName');
         await questionSectionUpdatePage.save();
         expect(await questionSectionUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 

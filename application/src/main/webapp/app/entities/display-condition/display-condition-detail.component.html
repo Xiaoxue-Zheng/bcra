@@ -5,32 +5,24 @@
             <hr>
             <jhi-alert-error></jhi-alert-error>
             <dl class="row-md jh-entity-details">
-                <dt><span>Display Condition Type</span></dt>
+                <dt><span>Question Identifier</span></dt>
                 <dd>
-                    <span>{{displayCondition.displayConditionType}}</span>
+                    <span>{{displayCondition.questionIdentifier}}</span>
                 </dd>
-                <dt><span>Condition Section Identifier</span></dt>
+                <dt><span>Item Identifier</span></dt>
                 <dd>
-                    <span>{{displayCondition.conditionSectionIdentifier}}</span>
+                    <span>{{displayCondition.itemIdentifier}}</span>
                 </dd>
-                <dt><span>Condition Question Identifier</span></dt>
+                <dt><span>Question Section</span></dt>
                 <dd>
-                    <span>{{displayCondition.conditionQuestionIdentifier}}</span>
-                </dd>
-                <dt><span>Condition Question Item Identifier</span></dt>
-                <dd>
-                    <span>{{displayCondition.conditionQuestionItemIdentifier}}</span>
-                </dd>
-                <dt><span>Display Question Section</span></dt>
-                <dd>
-                    <div *ngIf="displayCondition.displayQuestionSectionId">
-                        <a [routerLink]="['/question-section', displayCondition.displayQuestionSectionId, 'view']">{{displayCondition.displayQuestionSectionId}}</a>
+                    <div *ngIf="displayCondition.questionSectionId">
+                        <a [routerLink]="['/question-section', displayCondition.questionSectionId, 'view']">{{displayCondition.questionSectionId}}</a>
                     </div>
                 </dd>
-                <dt><span>Display Question</span></dt>
+                <dt><span>Question</span></dt>
                 <dd>
-                    <div *ngIf="displayCondition.displayQuestionId">
-                        <a [routerLink]="['/question', displayCondition.displayQuestionId, 'view']">{{displayCondition.displayQuestionId}}</a>
+                    <div *ngIf="displayCondition.questionId">
+                        <a [routerLink]="['/question', displayCondition.questionId, 'view']">{{displayCondition.questionId}}</a>
                     </div>
                 </dd>
             </dl>

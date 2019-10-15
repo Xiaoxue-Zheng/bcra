@@ -29,6 +29,8 @@ export class QuestionItemUpdatePage {
   identifierSelect = element(by.id('field_identifier'));
   orderInput = element(by.id('field_order'));
   labelInput = element(by.id('field_label'));
+  necessaryInput = element(by.id('field_necessary'));
+  exclusiveInput = element(by.id('field_exclusive'));
   questionSelect = element(by.id('field_question'));
 
   async getPageTitle() {
@@ -64,6 +66,13 @@ export class QuestionItemUpdatePage {
 
   async getLabelInput() {
     return await this.labelInput.getAttribute('value');
+  }
+
+  getNecessaryInput(timeout?: number) {
+    return this.necessaryInput;
+  }
+  getExclusiveInput(timeout?: number) {
+    return this.exclusiveInput;
   }
 
   async questionSelectLastOption(timeout?: number) {

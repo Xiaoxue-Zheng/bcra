@@ -9,9 +9,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import uk.ac.herc.bcra.domain.enumeration.QuestionnaireIdentifier;
-
-import uk.ac.herc.bcra.domain.enumeration.Algorithm;
+import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 
 /**
  * A Questionnaire.
@@ -30,25 +28,12 @@ public class Questionnaire implements Serializable {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "identifier", nullable = false, unique = true)
-    private QuestionnaireIdentifier identifier;
+    @Column(name = "type", nullable = false)
+    private QuestionnaireType type;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "algorithm", nullable = false)
-    private Algorithm algorithm;
-
-    @NotNull
-    @Column(name = "algorithm_minimum", nullable = false)
-    private Integer algorithmMinimum;
-
-    @NotNull
-    @Column(name = "algorithm_maximum", nullable = false)
-    private Integer algorithmMaximum;
-
-    @NotNull
-    @Column(name = "implementation_version", nullable = false)
-    private Integer implementationVersion;
+    @Column(name = "version", nullable = false)
+    private Integer version;
 
     @OneToMany(mappedBy = "questionnaire")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -63,69 +48,30 @@ public class Questionnaire implements Serializable {
         this.id = id;
     }
 
-    public QuestionnaireIdentifier getIdentifier() {
-        return identifier;
+    public QuestionnaireType getType() {
+        return type;
     }
 
-    public Questionnaire identifier(QuestionnaireIdentifier identifier) {
-        this.identifier = identifier;
+    public Questionnaire type(QuestionnaireType type) {
+        this.type = type;
         return this;
     }
 
-    public void setIdentifier(QuestionnaireIdentifier identifier) {
-        this.identifier = identifier;
+    public void setType(QuestionnaireType type) {
+        this.type = type;
     }
 
-    public Algorithm getAlgorithm() {
-        return algorithm;
+    public Integer getVersion() {
+        return version;
     }
 
-    public Questionnaire algorithm(Algorithm algorithm) {
-        this.algorithm = algorithm;
+    public Questionnaire version(Integer version) {
+        this.version = version;
         return this;
     }
 
-    public void setAlgorithm(Algorithm algorithm) {
-        this.algorithm = algorithm;
-    }
-
-    public Integer getAlgorithmMinimum() {
-        return algorithmMinimum;
-    }
-
-    public Questionnaire algorithmMinimum(Integer algorithmMinimum) {
-        this.algorithmMinimum = algorithmMinimum;
-        return this;
-    }
-
-    public void setAlgorithmMinimum(Integer algorithmMinimum) {
-        this.algorithmMinimum = algorithmMinimum;
-    }
-
-    public Integer getAlgorithmMaximum() {
-        return algorithmMaximum;
-    }
-
-    public Questionnaire algorithmMaximum(Integer algorithmMaximum) {
-        this.algorithmMaximum = algorithmMaximum;
-        return this;
-    }
-
-    public void setAlgorithmMaximum(Integer algorithmMaximum) {
-        this.algorithmMaximum = algorithmMaximum;
-    }
-
-    public Integer getImplementationVersion() {
-        return implementationVersion;
-    }
-
-    public Questionnaire implementationVersion(Integer implementationVersion) {
-        this.implementationVersion = implementationVersion;
-        return this;
-    }
-
-    public void setImplementationVersion(Integer implementationVersion) {
-        this.implementationVersion = implementationVersion;
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public Set<QuestionSection> getQuestionSections() {
@@ -174,11 +120,8 @@ public class Questionnaire implements Serializable {
     public String toString() {
         return "Questionnaire{" +
             "id=" + getId() +
-            ", identifier='" + getIdentifier() + "'" +
-            ", algorithm='" + getAlgorithm() + "'" +
-            ", algorithmMinimum=" + getAlgorithmMinimum() +
-            ", algorithmMaximum=" + getAlgorithmMaximum() +
-            ", implementationVersion=" + getImplementationVersion() +
+            ", type='" + getType() + "'" +
+            ", version=" + getVersion() +
             "}";
     }
 }

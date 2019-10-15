@@ -6,6 +6,7 @@ import uk.ac.herc.bcra.domain.Questionnaire;
 import uk.ac.herc.bcra.domain.QuestionGroup;
 import uk.ac.herc.bcra.service.dto.QuestionSectionDTO;
 import uk.ac.herc.bcra.service.mapper.QuestionSectionMapper;
+import uk.ac.herc.bcra.domain.enumeration.QuestionSectionIdentifier;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,25 +14,20 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityManager;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import uk.ac.herc.bcra.domain.enumeration.QuestionSectionIdentifier;
 /**
  * Integration tests for the {@link QuestionSectionResource} REST controller.
  */
 @SpringBootTest(classes = BcraApp.class)
 public class QuestionSectionResourceIT {
 
-    private static final QuestionSectionIdentifier DEFAULT_IDENTIFIER = QuestionSectionIdentifier.PERSONAL_HISTORY;
-    private static final QuestionSectionIdentifier UPDATED_IDENTIFIER = QuestionSectionIdentifier.FAMILY_HISTORY;
+    private static final QuestionSectionIdentifier DEFAULT_IDENTIFIER = QuestionSectionIdentifier.CONSENT_FORM;
+    private static final QuestionSectionIdentifier UPDATED_IDENTIFIER = QuestionSectionIdentifier.FAMILY_BREAST_AFFECTED;
 
     private static final Integer DEFAULT_ORDER = 1;
     private static final Integer UPDATED_ORDER = 2;
-
-    private static final String DEFAULT_RELATIVE_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_RELATIVE_NAME = "BBBBBBBBBB";
 
     @Autowired
     private QuestionSectionMapper questionSectionMapper;
@@ -50,8 +46,7 @@ public class QuestionSectionResourceIT {
     public static QuestionSection createEntity(EntityManager em) {
         QuestionSection questionSection = new QuestionSection()
             .identifier(DEFAULT_IDENTIFIER)
-            .order(DEFAULT_ORDER)
-            .relativeName(DEFAULT_RELATIVE_NAME);
+            .order(DEFAULT_ORDER);
         // Add required entity
         Questionnaire questionnaire;
         if (TestUtil.findAll(em, Questionnaire.class).isEmpty()) {
@@ -83,8 +78,7 @@ public class QuestionSectionResourceIT {
     public static QuestionSection createUpdatedEntity(EntityManager em) {
         QuestionSection questionSection = new QuestionSection()
             .identifier(UPDATED_IDENTIFIER)
-            .order(UPDATED_ORDER)
-            .relativeName(UPDATED_RELATIVE_NAME);
+            .order(UPDATED_ORDER);
         // Add required entity
         Questionnaire questionnaire;
         if (TestUtil.findAll(em, Questionnaire.class).isEmpty()) {

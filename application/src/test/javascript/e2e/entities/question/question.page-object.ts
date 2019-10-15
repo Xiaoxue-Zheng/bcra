@@ -30,8 +30,11 @@ export class QuestionUpdatePage {
   typeSelect = element(by.id('field_type'));
   orderInput = element(by.id('field_order'));
   textInput = element(by.id('field_text'));
+  variableNameInput = element(by.id('field_variableName'));
   minimumInput = element(by.id('field_minimum'));
   maximumInput = element(by.id('field_maximum'));
+  hintInput = element(by.id('field_hint'));
+  hintTextInput = element(by.id('field_hintText'));
   questionGroupSelect = element(by.id('field_questionGroup'));
 
   async getPageTitle() {
@@ -84,6 +87,14 @@ export class QuestionUpdatePage {
     return await this.textInput.getAttribute('value');
   }
 
+  async setVariableNameInput(variableName) {
+    await this.variableNameInput.sendKeys(variableName);
+  }
+
+  async getVariableNameInput() {
+    return await this.variableNameInput.getAttribute('value');
+  }
+
   async setMinimumInput(minimum) {
     await this.minimumInput.sendKeys(minimum);
   }
@@ -98,6 +109,22 @@ export class QuestionUpdatePage {
 
   async getMaximumInput() {
     return await this.maximumInput.getAttribute('value');
+  }
+
+  async setHintInput(hint) {
+    await this.hintInput.sendKeys(hint);
+  }
+
+  async getHintInput() {
+    return await this.hintInput.getAttribute('value');
+  }
+
+  async setHintTextInput(hintText) {
+    await this.hintTextInput.sendKeys(hintText);
+  }
+
+  async getHintTextInput() {
+    return await this.hintTextInput.getAttribute('value');
   }
 
   async questionGroupSelectLastOption(timeout?: number) {

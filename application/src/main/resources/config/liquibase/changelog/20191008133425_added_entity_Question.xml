@@ -27,8 +27,12 @@
                 <constraints nullable="false" />
             </column>
 
-            <column name="text" type="varchar(255)">
+            <column name="text" type="varchar(1000)">
                 <constraints nullable="false" />
+            </column>
+
+            <column name="variable_name" type="varchar(255)">
+                <constraints nullable="true" />
             </column>
 
             <column name="minimum" type="integer">
@@ -36,6 +40,14 @@
             </column>
 
             <column name="maximum" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="hint" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="hint_text" type="varchar(1000)">
                 <constraints nullable="true" />
             </column>
 
@@ -63,7 +75,7 @@
     -->
     <changeSet id="20191008133425-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/question.csv"
+                  file="config/liquibase/questionnaires/question.csv"
                   separator=","
                   tableName="question">
             <column name="id" type="numeric"/>
@@ -73,7 +85,10 @@
             <column name="minimum" type="numeric"/>
             <column name="maximum" type="numeric"/>
             <column name="question_group_id" type="numeric"/>
+            <column name="variable_name" type="string"/>            
             <column name="text" type="string"/>
+            <column name="hint" type="string"/>
+            <column name="hint_text" type="string"/>            
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

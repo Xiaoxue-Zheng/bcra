@@ -4,5 +4,5 @@ package uk.ac.herc.bcra.domain.enumeration;
  * The QuestionType enumeration.
  */
 public enum QuestionType {
-    NUMBER, NUMBER_WEIGHT, NUMBER_HEIGHT, NUMBER_UNKNOWN, DROPDOWN_NUMBER, CHECKBOX, RADIO
+    TICKBOX_CONSENT, CHECKBOX, RADIO, NUMBER, NUMBER_UNKNOWN, NUMBER_WEIGHT, NUMBER_HEIGHT, DROPDOWN_NUMBER
 }

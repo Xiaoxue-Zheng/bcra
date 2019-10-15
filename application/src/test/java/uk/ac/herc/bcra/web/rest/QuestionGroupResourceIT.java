@@ -4,6 +4,7 @@ import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.QuestionGroup;
 import uk.ac.herc.bcra.service.dto.QuestionGroupDTO;
 import uk.ac.herc.bcra.service.mapper.QuestionGroupMapper;
+import uk.ac.herc.bcra.domain.enumeration.QuestionGroupIdentifier;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,20 +12,17 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityManager;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
-import uk.ac.herc.bcra.domain.enumeration.QuestionGroupIdentifier;
 /**
  * Integration tests for the {@link QuestionGroupResource} REST controller.
  */
 @SpringBootTest(classes = BcraApp.class)
 public class QuestionGroupResourceIT {
 
-    private static final QuestionGroupIdentifier DEFAULT_IDENTIFIER = QuestionGroupIdentifier.PERSONAL_HISTORY_QUESTIONS;
-    private static final QuestionGroupIdentifier UPDATED_IDENTIFIER = QuestionGroupIdentifier.FAMILY_HISTORY_QUESTIONS;
+    private static final QuestionGroupIdentifier DEFAULT_IDENTIFIER = QuestionGroupIdentifier.CONSENT_FORM_QUESTIONS;
+    private static final QuestionGroupIdentifier UPDATED_IDENTIFIER = QuestionGroupIdentifier.FAMILY_BREAST_AFFECTED_QUESTIONS;
 
     @Autowired
     private QuestionGroupMapper questionGroupMapper;

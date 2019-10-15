@@ -25,8 +25,11 @@ export class QuestionUpdateComponent implements OnInit {
     type: [null, [Validators.required]],
     order: [null, [Validators.required]],
     text: [null, [Validators.required]],
+    variableName: [],
     minimum: [],
     maximum: [],
+    hint: [],
+    hintText: [],
     questionGroupId: [null, Validators.required]
   });
 
@@ -59,8 +62,11 @@ export class QuestionUpdateComponent implements OnInit {
       type: question.type,
       order: question.order,
       text: question.text,
+      variableName: question.variableName,
       minimum: question.minimum,
       maximum: question.maximum,
+      hint: question.hint,
+      hintText: question.hintText,
       questionGroupId: question.questionGroupId
     });
   }
@@ -87,8 +93,11 @@ export class QuestionUpdateComponent implements OnInit {
       type: this.editForm.get(['type']).value,
       order: this.editForm.get(['order']).value,
       text: this.editForm.get(['text']).value,
+      variableName: this.editForm.get(['variableName']).value,
       minimum: this.editForm.get(['minimum']).value,
       maximum: this.editForm.get(['maximum']).value,
+      hint: this.editForm.get(['hint']).value,
+      hintText: this.editForm.get(['hintText']).value,
       questionGroupId: this.editForm.get(['questionGroupId']).value
     };
   }

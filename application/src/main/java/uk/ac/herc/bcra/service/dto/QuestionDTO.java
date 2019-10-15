@@ -28,13 +28,21 @@ public class QuestionDTO implements Serializable {
     @NotNull
     private String text;
 
+    private String variableName;
+
     private Integer minimum;
 
     private Integer maximum;
 
+    private String hint;
+
+    private String hintText;
+    
     private Set<QuestionItemDTO> questionItems = new HashSet<>();
 
     private Set<DisplayConditionDTO> displayConditions = new HashSet<>();
+
+    private Set<ReferralConditionDTO> referralConditions = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -76,6 +84,14 @@ public class QuestionDTO implements Serializable {
         this.text = text;
     }
 
+    public String getVariableName() {
+        return variableName;
+    }
+
+    public void setVariableName(String variableName) {
+        this.variableName = variableName;
+    }
+
     public Integer getMinimum() {
         return minimum;
     }
@@ -90,6 +106,22 @@ public class QuestionDTO implements Serializable {
 
     public void setMaximum(Integer maximum) {
         this.maximum = maximum;
+    }
+
+    public String getHint() {
+        return hint;
+    }
+
+    public void setHint(String hint) {
+        this.hint = hint;
+    }
+
+    public String getHintText() {
+        return hintText;
+    }
+
+    public void setHintText(String hintText) {
+        this.hintText = hintText;
     }
 
     public Set<QuestionItemDTO> getQuestionItems() {
@@ -107,6 +139,14 @@ public class QuestionDTO implements Serializable {
     public void setDisplayConditions(Set<DisplayConditionDTO> displayConditions) {
         this.displayConditions = displayConditions;
     }
+
+    public Set<ReferralConditionDTO> getReferralConditions() {
+        return referralConditions;
+    }
+
+    public void setReferralConditions(Set<ReferralConditionDTO> referralConditions) {
+        this.referralConditions = referralConditions;
+    }    
 
     @Override
     public boolean equals(Object o) {
@@ -137,10 +177,14 @@ public class QuestionDTO implements Serializable {
             ", type='" + getType() + "'" +
             ", order=" + getOrder() +
             ", text='" + getText() + "'" +
+            ", variableName='" + getVariableName() + "'" +
             ", minimum=" + getMinimum() +
             ", maximum=" + getMaximum() +
+            ", hint='" + getHint() + "'" +
+            ", hintText='" + getHintText() + "'" +
             ", questionItems=" + getQuestionItems() +
             ", displayConditions=" + getDisplayConditions() +
+            ", referralConditions=" + getReferralConditions() +
             "}";
     }
 }

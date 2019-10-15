@@ -23,7 +23,7 @@ describe('Service Tests', () => {
       service = injector.get(QuestionSectionService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new QuestionSection(0, QuestionSectionIdentifier.PERSONAL_HISTORY, 0, 'AAAAAAA');
+      elemDefault = new QuestionSection(0, QuestionSectionIdentifier.CONSENT_FORM, 0);
     });
 
     describe('Service methods', () => {
@@ -60,8 +60,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             identifier: 'BBBBBB',
-            order: 1,
-            relativeName: 'BBBBBB'
+            order: 1
           },
           elemDefault
         );
@@ -80,8 +79,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             identifier: 'BBBBBB',
-            order: 1,
-            relativeName: 'BBBBBB'
+            order: 1
           },
           elemDefault
         );

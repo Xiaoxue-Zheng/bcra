@@ -21,6 +21,8 @@
             <th><span>Identifier</span></th>
             <th><span>Order</span></th>
             <th><span>Label</span></th>
+            <th><span>Necessary</span></th>
+            <th><span>Exclusive</span></th>
             <th><span>Question</span></th>
             <th></th>
             </tr>
@@ -31,6 +33,8 @@
                 <td>{{questionItem.identifier}}</td>
                 <td>{{questionItem.order}}</td>
                 <td>{{questionItem.label}}</td>
+                <td>{{questionItem.necessary}}</td>
+                <td>{{questionItem.exclusive}}</td>
                 <td>
                     <div *ngIf="questionItem.questionId">
                         <a [routerLink]="['/question', questionItem.questionId , 'view' ]" >{{questionItem.questionId}}</a>

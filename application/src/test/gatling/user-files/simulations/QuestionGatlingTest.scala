@@ -72,12 +72,15 @@ class QuestionGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "identifier":"SELF_FIRST_PERIOD"
-                , "type":"NUMBER"
+                , "identifier":"CONSENT_INFO_SHEET"
+                , "type":"TICKBOX_CONSENT"
                 , "order":"0"
                 , "text":"SAMPLE_TEXT"
+                , "variableName":"SAMPLE_TEXT"
                 , "minimum":"0"
                 , "maximum":"0"
+                , "hint":"SAMPLE_TEXT"
+                , "hintText":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_question_url"))).exitHereIfFailed

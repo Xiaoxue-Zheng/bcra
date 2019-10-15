@@ -10,70 +10,29 @@
                         readonly />
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" for="field_identifier">Identifier</label>
-                    <select class="form-control" name="identifier" formControlName="identifier" id="field_identifier">
-                        <option value="TYRER_CUZICK_IV1">TYRER_CUZICK_IV1</option>
+                    <label class="form-control-label" for="field_type">Type</label>
+                    <select class="form-control" name="type" formControlName="type" id="field_type">
+                        <option value="CONSENT_FORM">CONSENT_FORM</option>
+                        <option value="RISK_ASSESMENT">RISK_ASSESMENT</option>
                     </select>
-                    <div *ngIf="editForm.get('identifier').invalid && (editForm.get('identifier').dirty || editForm.get('identifier').touched)">
+                    <div *ngIf="editForm.get('type').invalid && (editForm.get('type').dirty || editForm.get('type').touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('identifier').errors.required">
+                               *ngIf="editForm.get('type').errors.required">
                         This field is required.
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" for="field_algorithm">Algorithm</label>
-                    <select class="form-control" name="algorithm" formControlName="algorithm" id="field_algorithm">
-                        <option value="TYRER_CUZICK">TYRER_CUZICK</option>
-                    </select>
-                    <div *ngIf="editForm.get('algorithm').invalid && (editForm.get('algorithm').dirty || editForm.get('algorithm').touched)">
+                    <label class="form-control-label" for="field_version">Version</label>
+                    <input type="number" class="form-control" name="version" id="field_version"
+                           formControlName="version"/>
+                    <div *ngIf="editForm.get('version').invalid && (editForm.get('version').dirty || editForm.get('version').touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('algorithm').errors.required">
-                        This field is required.
-                        </small>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" for="field_algorithmMinimum">Algorithm Minimum</label>
-                    <input type="number" class="form-control" name="algorithmMinimum" id="field_algorithmMinimum"
-                           formControlName="algorithmMinimum"/>
-                    <div *ngIf="editForm.get('algorithmMinimum').invalid && (editForm.get('algorithmMinimum').dirty || editForm.get('algorithmMinimum').touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('algorithmMinimum').errors.required">
+                               *ngIf="editForm.get('version').errors.required">
                         This field is required.
                         </small>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.get('algorithmMinimum')?.errors?.number">
-                            This field should be a number.
-                        </small>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" for="field_algorithmMaximum">Algorithm Maximum</label>
-                    <input type="number" class="form-control" name="algorithmMaximum" id="field_algorithmMaximum"
-                           formControlName="algorithmMaximum"/>
-                    <div *ngIf="editForm.get('algorithmMaximum').invalid && (editForm.get('algorithmMaximum').dirty || editForm.get('algorithmMaximum').touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('algorithmMaximum').errors.required">
-                        This field is required.
-                        </small>
-                        <small class="form-text text-danger"
-                            [hidden]="!editForm.get('algorithmMaximum')?.errors?.number">
-                            This field should be a number.
-                        </small>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" for="field_implementationVersion">Implementation Version</label>
-                    <input type="number" class="form-control" name="implementationVersion" id="field_implementationVersion"
-                           formControlName="implementationVersion"/>
-                    <div *ngIf="editForm.get('implementationVersion').invalid && (editForm.get('implementationVersion').dirty || editForm.get('implementationVersion').touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('implementationVersion').errors.required">
-                        This field is required.
-                        </small>
-                        <small class="form-text text-danger"
-                            [hidden]="!editForm.get('implementationVersion')?.errors?.number">
+                            [hidden]="!editForm.get('version')?.errors?.number">
                             This field should be a number.
                         </small>
                     </div>

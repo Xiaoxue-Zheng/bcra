@@ -36,10 +36,7 @@ public class QuestionSection implements Serializable {
     @Column(name = "jhi_order", nullable = false)
     private Integer order;
 
-    @Column(name = "relative_name")
-    private String relativeName;
-
-    @OneToMany(mappedBy = "displayQuestionSection")
+    @OneToMany(mappedBy = "questionSection")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<DisplayCondition> displayConditions = new HashSet<>();
 
@@ -88,19 +85,6 @@ public class QuestionSection implements Serializable {
         this.order = order;
     }
 
-    public String getRelativeName() {
-        return relativeName;
-    }
-
-    public QuestionSection relativeName(String relativeName) {
-        this.relativeName = relativeName;
-        return this;
-    }
-
-    public void setRelativeName(String relativeName) {
-        this.relativeName = relativeName;
-    }
-
     public Set<DisplayCondition> getDisplayConditions() {
         return displayConditions;
     }
@@ -112,13 +96,13 @@ public class QuestionSection implements Serializable {
 
     public QuestionSection addDisplayCondition(DisplayCondition displayCondition) {
         this.displayConditions.add(displayCondition);
-        displayCondition.setDisplayQuestionSection(this);
+        displayCondition.setQuestionSection(this);
         return this;
     }
 
     public QuestionSection removeDisplayCondition(DisplayCondition displayCondition) {
         this.displayConditions.remove(displayCondition);
-        displayCondition.setDisplayQuestionSection(null);
+        displayCondition.setQuestionSection(null);
         return this;
     }
 
@@ -175,7 +159,6 @@ public class QuestionSection implements Serializable {
             "id=" + getId() +
             ", identifier='" + getIdentifier() + "'" +
             ", order=" + getOrder() +
-            ", relativeName='" + getRelativeName() + "'" +
             "}";
     }
 }

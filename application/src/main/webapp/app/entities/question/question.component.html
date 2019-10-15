@@ -22,8 +22,11 @@
             <th><span>Type</span></th>
             <th><span>Order</span></th>
             <th><span>Text</span></th>
+            <th><span>Variable Name</span></th>
             <th><span>Minimum</span></th>
             <th><span>Maximum</span></th>
+            <th><span>Hint</span></th>
+            <th><span>Hint Text</span></th>
             <th><span>Question Group</span></th>
             <th></th>
             </tr>
@@ -35,8 +38,11 @@
                 <td>{{question.type}}</td>
                 <td>{{question.order}}</td>
                 <td>{{question.text}}</td>
+                <td>{{question.variableName}}</td>
                 <td>{{question.minimum}}</td>
                 <td>{{question.maximum}}</td>
+                <td>{{question.hint}}</td>
+                <td>{{question.hintText}}</td>
                 <td>
                     <div *ngIf="question.questionGroupId">
                         <a [routerLink]="['/question-group', question.questionGroupId , 'view' ]" >{{question.questionGroupId}}</a>

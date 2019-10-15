@@ -4,7 +4,7 @@
         {
             "fieldName": "identifier",
             "fieldType": "QuestionSectionIdentifier",
-            "fieldValues": "PERSONAL_HISTORY,FAMILY_HISTORY,MOTHER,SISTER_COUNT,SISTERS,NIECE_COUNT,NIECES,MATERNAL_HALF_SISTER_COUNT,MATERNAL_HALF_SISTERS,MATERNAL_GRANDMOTHER,MATERNAL_AUNT_COUNT,MATERNAL_AUNTS,MATERNAL_COUSIN_COUNT,MATERNAL_COUSINS,PATERNAL_HALF_SISTER_COUNT,PATERNAL_HALF_SISTERS,PATERNAL_GRANDMOTHER,PATERNAL_AUNT_COUNT,PATERNAL_AUNTS,PATERNAL_COUSIN_COUNT,PATERNAL_COUSINS,MALE_BREAST_CANCER",
+            "fieldValues": "CONSENT_FORM,FAMILY_BREAST_AFFECTED,FAMILY_BREAST_HOW_MANY,FAMILY_BREAST_AGE,FAMILY_OVARIAN_AFFECTED,FAMILY_OVARIAN_HOW_MANY,FAMILY_OVARIAN_AGE,FAMILY_AFFECTED_GRANDMOTHER,FAMILY_AFFECTED_AUNT,FAMILY_AFFECTED_NIECE,FAMILY_AFFECTED_HALF_SISTER,PERSONAL_HISTORY,MALE_BREAST_CANCER",
             "fieldValidateRules": [
                 "required",
                 "unique"
@@ -16,17 +16,13 @@
             "fieldValidateRules": [
                 "required"
             ]
-        },
-        {
-            "fieldName": "relativeName",
-            "fieldType": "String"
         }
     ],
     "relationships": [
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "displayCondition",
-            "otherEntityRelationshipName": "displayQuestionSection",
+            "otherEntityRelationshipName": "questionSection",
             "relationshipName": "displayCondition"
         },
         {

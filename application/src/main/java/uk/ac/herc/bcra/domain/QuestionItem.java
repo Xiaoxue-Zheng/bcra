@@ -38,6 +38,12 @@ public class QuestionItem implements Serializable {
     @Column(name = "label", nullable = false)
     private String label;
 
+    @Column(name = "necessary")
+    private Boolean necessary;
+
+    @Column(name = "exclusive")
+    private Boolean exclusive;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("questionItems")
@@ -91,6 +97,32 @@ public class QuestionItem implements Serializable {
         this.label = label;
     }
 
+    public Boolean isNecessary() {
+        return necessary;
+    }
+
+    public QuestionItem necessary(Boolean necessary) {
+        this.necessary = necessary;
+        return this;
+    }
+
+    public void setNecessary(Boolean necessary) {
+        this.necessary = necessary;
+    }
+
+    public Boolean isExclusive() {
+        return exclusive;
+    }
+
+    public QuestionItem exclusive(Boolean exclusive) {
+        this.exclusive = exclusive;
+        return this;
+    }
+
+    public void setExclusive(Boolean exclusive) {
+        this.exclusive = exclusive;
+    }
+
     public Question getQuestion() {
         return question;
     }
@@ -128,6 +160,8 @@ public class QuestionItem implements Serializable {
             ", identifier='" + getIdentifier() + "'" +
             ", order=" + getOrder() +
             ", label='" + getLabel() + "'" +
+            ", necessary='" + isNecessary() + "'" +
+            ", exclusive='" + isExclusive() + "'" +
             "}";
     }
 }

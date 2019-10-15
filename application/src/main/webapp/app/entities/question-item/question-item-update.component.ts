@@ -24,6 +24,8 @@ export class QuestionItemUpdateComponent implements OnInit {
     identifier: [null, [Validators.required]],
     order: [null, [Validators.required]],
     label: [null, [Validators.required]],
+    necessary: [],
+    exclusive: [],
     questionId: [null, Validators.required]
   });
 
@@ -55,6 +57,8 @@ export class QuestionItemUpdateComponent implements OnInit {
       identifier: questionItem.identifier,
       order: questionItem.order,
       label: questionItem.label,
+      necessary: questionItem.necessary,
+      exclusive: questionItem.exclusive,
       questionId: questionItem.questionId
     });
   }
@@ -80,6 +84,8 @@ export class QuestionItemUpdateComponent implements OnInit {
       identifier: this.editForm.get(['identifier']).value,
       order: this.editForm.get(['order']).value,
       label: this.editForm.get(['label']).value,
+      necessary: this.editForm.get(['necessary']).value,
+      exclusive: this.editForm.get(['exclusive']).value,
       questionId: this.editForm.get(['questionId']).value
     };
   }

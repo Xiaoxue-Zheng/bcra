@@ -23,7 +23,7 @@ describe('Service Tests', () => {
       service = injector.get(QuestionItemService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new QuestionItem(0, QuestionItemIdentifier.SELF_PREMENOPAUSAL_YES, 0, 'AAAAAAA');
+      elemDefault = new QuestionItem(0, QuestionItemIdentifier.CONSENT_INFO_SHEET_2_YES, 0, 'AAAAAAA', false, false);
     });
 
     describe('Service methods', () => {
@@ -61,7 +61,9 @@ describe('Service Tests', () => {
           {
             identifier: 'BBBBBB',
             order: 1,
-            label: 'BBBBBB'
+            label: 'BBBBBB',
+            necessary: true,
+            exclusive: true
           },
           elemDefault
         );
@@ -81,7 +83,9 @@ describe('Service Tests', () => {
           {
             identifier: 'BBBBBB',
             order: 1,
-            label: 'BBBBBB'
+            label: 'BBBBBB',
+            necessary: true,
+            exclusive: true
           },
           elemDefault
         );

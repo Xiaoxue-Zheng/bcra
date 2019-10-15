@@ -21,8 +21,6 @@ public class QuestionSectionDTO implements Serializable {
     @NotNull
     private Integer order;
 
-    private String relativeName;
-
     private QuestionGroupDTO questionGroup;
 
     private Set<DisplayConditionDTO> displayConditions = new HashSet<>();
@@ -49,14 +47,6 @@ public class QuestionSectionDTO implements Serializable {
 
     public void setOrder(Integer order) {
         this.order = order;
-    }
-
-    public String getRelativeName() {
-        return relativeName;
-    }
-
-    public void setRelativeName(String relativeName) {
-        this.relativeName = relativeName;
     }
 
     public QuestionGroupDTO getQuestionGroup() {
@@ -102,7 +92,6 @@ public class QuestionSectionDTO implements Serializable {
             "id=" + getId() +
             ", identifier='" + getIdentifier() + "'" +
             ", order=" + getOrder() +
-            ", relativeName='" + getRelativeName() + "'" +
             ", questionGroup=" + getQuestionGroup() +
             ", displayConditions=" + getDisplayConditions() +
             "}";

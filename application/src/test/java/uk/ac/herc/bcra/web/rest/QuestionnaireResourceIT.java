@@ -29,28 +29,18 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import uk.ac.herc.bcra.domain.enumeration.QuestionnaireIdentifier;
-import uk.ac.herc.bcra.domain.enumeration.Algorithm;
+import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 /**
  * Integration tests for the {@link QuestionnaireResource} REST controller.
  */
 @SpringBootTest(classes = BcraApp.class)
 public class QuestionnaireResourceIT {
 
-    private static final QuestionnaireIdentifier DEFAULT_IDENTIFIER = QuestionnaireIdentifier.TYRER_CUZICK_IV1;
-    private static final QuestionnaireIdentifier UPDATED_IDENTIFIER = QuestionnaireIdentifier.TYRER_CUZICK_IV1;
+    private static final QuestionnaireType DEFAULT_TYPE = QuestionnaireType.CONSENT_FORM;
+    private static final QuestionnaireType UPDATED_TYPE = QuestionnaireType.RISK_ASSESMENT;
 
-    private static final Algorithm DEFAULT_ALGORITHM = Algorithm.TYRER_CUZICK;
-    private static final Algorithm UPDATED_ALGORITHM = Algorithm.TYRER_CUZICK;
-
-    private static final Integer DEFAULT_ALGORITHM_MINIMUM = 1;
-    private static final Integer UPDATED_ALGORITHM_MINIMUM = 2;
-
-    private static final Integer DEFAULT_ALGORITHM_MAXIMUM = 1;
-    private static final Integer UPDATED_ALGORITHM_MAXIMUM = 2;
-
-    private static final Integer DEFAULT_IMPLEMENTATION_VERSION = 1;
-    private static final Integer UPDATED_IMPLEMENTATION_VERSION = 2;
+    private static final Integer DEFAULT_VERSION = 1;
+    private static final Integer UPDATED_VERSION = 2;
 
     @Autowired
     private QuestionnaireRepository questionnaireRepository;
@@ -100,11 +90,8 @@ public class QuestionnaireResourceIT {
      */
     public static Questionnaire createEntity(EntityManager em) {
         Questionnaire questionnaire = new Questionnaire()
-            .identifier(DEFAULT_IDENTIFIER)
-            .algorithm(DEFAULT_ALGORITHM)
-            .algorithmMinimum(DEFAULT_ALGORITHM_MINIMUM)
-            .algorithmMaximum(DEFAULT_ALGORITHM_MAXIMUM)
-            .implementationVersion(DEFAULT_IMPLEMENTATION_VERSION);
+            .type(DEFAULT_TYPE)
+            .version(DEFAULT_VERSION);
         return questionnaire;
     }
     /**
@@ -115,11 +102,8 @@ public class QuestionnaireResourceIT {
      */
     public static Questionnaire createUpdatedEntity(EntityManager em) {
         Questionnaire questionnaire = new Questionnaire()
-            .identifier(UPDATED_IDENTIFIER)
-            .algorithm(UPDATED_ALGORITHM)
-            .algorithmMinimum(UPDATED_ALGORITHM_MINIMUM)
-            .algorithmMaximum(UPDATED_ALGORITHM_MAXIMUM)
-            .implementationVersion(UPDATED_IMPLEMENTATION_VERSION);
+            .type(UPDATED_TYPE)
+            .version(UPDATED_VERSION);
         return questionnaire;
     }
 
@@ -127,6 +111,8 @@ public class QuestionnaireResourceIT {
     public void initTest() {
         questionnaire = createEntity(em);
     }
+
+
 
     @Test
     @Transactional
@@ -139,7 +125,8 @@ public class QuestionnaireResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(questionnaire.getId().intValue())))
-            .andExpect(jsonPath("$.[*].identifier").value(hasItem(DEFAULT_IDENTIFIER.toString())));
+            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].version").value(hasItem(DEFAULT_VERSION)));
     }
     
     @Test
@@ -153,7 +140,8 @@ public class QuestionnaireResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(questionnaire.getId().intValue()))
-            .andExpect(jsonPath("$.identifier").value(DEFAULT_IDENTIFIER.toString()));
+            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
+            .andExpect(jsonPath("$.version").value(DEFAULT_VERSION));
     }
 
     @Test

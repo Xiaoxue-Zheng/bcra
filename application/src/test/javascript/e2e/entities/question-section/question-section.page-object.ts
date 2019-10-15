@@ -28,7 +28,6 @@ export class QuestionSectionUpdatePage {
   cancelButton = element(by.id('cancel-save'));
   identifierSelect = element(by.id('field_identifier'));
   orderInput = element(by.id('field_order'));
-  relativeNameInput = element(by.id('field_relativeName'));
   questionnaireSelect = element(by.id('field_questionnaire'));
   questionGroupSelect = element(by.id('field_questionGroup'));
 
@@ -57,14 +56,6 @@ export class QuestionSectionUpdatePage {
 
   async getOrderInput() {
     return await this.orderInput.getAttribute('value');
-  }
-
-  async setRelativeNameInput(relativeName) {
-    await this.relativeNameInput.sendKeys(relativeName);
-  }
-
-  async getRelativeNameInput() {
-    return await this.relativeNameInput.getAttribute('value');
   }
 
   async questionnaireSelectLastOption(timeout?: number) {

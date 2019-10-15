@@ -47,15 +47,28 @@ public class Question implements Serializable {
     @Column(name = "text", nullable = false)
     private String text;
 
+    @Column(name = "variable_name")
+    private String variableName;
+
     @Column(name = "minimum")
     private Integer minimum;
 
     @Column(name = "maximum")
     private Integer maximum;
 
-    @OneToMany(mappedBy = "displayQuestion")
+    @Column(name = "hint")
+    private String hint;
+
+    @Column(name = "hint_text")
+    private String hintText;
+
+    @OneToMany(mappedBy = "question")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<DisplayCondition> displayConditions = new HashSet<>();
+
+    @OneToMany(mappedBy = "question")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<ReferralCondition> referralConditions = new HashSet<>();
 
     @ManyToOne(optional = false)
     @NotNull
@@ -127,6 +140,19 @@ public class Question implements Serializable {
         this.text = text;
     }
 
+    public String getVariableName() {
+        return variableName;
+    }
+
+    public Question variableName(String variableName) {
+        this.variableName = variableName;
+        return this;
+    }
+
+    public void setVariableName(String variableName) {
+        this.variableName = variableName;
+    }
+
     public Integer getMinimum() {
         return minimum;
     }
@@ -153,6 +179,32 @@ public class Question implements Serializable {
         this.maximum = maximum;
     }
 
+    public String getHint() {
+        return hint;
+    }
+
+    public Question hint(String hint) {
+        this.hint = hint;
+        return this;
+    }
+
+    public void setHint(String hint) {
+        this.hint = hint;
+    }
+
+    public String getHintText() {
+        return hintText;
+    }
+
+    public Question hintText(String hintText) {
+        this.hintText = hintText;
+        return this;
+    }
+
+    public void setHintText(String hintText) {
+        this.hintText = hintText;
+    }
+
     public Set<DisplayCondition> getDisplayConditions() {
         return displayConditions;
     }
@@ -164,18 +216,43 @@ public class Question implements Serializable {
 
     public Question addDisplayCondition(DisplayCondition displayCondition) {
         this.displayConditions.add(displayCondition);
-        displayCondition.setDisplayQuestion(this);
+        displayCondition.setQuestion(this);
         return this;
     }
 
     public Question removeDisplayCondition(DisplayCondition displayCondition) {
         this.displayConditions.remove(displayCondition);
-        displayCondition.setDisplayQuestion(null);
+        displayCondition.setQuestion(null);
         return this;
     }
 
     public void setDisplayConditions(Set<DisplayCondition> displayConditions) {
         this.displayConditions = displayConditions;
+    }
+
+    public Set<ReferralCondition> getReferralConditions() {
+        return referralConditions;
+    }
+
+    public Question referralConditions(Set<ReferralCondition> referralConditions) {
+        this.referralConditions = referralConditions;
+        return this;
+    }
+
+    public Question addReferralCondition(ReferralCondition referralCondition) {
+        this.referralConditions.add(referralCondition);
+        referralCondition.setQuestion(this);
+        return this;
+    }
+
+    public Question removeReferralCondition(ReferralCondition referralCondition) {
+        this.referralConditions.remove(referralCondition);
+        referralCondition.setQuestion(null);
+        return this;
+    }
+
+    public void setReferralConditions(Set<ReferralCondition> referralConditions) {
+        this.referralConditions = referralConditions;
     }
 
     public QuestionGroup getQuestionGroup() {
@@ -241,8 +318,11 @@ public class Question implements Serializable {
             ", type='" + getType() + "'" +
             ", order=" + getOrder() +
             ", text='" + getText() + "'" +
+            ", variableName='" + getVariableName() + "'" +
             ", minimum=" + getMinimum() +
             ", maximum=" + getMaximum() +
+            ", hint='" + getHint() + "'" +
+            ", hintText='" + getHintText() + "'" +
             "}";
     }
 }

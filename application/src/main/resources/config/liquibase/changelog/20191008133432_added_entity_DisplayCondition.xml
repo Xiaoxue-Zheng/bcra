@@ -15,27 +15,19 @@
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="display_condition_type" type="varchar(255)">
-                <constraints nullable="false" />
-            </column>
-
-            <column name="condition_section_identifier" type="varchar(255)">
+            <column name="question_identifier" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
 
-            <column name="condition_question_identifier" type="varchar(255)">
+            <column name="item_identifier" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
 
-            <column name="condition_question_item_identifier" type="varchar(255)">
+            <column name="question_section_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 
-            <column name="display_question_section_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="display_question_id" type="bigint">
+            <column name="question_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 
@@ -59,16 +51,14 @@
     -->
     <changeSet id="20191008133432-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/display_condition.csv"
+                  file="config/liquibase/questionnaires/display_condition.csv"
                   separator=","
                   tableName="display_condition">
             <column name="id" type="numeric"/>
-            <column name="display_condition_type" type="string"/>
-            <column name="condition_section_identifier" type="string"/>
-            <column name="condition_question_identifier" type="string"/>
-            <column name="condition_question_item_identifier" type="string"/>
-            <column name="display_question_section_id" type="numeric"/>
-            <column name="display_question_id" type="numeric"/>
+            <column name="question_identifier" type="string"/>
+            <column name="item_identifier" type="string"/>
+            <column name="question_section_id" type="numeric"/>
+            <column name="question_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

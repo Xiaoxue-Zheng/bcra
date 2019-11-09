@@ -49,6 +49,12 @@ Launch front-end: `npm start`
 ### Run Back-End Tests
 `mvnw verify`
 
+#### Run a Single Back-End Tests
+`mvnw surefire:test -Dtest=ClassNameOfTest`
+
+#### Run all Back-End Tests in a Package
+`mvnw surefire:test -Dtest="uk.ac.herc.bcra.algorithm.**"`
+
 ### Run Front-End Tests
 `npm test`
 

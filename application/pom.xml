@@ -103,6 +103,15 @@
     </dependencyManagement>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.pdfjet</groupId>
+            <artifactId>pdfjet</artifactId>
+            <version>6.05</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/libraries/PDFJet.jar</systemPath>
+        </dependency>
+
         <dependency>
             <groupId>io.github.jhipster</groupId>
             <artifactId>jhipster-framework</artifactId>

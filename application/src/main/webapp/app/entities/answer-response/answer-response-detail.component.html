@@ -5,6 +5,14 @@
             <hr>
             <jhi-alert-error></jhi-alert-error>
             <dl class="row-md jh-entity-details">
+                <dt><span>State</span></dt>
+                <dd>
+                    <span>{{answerResponse.state}}</span>
+                </dd>
+                <dt><span>Status</span></dt>
+                <dd>
+                    <span>{{answerResponse.status}}</span>
+                </dd>
                 <dt><span>Questionnaire</span></dt>
                 <dd>
                     <div *ngIf="answerResponse.questionnaireId">

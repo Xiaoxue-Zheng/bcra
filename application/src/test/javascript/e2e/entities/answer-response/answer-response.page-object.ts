@@ -26,10 +26,35 @@ export class AnswerResponseUpdatePage {
   pageTitle = element(by.id('jhi-answer-response-heading'));
   saveButton = element(by.id('save-entity'));
   cancelButton = element(by.id('cancel-save'));
+  stateSelect = element(by.id('field_state'));
+  statusInput = element(by.id('field_status'));
   questionnaireSelect = element(by.id('field_questionnaire'));
 
   async getPageTitle() {
     return this.pageTitle.getText();
+  }
+
+  async setStateSelect(state) {
+    await this.stateSelect.sendKeys(state);
+  }
+
+  async getStateSelect() {
+    return await this.stateSelect.element(by.css('option:checked')).getText();
+  }
+
+  async stateSelectLastOption(timeout?: number) {
+    await this.stateSelect
+      .all(by.tagName('option'))
+      .last()
+      .click();
+  }
+
+  async setStatusInput(status) {
+    await this.statusInput.sendKeys(status);
+  }
+
+  async getStatusInput() {
+    return await this.statusInput.getAttribute('value');
   }
 
   async questionnaireSelectLastOption(timeout?: number) {

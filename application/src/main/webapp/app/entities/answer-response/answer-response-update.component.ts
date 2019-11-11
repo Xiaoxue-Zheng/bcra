@@ -21,6 +21,8 @@ export class AnswerResponseUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
+    state: [null, [Validators.required]],
+    status: [],
     questionnaireId: [null, Validators.required]
   });
 
@@ -49,6 +51,8 @@ export class AnswerResponseUpdateComponent implements OnInit {
   updateForm(answerResponse: IAnswerResponse) {
     this.editForm.patchValue({
       id: answerResponse.id,
+      state: answerResponse.state,
+      status: answerResponse.status,
       questionnaireId: answerResponse.questionnaireId
     });
   }
@@ -71,6 +75,8 @@ export class AnswerResponseUpdateComponent implements OnInit {
     return {
       ...new AnswerResponse(),
       id: this.editForm.get(['id']).value,
+      state: this.editForm.get(['state']).value,
+      status: this.editForm.get(['status']).value,
       questionnaireId: this.editForm.get(['questionnaireId']).value
     };
   }

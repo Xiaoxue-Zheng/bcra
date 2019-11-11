@@ -227,6 +227,16 @@ enum QuestionItemIdentifier {
 
 /* AnswerResponse, AnswerSection, AnswerGroup, Answer, AnswerItem */
 entity AnswerResponse {
+    state ResponseState required
+    status String
+}
+
+enum ResponseState {
+    SUBMITTED,
+    INVALID,
+    VALIDATED,
+    FAILED,
+    PROCESSED
 }
 
 relationship ManyToOne {

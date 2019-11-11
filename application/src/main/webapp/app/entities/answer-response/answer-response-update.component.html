@@ -9,6 +9,27 @@
                     <input type="text" class="form-control" id="id" name="id" formControlName="id"
                         readonly />
                 </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_state">State</label>
+                    <select class="form-control" name="state" formControlName="state" id="field_state">
+                        <option value="SUBMITTED">SUBMITTED</option>
+                        <option value="INVALID">INVALID</option>
+                        <option value="VALIDATED">VALIDATED</option>
+                        <option value="FAILED">FAILED</option>
+                        <option value="PROCESSED">PROCESSED</option>
+                    </select>
+                    <div *ngIf="editForm.get('state').invalid && (editForm.get('state').dirty || editForm.get('state').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('state').errors.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_status">Status</label>
+                    <input type="text" class="form-control" name="status" id="field_status"
+                           formControlName="status"/>
+                </div>
 
                 <div class="form-group">
                     <label class="form-control-label" for="field_questionnaire">Questionnaire</label>

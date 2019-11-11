@@ -31,11 +31,18 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import uk.ac.herc.bcra.domain.enumeration.ResponseState;
 /**
  * Integration tests for the {@link AnswerResponseResource} REST controller.
  */
 @SpringBootTest(classes = BcraApp.class)
 public class AnswerResponseResourceIT {
+
+    private static final ResponseState DEFAULT_STATE = ResponseState.PROCESSED;
+    private static final ResponseState UPDATED_STATE = ResponseState.INVALID;
+
+    private static final String DEFAULT_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_STATUS = "BBBBBBBBBB";
 
     @Autowired
     private AnswerResponseRepository answerResponseRepository;
@@ -84,7 +91,9 @@ public class AnswerResponseResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static AnswerResponse createEntity(EntityManager em) {
-        AnswerResponse answerResponse = new AnswerResponse();
+        AnswerResponse answerResponse = new AnswerResponse()
+            .state(DEFAULT_STATE)
+            .status(DEFAULT_STATUS);
         // Add required entity
         Questionnaire questionnaire;
         if (TestUtil.findAll(em, Questionnaire.class).isEmpty()) {
@@ -104,7 +113,9 @@ public class AnswerResponseResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static AnswerResponse createUpdatedEntity(EntityManager em) {
-        AnswerResponse answerResponse = new AnswerResponse();
+        AnswerResponse answerResponse = new AnswerResponse()
+            .state(UPDATED_STATE)
+            .status(UPDATED_STATUS);
         // Add required entity
         Questionnaire questionnaire;
         if (TestUtil.findAll(em, Questionnaire.class).isEmpty()) {
@@ -138,6 +149,9 @@ public class AnswerResponseResourceIT {
         // Validate the AnswerResponse in the database
         List<AnswerResponse> answerResponseList = answerResponseRepository.findAll();
         assertThat(answerResponseList).hasSize(databaseSizeBeforeCreate + 1);
+        AnswerResponse testAnswerResponse = answerResponseList.get(answerResponseList.size() - 1);
+        assertThat(testAnswerResponse.getState()).isEqualTo(ResponseState.SUBMITTED);
+        assertThat(testAnswerResponse.getStatus()).isEqualTo(null);
     }
 
     @Test
@@ -160,6 +174,28 @@ public class AnswerResponseResourceIT {
         assertThat(answerResponseList).hasSize(databaseSizeBeforeCreate);
     }
 
+
+    @Test
+    @Transactional
+    public void checkStateIsSetToSubmitted() throws Exception {
+        int databaseSizeBeforeCreate = answerResponseRepository.findAll().size();
+        // set the field null
+        answerResponse.setState(null);
+
+        // Create the AnswerResponse, which fails.
+        AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(answerResponse);
+
+        restAnswerResponseMockMvc.perform(post("/api/answer-responses")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(answerResponseDTO)))
+            .andExpect(status().is2xxSuccessful());
+
+        // Validate the AnswerResponse in the database
+        List<AnswerResponse> answerResponseList = answerResponseRepository.findAll();
+        assertThat(answerResponseList).hasSize(databaseSizeBeforeCreate + 1);
+        AnswerResponse testAnswerResponse = answerResponseList.get(answerResponseList.size() - 1);
+        assertThat(testAnswerResponse.getState()).isEqualTo(ResponseState.SUBMITTED);
+    }
 
     @Test
     @Transactional
@@ -207,6 +243,9 @@ public class AnswerResponseResourceIT {
         AnswerResponse updatedAnswerResponse = answerResponseRepository.findById(answerResponse.getId()).get();
         // Disconnect from session so that the updates on updatedAnswerResponse are not directly saved in db
         em.detach(updatedAnswerResponse);
+        updatedAnswerResponse
+            .state(UPDATED_STATE)
+            .status(UPDATED_STATUS);
         AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(updatedAnswerResponse);
 
         restAnswerResponseMockMvc.perform(put("/api/answer-responses")
@@ -217,6 +256,11 @@ public class AnswerResponseResourceIT {
         // Validate the AnswerResponse in the database
         List<AnswerResponse> answerResponseList = answerResponseRepository.findAll();
         assertThat(answerResponseList).hasSize(databaseSizeBeforeUpdate);
+        AnswerResponse testAnswerResponse = answerResponseList.get(answerResponseList.size() - 1);
+
+        // Check that State and Status cannot be modified via API
+        assertThat(testAnswerResponse.getState()).isNotEqualTo(UPDATED_STATE);
+        assertThat(testAnswerResponse.getStatus()).isNotEqualTo(UPDATED_STATUS);
     }
 
     @Test

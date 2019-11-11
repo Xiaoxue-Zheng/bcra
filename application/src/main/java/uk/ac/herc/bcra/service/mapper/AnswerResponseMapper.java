@@ -18,6 +18,7 @@ public interface AnswerResponseMapper extends EntityMapper<AnswerResponseDTO, An
     @Mapping(source = "questionnaireId", target = "questionnaire")
     @Mapping(source = "answerSections", target="answerSections")
     @Mapping(target = "removeAnswerSection", ignore = true)
+    @Mapping(target = "state", constant = "SUBMITTED")
     AnswerResponse toEntity(AnswerResponseDTO answerResponseDTO);
 
     default AnswerResponse fromId(Long id) {

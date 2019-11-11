@@ -10,6 +10,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import uk.ac.herc.bcra.domain.enumeration.ResponseState;
+
 /**
  * A AnswerResponse.
  */
@@ -24,6 +26,14 @@ public class AnswerResponse implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "state", nullable = false)
+    private ResponseState state;
+
+    @Column(name = "status")
+    private String status;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -41,6 +51,32 @@ public class AnswerResponse implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public ResponseState getState() {
+        return state;
+    }
+
+    public AnswerResponse state(ResponseState state) {
+        this.state = state;
+        return this;
+    }
+
+    public void setState(ResponseState state) {
+        this.state = state;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public AnswerResponse status(String status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Questionnaire getQuestionnaire() {
@@ -105,6 +141,8 @@ public class AnswerResponse implements Serializable {
     public String toString() {
         return "AnswerResponse{" +
             "id=" + getId() +
+            ", state='" + getState() + "'" +
+            ", status='" + getStatus() + "'" +
             "}";
     }
 }

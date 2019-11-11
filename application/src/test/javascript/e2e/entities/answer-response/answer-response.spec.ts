@@ -40,8 +40,11 @@ describe('AnswerResponse e2e test', () => {
 
         await answerResponseComponentsPage.clickOnCreateButton();
         await promise.all([
+            answerResponseUpdatePage.stateSelectLastOption(),
+            answerResponseUpdatePage.setStatusInput('status'),
             answerResponseUpdatePage.questionnaireSelectLastOption(),
         ]);
+        expect(await answerResponseUpdatePage.getStatusInput()).to.eq('status', 'Expected Status value to be equals to status');
         await answerResponseUpdatePage.save();
         expect(await answerResponseUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 

@@ -5,7 +5,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 import { AnswerResponseService } from 'app/entities/answer-response/answer-response.service';
-import { IAnswerResponse, AnswerResponse } from 'app/shared/model/answer-response.model';
+import { IAnswerResponse, AnswerResponse, ResponseState } from 'app/shared/model/answer-response.model';
 
 describe('Service Tests', () => {
   describe('AnswerResponse Service', () => {
@@ -23,7 +23,7 @@ describe('Service Tests', () => {
       service = injector.get(AnswerResponseService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new AnswerResponse(0);
+      elemDefault = new AnswerResponse(0, ResponseState.SUBMITTED, 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -57,7 +57,13 @@ describe('Service Tests', () => {
       });
 
       it('should update a AnswerResponse', async () => {
-        const returnedFromService = Object.assign({}, elemDefault);
+        const returnedFromService = Object.assign(
+          {
+            state: 'BBBBBB',
+            status: 'BBBBBB'
+          },
+          elemDefault
+        );
 
         const expected = Object.assign({}, returnedFromService);
         service
@@ -70,7 +76,13 @@ describe('Service Tests', () => {
       });
 
       it('should return a list of AnswerResponse', async () => {
-        const returnedFromService = Object.assign({}, elemDefault);
+        const returnedFromService = Object.assign(
+          {
+            state: 'BBBBBB',
+            status: 'BBBBBB'
+          },
+          elemDefault
+        );
         const expected = Object.assign({}, returnedFromService);
         service
           .query(expected)

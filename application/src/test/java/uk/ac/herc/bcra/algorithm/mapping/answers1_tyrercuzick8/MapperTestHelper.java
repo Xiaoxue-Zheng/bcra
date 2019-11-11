@@ -49,6 +49,61 @@ public class MapperTestHelper {
         );
     }
 
+    public static void addAnswerAndItemsWithProperties(
+        AnswerGroup answerGroup,
+        QuestionIdentifier questionIdentifier,
+        QuestionType questionType,
+        QuestionItemIdentifier[] itemIdentifiers,
+        int selected,
+        int minimum,
+        int exclusive,
+        int neccessary
+    ) {
+        Question question = new Question();
+        question.setIdentifier(questionIdentifier);
+        question.setType(questionType);
+        question.setMinimum(minimum);
+        
+        Answer answer = new Answer();
+        answer.setQuestion(question);
+
+        for (QuestionItemIdentifier itemIdentifier: itemIdentifiers) {
+            QuestionItem questionItem = new QuestionItem();
+            questionItem.identifier(itemIdentifier);
+
+            AnswerItem answerItem = new AnswerItem();
+            answerItem.questionItem(questionItem);
+
+            if (selected > 0) {
+                answerItem.setSelected(true);
+                selected--;
+            }
+            else {
+                answerItem.setSelected(false);
+            }
+            
+            if (exclusive > 0) {
+                questionItem.setExclusive(true);
+                exclusive--;
+            }
+            else {
+                questionItem.setExclusive(false);
+            }
+
+            if (neccessary > 0) {
+                questionItem.setNecessary(true);
+                neccessary--;
+            }
+            else {
+                questionItem.setNecessary(false);
+            }
+
+            answer.addAnswerItem(answerItem);
+        }
+
+        answerGroup.addAnswer(answer);
+    }
+
     public static void addAnswerAndItems(
         AnswerGroup answerGroup,
         QuestionIdentifier questionIdentifier,
@@ -91,6 +146,25 @@ public class MapperTestHelper {
         );
     }
 
+    public static void addAnswerNumberMinMax(
+        AnswerGroup answerGroup,
+        QuestionIdentifier questionIdentifier,
+        QuestionType questionType,
+        Integer number,
+        Integer minimum,
+        Integer maximum
+    ) {
+        addAnswerNumberUnitsMinMax(
+            answerGroup,
+            questionIdentifier,
+            questionType,
+            null,
+            number,
+            minimum,
+            maximum
+        );
+    }    
+
     public static void addAnswerNumberUnits(
         AnswerGroup answerGroup,
         QuestionIdentifier questionIdentifier,
@@ -98,9 +172,31 @@ public class MapperTestHelper {
         AnswerUnits units,
         Integer number
     ) {
+        addAnswerNumberUnitsMinMax(
+            answerGroup,
+            questionIdentifier,
+            questionType,
+            units,
+            number,
+            null,
+            null
+        );
+    }
+
+    public static void addAnswerNumberUnitsMinMax(
+        AnswerGroup answerGroup,
+        QuestionIdentifier questionIdentifier,
+        QuestionType questionType,
+        AnswerUnits units,
+        Integer number,
+        Integer minimum,
+        Integer maximum
+    ) {
         Question question = new Question();
         question.setIdentifier(questionIdentifier);
         question.setType(questionType);
+        question.setMinimum(minimum);
+        question.setMaximum(maximum);
         
         Answer answer = new Answer();
         answer.setQuestion(question);

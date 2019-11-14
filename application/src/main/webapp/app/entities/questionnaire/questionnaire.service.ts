@@ -35,4 +35,8 @@ export class QuestionnaireService {
   delete(id: number): Observable<HttpResponse<any>> {
     return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
+
+  findAll(): Observable<HttpResponse<any>> {
+    return this.http.get<any>(this.resourceUrl, { observe: 'response' });
+  }
 }

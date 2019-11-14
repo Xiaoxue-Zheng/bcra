@@ -38,6 +38,7 @@ import {
   faSearch,
   faTrashAlt,
   faAsterisk,
+  faClipboardList,
   faTasks,
   faHome
 } from '@fortawesome/free-solid-svg-icons';
@@ -77,5 +78,6 @@ library.add(faCalendarAlt);
 library.add(faSearch);
 library.add(faTrashAlt);
 library.add(faAsterisk);
+library.add(faClipboardList);
 
 // jhipster-needle-add-element-to-vendor - JHipster will add new menu items here

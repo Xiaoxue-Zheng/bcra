@@ -1,0 +1,101 @@
+{
+    "name": "IdentifiableData",
+    "fields": [
+        {
+            "fieldName": "nhsNumber",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "unique",
+                "minlength",
+                "maxlength"
+            ],
+            "fieldValidateRulesMinlength": 10,
+            "fieldValidateRulesMaxlength": 10
+        },
+        {
+            "fieldName": "dateOfBirth",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "email",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 254
+        },
+        {
+            "fieldName": "address1",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "address2",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "address3",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "address4",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "address5",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "postcode",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "minlength",
+                "maxlength"
+            ],
+            "fieldValidateRulesMinlength": 6,
+            "fieldValidateRulesMaxlength": 8
+        },
+        {
+            "fieldName": "practiceName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "participant",
+            "otherEntityRelationshipName": "identifiableData",
+            "relationshipValidateRules": "required",
+            "relationshipName": "participant",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "csvFile",
+            "otherEntityRelationshipName": "identifiableData",
+            "relationshipName": "csvFile",
+            "otherEntityField": "fileName",
+            "ownerSide": true
+        }
+    ],
+    "changelogDate": "20191119110521",
+    "entityTableName": "identifiable_data",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

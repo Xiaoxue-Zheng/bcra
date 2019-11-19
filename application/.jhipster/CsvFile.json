@@ -1,0 +1,32 @@
+{
+    "name": "CsvFile",
+    "fields": [
+        {
+            "fieldName": "fileName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "minlength",
+                "required",
+                "unique"
+            ],
+            "fieldValidateRulesMinlength": 5
+        },
+        {
+            "fieldName": "uploadDatetime",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20191119110519",
+    "entityTableName": "csv_file",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

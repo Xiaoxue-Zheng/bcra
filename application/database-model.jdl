@@ -296,6 +296,50 @@ enum ReferralConditionType {
     VALUE_UNDER
 }
 
+entity CsvFile {
+    fileName String minlength(5) required unique
+    uploadDatetime Instant required
+}
+
+entity Participant {
+    registerDatetime Instant
+}
+
+enum ParticipantStatusType {
+    CSV_LOADED,
+    REGISTERED,
+    PART_COMPLETED,
+    COMPLETED_REJECT,
+    COMPLETED_ACCEPT
+}
+
+relationship OneToOne {
+    Participant{user(login) required} to User
+}
+
+entity IdentifiableData{
+    nhsNumber String required unique minlength(10) maxlength(10)
+    dateOfBirth LocalDate required
+    email String maxlength(254)
+    address1 String required
+    address2 String
+    address3 String
+    address4 String
+    address5 String
+    postcode String required minlength(6) maxlength(8)
+    practiceName String required
+}
+
+relationship OneToOne {
+    IdentifiableData{participant required} to Participant
+    IdentifiableData{CsvFile(fileName)} to CsvFile
+}
+
+
 /* Generation */
 dto * with mapstruct
 service * with serviceImpl
+
+paginate Participant with pagination
+
+filter Participant

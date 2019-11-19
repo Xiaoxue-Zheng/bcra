@@ -51,6 +51,18 @@ import { RouterModule } from '@angular/router';
       {
         path: 'referral-condition',
         loadChildren: () => import('./referral-condition/referral-condition.module').then(m => m.BcraReferralConditionModule)
+      },
+      {
+        path: 'csv-file',
+        loadChildren: () => import('./csv-file/csv-file.module').then(m => m.BcraCsvFileModule)
+      },
+      {
+        path: 'participant',
+        loadChildren: () => import('./participant/participant.module').then(m => m.BcraParticipantModule)
+      },
+      {
+        path: 'identifiable-data',
+        loadChildren: () => import('./identifiable-data/identifiable-data.module').then(m => m.BcraIdentifiableDataModule)
       }
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ])

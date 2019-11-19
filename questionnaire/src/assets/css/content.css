@@ -1,0 +1,52 @@
+/* Content */
+
+html {
+    color: #223344;
+    font-size: 1em;
+}
+
+p, strong {
+    line-height: 1.5em;
+}
+
+h1 {
+    font-size: 1em !important;
+    padding-bottom: 1.5em;
+    border-bottom: 1px solid rgba(34, 51, 68, 0.15);
+}
+
+a {
+    color: rgb(34, 119, 204);
+}
+
+.content {
+    padding: 1em;
+    min-height: calc(100vh - 26em);
+}
+
+@media only screen and (min-width: 568px) {
+    html {
+        font-size: 1.125em;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    html {
+        font-size: 1.25em;
+    }
+
+    h1 {
+        margin: 0 0 0.5em 0 !important;
+    }
+    
+    .content {
+        padding: 1.5em;
+        min-height: calc(100vh - 15em);
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    html {
+        font-size: 1.5em;
+    }
+}

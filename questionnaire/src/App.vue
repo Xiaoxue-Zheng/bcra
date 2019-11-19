@@ -1,24 +1,23 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
+    <Navigation></Navigation>
     <router-view/>
+    <Footer></Footer>
   </div>
 </template>
 
-<style lang="scss">
-#app {
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+<script>
+import '@/assets/css/content.css'
+import '@/assets/css/navigation.css'
+import '@/assets/css/footer.css'
+import '@/assets/css/buttons.css'
+import Navigation from './components/Navigation'
+import Footer from './components/Footer'
+export default {
+  name: 'app',
+  components: {
+    'Navigation': Navigation,
+    'Footer': Footer
   }
 }
-</style>
+</script>

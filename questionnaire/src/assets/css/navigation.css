@@ -1,0 +1,42 @@
+/* Navigation */
+
+.pure-menu {
+    border-bottom: 1px solid rgba(34, 51, 68, 0.15);
+    padding: 0.5em 0em;
+}
+
+.pure-menu ul {
+    float: right;
+}
+
+.pure-menu-link {
+    border-radius: 4px;
+    padding: 0.5em 0.9em !important;
+}
+
+.pure-menu-link:hover {
+    background: rgba(34, 119, 204, 0.1) !important;
+}
+
+.pure-menu-link:focus {
+    background: #ffffff !important;
+    color: #223344;
+}
+
+@media only screen and (min-width: 768px) {
+    .pure-menu {
+        padding: 1em 0.5em;
+    }
+}
+
+.pure-menu a {
+    color: rgb(34, 119, 204);
+}
+
+.pure-menu-heading {
+    font-weight: bold;
+}
+
+.pure-menu-heading {
+    padding: 0.5em 1em !important;
+}

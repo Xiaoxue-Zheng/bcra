@@ -24,9 +24,6 @@ public class QuestionItemDTO implements Serializable {
 
     private Boolean exclusive;
 
-
-    private Long questionId;
-
     public Long getId() {
         return id;
     }
@@ -75,14 +72,6 @@ public class QuestionItemDTO implements Serializable {
         this.exclusive = exclusive;
     }
 
-    public Long getQuestionId() {
-        return questionId;
-    }
-
-    public void setQuestionId(Long questionId) {
-        this.questionId = questionId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -113,7 +102,6 @@ public class QuestionItemDTO implements Serializable {
             ", label='" + getLabel() + "'" +
             ", necessary='" + isNecessary() + "'" +
             ", exclusive='" + isExclusive() + "'" +
-            ", question=" + getQuestionId() +
             "}";
     }
 }

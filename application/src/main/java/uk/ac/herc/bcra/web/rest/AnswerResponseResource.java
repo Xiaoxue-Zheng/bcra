@@ -1,9 +1,12 @@
 package uk.ac.herc.bcra.web.rest;
 
+import uk.ac.herc.bcra.domain.AnswerResponse;
+import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
+import uk.ac.herc.bcra.questionnaire.AnswerResponseGenerator;
 import uk.ac.herc.bcra.service.AnswerResponseService;
 import uk.ac.herc.bcra.web.rest.errors.BadRequestAlertException;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
-
+import uk.ac.herc.bcra.service.mapper.AnswerResponseMapper;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
@@ -34,9 +37,17 @@ public class AnswerResponseResource {
     private String applicationName;
 
     private final AnswerResponseService answerResponseService;
+    private final AnswerResponseGenerator answerResponseGenerator;
+    private final AnswerResponseMapper answerResponseMapper;
 
-    public AnswerResponseResource(AnswerResponseService answerResponseService) {
+    public AnswerResponseResource(
+        AnswerResponseService answerResponseService,
+        AnswerResponseGenerator answerResponseGenerator,
+        AnswerResponseMapper answerResponseMapper
+    ) {
         this.answerResponseService = answerResponseService;
+        this.answerResponseGenerator = answerResponseGenerator;
+        this.answerResponseMapper = answerResponseMapper;
     }
 
     /**
@@ -102,6 +113,22 @@ public class AnswerResponseResource {
         log.debug("REST request to get AnswerResponse : {}", id);
         Optional<AnswerResponseDTO> answerResponseDTO = answerResponseService.findOne(id);
         return ResponseUtil.wrapOrNotFound(answerResponseDTO);
+    }
+
+    /**
+     * {@code GET  /answer-responses/:id} : get the "id" answerResponse.
+     *
+     * @param id the id of the answerResponseDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the answerResponseDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/answer-responses/empty")
+    public AnswerResponseDTO getEmptyAnswerResponse(@RequestParam("type") QuestionnaireType questionnaireType) {
+        log.debug("REST request to get an empty AnswerResponse");
+
+        AnswerResponse answerResponse =
+            answerResponseGenerator.generateAnswerResponseToQuestionniare(questionnaireType);
+
+        return answerResponseMapper.toDto(answerResponse);
     }
 
     /**

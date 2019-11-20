@@ -32,6 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import uk.ac.herc.bcra.domain.enumeration.ResponseState;
+import uk.ac.herc.bcra.questionnaire.AnswerResponseGenerator;
 /**
  * Integration tests for the {@link AnswerResponseResource} REST controller.
  */
@@ -54,6 +55,9 @@ public class AnswerResponseResourceIT {
     private AnswerResponseService answerResponseService;
 
     @Autowired
+    private AnswerResponseGenerator answerResponseGenerator;
+    
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -75,7 +79,11 @@ public class AnswerResponseResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AnswerResponseResource answerResponseResource = new AnswerResponseResource(answerResponseService);
+        final AnswerResponseResource answerResponseResource = new AnswerResponseResource(
+            answerResponseService,
+            answerResponseGenerator,
+            answerResponseMapper
+        );
         this.restAnswerResponseMockMvc = MockMvcBuilders.standaloneSetup(answerResponseResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -221,6 +229,26 @@ public class AnswerResponseResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(answerResponse.getId().intValue()));
+    }
+
+    @Test
+    @Transactional
+    public void generateAnswerResponse() throws Exception {
+        
+        Questionnaire questionnaire;
+        if (TestUtil.findAll(em, Questionnaire.class).isEmpty()) {
+            questionnaire = QuestionnaireResourceIT.createUpdatedEntity(em);
+            em.persist(questionnaire);
+            em.flush();
+        } else {
+            questionnaire = TestUtil.findAll(em, Questionnaire.class).get(0);
+        }
+
+        // Generate the empty answerResponse
+        restAnswerResponseMockMvc.perform(get("/api/answer-responses/empty?type={type}", questionnaire.getType()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.questionnaireId").value(questionnaire.getId().intValue()));
     }
 
     @Test

@@ -1,14 +1,12 @@
 import axios from 'axios'
 import { API_URL } from '@/common/config'
 
+const RESPONSE_STATUS_UNAUTHORIZED = 401
+
 const ApiService = {
   init () {
     axios.defaults.baseURL = API_URL
-  },
-
-  setHeader () {
-    // axios.defaults.headers.common['Authorization'] =
-    // `Token ${JwtService.getToken()}`
+    axios.defaults.withCredentials = true
   },
 
   query (resource, params) {
@@ -34,6 +32,15 @@ const ApiService = {
 
   post (resource, params) {
     return axios.post(`${resource}`, params)
+  },
+
+  postFormData (url, formData) {
+    return axios({
+      method: 'post',
+      url: url,
+      data: formData,
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
   },
 
   update (resource, slug, params) {
@@ -62,5 +69,32 @@ export const QuestionnaireService = {
 export const AnswerService = {
   create (answerResponse) {
     return ApiService.post('answer-responses', answerResponse)
+  }
+}
+
+export const SecurityService = {
+  login (username, password) {
+    var formData = new FormData()
+    formData.set('username', username)
+    formData.set('password', password)
+    return new Promise((resolve) => {
+      ApiService.postFormData('authentication', formData).then(() => {
+        resolve('SUCCESS')
+      }).catch((error) => {
+        if (!error.response) {
+          resolve('ERROR')
+        } else if (error.response.status === RESPONSE_STATUS_UNAUTHORIZED) {
+          resolve('UNAUTHORIZED')
+        } else {
+          resolve('ERROR')
+        }
+      })
+    })
+  },
+  logout () {
+    return ApiService.post('logout')
+  },
+  getUser () {
+    return ApiService.get('account')
   }
 }

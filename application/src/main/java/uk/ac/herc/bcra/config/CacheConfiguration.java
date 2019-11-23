@@ -46,6 +46,8 @@ public class CacheConfiguration {
             createCache(cm, uk.ac.herc.bcra.domain.User.class.getName());
             createCache(cm, uk.ac.herc.bcra.domain.Authority.class.getName());
             createCache(cm, uk.ac.herc.bcra.domain.User.class.getName() + ".authorities");
+            createCache(cm, uk.ac.herc.bcra.domain.PersistentToken.class.getName());
+            createCache(cm, uk.ac.herc.bcra.domain.User.class.getName() + ".persistentTokens");
             createCache(cm, uk.ac.herc.bcra.domain.Questionnaire.class.getName());
             createCache(cm, uk.ac.herc.bcra.domain.Questionnaire.class.getName() + ".questionSections");
             createCache(cm, uk.ac.herc.bcra.domain.Questionnaire.class.getName() + ".answerResponses");

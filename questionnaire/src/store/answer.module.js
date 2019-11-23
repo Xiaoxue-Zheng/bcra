@@ -2,15 +2,12 @@ import {
   AnswerService
 } from '@/common/api.service'
 
-// initial state
 const state = {
   answers: {}
 }
 
-// getters
 const getters = {}
 
-// actions
 const actions = {
   async saveAnswers ({ commit }, answers) {
     const savedAnswers = await AnswerService.create(answers)
@@ -19,7 +16,6 @@ const actions = {
   }
 }
 
-// mutations
 const mutations = {
   setAnswers (state, answers) {
     state.answers = answers

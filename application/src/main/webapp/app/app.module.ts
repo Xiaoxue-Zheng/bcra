@@ -7,7 +7,6 @@ import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { NgJhipsterModule } from 'ng-jhipster';
 
-import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
 import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
@@ -42,11 +41,6 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
   ],
   declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, FooterComponent],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthExpiredInterceptor,

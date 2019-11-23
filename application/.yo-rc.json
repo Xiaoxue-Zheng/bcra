@@ -9,7 +9,7 @@
     "packageName": "uk.ac.herc.bcra",
     "packageFolder": "uk/ac/herc/bcra",
     "serverPort": "8080",
-    "authenticationType": "jwt",
+    "authenticationType": "session",
     "cacheProvider": "ehcache",
     "enableHibernateCache": true,
     "websocket": false,

@@ -77,6 +77,16 @@ Launch front-end: `npm run serve`
 
 Build front-end: `npm run build`
 
-This will place a **.war** file in the **dist** folder.
+<del>This will place a **.war** file in the **dist** folder.</del>
 
+(The warfile plugin is temporarily deactivated, because it conflicts with Cypress end-to-end tests.
 
+### Run Tests
+
+#### Unit Tests
+npm run test:unit
+
+#### End-to-End Tests
+(Launch back-end with 'mvnw' - see above)
+
+npm run test:e2e

@@ -12,8 +12,14 @@ Vue.config.productionTip = false
 
 ApiService.init()
 
-new Vue({
+store.dispatch('security/fetchAuthenticated')
+
+const app = new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount('#app')
+
+if (window.Cypress) {
+  window.app = app
+}

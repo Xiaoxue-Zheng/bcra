@@ -7,10 +7,11 @@
 </template>
 
 <script>
-import '@/assets/css/content.css'
-import '@/assets/css/navigation.css'
-import '@/assets/css/footer.css'
 import '@/assets/css/buttons.css'
+import '@/assets/css/content.css'
+import '@/assets/css/fonts.css'
+import '@/assets/css/footer.css'
+import '@/assets/css/navigation.css'
 import Navigation from './components/Navigation'
 import Footer from './components/Footer'
 export default {

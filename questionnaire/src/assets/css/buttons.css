@@ -2,7 +2,12 @@
 
 .pure-button {
     border-radius: 4px !important;
-    margin-right: 0.75em;
+    margin: 1.5em 0.75em 0.75em 0;
+}
+
+.pure-button-disabled {
+    background-color: rgba(34, 51, 68, 0.25) !important;
+    color:  rgba(34, 51, 68, 0.75) !important;
 }
 
 .pure-button-primary {

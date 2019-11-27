@@ -88,10 +88,6 @@
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/>
 
-        <addNotNullConstraint   columnName="password_hash"
-                                columnDataType="varchar(60)"
-                                tableName="jhi_user"/>
-
         <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="jhi_persistent_token"
                                  constraintName="fk_user_persistent_token"
@@ -102,6 +98,8 @@
                   separator=";"
                   tableName="jhi_user">
             <column name="id" type="numeric"/>
+            <column name="password_hash" type="string" defaultValue="null"/>
+            <column name="email" type="string" defaultValue="null"/>
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
         </loadData>

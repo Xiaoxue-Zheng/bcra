@@ -5,8 +5,6 @@ import uk.ac.herc.bcra.security.*;
 import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.security.*;
 
-import org.springframework.beans.factory.BeanInitializationException;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
@@ -114,6 +112,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .deny()
         .and()
             .authorizeRequests()
+            .antMatchers("/api/participants/exists").permitAll()
+            .antMatchers("/api/participants/activate").permitAll()
             .antMatchers("/api/authenticate").permitAll()
             .antMatchers("/api/register").permitAll()
             .antMatchers("/api/activate").permitAll()

@@ -588,7 +588,7 @@
                         <url>jdbc:postgresql://localhost:5432/bcra</url>
                         <defaultSchemaName></defaultSchemaName>
                         <username>bcra</username>
-                        <password></password>
+                        <password>bcra123</password>
                         <referenceUrl>hibernate:spring:uk.ac.herc.bcra.domain?dialect=org.hibernate.dialect.PostgreSQL95Dialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                         <verbose>true</verbose>
                         <logging>debug</logging>

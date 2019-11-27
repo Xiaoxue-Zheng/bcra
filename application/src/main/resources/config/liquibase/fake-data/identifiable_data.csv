@@ -1,2 +1,12 @@
 id;nhs_number;date_of_birth;email;address_1;address_2;address_3;address_4;address_5;postcode;practice_name;participant_id
-
+1;1111111111;1995-06-07;NULL;25 High Street; Manchester;;;;M12 3AB;Manchester Road Surgery;1
+2;2222222222;1995-06-07;NULL;25 High Street; Manchester;;;;M12 3AB;Manchester Road Surgery;2
+3;3333333333;1995-06-07;NULL;25 High Street; Manchester;;;;M12 3AB;Manchester Road Surgery;3
+4;4444444444;1995-06-07;NULL;25 High Street; Manchester;;;;M12 3AB;Manchester Road Surgery;4
+5;5555555555;1995-06-07;NULL;25 High Street; Manchester;;;;M12 3AB;Manchester Road Surgery;5
+6;6666666666;1995-06-07;NULL;25 High Street; Manchester;;;;M12 3AB;Manchester Road Surgery;6
+7;7777777777;1995-06-07;NULL;25 High Street; Manchester;;;;M12 3AB;Manchester Road Surgery;7
+8;8888888888;1995-06-07;NULL;25 High Street; Manchester;;;;M12 3AB;Manchester Road Surgery;8
+9;9999999999;1995-06-07;NULL;25 High Street; Manchester;;;;M12 3AB;Manchester Road Surgery;9
+100;2468101214;1995-06-07;cypressexisting@example.com;25 High Street; Manchester;;;;M12 3AB;Manchester Road Surgery;100
+101;2244668899;1995-06-07;NULL;25 High Street; Manchester;;;;M12 3AB;Manchester Road Surgery;101

@@ -1,10 +1,13 @@
 package uk.ac.herc.bcra.service;
 
+import uk.ac.herc.bcra.service.dto.ParticipantActivationDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantDTO;
+import uk.ac.herc.bcra.service.dto.ParticipantExistsDTO;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 /**
@@ -43,4 +46,8 @@ public interface ParticipantService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    ParticipantExistsDTO exists(String nhsNumber, LocalDate dateOfBirth);
+
+    void activate(ParticipantActivationDTO participantActivationDTO);
 }

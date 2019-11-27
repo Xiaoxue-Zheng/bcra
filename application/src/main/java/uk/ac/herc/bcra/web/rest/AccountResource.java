@@ -34,6 +34,8 @@ import java.util.*;
 public class AccountResource {
 
     private static class AccountResourceException extends RuntimeException {
+        private static final long serialVersionUID = -6276211576695084912L;
+
         private AccountResourceException(String message) {
             super(message);
         }
@@ -226,7 +228,7 @@ public class AccountResource {
         }
     }
 
-    private static boolean checkPasswordLength(String password) {
+    public static boolean checkPasswordLength(String password) {
         return !StringUtils.isEmpty(password) &&
             password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&
             password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;

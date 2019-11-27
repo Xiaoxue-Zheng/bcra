@@ -72,13 +72,10 @@
       <p>If you want to know more then click the button below. You will be taken to the registration page and then to the consent section before the questionnaire itself. The whole process should only take 10-15 minutes.</p>
     <hr>
     <router-link class="pure-button pure-button-primary" to="/Register">Join the study</router-link>
-    <!-- <Question text="How old are you?"/>
-    <pre>{{ questionnaire | formatJson}}</pre> -->
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import TabCard from '../components/TabCard'
 
 export default {
@@ -90,35 +87,6 @@ export default {
     return {
       initialTab: 'questionnaire',
       tabs: ['questionnaire', 'saliva', 'mammogram']
-    }
-  },
-  computed: mapState({
-    questionnaire: state => state.questionnaire
-  }),
-  created () {
-    this.$store.dispatch('questionnaire/getQuestionnaire')
-    this.$store.dispatch('answer/saveAnswers', {
-      'questionnaireId': 1,
-      'answerSections': [{
-        'questionSectionId': 1,
-        'answerGroups': [{
-          'order': 0,
-          'answers': [{
-            'number': 0,
-            'questionId': 1,
-            'units': 'GRAMS',
-            'answerItems': [{
-              'questionItemId': 1,
-              'selected': true
-            }]
-          }]
-        }]
-      }]
-    })
-  },
-  filters: {
-    formatJson: function (value) {
-      return JSON.stringify(value, null, 2)
     }
   }
 }

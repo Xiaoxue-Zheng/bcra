@@ -1,16 +1,14 @@
 import axios from 'axios'
-import { API_URL } from '@/common/config'
+import { API_URL } from './config'
 
-const RESPONSE_STATUS_UNAUTHORIZED = 401
-
-const ApiService = {
+export default {
   init () {
     axios.defaults.baseURL = API_URL
     axios.defaults.withCredentials = true
   },
 
   query (resource, params) {
-    return axios.get(resource, params).catch(error => {
+    return axios.get(resource, { params: params }).catch(error => {
       throw new Error(`BCRA ApiService ${error}`)
     })
   },
@@ -55,46 +53,5 @@ const ApiService = {
     return axios.delete(resource).catch(error => {
       throw new Error(`[RWV] ApiService ${error}`)
     })
-  }
-}
-
-export default ApiService
-
-export const QuestionnaireService = {
-  get () {
-    return ApiService.get('questionnaires')
-  }
-}
-
-export const AnswerService = {
-  create (answerResponse) {
-    return ApiService.post('answer-responses', answerResponse)
-  }
-}
-
-export const SecurityService = {
-  login (username, password) {
-    var formData = new FormData()
-    formData.set('username', username)
-    formData.set('password', password)
-    return new Promise((resolve) => {
-      ApiService.postFormData('authentication', formData).then(() => {
-        resolve('SUCCESS')
-      }).catch((error) => {
-        if (!error.response) {
-          resolve('ERROR')
-        } else if (error.response.status === RESPONSE_STATUS_UNAUTHORIZED) {
-          resolve('UNAUTHORIZED')
-        } else {
-          resolve('ERROR')
-        }
-      })
-    })
-  },
-  logout () {
-    return ApiService.post('logout')
-  },
-  getUser () {
-    return ApiService.get('account')
   }
 }

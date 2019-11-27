@@ -1,6 +1,6 @@
 import {
   AnswerService
-} from '@/common/api.service'
+} from '@/api/answer.service'
 
 const state = {
   answers: {}

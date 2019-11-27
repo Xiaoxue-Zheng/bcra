@@ -1,7 +1,9 @@
 package uk.ac.herc.bcra.service;
 
+import uk.ac.herc.bcra.domain.IdentifiableData;
 import uk.ac.herc.bcra.service.dto.IdentifiableDataDTO;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,4 +42,8 @@ public interface IdentifiableDataService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    Optional<IdentifiableData> findOne(String emailAddress);
+
+    Optional<IdentifiableData> findOne(String nhsNumber, LocalDate dateOfBirth);
 }

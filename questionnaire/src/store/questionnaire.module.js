@@ -1,6 +1,6 @@
 import {
   QuestionnaireService
-} from '@/common/api.service'
+} from '@/api/questionnaire.service'
 
 // initial state
 const state = {

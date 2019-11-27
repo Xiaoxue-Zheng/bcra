@@ -1,6 +1,8 @@
 package uk.ac.herc.bcra.security;
 
+import uk.ac.herc.bcra.domain.IdentifiableData;
 import uk.ac.herc.bcra.domain.User;
+import uk.ac.herc.bcra.repository.IdentifiableDataRepository;
 import uk.ac.herc.bcra.repository.UserRepository;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
@@ -26,8 +28,14 @@ public class DomainUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public DomainUserDetailsService(UserRepository userRepository) {
+    private final IdentifiableDataRepository identifiableDataRepository;
+
+    public DomainUserDetailsService(
+        UserRepository userRepository,
+        IdentifiableDataRepository identifiableDataRepository
+    ) {
         this.userRepository = userRepository;
+        this.identifiableDataRepository = identifiableDataRepository;
     }
 
     @Override
@@ -36,7 +44,23 @@ public class DomainUserDetailsService implements UserDetailsService {
         log.debug("Authenticating {}", login);
 
         if (new EmailValidator().isValid(login, null)) {
-            return userRepository.findOneWithAuthoritiesByEmailIgnoreCase(login)
+            Optional<User> userOptional = userRepository.findOneWithAuthoritiesByEmailIgnoreCase(login);
+
+            if (!userOptional.isPresent()) {
+                Optional<IdentifiableData> identifiableDataOptional = identifiableDataRepository.findOneByEmail(login);
+
+                if (identifiableDataOptional.isPresent()) {
+                    userOptional = Optional.of(
+                        identifiableDataOptional
+                        .get()
+                        .getParticipant()
+                        .getUser()
+                    );
+                    userOptional.get().getAuthorities();
+                }
+            }
+
+            return userOptional
                 .map(user -> createSpringSecurityUser(login, user))
                 .orElseThrow(() -> new UsernameNotFoundException("User with email " + login + " was not found in the database"));
         }
@@ -51,6 +75,9 @@ public class DomainUserDetailsService implements UserDetailsService {
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
         if (!user.getActivated()) {
             throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
+        }
+        if ((user.getPassword() == null) || (user.getPassword().isEmpty())) {
+            throw new UserNotActivatedException("User " + lowercaseLogin + " has no password");
         }
         List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
             .map(authority -> new SimpleGrantedAuthority(authority.getName()))

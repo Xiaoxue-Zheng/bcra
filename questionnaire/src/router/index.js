@@ -4,7 +4,7 @@ import Home from '../views/Home.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -27,6 +27,11 @@ export default new Router({
       component: () => import('../views/Register.vue')
     },
     {
+      path: '/account',
+      name: 'account',
+      component: () => import('../views/CreateAccount.vue')
+    },
+    {
       path: '/signin',
       name: 'signin',
       component: () => import('../views/SignIn.vue')
@@ -45,3 +50,5 @@ export default new Router({
     }
   }
 })
+
+export default router

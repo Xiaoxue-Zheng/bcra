@@ -7,10 +7,11 @@ import uk.ac.herc.bcra.service.dto.IdentifiableDataDTO;
 import uk.ac.herc.bcra.service.mapper.IdentifiableDataMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -62,7 +63,6 @@ public class IdentifiableDataServiceImpl implements IdentifiableDataService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
-
     /**
      * Get one identifiableData by id.
      *
@@ -86,5 +86,24 @@ public class IdentifiableDataServiceImpl implements IdentifiableDataService {
     public void delete(Long id) {
         log.debug("Request to delete IdentifiableData : {}", id);
         identifiableDataRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<IdentifiableData> findOne(String emailAddress) {
+        IdentifiableData exampleIdentifiableData = new IdentifiableData();
+        exampleIdentifiableData.setEmail(emailAddress);
+
+        Example<IdentifiableData> example = Example.of(exampleIdentifiableData);
+        return identifiableDataRepository.findOne(example);
+    }
+
+    @Override
+    public Optional<IdentifiableData> findOne(String nhsNumber, LocalDate dateOfBirth) {
+        IdentifiableData exampleIdentifiableData = new IdentifiableData();
+        exampleIdentifiableData.setNhsNumber(nhsNumber);
+        exampleIdentifiableData.setDateOfBirth(dateOfBirth);
+
+        Example<IdentifiableData> example = Example.of(exampleIdentifiableData);
+        return identifiableDataRepository.findOne(example);
     }
 }

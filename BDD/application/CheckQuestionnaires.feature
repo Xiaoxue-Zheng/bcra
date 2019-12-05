@@ -1,6 +1,6 @@
 Feature: Check Questionnaires
 
-	A manager us a User with the role ROLE_MANAGER.
+	A manager is a User with the role ROLE_MANAGER.
 	They can view a questionnaire to check its validity.
 
 Scenario: the Manager views the Questionnaires

@@ -16,4 +16,5 @@ public interface IdentifiableDataRepository extends JpaRepository<IdentifiableDa
 
     public Optional<IdentifiableData> findOneByEmail(String email);
 
+    public Optional<IdentifiableData> findOneByNhsNumber(String nhsNumber);
 }

@@ -1,9 +1,12 @@
 package uk.ac.herc.bcra.service;
 
 import uk.ac.herc.bcra.service.dto.CsvFileDTO;
+import uk.ac.herc.bcra.service.dto.CsvFileUploadDTO;
 
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Service Interface for managing {@link uk.ac.herc.bcra.domain.CsvFile}.
@@ -40,4 +43,6 @@ public interface CsvFileService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    CsvFileUploadDTO storeCsvFile(MultipartFile file);
 }

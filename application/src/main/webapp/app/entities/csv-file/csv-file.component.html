@@ -18,16 +18,26 @@
             <thead>
             <tr>
             <th><span>ID</span></th>
+            <th><span>State</span></th>
+            <th><span>Status</span></th>
             <th><span>File Name</span></th>
             <th><span>Upload Datetime</span></th>
+            <th><span>Content</span></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let csvFile of csvFiles ;trackBy: trackId">
                 <td><a [routerLink]="['/csv-file', csvFile.id, 'view' ]">{{csvFile.id}}</a></td>
+                <td>{{csvFile.state}}</td>
+                <td>{{csvFile.status}}</td>
                 <td>{{csvFile.fileName}}</td>
                 <td>{{csvFile.uploadDatetime | date:'medium'}}</td>
+                <td>
+                    <div *ngIf="csvFile.contentId">
+                        <a [routerLink]="['/csv-content', csvFile.contentId , 'view' ]" >{{csvFile.contentId}}</a>
+                    </div>
+                </td>
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"

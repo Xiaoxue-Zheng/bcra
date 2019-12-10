@@ -46,6 +46,12 @@ public class IdentifiableDataResourceIT {
     private static final LocalDate UPDATED_DATE_OF_BIRTH = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_DATE_OF_BIRTH = LocalDate.ofEpochDay(-1L);
 
+    private static final String DEFAULT_FIRSTNAME = "AAAAAAAAAA";
+    private static final String UPDATED_FIRSTNAME = "BBBBBBBBBB";
+
+    private static final String DEFAULT_SURNAME = "AAAAAAAAAA";
+    private static final String UPDATED_SURNAME = "BBBBBBBBBB";
+
     private static final String DEFAULT_EMAIL = "AAAAAAAAAA";
     private static final String UPDATED_EMAIL = "BBBBBBBBBB";
 
@@ -120,6 +126,8 @@ public class IdentifiableDataResourceIT {
         IdentifiableData identifiableData = new IdentifiableData()
             .nhsNumber(DEFAULT_NHS_NUMBER)
             .dateOfBirth(DEFAULT_DATE_OF_BIRTH)
+            .firstname(DEFAULT_FIRSTNAME)
+            .surname(DEFAULT_SURNAME)
             .email(DEFAULT_EMAIL)
             .address1(DEFAULT_ADDRESS_1)
             .address2(DEFAULT_ADDRESS_2)
@@ -150,6 +158,8 @@ public class IdentifiableDataResourceIT {
         IdentifiableData identifiableData = new IdentifiableData()
             .nhsNumber(UPDATED_NHS_NUMBER)
             .dateOfBirth(UPDATED_DATE_OF_BIRTH)
+            .firstname(UPDATED_FIRSTNAME)
+            .surname(UPDATED_SURNAME)
             .email(UPDATED_EMAIL)
             .address1(UPDATED_ADDRESS_1)
             .address2(UPDATED_ADDRESS_2)
@@ -194,6 +204,8 @@ public class IdentifiableDataResourceIT {
         IdentifiableData testIdentifiableData = identifiableDataList.get(identifiableDataList.size() - 1);
         assertThat(testIdentifiableData.getNhsNumber()).isEqualTo(DEFAULT_NHS_NUMBER);
         assertThat(testIdentifiableData.getDateOfBirth()).isEqualTo(DEFAULT_DATE_OF_BIRTH);
+        assertThat(testIdentifiableData.getFirstname()).isEqualTo(DEFAULT_FIRSTNAME);
+        assertThat(testIdentifiableData.getSurname()).isEqualTo(DEFAULT_SURNAME);
         assertThat(testIdentifiableData.getEmail()).isEqualTo(DEFAULT_EMAIL);
         assertThat(testIdentifiableData.getAddress1()).isEqualTo(DEFAULT_ADDRESS_1);
         assertThat(testIdentifiableData.getAddress2()).isEqualTo(DEFAULT_ADDRESS_2);
@@ -250,6 +262,44 @@ public class IdentifiableDataResourceIT {
         int databaseSizeBeforeTest = identifiableDataRepository.findAll().size();
         // set the field null
         identifiableData.setDateOfBirth(null);
+
+        // Create the IdentifiableData, which fails.
+        IdentifiableDataDTO identifiableDataDTO = identifiableDataMapper.toDto(identifiableData);
+
+        restIdentifiableDataMockMvc.perform(post("/api/identifiable-data")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(identifiableDataDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<IdentifiableData> identifiableDataList = identifiableDataRepository.findAll();
+        assertThat(identifiableDataList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkFirstnameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = identifiableDataRepository.findAll().size();
+        // set the field null
+        identifiableData.setFirstname(null);
+
+        // Create the IdentifiableData, which fails.
+        IdentifiableDataDTO identifiableDataDTO = identifiableDataMapper.toDto(identifiableData);
+
+        restIdentifiableDataMockMvc.perform(post("/api/identifiable-data")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(identifiableDataDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<IdentifiableData> identifiableDataList = identifiableDataRepository.findAll();
+        assertThat(identifiableDataList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkSurnameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = identifiableDataRepository.findAll().size();
+        // set the field null
+        identifiableData.setSurname(null);
 
         // Create the IdentifiableData, which fails.
         IdentifiableDataDTO identifiableDataDTO = identifiableDataMapper.toDto(identifiableData);
@@ -333,6 +383,8 @@ public class IdentifiableDataResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(identifiableData.getId().intValue())))
             .andExpect(jsonPath("$.[*].nhsNumber").value(hasItem(DEFAULT_NHS_NUMBER.toString())))
             .andExpect(jsonPath("$.[*].dateOfBirth").value(hasItem(DEFAULT_DATE_OF_BIRTH.toString())))
+            .andExpect(jsonPath("$.[*].firstname").value(hasItem(DEFAULT_FIRSTNAME.toString())))
+            .andExpect(jsonPath("$.[*].surname").value(hasItem(DEFAULT_SURNAME.toString())))
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL.toString())))
             .andExpect(jsonPath("$.[*].address1").value(hasItem(DEFAULT_ADDRESS_1.toString())))
             .andExpect(jsonPath("$.[*].address2").value(hasItem(DEFAULT_ADDRESS_2.toString())))
@@ -356,6 +408,8 @@ public class IdentifiableDataResourceIT {
             .andExpect(jsonPath("$.id").value(identifiableData.getId().intValue()))
             .andExpect(jsonPath("$.nhsNumber").value(DEFAULT_NHS_NUMBER.toString()))
             .andExpect(jsonPath("$.dateOfBirth").value(DEFAULT_DATE_OF_BIRTH.toString()))
+            .andExpect(jsonPath("$.firstname").value(DEFAULT_FIRSTNAME.toString()))
+            .andExpect(jsonPath("$.surname").value(DEFAULT_SURNAME.toString()))
             .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL.toString()))
             .andExpect(jsonPath("$.address1").value(DEFAULT_ADDRESS_1.toString()))
             .andExpect(jsonPath("$.address2").value(DEFAULT_ADDRESS_2.toString()))
@@ -389,6 +443,8 @@ public class IdentifiableDataResourceIT {
         updatedIdentifiableData
             .nhsNumber(UPDATED_NHS_NUMBER)
             .dateOfBirth(UPDATED_DATE_OF_BIRTH)
+            .firstname(UPDATED_FIRSTNAME)
+            .surname(UPDATED_SURNAME)
             .email(UPDATED_EMAIL)
             .address1(UPDATED_ADDRESS_1)
             .address2(UPDATED_ADDRESS_2)
@@ -410,6 +466,8 @@ public class IdentifiableDataResourceIT {
         IdentifiableData testIdentifiableData = identifiableDataList.get(identifiableDataList.size() - 1);
         assertThat(testIdentifiableData.getNhsNumber()).isEqualTo(UPDATED_NHS_NUMBER);
         assertThat(testIdentifiableData.getDateOfBirth()).isEqualTo(UPDATED_DATE_OF_BIRTH);
+        assertThat(testIdentifiableData.getFirstname()).isEqualTo(UPDATED_FIRSTNAME);
+        assertThat(testIdentifiableData.getSurname()).isEqualTo(UPDATED_SURNAME);
         assertThat(testIdentifiableData.getEmail()).isEqualTo(UPDATED_EMAIL);
         assertThat(testIdentifiableData.getAddress1()).isEqualTo(UPDATED_ADDRESS_1);
         assertThat(testIdentifiableData.getAddress2()).isEqualTo(UPDATED_ADDRESS_2);

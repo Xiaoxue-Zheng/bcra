@@ -40,9 +40,13 @@ describe('CsvFile e2e test', () => {
 
     await csvFileComponentsPage.clickOnCreateButton();
     await promise.all([
+      csvFileUpdatePage.stateSelectLastOption(),
+      csvFileUpdatePage.setStatusInput('status'),
       csvFileUpdatePage.setFileNameInput('fileName'),
-      csvFileUpdatePage.setUploadDatetimeInput('01/01/2001' + protractor.Key.TAB + '02:30AM')
+      csvFileUpdatePage.setUploadDatetimeInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
+      csvFileUpdatePage.contentSelectLastOption()
     ]);
+    expect(await csvFileUpdatePage.getStatusInput()).to.eq('status', 'Expected Status value to be equals to status');
     expect(await csvFileUpdatePage.getFileNameInput()).to.eq('fileName', 'Expected FileName value to be equals to fileName');
     expect(await csvFileUpdatePage.getUploadDatetimeInput()).to.contain(
       '2001-01-01T02:30',

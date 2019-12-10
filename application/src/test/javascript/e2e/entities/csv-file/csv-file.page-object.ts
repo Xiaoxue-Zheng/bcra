@@ -26,11 +26,37 @@ export class CsvFileUpdatePage {
   pageTitle = element(by.id('jhi-csv-file-heading'));
   saveButton = element(by.id('save-entity'));
   cancelButton = element(by.id('cancel-save'));
+  stateSelect = element(by.id('field_state'));
+  statusInput = element(by.id('field_status'));
   fileNameInput = element(by.id('field_fileName'));
   uploadDatetimeInput = element(by.id('field_uploadDatetime'));
+  contentSelect = element(by.id('field_content'));
 
   async getPageTitle() {
     return this.pageTitle.getText();
+  }
+
+  async setStateSelect(state) {
+    await this.stateSelect.sendKeys(state);
+  }
+
+  async getStateSelect() {
+    return await this.stateSelect.element(by.css('option:checked')).getText();
+  }
+
+  async stateSelectLastOption(timeout?: number) {
+    await this.stateSelect
+      .all(by.tagName('option'))
+      .last()
+      .click();
+  }
+
+  async setStatusInput(status) {
+    await this.statusInput.sendKeys(status);
+  }
+
+  async getStatusInput() {
+    return await this.statusInput.getAttribute('value');
   }
 
   async setFileNameInput(fileName) {
@@ -47,6 +73,25 @@ export class CsvFileUpdatePage {
 
   async getUploadDatetimeInput() {
     return await this.uploadDatetimeInput.getAttribute('value');
+  }
+
+  async contentSelectLastOption(timeout?: number) {
+    await this.contentSelect
+      .all(by.tagName('option'))
+      .last()
+      .click();
+  }
+
+  async contentSelectOption(option) {
+    await this.contentSelect.sendKeys(option);
+  }
+
+  getContentSelect(): ElementFinder {
+    return this.contentSelect;
+  }
+
+  async getContentSelectedOption() {
+    return await this.contentSelect.element(by.css('option:checked')).getText();
   }
 
   async save(timeout?: number) {

@@ -2,6 +2,18 @@
     "name": "CsvFile",
     "fields": [
         {
+            "fieldName": "state",
+            "fieldType": "CsvFileState",
+            "fieldValues": "UPLOADED,INVALID,CREATION_ERROR,COMPLETED",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "fileName",
             "fieldType": "String",
             "fieldValidateRules": [
@@ -19,7 +31,16 @@
             ]
         }
     ],
-    "relationships": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "csvContent",
+            "otherEntityRelationshipName": "csvFile",
+            "relationshipName": "content",
+            "otherEntityField": "id",
+            "ownerSide": true
+        }
+    ],
     "changelogDate": "20191119110519",
     "entityTableName": "csv_file",
     "dto": "mapstruct",

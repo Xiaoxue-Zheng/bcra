@@ -29,6 +29,8 @@ export class IdentifiableDataUpdateComponent implements OnInit {
     id: [],
     nhsNumber: [null, [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
     dateOfBirth: [null, [Validators.required]],
+    firstname: [null, [Validators.required]],
+    surname: [null, [Validators.required]],
     email: [null, [Validators.maxLength(254)]],
     address1: [null, [Validators.required]],
     address2: [],
@@ -81,30 +83,12 @@ export class IdentifiableDataUpdateComponent implements OnInit {
         (res: HttpErrorResponse) => this.onError(res.message)
       );
     this.csvFileService
-      .query({ filter: 'identifiabledata-is-null' })
+      .query()
       .pipe(
         filter((mayBeOk: HttpResponse<ICsvFile[]>) => mayBeOk.ok),
         map((response: HttpResponse<ICsvFile[]>) => response.body)
       )
-      .subscribe(
-        (res: ICsvFile[]) => {
-          if (!this.editForm.get('csvFileId').value) {
-            this.csvfiles = res;
-          } else {
-            this.csvFileService
-              .find(this.editForm.get('csvFileId').value)
-              .pipe(
-                filter((subResMayBeOk: HttpResponse<ICsvFile>) => subResMayBeOk.ok),
-                map((subResponse: HttpResponse<ICsvFile>) => subResponse.body)
-              )
-              .subscribe(
-                (subRes: ICsvFile) => (this.csvfiles = [subRes].concat(res)),
-                (subRes: HttpErrorResponse) => this.onError(subRes.message)
-              );
-          }
-        },
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
+      .subscribe((res: ICsvFile[]) => (this.csvfiles = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
   updateForm(identifiableData: IIdentifiableData) {
@@ -112,6 +96,8 @@ export class IdentifiableDataUpdateComponent implements OnInit {
       id: identifiableData.id,
       nhsNumber: identifiableData.nhsNumber,
       dateOfBirth: identifiableData.dateOfBirth,
+      firstname: identifiableData.firstname,
+      surname: identifiableData.surname,
       email: identifiableData.email,
       address1: identifiableData.address1,
       address2: identifiableData.address2,
@@ -145,6 +131,8 @@ export class IdentifiableDataUpdateComponent implements OnInit {
       id: this.editForm.get(['id']).value,
       nhsNumber: this.editForm.get(['nhsNumber']).value,
       dateOfBirth: this.editForm.get(['dateOfBirth']).value,
+      firstname: this.editForm.get(['firstname']).value,
+      surname: this.editForm.get(['surname']).value,
       email: this.editForm.get(['email']).value,
       address1: this.editForm.get(['address1']).value,
       address2: this.editForm.get(['address2']).value,

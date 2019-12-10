@@ -10,6 +10,26 @@
                         readonly />
                 </div>
                 <div class="form-group">
+                    <label class="form-control-label" for="field_state">State</label>
+                    <select class="form-control" name="state" formControlName="state" id="field_state">
+                        <option value="UPLOADED">UPLOADED</option>
+                        <option value="INVALID">INVALID</option>
+                        <option value="CREATION_ERROR">CREATION_ERROR</option>
+                        <option value="COMPLETED">COMPLETED</option>
+                    </select>
+                    <div *ngIf="editForm.get('state').invalid && (editForm.get('state').dirty || editForm.get('state').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('state').errors.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_status">Status</label>
+                    <input type="text" class="form-control" name="status" id="field_status"
+                           formControlName="status"/>
+                </div>
+                <div class="form-group">
                     <label class="form-control-label" for="field_fileName">File Name</label>
                     <input type="text" class="form-control" name="fileName" id="field_fileName"
                            formControlName="fileName"/>
@@ -41,6 +61,13 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label class="form-control-label" for="field_content">Content</label>
+                    <select class="form-control" id="field_content" name="content" formControlName="contentId">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="csvContentOption.id" *ngFor="let csvContentOption of contents; trackBy: trackCsvContentById">{{csvContentOption.id}}</option>
+                    </select>
+                </div>
             </div>
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">

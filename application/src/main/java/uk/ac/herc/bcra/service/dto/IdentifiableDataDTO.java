@@ -18,6 +18,12 @@ public class IdentifiableDataDTO implements Serializable {
     @NotNull
     private LocalDate dateOfBirth;
 
+    @NotNull
+    private String firstname;
+
+    @NotNull
+    private String surname;
+
     @Size(max = 254)
     private String email;
 
@@ -68,6 +74,22 @@ public class IdentifiableDataDTO implements Serializable {
 
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public String getEmail() {
@@ -185,6 +207,8 @@ public class IdentifiableDataDTO implements Serializable {
             "id=" + getId() +
             ", nhsNumber='" + getNhsNumber() + "'" +
             ", dateOfBirth='" + getDateOfBirth() + "'" +
+            ", firstname='" + getFirstname() + "'" +
+            ", surname='" + getSurname() + "'" +
             ", email='" + getEmail() + "'" +
             ", address1='" + getAddress1() + "'" +
             ", address2='" + getAddress2() + "'" +

@@ -32,19 +32,25 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import uk.ac.herc.bcra.domain.enumeration.CsvFileState;
 /**
  * Integration tests for the {@link CsvFileResource} REST controller.
  */
 @SpringBootTest(classes = BcraApp.class)
 public class CsvFileResourceIT {
 
+    private static final CsvFileState DEFAULT_STATE = CsvFileState.UPLOADED;
+    private static final CsvFileState UPDATED_STATE = CsvFileState.INVALID;
+
+    private static final String DEFAULT_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_STATUS = "BBBBBBBBBB";
+
     private static final String DEFAULT_FILE_NAME = "AAAAAAAAAA";
     private static final String UPDATED_FILE_NAME = "BBBBBBBBBB";
 
     private static final Instant DEFAULT_UPLOAD_DATETIME = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_UPLOAD_DATETIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
-    private static final Instant SMALLER_UPLOAD_DATETIME = Instant.ofEpochMilli(-1L);
-
+    
     @Autowired
     private CsvFileRepository csvFileRepository;
 
@@ -93,6 +99,8 @@ public class CsvFileResourceIT {
      */
     public static CsvFile createEntity(EntityManager em) {
         CsvFile csvFile = new CsvFile()
+            .state(DEFAULT_STATE)
+            .status(DEFAULT_STATUS)
             .fileName(DEFAULT_FILE_NAME)
             .uploadDatetime(DEFAULT_UPLOAD_DATETIME);
         return csvFile;
@@ -105,6 +113,8 @@ public class CsvFileResourceIT {
      */
     public static CsvFile createUpdatedEntity(EntityManager em) {
         CsvFile csvFile = new CsvFile()
+            .state(UPDATED_STATE)
+            .status(UPDATED_STATUS)
             .fileName(UPDATED_FILE_NAME)
             .uploadDatetime(UPDATED_UPLOAD_DATETIME);
         return csvFile;
@@ -131,6 +141,8 @@ public class CsvFileResourceIT {
         List<CsvFile> csvFileList = csvFileRepository.findAll();
         assertThat(csvFileList).hasSize(databaseSizeBeforeCreate + 1);
         CsvFile testCsvFile = csvFileList.get(csvFileList.size() - 1);
+        assertThat(testCsvFile.getState()).isEqualTo(DEFAULT_STATE);
+        assertThat(testCsvFile.getStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testCsvFile.getFileName()).isEqualTo(DEFAULT_FILE_NAME);
         assertThat(testCsvFile.getUploadDatetime()).isEqualTo(DEFAULT_UPLOAD_DATETIME);
     }
@@ -155,6 +167,25 @@ public class CsvFileResourceIT {
         assertThat(csvFileList).hasSize(databaseSizeBeforeCreate);
     }
 
+
+    @Test
+    @Transactional
+    public void checkStateIsRequired() throws Exception {
+        int databaseSizeBeforeTest = csvFileRepository.findAll().size();
+        // set the field null
+        csvFile.setState(null);
+
+        // Create the CsvFile, which fails.
+        CsvFileDTO csvFileDTO = csvFileMapper.toDto(csvFile);
+
+        restCsvFileMockMvc.perform(post("/api/csv-files")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(csvFileDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<CsvFile> csvFileList = csvFileRepository.findAll();
+        assertThat(csvFileList).hasSize(databaseSizeBeforeTest);
+    }
 
     @Test
     @Transactional
@@ -205,6 +236,8 @@ public class CsvFileResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(csvFile.getId().intValue())))
+            .andExpect(jsonPath("$.[*].state").value(hasItem(DEFAULT_STATE.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].fileName").value(hasItem(DEFAULT_FILE_NAME.toString())))
             .andExpect(jsonPath("$.[*].uploadDatetime").value(hasItem(DEFAULT_UPLOAD_DATETIME.toString())));
     }
@@ -220,6 +253,8 @@ public class CsvFileResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(csvFile.getId().intValue()))
+            .andExpect(jsonPath("$.state").value(DEFAULT_STATE.toString()))
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
             .andExpect(jsonPath("$.fileName").value(DEFAULT_FILE_NAME.toString()))
             .andExpect(jsonPath("$.uploadDatetime").value(DEFAULT_UPLOAD_DATETIME.toString()));
     }
@@ -245,6 +280,8 @@ public class CsvFileResourceIT {
         // Disconnect from session so that the updates on updatedCsvFile are not directly saved in db
         em.detach(updatedCsvFile);
         updatedCsvFile
+            .state(UPDATED_STATE)
+            .status(UPDATED_STATUS)
             .fileName(UPDATED_FILE_NAME)
             .uploadDatetime(UPDATED_UPLOAD_DATETIME);
         CsvFileDTO csvFileDTO = csvFileMapper.toDto(updatedCsvFile);
@@ -258,6 +295,8 @@ public class CsvFileResourceIT {
         List<CsvFile> csvFileList = csvFileRepository.findAll();
         assertThat(csvFileList).hasSize(databaseSizeBeforeUpdate);
         CsvFile testCsvFile = csvFileList.get(csvFileList.size() - 1);
+        assertThat(testCsvFile.getState()).isEqualTo(UPDATED_STATE);
+        assertThat(testCsvFile.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testCsvFile.getFileName()).isEqualTo(UPDATED_FILE_NAME);
         assertThat(testCsvFile.getUploadDatetime()).isEqualTo(UPDATED_UPLOAD_DATETIME);
     }

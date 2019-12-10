@@ -1,4 +1,5 @@
 package uk.ac.herc.bcra.domain;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -31,6 +32,14 @@ public class IdentifiableData implements Serializable {
     @NotNull
     @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
+
+    @NotNull
+    @Column(name = "firstname", nullable = false)
+    private String firstname;
+
+    @NotNull
+    @Column(name = "surname", nullable = false)
+    private String surname;
 
     @Size(max = 254)
     @Column(name = "email", length = 254)
@@ -66,8 +75,8 @@ public class IdentifiableData implements Serializable {
     @JoinColumn(unique = true)
     private Participant participant;
 
-    @OneToOne
-    @JoinColumn(unique = true)
+    @ManyToOne
+    @JsonIgnoreProperties("identifiableData")
     private CsvFile csvFile;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -103,6 +112,32 @@ public class IdentifiableData implements Serializable {
 
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public IdentifiableData firstname(String firstname) {
+        this.firstname = firstname;
+        return this;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public IdentifiableData surname(String surname) {
+        this.surname = surname;
+        return this;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public String getEmail() {
@@ -258,6 +293,8 @@ public class IdentifiableData implements Serializable {
             "id=" + getId() +
             ", nhsNumber='" + getNhsNumber() + "'" +
             ", dateOfBirth='" + getDateOfBirth() + "'" +
+            ", firstname='" + getFirstname() + "'" +
+            ", surname='" + getSurname() + "'" +
             ", email='" + getEmail() + "'" +
             ", address1='" + getAddress1() + "'" +
             ", address2='" + getAddress2() + "'" +

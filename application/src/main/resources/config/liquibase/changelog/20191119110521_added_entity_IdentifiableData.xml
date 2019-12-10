@@ -23,6 +23,14 @@
                 <constraints nullable="false" />
             </column>
 
+            <column name="firstname" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="surname" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+
             <column name="email" type="varchar(254)">
                 <constraints nullable="true" />
             </column>
@@ -56,9 +64,11 @@
             </column>
             <column name="participant_id" type="bigint">
                 <constraints unique="true" nullable="false" uniqueConstraintName="ux_identifiable_data_participant_id" />
-            </column>            <column name="csv_file_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_identifiable_data_csv_file_id" />
             </column>
+            <column name="csv_file_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
 
@@ -85,6 +95,8 @@
             <column name="id" type="numeric"/>
             <column name="nhs_number" type="string"/>
             <column name="date_of_birth" type="date"/>
+            <column name="firstname" type="string"/>
+            <column name="surname" type="string"/>
             <column name="email" type="string"/>
             <column name="address_1" type="string"/>
             <column name="address_2" type="string"/>

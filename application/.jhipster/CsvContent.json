@@ -1,0 +1,32 @@
+{
+    "name": "CsvContent",
+    "fields": [
+        {
+            "fieldName": "data",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "csvFile",
+            "otherEntityRelationshipName": "content",
+            "relationshipValidateRules": "required",
+            "relationshipName": "csvFile",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20191210101244",
+    "entityTableName": "csv_content",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

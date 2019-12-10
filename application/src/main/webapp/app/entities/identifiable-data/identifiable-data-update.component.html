@@ -44,6 +44,28 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="form-control-label" for="field_firstname">Firstname</label>
+                    <input type="text" class="form-control" name="firstname" id="field_firstname"
+                           formControlName="firstname"/>
+                    <div *ngIf="editForm.get('firstname').invalid && (editForm.get('firstname').dirty || editForm.get('firstname').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('firstname').errors.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_surname">Surname</label>
+                    <input type="text" class="form-control" name="surname" id="field_surname"
+                           formControlName="surname"/>
+                    <div *ngIf="editForm.get('surname').invalid && (editForm.get('surname').dirty || editForm.get('surname').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('surname').errors.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="form-control-label" for="field_email">Email</label>
                     <input type="text" class="form-control" name="email" id="field_email"
                            formControlName="email"/>

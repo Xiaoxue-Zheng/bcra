@@ -63,6 +63,10 @@ import { RouterModule } from '@angular/router';
       {
         path: 'identifiable-data',
         loadChildren: () => import('./identifiable-data/identifiable-data.module').then(m => m.BcraIdentifiableDataModule)
+      },
+      {
+        path: 'csv-content',
+        loadChildren: () => import('./csv-content/csv-content.module').then(m => m.BcraCsvContentModule)
       }
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ])

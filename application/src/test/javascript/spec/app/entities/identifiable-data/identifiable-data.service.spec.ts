@@ -38,6 +38,8 @@ describe('Service Tests', () => {
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
+        'AAAAAAA',
+        'AAAAAAA',
         'AAAAAAA'
       );
     });
@@ -88,6 +90,8 @@ describe('Service Tests', () => {
           {
             nhsNumber: 'BBBBBB',
             dateOfBirth: currentDate.format(DATE_FORMAT),
+            firstname: 'BBBBBB',
+            surname: 'BBBBBB',
             email: 'BBBBBB',
             address1: 'BBBBBB',
             address2: 'BBBBBB',
@@ -120,6 +124,8 @@ describe('Service Tests', () => {
           {
             nhsNumber: 'BBBBBB',
             dateOfBirth: currentDate.format(DATE_FORMAT),
+            firstname: 'BBBBBB',
+            surname: 'BBBBBB',
             email: 'BBBBBB',
             address1: 'BBBBBB',
             address2: 'BBBBBB',

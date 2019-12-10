@@ -28,6 +28,8 @@ export class IdentifiableDataUpdatePage {
   cancelButton = element(by.id('cancel-save'));
   nhsNumberInput = element(by.id('field_nhsNumber'));
   dateOfBirthInput = element(by.id('field_dateOfBirth'));
+  firstnameInput = element(by.id('field_firstname'));
+  surnameInput = element(by.id('field_surname'));
   emailInput = element(by.id('field_email'));
   address1Input = element(by.id('field_address1'));
   address2Input = element(by.id('field_address2'));
@@ -57,6 +59,22 @@ export class IdentifiableDataUpdatePage {
 
   async getDateOfBirthInput() {
     return await this.dateOfBirthInput.getAttribute('value');
+  }
+
+  async setFirstnameInput(firstname) {
+    await this.firstnameInput.sendKeys(firstname);
+  }
+
+  async getFirstnameInput() {
+    return await this.firstnameInput.getAttribute('value');
+  }
+
+  async setSurnameInput(surname) {
+    await this.surnameInput.sendKeys(surname);
+  }
+
+  async getSurnameInput() {
+    return await this.surnameInput.getAttribute('value');
   }
 
   async setEmailInput(email) {

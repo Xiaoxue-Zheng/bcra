@@ -21,6 +21,20 @@
             ]
         },
         {
+            "fieldName": "firstname",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "surname",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "email",
             "fieldType": "String",
             "fieldValidateRules": [
@@ -81,12 +95,11 @@
             "ownerSide": true
         },
         {
-            "relationshipType": "one-to-one",
+            "relationshipType": "many-to-one",
             "otherEntityName": "csvFile",
             "otherEntityRelationshipName": "identifiableData",
             "relationshipName": "csvFile",
-            "otherEntityField": "fileName",
-            "ownerSide": true
+            "otherEntityField": "fileName"
         }
     ],
     "changelogDate": "20191119110521",

@@ -306,11 +306,32 @@ enum ReferralConditionType {
     VALUE_UNDER
 }
 
+
+/* CSV Files */
 entity CsvFile {
+    state CsvFileState required
+    status String
     fileName String minlength(5) required unique
     uploadDatetime Instant required
 }
 
+enum CsvFileState {
+    UPLOADED,
+    INVALID,
+    CREATION_ERROR,
+    COMPLETED
+}
+
+entity CsvContent {
+  data Blob required
+}
+
+relationship OneToOne {
+  CsvFile{content} to CsvContent{csvFile required}
+}
+
+
+/* Participants */
 entity Participant {
     registerDatetime Instant
 }
@@ -330,6 +351,8 @@ relationship OneToOne {
 entity IdentifiableData{
     nhsNumber String required unique minlength(10) maxlength(10)
     dateOfBirth LocalDate required
+    firstname String required
+    surname String required
     email String maxlength(254)
     address1 String required
     address2 String
@@ -342,6 +365,9 @@ entity IdentifiableData{
 
 relationship OneToOne {
     IdentifiableData{participant required} to Participant
+}
+
+relationship ManyToOne {
     IdentifiableData{CsvFile(fileName)} to CsvFile
 }
 

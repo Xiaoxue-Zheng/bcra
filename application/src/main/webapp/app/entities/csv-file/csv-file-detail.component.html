@@ -5,6 +5,14 @@
             <hr>
             <jhi-alert-error></jhi-alert-error>
             <dl class="row-md jh-entity-details">
+                <dt><span>State</span></dt>
+                <dd>
+                    <span>{{csvFile.state}}</span>
+                </dd>
+                <dt><span>Status</span></dt>
+                <dd>
+                    <span>{{csvFile.status}}</span>
+                </dd>
                 <dt><span>File Name</span></dt>
                 <dd>
                     <span>{{csvFile.fileName}}</span>
@@ -12,6 +20,12 @@
                 <dt><span>Upload Datetime</span></dt>
                 <dd>
                     <span>{{csvFile.uploadDatetime}}</span>
+                </dd>
+                <dt><span>Content</span></dt>
+                <dd>
+                    <div *ngIf="csvFile.contentId">
+                        <a [routerLink]="['/csv-content', csvFile.contentId, 'view']">{{csvFile.contentId}}</a>
+                    </div>
                 </dd>
             </dl>
 

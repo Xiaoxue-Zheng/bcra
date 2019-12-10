@@ -8,6 +8,8 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
 
+import uk.ac.herc.bcra.domain.enumeration.CsvFileState;
+
 /**
  * A CsvFile.
  */
@@ -24,6 +26,14 @@ public class CsvFile implements Serializable {
     private Long id;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "state", nullable = false)
+    private CsvFileState state;
+
+    @Column(name = "status")
+    private String status;
+
+    @NotNull
     @Size(min = 5)
     @Column(name = "file_name", nullable = false, unique = true)
     private String fileName;
@@ -32,6 +42,10 @@ public class CsvFile implements Serializable {
     @Column(name = "upload_datetime", nullable = false)
     private Instant uploadDatetime;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(unique = true)
+    private CsvContent content;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -39,6 +53,32 @@ public class CsvFile implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public CsvFileState getState() {
+        return state;
+    }
+
+    public CsvFile state(CsvFileState state) {
+        this.state = state;
+        return this;
+    }
+
+    public void setState(CsvFileState state) {
+        this.state = state;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public CsvFile status(String status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getFileName() {
@@ -66,6 +106,19 @@ public class CsvFile implements Serializable {
     public void setUploadDatetime(Instant uploadDatetime) {
         this.uploadDatetime = uploadDatetime;
     }
+
+    public byte[] readContent() {
+        return content.getData();
+    }
+
+    public void writeContent(byte[] data) {
+        if (this.content == null) {
+            this.content = new CsvContent();
+        }
+        this.content.setData(data);
+        this.content.setDataContentType("csv");
+        this.content.setCsvFile(this);
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -88,6 +141,8 @@ public class CsvFile implements Serializable {
     public String toString() {
         return "CsvFile{" +
             "id=" + getId() +
+            ", state='" + getState() + "'" +
+            ", status='" + getStatus() + "'" +
             ", fileName='" + getFileName() + "'" +
             ", uploadDatetime='" + getUploadDatetime() + "'" +
             "}";

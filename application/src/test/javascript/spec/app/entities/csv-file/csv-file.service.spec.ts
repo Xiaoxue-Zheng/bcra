@@ -7,7 +7,7 @@ import { take, map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { CsvFileService } from 'app/entities/csv-file/csv-file.service';
-import { ICsvFile, CsvFile } from 'app/shared/model/csv-file.model';
+import { ICsvFile, CsvFile, CsvFileState } from 'app/shared/model/csv-file.model';
 
 describe('Service Tests', () => {
   describe('CsvFile Service', () => {
@@ -27,7 +27,7 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new CsvFile(0, 'AAAAAAA', currentDate);
+      elemDefault = new CsvFile(0, CsvFileState.UPLOADED, 'AAAAAAA', 'AAAAAAA', currentDate);
     });
 
     describe('Service methods', () => {
@@ -74,6 +74,8 @@ describe('Service Tests', () => {
       it('should update a CsvFile', async () => {
         const returnedFromService = Object.assign(
           {
+            state: 'BBBBBB',
+            status: 'BBBBBB',
             fileName: 'BBBBBB',
             uploadDatetime: currentDate.format(DATE_TIME_FORMAT)
           },
@@ -98,6 +100,8 @@ describe('Service Tests', () => {
       it('should return a list of CsvFile', async () => {
         const returnedFromService = Object.assign(
           {
+            state: 'BBBBBB',
+            status: 'BBBBBB',
             fileName: 'BBBBBB',
             uploadDatetime: currentDate.format(DATE_TIME_FORMAT)
           },

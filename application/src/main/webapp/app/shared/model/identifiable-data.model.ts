@@ -4,6 +4,8 @@ export interface IIdentifiableData {
   id?: number;
   nhsNumber?: string;
   dateOfBirth?: Moment;
+  firstname?: string;
+  surname?: string;
   email?: string;
   address1?: string;
   address2?: string;
@@ -22,6 +24,8 @@ export class IdentifiableData implements IIdentifiableData {
     public id?: number,
     public nhsNumber?: string,
     public dateOfBirth?: Moment,
+    public firstname?: string,
+    public surname?: string,
     public email?: string,
     public address1?: string,
     public address2?: string,

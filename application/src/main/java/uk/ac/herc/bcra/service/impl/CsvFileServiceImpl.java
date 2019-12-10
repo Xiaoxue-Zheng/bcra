@@ -2,15 +2,19 @@ package uk.ac.herc.bcra.service.impl;
 
 import uk.ac.herc.bcra.service.CsvFileService;
 import uk.ac.herc.bcra.domain.CsvFile;
+import uk.ac.herc.bcra.domain.enumeration.CsvFileState;
 import uk.ac.herc.bcra.repository.CsvFileRepository;
 import uk.ac.herc.bcra.service.dto.CsvFileDTO;
+import uk.ac.herc.bcra.service.dto.CsvFileUploadDTO;
 import uk.ac.herc.bcra.service.mapper.CsvFileMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -86,5 +90,47 @@ public class CsvFileServiceImpl implements CsvFileService {
     public void delete(Long id) {
         log.debug("Request to delete CsvFile : {}", id);
         csvFileRepository.deleteById(id);
+    }
+
+    public CsvFileUploadDTO storeCsvFile(MultipartFile file) {
+        
+        byte[] csvData;
+        try {
+            csvData = file.getBytes();
+        }
+        catch (Exception exception) {
+            return CsvFileUploadDTO.UPLOAD_ERROR;
+        }
+
+        String fileName = file.getOriginalFilename();
+        Optional<CsvFile> csvFileOptional = csvFileRepository.findOneByFileName(fileName);
+
+        if (csvFileOptional.isPresent()) {
+            CsvFile csvFile = csvFileOptional.get();
+
+            if (csvFile.getState() == CsvFileState.INVALID) {
+                csvFile.writeContent(csvData);
+                csvFile.setUploadDatetime(Instant.now());
+                csvFile.setState(CsvFileState.UPLOADED);
+                csvFile.setStatus(null);
+                csvFileRepository.save(csvFile);
+
+                return CsvFileUploadDTO.UPDATED;
+            }
+            else {
+                return CsvFileUploadDTO.ALREADY_EXISTS;
+            }
+        }
+        else {
+            CsvFile csvFile = new CsvFile();
+            csvFile.setFileName(fileName);
+            csvFile.writeContent(csvData);
+            csvFile.setUploadDatetime(Instant.now());     
+            csvFile.setState(CsvFileState.UPLOADED);
+            csvFile.setStatus(null);
+            csvFileRepository.save(csvFile);
+
+            return CsvFileUploadDTO.CREATED;
+        }
     }
 }

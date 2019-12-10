@@ -42,6 +42,8 @@ describe('IdentifiableData e2e test', () => {
         await promise.all([
             identifiableDataUpdatePage.setNhsNumberInput('nhsNumber'),
             identifiableDataUpdatePage.setDateOfBirthInput('2000-12-31'),
+            identifiableDataUpdatePage.setFirstnameInput('firstname'),
+            identifiableDataUpdatePage.setSurnameInput('surname'),
             identifiableDataUpdatePage.setEmailInput('email'),
             identifiableDataUpdatePage.setAddress1Input('address1'),
             identifiableDataUpdatePage.setAddress2Input('address2'),
@@ -55,6 +57,8 @@ describe('IdentifiableData e2e test', () => {
         ]);
         expect(await identifiableDataUpdatePage.getNhsNumberInput()).to.eq('nhsNumber', 'Expected NhsNumber value to be equals to nhsNumber');
         expect(await identifiableDataUpdatePage.getDateOfBirthInput()).to.eq('2000-12-31', 'Expected dateOfBirth value to be equals to 2000-12-31');
+        expect(await identifiableDataUpdatePage.getFirstnameInput()).to.eq('firstname', 'Expected Firstname value to be equals to firstname');
+        expect(await identifiableDataUpdatePage.getSurnameInput()).to.eq('surname', 'Expected Surname value to be equals to surname');
         expect(await identifiableDataUpdatePage.getEmailInput()).to.eq('email', 'Expected Email value to be equals to email');
         expect(await identifiableDataUpdatePage.getAddress1Input()).to.eq('address1', 'Expected Address1 value to be equals to address1');
         expect(await identifiableDataUpdatePage.getAddress2Input()).to.eq('address2', 'Expected Address2 value to be equals to address2');

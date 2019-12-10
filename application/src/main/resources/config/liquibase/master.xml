@@ -29,6 +29,7 @@
     <include file="config/liquibase/changelog/20191119110519_added_entity_CsvFile.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191119110520_added_entity_Participant.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191119110521_added_entity_IdentifiableData.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191210101244_added_entity_CsvContent.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20191008133423_added_entity_constraints_QuestionSection.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191008133425_added_entity_constraints_Question.xml" relativeToChangelogFile="false"/>
@@ -42,5 +43,6 @@
     <include file="config/liquibase/changelog/20191105113559_added_entity_constraints_ReferralCondition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191119110520_added_entity_constraints_Participant.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191119110521_added_entity_constraints_IdentifiableData.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191119110519_added_entity_constraints_CsvFile.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

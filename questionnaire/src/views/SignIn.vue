@@ -1,19 +1,29 @@
 <template>
   <div class="signin content">
     <h1>Sign in</h1>
+    <hr>
+    <p>In order to sign in, you need to have <router-link to="/Register">registered here</router-link> first.</p>
+    <hr>
     <div class="pure-g">
-      <div class="pure-u-1 pure-u-lg-2-3 pure-u-xl-1-2">
-        <form @submit.prevent="login">
-          <label>Email address: </label>
-          <input required v-model="username" type="text"/>
-          <br/><br/>
-          <label>Password: </label>
-          <input required v-model="password" type="password"/>
-          <br/>
-          <strong v-if="displayFailureMessage">Bad username or password.</strong>
-          <strong v-if="displayErrorMessage">Something went wrong.</strong>
-          <hr/>
-          <button type="submit">Login</button>
+      <div class="pure-u-1">
+        <form @submit.prevent="login" class="pure-form pure-form-stacked">
+          <fieldset>
+            <div class="form-section">
+              <label>Your email address</label>
+              <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-2-5">
+                <input required v-model="username" type="email" class="pure-input-1"/>
+              </div>
+            </div>
+            <div class="form-section">
+              <label>Your password</label>
+              <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-2-5">
+                <input required v-model="password" type="password" class="pure-input-1"/>
+              </div>
+            </div>
+            <p class="error-message" v-if="displayFailureMessage">Your username or password were not recognised. Please try again.</p>
+            <p class="error-message" v-if="displayErrorMessage">Something went wrong. Please try again.</p>
+            <button class="pure-button pure-button-primary" type="submit">Sign in</button>
+          </fieldset>
         </form>
       </div>
     </div>

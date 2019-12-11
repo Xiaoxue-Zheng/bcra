@@ -1,29 +1,46 @@
 <template>
   <div class="register content">
     <h1>Register</h1>
+    <hr>
+    <p>If you have already registered, you can <router-link to="/SignIn">sign in here</router-link>. Otherwise please complete the following.</p>
+    <hr>
     <div class="pure-g">
-      <div class="pure-u-1 pure-u-lg-2-3 pure-u-xl-1-2">
-
-        <form @submit.prevent="register">
-          <label>Your NHS Number: </label>
-          <input required v-model="nhsNumber" type="text"/>
-          <br/><br/>
-          <label>Your Date of Birth: </label>
-          <input required v-model="dateOfBirth" type="date"/>
-          <br/><br/>
-          <div v-if="notFound">Your nhs and dob were not found. Check them or contact the study team??</div>
-          <div v-if="alreadyRegistered">You already have an account, so please [sign in] and use it</div>
-          <div v-if="error">There was a problem!</div>
-          <button type="submit">Next</button>
+      <div class="pure-u-1">
+        <form @submit.prevent="register" class="pure-form pure-form-stacked">
+          <fieldset>
+            <div class="form-section">
+              <label>Your NHS number</label>
+              <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-1-3">
+                <input required v-model="nhsNumber" type="text" class="pure-input-1"/>
+              </div>
+              <Accordion class="blue">
+                <template v-slot:title>How do I find my NHS number?</template>
+                <template v-slot:text>Your NHS Number is displayed on the letter inviting you to take part in this trial. If you cannot find your NHS Number, your GP practice will be able to help you.</template>
+              </Accordion>
+            </div>
+            <div class="form-section">
+              <label>Your date of birth</label>
+              <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-1-3">
+                <input required v-model="dateOfBirth" type="date"/>
+              </div>
+            </div>
+            <div class="error-message" v-if="notFound">Your NHS number and date of birth were not found. Please double check them or contact the study team.</div>
+            <div class="error-message" v-if="alreadyRegistered">You already have an account. Please sign in instead.</div>
+            <div class="error-message" v-if="error">There was a problem!</div>
+            <button class="pure-button pure-button-primary" type="submit">Next</button>
+          </fieldset>
         </form>
       </div>
     </div>
   </div>
 </template>
+
 <script>
 import { SecurityService } from '@/api/security.service'
 
 import { createHelpers } from 'vuex-map-fields'
+
+import Accordion from '@/components/Accordion.vue'
 
 const { mapFields } = createHelpers({
   getterType: 'security/getActivationField',
@@ -37,6 +54,9 @@ export default {
       alreadyRegistered: false,
       error: false
     }
+  },
+  components: {
+    Accordion
   },
   computed: {
     ...mapFields([

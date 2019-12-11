@@ -2,7 +2,7 @@
 
 .pure-button {
     border-radius: 4px !important;
-    margin: 1.5em 0.75em 0.75em 0;
+    margin: 2em 0.75em 0.5em 0;
 }
 
 .pure-button-disabled {
@@ -22,8 +22,9 @@
 }
 
 .pure-button:hover {
-    background: rgba(34, 119, 204, 0.25) !important;
+    background: rgba(34, 119, 204, 0) !important;
     color: rgb(34, 119, 204) !important;
+    transition: background 0.5s ease;
 }
 
 .pure-button-primary-active, .pure-button-primary:active {

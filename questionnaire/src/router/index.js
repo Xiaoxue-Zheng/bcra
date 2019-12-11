@@ -37,6 +37,11 @@ const router = new Router({
       component: () => import('../views/SignIn.vue')
     },
     {
+      path: '/tabs',
+      name: 'tabs',
+      component: () => import('../views/Tabs.vue')
+    },
+    {
       path: '/privacy',
       name: 'privacy',
       component: () => import('../views/Privacy.vue')

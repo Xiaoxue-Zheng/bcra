@@ -1,26 +1,38 @@
 <template>
   <div class="signin content">
     <h1>Create your account</h1>
+    <hr>
+    <p>An email address and password will help to keep your personal details safe and secure.</p>
+    <hr>
     <div class="pure-g">
-      <div class="pure-u-1 pure-u-lg-2-3 pure-u-xl-1-2">
-        <form @submit.prevent="createAccount">
-          <label>Your email address </label>
-          <input required v-model="emailAddress" type="text"/>
-          <br/><br/>
-          <label>New password </label>
-          <password v-model="password" @score="setScore" @feedback="showFeedback"/>
-          <div v-for="suggestion in passwordSuggestions" style="color: orange" v-bind:key="suggestion">{{ suggestion }}</div>
-          <div style="color: red">{{ passwordWarning }}</div>
-          <br/><br/>
-          <label>Repeat Password </label>
-          <input required v-model="repeatPassword" type="password"/>
-          <br/>
-          <div v-if="password != repeatPassword">They don't match!</div>
-          <div v-if="passwordScore < MINIMUM_PASSWORD_SCORE">Pick a stronger password</div>
-          <div v-if="displayErrorMessage">Something went wrong.</div>
-          <hr/>
-          <button type="submit">Create Account</button>
-          <br/>
+      <div class="pure-u-1">
+        <form @submit.prevent="createAccount" class="pure-form pure-form-stacked">
+          <fieldset>
+            <div class="form-section">
+              <label>Your email address</label>
+              <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-2-5">
+                <input required v-model="emailAddress" type="text" class="pure-input-1"/>
+              </div>
+            </div>
+            <div class="form-section">
+              <label>Create a password</label>
+              <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-2-5">
+                <password v-model="password" @score="setScore" @feedback="showFeedback" class="pure-input-1"/>
+              </div>
+              <div class="error-message" v-for="suggestion in passwordSuggestions" v-bind:key="suggestion">{{ suggestion }}</div>
+              <div class="error-message">{{ passwordWarning }}</div>
+            </div>
+            <div class="form-section">
+              <label>Repeat your password</label>
+              <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-2-5">
+                <input required v-model="repeatPassword" type="password" class="pure-input-1"/>
+              </div>
+            </div>
+            <div class="error-message" v-if="password != repeatPassword">Your passwords don't match!</div>
+            <div class="error-message" v-if="passwordScore < MINIMUM_PASSWORD_SCORE">Please pick a stronger password.</div>
+            <div class="error-message" v-if="displayErrorMessage">Something went wrong. Please try again.</div>
+            <button class="pure-button pure-button-primary" type="submit">Create account</button>
+          </fieldset>
         </form>
       </div>
     </div>

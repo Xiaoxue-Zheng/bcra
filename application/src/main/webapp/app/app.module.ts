@@ -15,6 +15,7 @@ import { BcraCoreModule } from 'app/core';
 import { BcraAppRoutingModule } from './app-routing.module';
 import { BcraHomeModule } from './home/home.module';
 import { BcraQuestionnaireModule } from './questionnaire/questionnaire.module';
+import { BcraCsvFileModule } from './csvfile/csvfile.module';
 import { BcraAccountModule } from './account/account.module';
 import { BcraEntityModule } from './entities/entity.module';
 import * as moment from 'moment';
@@ -34,6 +35,7 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
     BcraCoreModule,
     BcraHomeModule,
     BcraQuestionnaireModule,
+    BcraCsvFileModule,
     BcraAccountModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
     BcraEntityModule,

@@ -16,11 +16,19 @@
                     </span>
                 </a>
             </li>
-            <li *jhiHasAnyAuthority="'ROLE_ADMIN'" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <li *jhiHasAnyAuthority="['ROLE_ADMIN','ROLE_MANAGER']" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link" routerLink="questionnaires" (click)="collapseNavbar()">
                     <span>
                         <fa-icon icon="clipboard-list" fixedWidth="true"></fa-icon>
                         <span>Questionnaires</span>
+                    </span>
+                </a>
+            </li>
+            <li *jhiHasAnyAuthority="['ROLE_ADMIN','ROLE_MANAGER']" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link" routerLink="csvfiles" (click)="collapseNavbar()">
+                    <span>
+                        <fa-icon icon="file-csv" fixedWidth="true"></fa-icon>
+                        <span>Csv Files</span>
                     </span>
                 </a>
             </li>

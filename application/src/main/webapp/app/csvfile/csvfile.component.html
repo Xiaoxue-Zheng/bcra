@@ -1,0 +1,33 @@
+<div class="upload">
+    <h2>Upload New CSV File</h2>
+    <form>
+        <input class="parameter required" type="file" (change)="loadFiles($event.target.files)">
+        <button (click)="upload()">Upload</button>
+    </form>
+    <jhi-alert></jhi-alert>
+</div>
+
+<div *ngIf="csvFiles">
+    <h2>Uploaded CSV Files</h2>
+
+    <table class="csvtable">
+        <tbody *ngFor="let file of csvFiles | orderBy:'uploadDatetime':true" class="csvbody">
+            <tr
+                class="csvinfo"   
+                [ngClass]="{
+                    'file-yellow': file.state==='UPLOADED',
+                    'file-orange': file.state==='INVALID',
+                    'file-red': file.state==='CREATION_ERROR',
+                    'file-green': file.state==='COMPLETED'
+                }"
+            >
+                <td>{{ file.fileName }}</td>
+                <td>{{ file.uploadDatetime | date:'medium'}}</td>
+                <td>{{ file.state }}</td>
+            </tr>
+            <tr *ngIf="file.status" class="csvstatus">
+                <td colspan="3">{{ file.status }}</td>
+            </tr>
+        </tbody class="csvfile">
+    </table>
+</div>

@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
 import { ICsvFile } from 'app/shared/model/csv-file.model';
+import { formatDiagnosticsWithColorAndContext } from 'typescript';
 
 type EntityResponseType = HttpResponse<ICsvFile>;
 type EntityArrayResponseType = HttpResponse<ICsvFile[]>;
@@ -47,6 +48,17 @@ export class CsvFileService {
 
   delete(id: number): Observable<HttpResponse<any>> {
     return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  }
+
+  findAll(): Observable<HttpResponse<any>> {
+    return this.http.get<any>(this.resourceUrl, { observe: 'response' });
+  }
+
+  upload(file: File): Observable<HttpResponse<any>> {
+    const formData = new FormData();
+    console.log(file);
+    formData.append('file', file, file.name);
+    return this.http.post<any>(SERVER_API_URL + 'api/participant-csv', formData, { observe: 'response' });
   }
 
   protected convertDateFromClient(csvFile: ICsvFile): ICsvFile {

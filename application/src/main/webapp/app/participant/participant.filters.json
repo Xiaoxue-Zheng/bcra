@@ -1,0 +1,18 @@
+[
+  {
+    "caption": "All Participants",
+    "parameters": {}
+  },
+  {
+    "caption": "Have Registered",
+    "parameters": {
+      "registerDatetime.specified": "true"
+    }
+  },
+  {
+    "caption": "Have never Logged-In",
+    "parameters": {
+      "lastLoginDatetime.specified": "false"
+    }
+  }
+]

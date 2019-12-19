@@ -44,8 +44,7 @@ public class IdentifiableDataResourceIT {
 
     private static final LocalDate DEFAULT_DATE_OF_BIRTH = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_DATE_OF_BIRTH = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_DATE_OF_BIRTH = LocalDate.ofEpochDay(-1L);
-
+    
     private static final String DEFAULT_FIRSTNAME = "AAAAAAAAAA";
     private static final String UPDATED_FIRSTNAME = "BBBBBBBBBB";
 

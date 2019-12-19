@@ -10,6 +10,8 @@ import uk.ac.herc.bcra.service.mapper.ParticipantMapper;
 import uk.ac.herc.bcra.web.rest.errors.ExceptionTranslator;
 import uk.ac.herc.bcra.service.ParticipantQueryService;
 
+import org.hamcrest.Matchers;
+import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -42,6 +44,9 @@ public class ParticipantResourceIT {
 
     private static final Instant DEFAULT_REGISTER_DATETIME = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_REGISTER_DATETIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    
+    private static final Instant DEFAULT_LAST_LOGIN_DATETIME = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_LAST_LOGIN_DATETIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
     
     @Autowired
     private ParticipantRepository participantRepository;
@@ -94,7 +99,8 @@ public class ParticipantResourceIT {
      */
     public static Participant createEntity(EntityManager em) {
         Participant participant = new Participant()
-            .registerDatetime(DEFAULT_REGISTER_DATETIME);
+            .registerDatetime(DEFAULT_REGISTER_DATETIME)
+            .lastLoginDatetime(DEFAULT_LAST_LOGIN_DATETIME);
         // Add required entity
         User user = UserResourceIT.createEntity(em);
         em.persist(user);
@@ -110,7 +116,8 @@ public class ParticipantResourceIT {
      */
     public static Participant createUpdatedEntity(EntityManager em) {
         Participant participant = new Participant()
-            .registerDatetime(UPDATED_REGISTER_DATETIME);
+            .registerDatetime(UPDATED_REGISTER_DATETIME)
+            .lastLoginDatetime(UPDATED_LAST_LOGIN_DATETIME);
         // Add required entity
         User user = UserResourceIT.createEntity(em);
         em.persist(user);
@@ -139,8 +146,6 @@ public class ParticipantResourceIT {
         // Validate the Participant in the database
         List<Participant> participantList = participantRepository.findAll();
         assertThat(participantList).hasSize(databaseSizeBeforeCreate + 1);
-        Participant testParticipant = participantList.get(participantList.size() - 1);
-        assertThat(testParticipant.getRegisterDatetime()).isEqualTo(DEFAULT_REGISTER_DATETIME);
     }
 
     @Test
@@ -175,7 +180,8 @@ public class ParticipantResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(participant.getId().intValue())))
-            .andExpect(jsonPath("$.[*].registerDatetime").value(hasItem(DEFAULT_REGISTER_DATETIME.toString())));
+            .andExpect(jsonPath("$.[*].registerDatetime").value(hasItem(DEFAULT_REGISTER_DATETIME.toString())))
+            .andExpect(jsonPath("$.[*].lastLoginDatetime").value(hasItem(DEFAULT_LAST_LOGIN_DATETIME.toString())));
     }
     
     @Test
@@ -189,7 +195,8 @@ public class ParticipantResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(participant.getId().intValue()))
-            .andExpect(jsonPath("$.registerDatetime").value(DEFAULT_REGISTER_DATETIME.toString()));
+            .andExpect(jsonPath("$.registerDatetime").value(DEFAULT_REGISTER_DATETIME.toString()))
+            .andExpect(jsonPath("$.lastLoginDatetime").value(DEFAULT_LAST_LOGIN_DATETIME.toString()));
     }
 
     @Test
@@ -228,9 +235,46 @@ public class ParticipantResourceIT {
         defaultParticipantShouldBeFound("registerDatetime.specified=true");
 
         // Get all the participantList where registerDatetime is null
-        // Commented out because another tests creates participants with null registerDatetime
-        // and there is no straightforward meaningful way to turn this into a working test.
-        //defaultParticipantShouldNotBeFound("registerDatetime.specified=false");
+        participantsShouldHaveNullRegisterDatetime("registerDatetime.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllParticipantsByLastLoginDatetimeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        participantRepository.saveAndFlush(participant);
+
+        // Get all the participantList where lastLoginDatetime equals to DEFAULT_LAST_LOGIN_DATETIME
+        defaultParticipantShouldBeFound("lastLoginDatetime.equals=" + DEFAULT_LAST_LOGIN_DATETIME);
+
+        // Get all the participantList where lastLoginDatetime equals to UPDATED_LAST_LOGIN_DATETIME
+        defaultParticipantShouldNotBeFound("lastLoginDatetime.equals=" + UPDATED_LAST_LOGIN_DATETIME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllParticipantsByLastLoginDatetimeIsInShouldWork() throws Exception {
+        // Initialize the database
+        participantRepository.saveAndFlush(participant);
+
+        // Get all the participantList where lastLoginDatetime in DEFAULT_LAST_LOGIN_DATETIME or UPDATED_LAST_LOGIN_DATETIME
+        defaultParticipantShouldBeFound("lastLoginDatetime.in=" + DEFAULT_LAST_LOGIN_DATETIME + "," + UPDATED_LAST_LOGIN_DATETIME);
+
+        // Get all the participantList where lastLoginDatetime equals to UPDATED_LAST_LOGIN_DATETIME
+        defaultParticipantShouldNotBeFound("lastLoginDatetime.in=" + UPDATED_LAST_LOGIN_DATETIME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllParticipantsByLastLoginDatetimeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        participantRepository.saveAndFlush(participant);
+
+        // Get all the participantList where lastLoginDatetime is not null
+        defaultParticipantShouldBeFound("lastLoginDatetime.specified=true");
+
+        // Get all the participantList where lastLoginDatetime is null
+        participantsShouldHaveNullLastLoginDatetime("lastLoginDatetime.specified=false");
     }
 
     @Test
@@ -256,13 +300,28 @@ public class ParticipantResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(participant.getId().intValue())))
-            .andExpect(jsonPath("$.[*].registerDatetime").value(hasItem(DEFAULT_REGISTER_DATETIME.toString())));
+            .andExpect(jsonPath("$.[*].registerDatetime").value(hasItem(DEFAULT_REGISTER_DATETIME.toString())))
+            .andExpect(jsonPath("$.[*].lastLoginDatetime").value(hasItem(DEFAULT_LAST_LOGIN_DATETIME.toString())));
 
         // Check, that the count call also returns 1
         restParticipantMockMvc.perform(get("/api/participants/count?sort=id,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(content().string("1"));
+    }
+
+    private void participantsShouldHaveNullRegisterDatetime(String filter) throws Exception {
+        restParticipantMockMvc.perform(get("/api/participants?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].registerDatetime", Matchers.hasItem(IsNull.nullValue())));
+    }
+
+    private void participantsShouldHaveNullLastLoginDatetime(String filter) throws Exception {
+        restParticipantMockMvc.perform(get("/api/participants?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].lastLoginDatetime", Matchers.hasItem(IsNull.nullValue())));
     }
 
     /**
@@ -303,8 +362,6 @@ public class ParticipantResourceIT {
         Participant updatedParticipant = participantRepository.findById(participant.getId()).get();
         // Disconnect from session so that the updates on updatedParticipant are not directly saved in db
         em.detach(updatedParticipant);
-        updatedParticipant
-            .registerDatetime(UPDATED_REGISTER_DATETIME);
         ParticipantDTO participantDTO = participantMapper.toDto(updatedParticipant);
 
         restParticipantMockMvc.perform(put("/api/participants")
@@ -315,8 +372,6 @@ public class ParticipantResourceIT {
         // Validate the Participant in the database
         List<Participant> participantList = participantRepository.findAll();
         assertThat(participantList).hasSize(databaseSizeBeforeUpdate);
-        Participant testParticipant = participantList.get(participantList.size() - 1);
-        assertThat(testParticipant.getRegisterDatetime()).isEqualTo(UPDATED_REGISTER_DATETIME);
     }
 
     @Test

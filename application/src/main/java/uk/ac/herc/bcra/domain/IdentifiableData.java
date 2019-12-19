@@ -70,8 +70,8 @@ public class IdentifiableData implements Serializable {
     @Column(name = "practice_name", nullable = false)
     private String practiceName;
 
-    @OneToOne(optional = false)    @NotNull
-
+    @OneToOne(optional = false)
+    @NotNull
     @JoinColumn(unique = true)
     private Participant participant;
 

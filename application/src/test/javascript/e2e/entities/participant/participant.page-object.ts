@@ -27,6 +27,7 @@ export class ParticipantUpdatePage {
   saveButton = element(by.id('save-entity'));
   cancelButton = element(by.id('cancel-save'));
   registerDatetimeInput = element(by.id('field_registerDatetime'));
+  lastLoginDatetimeInput = element(by.id('field_lastLoginDatetime'));
   userSelect = element(by.id('field_user'));
 
   async getPageTitle() {
@@ -39,6 +40,14 @@ export class ParticipantUpdatePage {
 
   async getRegisterDatetimeInput() {
     return await this.registerDatetimeInput.getAttribute('value');
+  }
+
+  async setLastLoginDatetimeInput(lastLoginDatetime) {
+    await this.lastLoginDatetimeInput.sendKeys(lastLoginDatetime);
+  }
+
+  async getLastLoginDatetimeInput() {
+    return await this.lastLoginDatetimeInput.getAttribute('value');
   }
 
   async userSelectLastOption(timeout?: number) {

@@ -11,3 +11,5 @@ export * from '../questionnaire/questionnaire.component';
 export * from '../questionnaire/questionnaire.route';
 export * from '../csvfile/csvfile.component';
 export * from '../csvfile/csvfile.route';
+export * from '../participant/participant.component';
+export * from '../participant/participant.route';

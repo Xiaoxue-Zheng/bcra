@@ -107,3 +107,16 @@ This has the following fields set:
  * ConditionSection - the section that contains the ConditionQuestion
  * ConditionQuestion - the question that contains the ConditionQuestionItem
  * ConditionQuestionItem - the question item who's AnswerItem is tested
+
+## How to add a field to Particpant and it's search Criteria
+Search for **nhsNumber** and follow the pattern in these files:
+ * domain\\**Participant**.java *(if you need to join in another table)*
+ * service\dto\\**ParticipantDTO**.java
+ * service\mapper\\**ParticipantMapper**.java
+ * service\dto\\**ParticipantCriteria**.java
+ * service\\**ParticipantQueryService**.java
+ 
+### Particpant Query URL Structure
+```
+http://localhost:8080/api/participants?page=0&size=20&nhsNumber.contains=6&sort=identifiableDataNhsNumber
+```

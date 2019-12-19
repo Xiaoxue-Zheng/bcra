@@ -4,7 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import * as moment from 'moment';
+import moment from 'moment';
 import { JhiAlertService } from 'ng-jhipster';
 import { IIdentifiableData, IdentifiableData } from 'app/shared/model/identifiable-data.model';
 import { IdentifiableDataService } from './identifiable-data.service';

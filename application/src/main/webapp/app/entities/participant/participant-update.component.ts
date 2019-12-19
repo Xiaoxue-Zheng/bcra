@@ -4,7 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import * as moment from 'moment';
+import moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService } from 'ng-jhipster';
 import { IParticipant, Participant } from 'app/shared/model/participant.model';
@@ -23,6 +23,7 @@ export class ParticipantUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     registerDatetime: [],
+    lastLoginDatetime: [],
     userId: [null, Validators.required]
   });
 
@@ -52,6 +53,7 @@ export class ParticipantUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: participant.id,
       registerDatetime: participant.registerDatetime != null ? participant.registerDatetime.format(DATE_TIME_FORMAT) : null,
+      lastLoginDatetime: participant.lastLoginDatetime != null ? participant.lastLoginDatetime.format(DATE_TIME_FORMAT) : null,
       userId: participant.userId
     });
   }
@@ -77,6 +79,10 @@ export class ParticipantUpdateComponent implements OnInit {
       registerDatetime:
         this.editForm.get(['registerDatetime']).value != null
           ? moment(this.editForm.get(['registerDatetime']).value, DATE_TIME_FORMAT)
+          : undefined,
+      lastLoginDatetime:
+        this.editForm.get(['lastLoginDatetime']).value != null
+          ? moment(this.editForm.get(['lastLoginDatetime']).value, DATE_TIME_FORMAT)
           : undefined,
       userId: this.editForm.get(['userId']).value
     };

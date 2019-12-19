@@ -3,14 +3,17 @@ package uk.ac.herc.bcra.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 import io.github.jhipster.service.Criteria;
-import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
+
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.InstantFilter;
+/*
+import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
+import io.github.jhipster.service.filter.FloatFilter;
+import io.github.jhipster.service.filter.IntegerFilter;
+*/
 
 /**
  * Criteria class for the {@link uk.ac.herc.bcra.domain.Participant} entity. This class is used
@@ -29,7 +32,11 @@ public class ParticipantCriteria implements Serializable, Criteria {
 
     private InstantFilter registerDatetime;
 
+    private InstantFilter lastLoginDatetime;
+
     private LongFilter userId;
+
+    private StringFilter nhsNumber;
 
     public ParticipantCriteria(){
     }
@@ -37,7 +44,9 @@ public class ParticipantCriteria implements Serializable, Criteria {
     public ParticipantCriteria(ParticipantCriteria other){
         this.id = other.id == null ? null : other.id.copy();
         this.registerDatetime = other.registerDatetime == null ? null : other.registerDatetime.copy();
+        this.lastLoginDatetime = other.lastLoginDatetime == null ? null : other.lastLoginDatetime.copy();
         this.userId = other.userId == null ? null : other.userId.copy();
+        this.nhsNumber = other.nhsNumber == null ? null : other.nhsNumber.copy();
     }
 
     @Override
@@ -61,6 +70,14 @@ public class ParticipantCriteria implements Serializable, Criteria {
         this.registerDatetime = registerDatetime;
     }
 
+    public InstantFilter getLastLoginDatetime() {
+        return lastLoginDatetime;
+    }
+
+    public void setLastLoginDatetime(InstantFilter lastLoginDatetime) {
+        this.lastLoginDatetime = lastLoginDatetime;
+    }
+
     public LongFilter getUserId() {
         return userId;
     }
@@ -69,6 +86,13 @@ public class ParticipantCriteria implements Serializable, Criteria {
         this.userId = userId;
     }
 
+    public StringFilter getNhsNumber() {
+        return nhsNumber;
+    }
+
+    public void setNhsNumber(StringFilter nhsNumber) {
+        this.nhsNumber = nhsNumber;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -82,7 +106,9 @@ public class ParticipantCriteria implements Serializable, Criteria {
         return
             Objects.equals(id, that.id) &&
             Objects.equals(registerDatetime, that.registerDatetime) &&
-            Objects.equals(userId, that.userId);
+            Objects.equals(lastLoginDatetime, that.lastLoginDatetime) &&
+            Objects.equals(userId, that.userId) &&
+            Objects.equals(nhsNumber, that.nhsNumber);
     }
 
     @Override
@@ -90,7 +116,9 @@ public class ParticipantCriteria implements Serializable, Criteria {
         return Objects.hash(
         id,
         registerDatetime,
-        userId
+        lastLoginDatetime,
+        userId,
+        nhsNumber
         );
     }
 
@@ -99,8 +127,12 @@ public class ParticipantCriteria implements Serializable, Criteria {
         return "ParticipantCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (registerDatetime != null ? "registerDatetime=" + registerDatetime + ", " : "") +
+                (lastLoginDatetime != null ? "lastLoginDatetime=" + lastLoginDatetime + ", " : "") +
                 (userId != null ? "userId=" + userId + ", " : "") +
+                (nhsNumber != null ? "nhsNumber=" + nhsNumber + ", " : "") +
             "}";
     }
+
+
 
 }

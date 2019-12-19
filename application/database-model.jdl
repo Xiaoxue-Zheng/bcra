@@ -334,6 +334,7 @@ relationship OneToOne {
 /* Participants */
 entity Participant {
     registerDatetime Instant
+    lastLoginDatetime Instant
 }
 
 enum ParticipantStatusType {

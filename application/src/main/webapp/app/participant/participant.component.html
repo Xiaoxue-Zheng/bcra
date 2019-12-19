@@ -1,0 +1,91 @@
+<div *ngIf="participants">
+    <h1>Participants</h1>
+
+    <div>
+        Show: 
+        <select [(ngModel)] ="selectedFilter" (change)="loadParticipants()">
+            <option [ngValue]="filter.parameters" *ngFor="let filter of filters">{{ filter.caption }}</option>
+        </select>
+    </div>
+
+    <div>
+        Order by: 
+        <select [(ngModel)] ="selectedOrder" (change)="loadParticipants()">
+            <option [ngValue]="order.sorts" *ngFor="let order of orders">{{ order.caption }}</option>
+        </select>
+    </div>
+
+    <div class="custom-control custom-switch show-details">
+        <input [(ngModel)]="showDetails" type="checkbox" class="custom-control-input" id="showDetails">
+        <label class="custom-control-label" for="showDetails">Show full details</label>
+    </div>
+
+    <table class="participant" *ngFor="let participant of participants">
+
+        <tr class="details">
+            <th colspan="5">
+                <span class="left">{{ participant.nhsNumber }}</span>
+                <span class="right">{{ participant.practiceName }}</span>
+            </th>
+        </tr>
+        <tbody [hidden]="!showDetails">
+            <tr>
+                <td rowspan="2" class="icon"><fa-icon icon="user" fixedWidth="true"></fa-icon></td>
+                <th>Imported</th>
+                <th>Registered</th>
+                <th>Login</th>
+                <td></td>
+            </tr>
+            <tr>
+                <td>{{ participant.importedDatetime | date: shortDate | defaultValue: '-' }}</td>
+                <td>{{ participant.registerDatetime | date: shortDate | defaultValue: '-' }}</td>
+                <td>{{ participant.lastLoginDatetime | date: shortDate | defaultValue: '-' }}</td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td rowspan="2" class="icon"><fa-icon icon="clipboard-list" fixedWidth="true"></fa-icon></td>
+                <th>Consent</th>
+                <th>Questionnaire</th>
+                <th>Swab</th>
+                <th>Mammogram</th>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            
+            <tr>
+                <td rowspan="3" class="icon"><fa-icon icon="envelope" fixedWidth="true"></fa-icon></td>
+                <th>Invitation</th>
+                <th>Saliva Letter</th>
+                <th>Mammo Letter</th>
+                <th>Outcome</th>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td><a class="button" href="/api/letter" target="new">Download</a></td>
+                <td><a class="button" href="/api/letter" target="new">Download</a></td>
+                <td><a class="button" href="/api/letter" target="new">Download</a></td>
+                <td><a class="button" href="/api/letter" target="new">Download</a></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div [hidden]="participants?.length === 0">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="totalItems" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+
+</div>

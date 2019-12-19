@@ -12,10 +12,18 @@ import org.mapstruct.*;
 public interface ParticipantMapper extends EntityMapper<ParticipantDTO, Participant> {
 
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "identifiableData.nhsNumber", target = "nhsNumber")
+    @Mapping(source = "identifiableData.practiceName", target = "practiceName")
+    @Mapping(source = "user.createdDate", target = "importedDatetime")
+    @Mapping(source = "participant.registerDatetime", target = "registerDatetime")
+    @Mapping(source = "participant.lastLoginDatetime", target = "lastLoginDatetime")
     @Mapping(source = "user.login", target = "userLogin")
     ParticipantDTO toDto(Participant participant);
 
     @Mapping(source = "userId", target = "user")
+    @Mapping(target = "identifiableData", ignore=true)
+    @Mapping(target = "registerDatetime", ignore=true)
+    @Mapping(target = "lastLoginDatetime", ignore=true)
     Participant toEntity(ParticipantDTO participantDTO);
 
     default Participant fromId(Long id) {

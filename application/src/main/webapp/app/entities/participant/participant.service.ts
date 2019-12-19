@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import * as moment from 'moment';
+import moment from 'moment';
 import { DATE_FORMAT } from 'app/shared/constants/input.constants';
 import { map } from 'rxjs/operators';
 
@@ -52,7 +52,9 @@ export class ParticipantService {
   protected convertDateFromClient(participant: IParticipant): IParticipant {
     const copy: IParticipant = Object.assign({}, participant, {
       registerDatetime:
-        participant.registerDatetime != null && participant.registerDatetime.isValid() ? participant.registerDatetime.toJSON() : null
+        participant.registerDatetime != null && participant.registerDatetime.isValid() ? participant.registerDatetime.toJSON() : null,
+      lastLoginDatetime:
+        participant.lastLoginDatetime != null && participant.lastLoginDatetime.isValid() ? participant.lastLoginDatetime.toJSON() : null
     });
     return copy;
   }
@@ -60,6 +62,7 @@ export class ParticipantService {
   protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
     if (res.body) {
       res.body.registerDatetime = res.body.registerDatetime != null ? moment(res.body.registerDatetime) : null;
+      res.body.lastLoginDatetime = res.body.lastLoginDatetime != null ? moment(res.body.lastLoginDatetime) : null;
     }
     return res;
   }
@@ -68,6 +71,7 @@ export class ParticipantService {
     if (res.body) {
       res.body.forEach((participant: IParticipant) => {
         participant.registerDatetime = participant.registerDatetime != null ? moment(participant.registerDatetime) : null;
+        participant.lastLoginDatetime = participant.lastLoginDatetime != null ? moment(participant.lastLoginDatetime) : null;
       });
     }
     return res;

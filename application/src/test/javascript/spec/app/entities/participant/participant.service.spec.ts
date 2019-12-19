@@ -4,7 +4,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
-import * as moment from 'moment';
+import moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { ParticipantService } from 'app/entities/participant/participant.service';
 import { IParticipant, Participant } from 'app/shared/model/participant.model';
@@ -27,14 +27,15 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new Participant(0, currentDate);
+      elemDefault = new Participant(0, currentDate, currentDate);
     });
 
     describe('Service methods', () => {
       it('should find an element', async () => {
         const returnedFromService = Object.assign(
           {
-            registerDatetime: currentDate.format(DATE_TIME_FORMAT)
+            registerDatetime: currentDate.format(DATE_TIME_FORMAT),
+            lastLoginDatetime: currentDate.format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
@@ -52,13 +53,15 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 0,
-            registerDatetime: currentDate.format(DATE_TIME_FORMAT)
+            registerDatetime: currentDate.format(DATE_TIME_FORMAT),
+            lastLoginDatetime: currentDate.format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
         const expected = Object.assign(
           {
-            registerDatetime: currentDate
+            registerDatetime: currentDate,
+            lastLoginDatetime: currentDate
           },
           returnedFromService
         );
@@ -74,14 +77,16 @@ describe('Service Tests', () => {
       it('should update a Participant', async () => {
         const returnedFromService = Object.assign(
           {
-            registerDatetime: currentDate.format(DATE_TIME_FORMAT)
+            registerDatetime: currentDate.format(DATE_TIME_FORMAT),
+            lastLoginDatetime: currentDate.format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
 
         const expected = Object.assign(
           {
-            registerDatetime: currentDate
+            registerDatetime: currentDate,
+            lastLoginDatetime: currentDate
           },
           returnedFromService
         );
@@ -97,13 +102,15 @@ describe('Service Tests', () => {
       it('should return a list of Participant', async () => {
         const returnedFromService = Object.assign(
           {
-            registerDatetime: currentDate.format(DATE_TIME_FORMAT)
+            registerDatetime: currentDate.format(DATE_TIME_FORMAT),
+            lastLoginDatetime: currentDate.format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
         const expected = Object.assign(
           {
-            registerDatetime: currentDate
+            registerDatetime: currentDate,
+            lastLoginDatetime: currentDate
           },
           returnedFromService
         );

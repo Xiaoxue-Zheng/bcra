@@ -137,6 +137,10 @@ public class ParticipantImport {
         user.setCreatedBy("CSV Import");
         user.setCreatedDate(Instant.now());
         user.setLogin(UUID.randomUUID().toString());
+
+        // Imported participants do not need to
+        // validate their email address.
+        user.setActivated(true);
         
         Set<Authority> authorities = new HashSet<Authority>();
         authorities.add(

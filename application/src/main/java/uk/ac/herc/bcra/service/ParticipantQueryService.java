@@ -94,9 +94,16 @@ public class ParticipantQueryService extends QueryService<Participant> {
             if (criteria.getRegisterDatetime() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getRegisterDatetime(), Participant_.registerDatetime));
             }
+            if (criteria.getLastLoginDatetime() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getLastLoginDatetime(), Participant_.lastLoginDatetime));
+            }
             if (criteria.getUserId() != null) {
                 specification = specification.and(buildSpecification(criteria.getUserId(),
                     root -> root.join(Participant_.user, JoinType.LEFT).get(User_.id)));
+            }
+            if (criteria.getNhsNumber() != null) {
+                specification = specification.and(buildSpecification(criteria.getNhsNumber(),
+                    root -> root.join(Participant_.identifiableData, JoinType.LEFT).get(IdentifiableData_.nhsNumber)));
             }
         }
         return specification;

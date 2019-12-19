@@ -26,10 +26,16 @@ public class Participant implements Serializable {
     @Column(name = "register_datetime")
     private Instant registerDatetime;
 
-    @OneToOne(optional = false)    @NotNull
+    @Column(name = "last_login_datetime")
+    private Instant lastLoginDatetime;
 
+    @OneToOne(optional = false)
+    @NotNull
     @JoinColumn(unique = true)
     private User user;
+
+    @OneToOne(mappedBy = "participant")
+    private IdentifiableData identifiableData;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -53,6 +59,20 @@ public class Participant implements Serializable {
         this.registerDatetime = registerDatetime;
     }
 
+    
+    public Instant getLastLoginDatetime() {
+        return lastLoginDatetime;
+    }
+
+    public Participant lastLoginDatetime(Instant lastLoginDatetime) {
+        this.lastLoginDatetime = lastLoginDatetime;
+        return this;
+    }
+
+    public void setLastLoginDatetime(Instant lastLoginDatetime) {
+        this.lastLoginDatetime = lastLoginDatetime;
+    }
+
     public User getUser() {
         return user;
     }
@@ -64,6 +84,14 @@ public class Participant implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public IdentifiableData getIdentifiableData() {
+        return identifiableData;
+    }
+
+    public void setIdentifiableData(IdentifiableData identifiableData) {
+        this.identifiableData = identifiableData;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -88,6 +116,10 @@ public class Participant implements Serializable {
         return "Participant{" +
             "id=" + getId() +
             ", registerDatetime='" + getRegisterDatetime() + "'" +
+            ", lastLoginDatetime='" + getLastLoginDatetime() + "'" +
+            ", identifiableData=" + getIdentifiableData() +
             "}";
     }
+
+
 }

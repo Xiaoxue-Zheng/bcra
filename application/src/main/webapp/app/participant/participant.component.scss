@@ -1,0 +1,70 @@
+@import '~bootswatch/dist/materia/variables';
+
+select {
+  width: 100%;
+  max-width: 600px;
+  margin: 10px 0 20px 0;
+  border: 1px solid $gray-600;
+  border-radius: 6px;
+  padding: 4px 20px 4px 4px;
+}
+
+.show-details {
+  width: 100%;
+  max-width: 1200px;
+  text-align: right;
+}
+
+table {
+  width: 100%;
+  max-width: 1200px;
+  font-size: 0.9em;
+  margin-bottom: 1px;
+}
+
+tbody {
+  border-bottom: 20px solid $white;
+}
+
+th {
+  background: $gray-600;
+  color: $white;
+  text-align: center;
+  border: 2px solid $white;
+}
+
+td {
+  background: $gray-300;
+  text-align: center;
+  border: 2px solid $white;
+}
+
+.details {
+  font-size: 1.4em;
+}
+
+.details th {
+  background: $primary;
+  padding: 2px 6px;
+}
+
+.icon {
+  font-size: 2em;
+  line-height: 1em;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.button {
+  padding: 0.2em;
+  margin: 0.4em;
+  border: 1px solid $gray-600;
+  background: $white;
+  color: $gray-900;
+}

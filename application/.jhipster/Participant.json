@@ -4,6 +4,10 @@
         {
             "fieldName": "registerDatetime",
             "fieldType": "Instant"
+        },
+        {
+            "fieldName": "lastLoginDatetime",
+            "fieldType": "Instant"
         }
     ],
     "relationships": [

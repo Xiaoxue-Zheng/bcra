@@ -13,6 +13,7 @@ import '@/assets/css/fonts.css'
 import '@/assets/css/footer.css'
 import '@/assets/css/forms.css'
 import '@/assets/css/navigation.css'
+import '@/assets/css/components.css'
 import Navigation from './components/Navigation'
 import Footer from './components/Footer'
 export default {

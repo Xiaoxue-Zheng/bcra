@@ -19,10 +19,10 @@ p {
 
 h1 {
     font-size: 1em !important;
-    padding-bottom: 1em;
+    padding-bottom: 1.5em;
 }
 
-h2 {
+h2, h3 {
     font-size: 1em !important;
     padding-bottom: 0em;
 }
@@ -53,7 +53,7 @@ hr {
     }
 
     h1 {
-        margin: 0 0 0.5em 0 !important;
+        margin: 0 !important;
     }
     
     .content {
@@ -99,8 +99,8 @@ hr {
 .info-box {
     background: rgba(255, 238, 85, 0.4);
     padding: 1em;
-    border-radius: 4px;
-    font-weight: 700;
+    border-radius: 0.2em;
+    font-weight: 400;
     margin: 1.5em 0;
 }
 
@@ -109,16 +109,32 @@ hr {
     font-weight: 400;
 }
 
+.info-box p {
+    margin: 1em 0;
+}
+
+.info-box p:first-of-type {
+    margin: 0.5em 0;
+}
+
+.info-box p:last-of-type {
+    margin: 0;
+}
+
+.info-box h3 {
+    margin: 0;
+}
+
 .info-link {
     font-size: 0.8em;
 }
 
 .first-img {
-    border-radius: 4px 0 0 4px;
+    border-radius: 0.2em 0 0 0.2em;
 }
 
 .last-img {
-    border-radius: 0 4px 4px 0;
+    border-radius: 0 0.2em 0.2em 0;
 }
 
 .accordion-list {

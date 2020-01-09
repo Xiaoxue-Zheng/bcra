@@ -44,7 +44,7 @@ export default {
 }
 .accordion-wrapper {
     padding: 1em;
-    border-radius: 4px;
+    border-radius: 0.2em;
     margin-top: 1em;
     cursor: pointer;
 }

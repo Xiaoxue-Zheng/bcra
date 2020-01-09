@@ -76,8 +76,8 @@ export default {
     font-size: 0.79em;
     padding: 0.5em 0.9em !important;
     margin-right: 0.25em;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
+    border-top-left-radius: 0.2em;
+    border-top-right-radius: 0.2em;
     position: relative;
     cursor: pointer;
 }
@@ -112,7 +112,7 @@ export default {
     margin-right: 0.5em;
   }
   .card-body {
-    border-radius: 4px;
+    border-radius: 0.2em;
   }
 }
 </style>

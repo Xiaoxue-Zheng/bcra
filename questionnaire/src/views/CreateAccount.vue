@@ -8,31 +8,29 @@
       <div class="pure-u-1">
         <form @submit.prevent="createAccount" class="pure-form pure-form-stacked">
           <fieldset>
-            <div class="form-section">
-              <label>Your email address</label>
-              <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-2-5">
-                <input required v-model="emailAddress" type="text" class="pure-input-1"/>
-              </div>
+            <label>Your email address</label>
+            <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-2-5">
+              <input required v-model="emailAddress" type="text" class="pure-input-1"/>
             </div>
-            <div class="form-section">
-              <label>Create a password</label>
-              <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-2-5">
-                <password v-model="password" @score="setScore" @feedback="showFeedback" class="pure-input-1"/>
-              </div>
-              <div class="error-message" v-for="suggestion in passwordSuggestions" v-bind:key="suggestion">{{ suggestion }}</div>
-              <div class="error-message">{{ passwordWarning }}</div>
-            </div>
-            <div class="form-section">
-              <label>Repeat your password</label>
-              <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-2-5">
-                <input required v-model="repeatPassword" type="password" class="pure-input-1"/>
-              </div>
-            </div>
-            <div class="error-message" v-if="password != repeatPassword">Your passwords don't match!</div>
-            <div class="error-message" v-if="passwordScore < MINIMUM_PASSWORD_SCORE">Please pick a stronger password.</div>
-            <div class="error-message" v-if="displayErrorMessage">Something went wrong. Please try again.</div>
-            <button class="pure-button pure-button-primary" type="submit">Create account</button>
           </fieldset>
+          <fieldset>
+            <label>Create a password</label>
+            <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-2-5">
+              <password v-model="password" @score="setScore" @feedback="showFeedback" class="pure-input-1"/>
+            </div>
+            <div class="error-message" v-for="suggestion in passwordSuggestions" v-bind:key="suggestion">{{ suggestion }}</div>
+            <div class="error-message">{{ passwordWarning }}</div>
+          </fieldset>
+          <fieldset>
+            <label>Repeat your password</label>
+            <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-2-5">
+              <input required v-model="repeatPassword" type="password" class="pure-input-1"/>
+            </div>
+          </fieldset>
+          <div class="error-message" v-if="password != repeatPassword">Your passwords don't match!</div>
+          <div class="error-message" v-if="passwordScore < MINIMUM_PASSWORD_SCORE">Please pick a stronger password.</div>
+          <div class="error-message" v-if="displayErrorMessage">Something went wrong. Please try again.</div>
+          <button class="pure-button pure-button-primary" type="submit">Create account</button>
         </form>
       </div>
     </div>

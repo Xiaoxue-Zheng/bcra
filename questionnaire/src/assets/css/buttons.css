@@ -1,8 +1,16 @@
 /* Buttons */
 
 .pure-button {
-    border-radius: 4px !important;
-    margin: 2em 0.75em 0.5em 0;
+    border-radius: 0.2em !important;
+    margin: 2em 0.75em 2em 0 !important;
+    padding: 0.75em 1em !important;
+    border: 2px solid rgb(34, 119, 204) !important;
+}
+
+@media only screen and (max-width: 568px) {
+    .pure-button {
+        width: 100%;;
+    }
 }
 
 .pure-button-disabled {
@@ -12,7 +20,6 @@
 
 .pure-button-primary {
     background: rgb(34, 119, 204) !important;
-    border: 2px solid rgb(34, 119, 204) !important;
 }
 
 .pure-button-secondary {
@@ -22,15 +29,14 @@
 }
 
 .pure-button:hover {
-    background: rgba(34, 119, 204, 0) !important;
+    background: rgba(34, 119, 204, 0.2) !important;
     color: rgb(34, 119, 204) !important;
-    transition: background 0.5s ease;
+    transition: all 0.5s ease;
 }
 
 .pure-button-primary-active, .pure-button-primary:active {
     box-shadow: none !important;
     background: white !important;
-    border: 2px solid rgb(34, 119, 204) !important;
     color: rgb(34, 119, 204) !important;
 }
 

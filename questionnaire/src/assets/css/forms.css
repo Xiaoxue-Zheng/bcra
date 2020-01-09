@@ -4,15 +4,21 @@ label, .error-message {
     font-weight: 700;
 }
 
+label {
+    margin: 0 0 0.25em !important;
+}
+
 .error-message {
     color: rgb(213, 67, 57);
     font-size: 0.8em;
 }
+.error-message:first-of-type {
+    margin-top: 2em;
+}
 
-.form-section {
-    padding-bottom: 1.5em;
-    border-bottom: 1px solid rgba(34, 51, 68, 0.15);
-    margin-bottom: 1.25em;
+fieldset {
+    padding: 1.5em 0 1.75em !important;
+    border-bottom: 1px solid rgba(34, 51, 68, 0.15) !important;
 }
 
 .pure-form input:not([type]){
@@ -34,7 +40,7 @@ label, .error-message {
 .Password__field {
     background-color: white !important;
     border: 1px solid rgba(34, 51, 68, 0.15) !important;
-    border-radius: 4px !important;
+    border-radius: 0.2em !important;
     font-size: 1em !important;
     padding: 0.5em 0.6em !important;
 }

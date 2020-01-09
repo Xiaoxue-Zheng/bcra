@@ -23,7 +23,7 @@
     </ul>
     <router-link class="pure-button pure-button-primary" to="/Register">Register to take part</router-link>
     <div class="info-box">
-      Participation in this trial requires the following:
+      <h3>Participation in this trial requires the following:</h3>
       <ul>
         <li>An invite from your doctor.</li>
         <li>Details of your family history.</li>
@@ -31,7 +31,7 @@
       </ul>
     </div>
     <div class="info-box">
-      This study is NOT for women who have:
+      <h3>This study is NOT for women who have:</h3>
       <ul>
         <li>Had breast cancer or DCIS (ductal carcinoma in situ).</li>
         <li>Been seen in a Family History or Genetics clinic to assess their breast cancer risk.</li>

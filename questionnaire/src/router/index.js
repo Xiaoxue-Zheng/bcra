@@ -45,6 +45,11 @@ const router = new Router({
       path: '/privacy',
       name: 'privacy',
       component: () => import('../views/Privacy.vue')
+    },
+    {
+      path: '/components',
+      name: 'components',
+      component: () => import('../views/ComponentLibrary.vue')
     }
   ],
   scrollBehavior (to, from, savedPosition) {

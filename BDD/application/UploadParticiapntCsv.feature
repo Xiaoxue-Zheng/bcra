@@ -1,4 +1,4 @@
-Feature: Check Questionnaires
+Feature: Upload Participant CSVs
 
 	A manager is a User with the role ROLE_MANAGER.
 	They can upload and view details of uploaded CSV files.

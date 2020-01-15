@@ -17,6 +17,24 @@
                 <dd>
                     {{participant.userLogin}}
                 </dd>
+                <dt><span>Identifiable Data</span></dt>
+                <dd>
+                    <div *ngIf="participant.identifiableDataId">
+                        <a [routerLink]="['/identifiable-data', participant.identifiableDataId, 'view']">{{participant.identifiableDataId}}</a>
+                    </div>
+                </dd>
+                <dt><span>Procedure</span></dt>
+                <dd>
+                    <div *ngIf="participant.procedureId">
+                        <a [routerLink]="['/procedure', participant.procedureId, 'view']">{{participant.procedureId}}</a>
+                    </div>
+                </dd>
+                <dt><span>Csv File</span></dt>
+                <dd>
+                    <div *ngIf="participant.csvFileId">
+                        <a [routerLink]="['/csv-file', participant.csvFileId, 'view']">{{participant.csvFileFileName}}</a>
+                    </div>
+                </dd>
             </dl>
 
             <button type="submit"

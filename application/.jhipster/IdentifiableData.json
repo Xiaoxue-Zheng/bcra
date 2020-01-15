@@ -84,24 +84,7 @@
             ]
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "participant",
-            "otherEntityRelationshipName": "identifiableData",
-            "relationshipValidateRules": "required",
-            "relationshipName": "participant",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "csvFile",
-            "otherEntityRelationshipName": "identifiableData",
-            "relationshipName": "csvFile",
-            "otherEntityField": "fileName"
-        }
-    ],
+    "relationships": [],
     "changelogDate": "20191119110521",
     "entityTableName": "identifiable_data",
     "dto": "mapstruct",

@@ -4,7 +4,7 @@
         {
             "fieldName": "state",
             "fieldType": "ResponseState",
-            "fieldValues": "SUBMITTED,INVALID,VALIDATED,FAILED,PROCESSED",
+            "fieldValues": "NOT_STARTED,SUBMITTED,INVALID,VALIDATED,FAILED,PROCESSED",
             "fieldValidateRules": [
                 "required"
             ]

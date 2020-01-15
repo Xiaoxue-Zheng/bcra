@@ -14,5 +14,23 @@
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/>
 
+        <addForeignKeyConstraint baseColumnNames="identifiable_data_id"
+                                 baseTableName="participant"
+                                 constraintName="fk_participant_identifiable_data_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="identifiable_data"/>
+
+        <addForeignKeyConstraint baseColumnNames="procedure_id"
+                                 baseTableName="participant"
+                                 constraintName="fk_participant_procedure_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="procedure"/>
+
+        <addForeignKeyConstraint baseColumnNames="csv_file_id"
+                                 baseTableName="participant"
+                                 constraintName="fk_participant_csv_file_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="csv_file"/>
+
     </changeSet>
 </databaseChangeLog>

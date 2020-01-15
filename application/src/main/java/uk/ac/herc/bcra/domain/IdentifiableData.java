@@ -1,5 +1,4 @@
 package uk.ac.herc.bcra.domain;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -69,15 +68,6 @@ public class IdentifiableData implements Serializable {
     @NotNull
     @Column(name = "practice_name", nullable = false)
     private String practiceName;
-
-    @OneToOne(optional = false)
-    @NotNull
-    @JoinColumn(unique = true)
-    private Participant participant;
-
-    @ManyToOne
-    @JsonIgnoreProperties("identifiableData")
-    private CsvFile csvFile;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -242,32 +232,6 @@ public class IdentifiableData implements Serializable {
 
     public void setPracticeName(String practiceName) {
         this.practiceName = practiceName;
-    }
-
-    public Participant getParticipant() {
-        return participant;
-    }
-
-    public IdentifiableData participant(Participant participant) {
-        this.participant = participant;
-        return this;
-    }
-
-    public void setParticipant(Participant participant) {
-        this.participant = participant;
-    }
-
-    public CsvFile getCsvFile() {
-        return csvFile;
-    }
-
-    public IdentifiableData csvFile(CsvFile csvFile) {
-        this.csvFile = csvFile;
-        return this;
-    }
-
-    public void setCsvFile(CsvFile csvFile) {
-        this.csvFile = csvFile;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

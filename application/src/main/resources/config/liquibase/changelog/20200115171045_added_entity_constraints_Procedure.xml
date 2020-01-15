@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity Procedure.
+    -->
+    <changeSet id="20200115171045-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="consent_response_id"
+                                 baseTableName="procedure"
+                                 constraintName="fk_procedure_consent_response_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="answer_response"/>
+
+        <addForeignKeyConstraint baseColumnNames="risk_assesment_response_id"
+                                 baseTableName="procedure"
+                                 constraintName="fk_procedure_risk_assesment_response_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="answer_response"/>
+
+    </changeSet>
+</databaseChangeLog>

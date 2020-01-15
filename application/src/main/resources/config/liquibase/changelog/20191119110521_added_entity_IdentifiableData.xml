@@ -62,12 +62,6 @@
             <column name="practice_name" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="participant_id" type="bigint">
-                <constraints unique="true" nullable="false" uniqueConstraintName="ux_identifiable_data_participant_id" />
-            </column>
-            <column name="csv_file_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
 
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
@@ -78,36 +72,5 @@
 
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
-
-    <!--
-        Load sample data generated with Faker.js
-        - This data can be easily edited using a CSV editor (or even MS Excel) and
-          is located in the 'src/main/resources/config/liquibase/data' directory
-        - By default this data is applied when running with the JHipster 'dev' profile.
-          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
-          Spring Boot configuration key.
-    -->
-    <changeSet id="20191119110521-1-data" author="jhipster" context="faker">
-        <loadData
-                  file="config/liquibase/fake-data/identifiable_data.csv"
-                  separator=";"
-                  tableName="identifiable_data">
-            <column name="id" type="numeric"/>
-            <column name="nhs_number" type="string"/>
-            <column name="date_of_birth" type="date"/>
-            <column name="firstname" type="string"/>
-            <column name="surname" type="string"/>
-            <column name="email" type="string"/>
-            <column name="address_1" type="string"/>
-            <column name="address_2" type="string"/>
-            <column name="address_3" type="string"/>
-            <column name="address_4" type="string"/>
-            <column name="address_5" type="string"/>
-            <column name="postcode" type="string"/>
-            <column name="practice_name" type="string"/>
-            <column name="participant_id" type="numeric"/>
-            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
-        </loadData>
-    </changeSet>
 
 </databaseChangeLog>

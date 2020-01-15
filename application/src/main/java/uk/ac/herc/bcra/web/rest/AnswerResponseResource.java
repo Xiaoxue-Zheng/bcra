@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,23 +50,28 @@ public class AnswerResponseResource {
         this.answerResponseMapper = answerResponseMapper;
     }
 
-    /**
-     * {@code POST  /answer-responses} : Create a new answerResponse.
-     *
-     * @param answerResponseDTO the answerResponseDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new answerResponseDTO, or with status {@code 400 (Bad Request)} if the answerResponse has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PostMapping("/answer-responses")
-    public ResponseEntity<AnswerResponseDTO> createAnswerResponse(@Valid @RequestBody AnswerResponseDTO answerResponseDTO) throws URISyntaxException {
-        log.debug("REST request to save AnswerResponse : {}", answerResponseDTO);
-        if (answerResponseDTO.getId() != null) {
-            throw new BadRequestAlertException("A new answerResponse cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        AnswerResponseDTO result = answerResponseService.save(answerResponseDTO);
-        return ResponseEntity.created(new URI("/api/answer-responses/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+    @GetMapping("/answer-responses/consent")
+    public ResponseEntity<AnswerResponseDTO> getConsentAnswerResponse(Principal principal) {
+        log.debug("REST request to get Consent");
+        Optional<AnswerResponseDTO> answerResponseDTO = 
+            answerResponseService
+                .findOne(
+                    principal.getName(),
+                    QuestionnaireType.CONSENT_FORM
+            );
+        return ResponseUtil.wrapOrNotFound(answerResponseDTO);
+    }
+
+    @GetMapping("/answer-responses/questionnaire")
+    public ResponseEntity<AnswerResponseDTO> getRiskAssesmentAnswerResponse(Principal principal) {
+        log.debug("REST request to get Risk Assesment");
+        Optional<AnswerResponseDTO> answerResponseDTO = 
+            answerResponseService
+                .findOne(
+                    principal.getName(),
+                    QuestionnaireType.RISK_ASSESMENT
+            );
+        return ResponseUtil.wrapOrNotFound(answerResponseDTO);
     }
 
     /**
@@ -88,59 +93,5 @@ public class AnswerResponseResource {
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, answerResponseDTO.getId().toString()))
             .body(result);
-    }
-
-    /**
-     * {@code GET  /answer-responses} : get all the answerResponses.
-     *
-
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of answerResponses in body.
-     */
-    @GetMapping("/answer-responses")
-    public List<AnswerResponseDTO> getAllAnswerResponses() {
-        log.debug("REST request to get all AnswerResponses");
-        return answerResponseService.findAll();
-    }
-
-    /**
-     * {@code GET  /answer-responses/:id} : get the "id" answerResponse.
-     *
-     * @param id the id of the answerResponseDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the answerResponseDTO, or with status {@code 404 (Not Found)}.
-     */
-    @GetMapping("/answer-responses/{id}")
-    public ResponseEntity<AnswerResponseDTO> getAnswerResponse(@PathVariable Long id) {
-        log.debug("REST request to get AnswerResponse : {}", id);
-        Optional<AnswerResponseDTO> answerResponseDTO = answerResponseService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(answerResponseDTO);
-    }
-
-    /**
-     * {@code GET  /answer-responses/:id} : get the "id" answerResponse.
-     *
-     * @param id the id of the answerResponseDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the answerResponseDTO, or with status {@code 404 (Not Found)}.
-     */
-    @GetMapping("/answer-responses/empty")
-    public AnswerResponseDTO getEmptyAnswerResponse(@RequestParam("type") QuestionnaireType questionnaireType) {
-        log.debug("REST request to get an empty AnswerResponse");
-
-        AnswerResponse answerResponse =
-            answerResponseGenerator.generateAnswerResponseToQuestionniare(questionnaireType);
-
-        return answerResponseMapper.toDto(answerResponse);
-    }
-
-    /**
-     * {@code DELETE  /answer-responses/:id} : delete the "id" answerResponse.
-     *
-     * @param id the id of the answerResponseDTO to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
-    @DeleteMapping("/answer-responses/{id}")
-    public ResponseEntity<Void> deleteAnswerResponse(@PathVariable Long id) {
-        log.debug("REST request to delete AnswerResponse : {}", id);
-        answerResponseService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
     }
 }

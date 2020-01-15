@@ -1,7 +1,6 @@
 package uk.ac.herc.bcra.web.rest;
 
 import uk.ac.herc.bcra.service.ParticipantService;
-import uk.ac.herc.bcra.web.rest.errors.BadRequestAlertException;
 import uk.ac.herc.bcra.web.rest.errors.InvalidPasswordException;
 import uk.ac.herc.bcra.service.dto.ParticipantDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantExistsDTO;
@@ -25,8 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -52,46 +49,6 @@ public class ParticipantResource {
     public ParticipantResource(ParticipantService participantService, ParticipantQueryService participantQueryService) {
         this.participantService = participantService;
         this.participantQueryService = participantQueryService;
-    }
-
-    /**
-     * {@code POST  /participants} : Create a new participant.
-     *
-     * @param participantDTO the participantDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new participantDTO, or with status {@code 400 (Bad Request)} if the participant has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PostMapping("/participants")
-    public ResponseEntity<ParticipantDTO> createParticipant(@Valid @RequestBody ParticipantDTO participantDTO) throws URISyntaxException {
-        log.debug("REST request to save Participant : {}", participantDTO);
-        if (participantDTO.getId() != null) {
-            throw new BadRequestAlertException("A new participant cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        ParticipantDTO result = participantService.save(participantDTO);
-        return ResponseEntity.created(new URI("/api/participants/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
-            .body(result);
-    }
-
-    /**
-     * {@code PUT  /participants} : Updates an existing participant.
-     *
-     * @param participantDTO the participantDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated participantDTO,
-     * or with status {@code 400 (Bad Request)} if the participantDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the participantDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PutMapping("/participants")
-    public ResponseEntity<ParticipantDTO> updateParticipant(@Valid @RequestBody ParticipantDTO participantDTO) throws URISyntaxException {
-        log.debug("REST request to update Participant : {}", participantDTO);
-        if (participantDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        ParticipantDTO result = participantService.save(participantDTO);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, participantDTO.getId().toString()))
-            .body(result);
     }
 
     /**

@@ -43,6 +43,9 @@ describe('Participant e2e test', () => {
             participantUpdatePage.setRegisterDatetimeInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
             participantUpdatePage.setLastLoginDatetimeInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
             participantUpdatePage.userSelectLastOption(),
+            participantUpdatePage.identifiableDataSelectLastOption(),
+            participantUpdatePage.procedureSelectLastOption(),
+            participantUpdatePage.csvFileSelectLastOption(),
         ]);
         expect(await participantUpdatePage.getRegisterDatetimeInput()).to.contain('2001-01-01T02:30', 'Expected registerDatetime value to be equals to 2000-12-31');
         expect(await participantUpdatePage.getLastLoginDatetimeInput()).to.contain('2001-01-01T02:30', 'Expected lastLoginDatetime value to be equals to 2000-12-31');

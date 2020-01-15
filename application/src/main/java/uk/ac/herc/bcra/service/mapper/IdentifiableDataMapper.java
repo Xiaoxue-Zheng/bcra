@@ -8,17 +8,10 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link IdentifiableData} and its DTO {@link IdentifiableDataDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ParticipantMapper.class, CsvFileMapper.class})
+@Mapper(componentModel = "spring", uses = {})
 public interface IdentifiableDataMapper extends EntityMapper<IdentifiableDataDTO, IdentifiableData> {
 
-    @Mapping(source = "participant.id", target = "participantId")
-    @Mapping(source = "csvFile.id", target = "csvFileId")
-    @Mapping(source = "csvFile.fileName", target = "csvFileFileName")
-    IdentifiableDataDTO toDto(IdentifiableData identifiableData);
 
-    @Mapping(source = "participantId", target = "participant")
-    @Mapping(source = "csvFileId", target = "csvFile")
-    IdentifiableData toEntity(IdentifiableDataDTO identifiableDataDTO);
 
     default IdentifiableData fromId(Long id) {
         if (id == null) {

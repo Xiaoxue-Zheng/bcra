@@ -24,17 +24,13 @@ public class ParticipantDTO implements Serializable {
     private Instant lastLoginDatetime;
 
     // Process
-    //private Instant consentDatetime;
+    private ResponseState consentStatus;
     private ResponseState questionnaireStatus;
     //private SwabState swabState;
     //private MammogramState mamogramState;
 
     // Letters
     //private Instant invitationDownloadedDatetime;
-
-    // Unused
-    private Long userId;
-    private String userLogin;
 
     public Long getId() {
         return id;
@@ -50,22 +46,6 @@ public class ParticipantDTO implements Serializable {
 
     public void setRegisterDatetime(Instant registerDatetime) {
         this.registerDatetime = registerDatetime;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getUserLogin() {
-        return userLogin;
-    }
-
-    public void setUserLogin(String userLogin) {
-        this.userLogin = userLogin;
     }
 
     public String getNhsNumber() {
@@ -98,6 +78,22 @@ public class ParticipantDTO implements Serializable {
 
     public void setLastLoginDatetime(Instant lastLoginDatetime) {
         this.lastLoginDatetime = lastLoginDatetime;
+    }
+    
+    public ResponseState getConsentStatus() {
+        return consentStatus;
+    }
+
+    public void setConsentStatus(ResponseState consentStatus) {
+        this.consentStatus = consentStatus;
+    }
+
+    public ResponseState getQuestionnaireStatus() {
+        return questionnaireStatus;
+    }
+
+    public void setQuestionnaireStatus(ResponseState questionnaireStatus) {
+        this.questionnaireStatus = questionnaireStatus;
     }
 
     @Override
@@ -133,9 +129,8 @@ public class ParticipantDTO implements Serializable {
             + ", questionnaireStatus=" + questionnaireStatus 
             + ", registerDatetime=" + registerDatetime
             + ", lastLoginDatetime=" + lastLoginDatetime
-            + ", userId=" + userId
-            + ", userLogin=" + userLogin
+            + ", consentStatus=" + consentStatus
+            + ", questionnaireStatus=" + questionnaireStatus            
             + "]";
     }
-
 }

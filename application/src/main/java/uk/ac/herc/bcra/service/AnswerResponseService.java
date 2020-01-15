@@ -1,5 +1,6 @@
 package uk.ac.herc.bcra.service;
 
+import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
 
 import java.util.List;
@@ -33,6 +34,8 @@ public interface AnswerResponseService {
      * @return the entity.
      */
     Optional<AnswerResponseDTO> findOne(Long id);
+
+    Optional<AnswerResponseDTO> findOne(String login, QuestionnaireType questionnaireType);
 
     /**
      * Delete the "id" answerResponse.

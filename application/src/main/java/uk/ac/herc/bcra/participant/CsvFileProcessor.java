@@ -5,6 +5,8 @@ import java.util.List;
 import com.univocity.parsers.common.DataValidationException;
 import com.univocity.parsers.common.TextParsingException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,8 @@ import uk.ac.herc.bcra.repository.CsvFileRepository;
 
 @Service
 public class CsvFileProcessor {
+
+    private final Logger log = LoggerFactory.getLogger(CsvFileProcessor.class);
 
     private final CsvFileRepository csvFileRepository;
     private final ParticipantImport participantImport;
@@ -78,6 +82,10 @@ public class CsvFileProcessor {
         catch (Exception exception) {
             state = CsvFileState.INVALID; 
             status = exception.getMessage();
+        }
+
+        if (status != null) {
+            log.debug("Error processing CSV File: " + status);
         }
 
         setCsvFileState.setStateAndStatus(csvFileId, state, status);

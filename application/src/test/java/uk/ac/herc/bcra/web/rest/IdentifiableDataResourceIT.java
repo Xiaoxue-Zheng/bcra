@@ -2,7 +2,6 @@ package uk.ac.herc.bcra.web.rest;
 
 import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.IdentifiableData;
-import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.repository.IdentifiableDataRepository;
 import uk.ac.herc.bcra.service.IdentifiableDataService;
 import uk.ac.herc.bcra.service.dto.IdentifiableDataDTO;
@@ -44,7 +43,7 @@ public class IdentifiableDataResourceIT {
 
     private static final LocalDate DEFAULT_DATE_OF_BIRTH = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_DATE_OF_BIRTH = LocalDate.now(ZoneId.systemDefault());
-    
+
     private static final String DEFAULT_FIRSTNAME = "AAAAAAAAAA";
     private static final String UPDATED_FIRSTNAME = "BBBBBBBBBB";
 
@@ -135,16 +134,6 @@ public class IdentifiableDataResourceIT {
             .address5(DEFAULT_ADDRESS_5)
             .postcode(DEFAULT_POSTCODE)
             .practiceName(DEFAULT_PRACTICE_NAME);
-        // Add required entity
-        Participant participant;
-        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = ParticipantResourceIT.createEntity(em);
-            em.persist(participant);
-            em.flush();
-        } else {
-            participant = TestUtil.findAll(em, Participant.class).get(0);
-        }
-        identifiableData.setParticipant(participant);
         return identifiableData;
     }
     /**
@@ -167,16 +156,6 @@ public class IdentifiableDataResourceIT {
             .address5(UPDATED_ADDRESS_5)
             .postcode(UPDATED_POSTCODE)
             .practiceName(UPDATED_PRACTICE_NAME);
-        // Add required entity
-        Participant participant;
-        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = ParticipantResourceIT.createUpdatedEntity(em);
-            em.persist(participant);
-            em.flush();
-        } else {
-            participant = TestUtil.findAll(em, Participant.class).get(0);
-        }
-        identifiableData.setParticipant(participant);
         return identifiableData;
     }
 

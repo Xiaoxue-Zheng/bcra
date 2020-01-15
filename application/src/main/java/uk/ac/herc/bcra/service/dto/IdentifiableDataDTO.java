@@ -46,12 +46,6 @@ public class IdentifiableDataDTO implements Serializable {
     private String practiceName;
 
 
-    private Long participantId;
-
-    private Long csvFileId;
-
-    private String csvFileFileName;
-
     public Long getId() {
         return id;
     }
@@ -156,30 +150,6 @@ public class IdentifiableDataDTO implements Serializable {
         this.practiceName = practiceName;
     }
 
-    public Long getParticipantId() {
-        return participantId;
-    }
-
-    public void setParticipantId(Long participantId) {
-        this.participantId = participantId;
-    }
-
-    public Long getCsvFileId() {
-        return csvFileId;
-    }
-
-    public void setCsvFileId(Long csvFileId) {
-        this.csvFileId = csvFileId;
-    }
-
-    public String getCsvFileFileName() {
-        return csvFileFileName;
-    }
-
-    public void setCsvFileFileName(String csvFileFileName) {
-        this.csvFileFileName = csvFileFileName;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -217,9 +187,6 @@ public class IdentifiableDataDTO implements Serializable {
             ", address5='" + getAddress5() + "'" +
             ", postcode='" + getPostcode() + "'" +
             ", practiceName='" + getPracticeName() + "'" +
-            ", participant=" + getParticipantId() +
-            ", csvFile=" + getCsvFileId() +
-            ", csvFile='" + getCsvFileFileName() + "'" +
             "}";
     }
 }

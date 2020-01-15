@@ -101,6 +101,18 @@ public class ParticipantQueryService extends QueryService<Participant> {
                 specification = specification.and(buildSpecification(criteria.getUserId(),
                     root -> root.join(Participant_.user, JoinType.LEFT).get(User_.id)));
             }
+            if (criteria.getIdentifiableDataId() != null) {
+                specification = specification.and(buildSpecification(criteria.getIdentifiableDataId(),
+                    root -> root.join(Participant_.identifiableData, JoinType.LEFT).get(IdentifiableData_.id)));
+            }
+            if (criteria.getProcedureId() != null) {
+                specification = specification.and(buildSpecification(criteria.getProcedureId(),
+                    root -> root.join(Participant_.procedure, JoinType.LEFT).get(Procedure_.id)));
+            }
+            if (criteria.getCsvFileId() != null) {
+                specification = specification.and(buildSpecification(criteria.getCsvFileId(),
+                    root -> root.join(Participant_.csvFile, JoinType.LEFT).get(CsvFile_.id)));
+            }
             if (criteria.getNhsNumber() != null) {
                 specification = specification.and(buildSpecification(criteria.getNhsNumber(),
                     root -> root.join(Participant_.identifiableData, JoinType.LEFT).get(IdentifiableData_.nhsNumber)));

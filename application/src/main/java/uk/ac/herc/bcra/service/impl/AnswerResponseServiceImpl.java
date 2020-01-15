@@ -2,7 +2,10 @@ package uk.ac.herc.bcra.service.impl;
 
 import uk.ac.herc.bcra.service.AnswerResponseService;
 import uk.ac.herc.bcra.domain.AnswerResponse;
+import uk.ac.herc.bcra.domain.Participant;
+import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 import uk.ac.herc.bcra.repository.AnswerResponseRepository;
+import uk.ac.herc.bcra.repository.ParticipantRepository;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
 import uk.ac.herc.bcra.service.mapper.AnswerResponseMapper;
 import org.slf4j.Logger;
@@ -29,9 +32,16 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
 
     private final AnswerResponseMapper answerResponseMapper;
 
-    public AnswerResponseServiceImpl(AnswerResponseRepository answerResponseRepository, AnswerResponseMapper answerResponseMapper) {
+    private final ParticipantRepository participantRepository;
+
+    public AnswerResponseServiceImpl(
+        AnswerResponseRepository answerResponseRepository,
+        AnswerResponseMapper answerResponseMapper,
+        ParticipantRepository participantRepository
+    ) {
         this.answerResponseRepository = answerResponseRepository;
         this.answerResponseMapper = answerResponseMapper;
+        this.participantRepository = participantRepository;
     }
 
     /**
@@ -75,6 +85,27 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
         log.debug("Request to get AnswerResponse : {}", id);
         return answerResponseRepository.findById(id)
             .map(answerResponseMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<AnswerResponseDTO> findOne(String login, QuestionnaireType questionnaireType) {
+        log.debug("Request to get AnswerResponse");
+        Optional<Participant> participantOptional = participantRepository.findOneByUserLogin(login);
+        if (participantOptional.isPresent()) {
+            if (questionnaireType == QuestionnaireType.CONSENT_FORM) {
+                return 
+                    Optional
+                    .of(participantOptional.get().getProcedure().getConsentResponse())
+                    .map(answerResponseMapper::toDto);
+            } else if (questionnaireType == QuestionnaireType.RISK_ASSESMENT) {
+                return 
+                    Optional
+                    .of(participantOptional.get().getProcedure().getRiskAssesmentResponse())
+                    .map(answerResponseMapper::toDto);
+            }
+        }
+        return Optional.empty();
     }
 
     /**

@@ -35,6 +35,39 @@
                         This field is required.
                     </small>
                 </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_identifiableData">Identifiable Data</label>
+                    <select class="form-control" id="field_identifiableData" name="identifiableData" formControlName="identifiableDataId">
+                        <option *ngIf="!editForm.get('identifiableDataId').value" [ngValue]="null" selected></option>
+                        <option [ngValue]="identifiableDataOption.id" *ngFor="let identifiableDataOption of identifiabledata; trackBy: trackIdentifiableDataById">{{identifiableDataOption.id}}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('identifiableDataId').invalid && (editForm.get('identifiableDataId').dirty || editForm.get('identifiableDataId').touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('identifiableDataId').errors.required">
+                        This field is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_procedure">Procedure</label>
+                    <select class="form-control" id="field_procedure" name="procedure" formControlName="procedureId">
+                        <option *ngIf="!editForm.get('procedureId').value" [ngValue]="null" selected></option>
+                        <option [ngValue]="procedureOption.id" *ngFor="let procedureOption of procedures; trackBy: trackProcedureById">{{procedureOption.id}}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('procedureId').invalid && (editForm.get('procedureId').dirty || editForm.get('procedureId').touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('procedureId').errors.required">
+                        This field is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_csvFile">Csv File</label>
+                    <select class="form-control" id="field_csvFile" name="csvFile" formControlName="csvFileId">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="csvFileOption.id" *ngFor="let csvFileOption of csvfiles; trackBy: trackCsvFileById">{{csvFileOption.fileName}}</option>
+                    </select>
+                </div>
             </div>
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">

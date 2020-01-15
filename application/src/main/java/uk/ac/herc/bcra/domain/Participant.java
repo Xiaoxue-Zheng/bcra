@@ -1,4 +1,5 @@
 package uk.ac.herc.bcra.domain;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -29,13 +30,24 @@ public class Participant implements Serializable {
     @Column(name = "last_login_datetime")
     private Instant lastLoginDatetime;
 
-    @OneToOne(optional = false)
-    @NotNull
+    @OneToOne(optional = false)    @NotNull
+
     @JoinColumn(unique = true)
     private User user;
 
-    @OneToOne(mappedBy = "participant")
+    @OneToOne(optional = false)    @NotNull
+
+    @JoinColumn(unique = true)
     private IdentifiableData identifiableData;
+
+    @OneToOne(optional = false)    @NotNull
+
+    @JoinColumn(unique = true)
+    private Procedure procedure;
+
+    @ManyToOne
+    @JsonIgnoreProperties("participants")
+    private CsvFile csvFile;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -59,7 +71,6 @@ public class Participant implements Serializable {
         this.registerDatetime = registerDatetime;
     }
 
-    
     public Instant getLastLoginDatetime() {
         return lastLoginDatetime;
     }
@@ -90,8 +101,39 @@ public class Participant implements Serializable {
         return identifiableData;
     }
 
+    public Participant identifiableData(IdentifiableData identifiableData) {
+        this.identifiableData = identifiableData;
+        return this;
+    }
+
     public void setIdentifiableData(IdentifiableData identifiableData) {
         this.identifiableData = identifiableData;
+    }
+
+    public Procedure getProcedure() {
+        return procedure;
+    }
+
+    public Participant procedure(Procedure procedure) {
+        this.procedure = procedure;
+        return this;
+    }
+
+    public void setProcedure(Procedure procedure) {
+        this.procedure = procedure;
+    }
+
+    public CsvFile getCsvFile() {
+        return csvFile;
+    }
+
+    public Participant csvFile(CsvFile csvFile) {
+        this.csvFile = csvFile;
+        return this;
+    }
+
+    public void setCsvFile(CsvFile csvFile) {
+        this.csvFile = csvFile;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -117,9 +159,6 @@ public class Participant implements Serializable {
             "id=" + getId() +
             ", registerDatetime='" + getRegisterDatetime() + "'" +
             ", lastLoginDatetime='" + getLastLoginDatetime() + "'" +
-            ", identifiableData=" + getIdentifiableData() +
             "}";
     }
-
-
 }

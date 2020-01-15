@@ -4,12 +4,15 @@ import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.CsvFile;
 import uk.ac.herc.bcra.domain.IdentifiableData;
 import uk.ac.herc.bcra.domain.Participant;
+import uk.ac.herc.bcra.domain.Questionnaire;
 import uk.ac.herc.bcra.domain.User;
 import uk.ac.herc.bcra.domain.enumeration.CsvFileState;
+import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 import uk.ac.herc.bcra.participant.CsvFileProcessor;
 import uk.ac.herc.bcra.repository.CsvFileRepository;
 import uk.ac.herc.bcra.repository.IdentifiableDataRepository;
 import uk.ac.herc.bcra.repository.ParticipantRepository;
+import uk.ac.herc.bcra.repository.QuestionnaireRepository;
 import uk.ac.herc.bcra.repository.UserRepository;
 import uk.ac.herc.bcra.service.CsvFileService;
 import uk.ac.herc.bcra.web.rest.errors.ExceptionTranslator;
@@ -61,6 +64,10 @@ public class ParticipantCsvUploadResourceIT {
     private ParticipantRepository participantRepository;
 
     @Autowired
+    private QuestionnaireRepository questionnaireRepository;
+
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -93,6 +100,18 @@ public class ParticipantCsvUploadResourceIT {
     @BeforeEach
     public void setup() throws Exception {
         MockitoAnnotations.initMocks(this);
+
+        Questionnaire consentQuestionnaire = new Questionnaire()
+            .type(QuestionnaireType.CONSENT_FORM)
+            .version(1);
+
+        Questionnaire riskAssesmentQuestionnaire = new Questionnaire()
+            .type(QuestionnaireType.RISK_ASSESMENT)
+            .version(1);
+
+        questionnaireRepository.saveAndFlush(consentQuestionnaire);
+        questionnaireRepository.saveAndFlush(riskAssesmentQuestionnaire);
+
         final CsvFileResource csvFileResource = new CsvFileResource(csvFileService);
         mockMvc = MockMvcBuilders.standaloneSetup(csvFileResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)

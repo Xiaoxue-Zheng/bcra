@@ -21,6 +21,9 @@
             <th jhiSortBy="registerDatetime"><span>Register Datetime</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="lastLoginDatetime"><span>Last Login Datetime</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="userLogin"><span>User</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="identifiableDataId"><span>Identifiable Data</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="procedureId"><span>Procedure</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="csvFileFileName"><span>Csv File</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
@@ -31,6 +34,21 @@
                 <td>{{participant.lastLoginDatetime | date:'medium'}}</td>
                 <td>
                     {{participant.userLogin}}
+                </td>
+                <td>
+                    <div *ngIf="participant.identifiableDataId">
+                        <a [routerLink]="['/identifiable-data', participant.identifiableDataId , 'view' ]" >{{participant.identifiableDataId}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="participant.procedureId">
+                        <a [routerLink]="['/procedure', participant.procedureId , 'view' ]" >{{participant.procedureId}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="participant.csvFileId">
+                        <a [routerLink]="['/csv-file', participant.csvFileId , 'view' ]" >{{participant.csvFileFileName}}</a>
+                    </div>
                 </td>
                 <td class="text-right">
                     <div class="btn-group">

@@ -14,9 +14,6 @@ export interface IIdentifiableData {
   address5?: string;
   postcode?: string;
   practiceName?: string;
-  participantId?: number;
-  csvFileFileName?: string;
-  csvFileId?: number;
 }
 
 export class IdentifiableData implements IIdentifiableData {
@@ -33,9 +30,6 @@ export class IdentifiableData implements IIdentifiableData {
     public address4?: string,
     public address5?: string,
     public postcode?: string,
-    public practiceName?: string,
-    public participantId?: number,
-    public csvFileFileName?: string,
-    public csvFileId?: number
+    public practiceName?: string
   ) {}
 }

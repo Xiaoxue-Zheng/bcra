@@ -16,6 +16,7 @@ import uk.ac.herc.bcra.web.rest.errors.EmailAlreadyUsedException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -118,17 +119,29 @@ public class ParticipantServiceImpl implements ParticipantService {
     }
 
     @Override
-    public ParticipantExistsDTO exists(String nhsNumber, LocalDate dateOfBirth) {
-        Optional<IdentifiableData> identifiableDataOptional =
-            identifiableDataService.findOne(nhsNumber, dateOfBirth);
+    public Optional<Participant> findOne(String nhsNumber, LocalDate dateOfBirth) {
+        IdentifiableData exampleIdentifiableData = new IdentifiableData();
+        exampleIdentifiableData.setNhsNumber(nhsNumber);
+        exampleIdentifiableData.setDateOfBirth(dateOfBirth);
 
-        if (!identifiableDataOptional.isPresent()) {
+        Participant exampleParticipant = new Participant();
+        exampleParticipant.setIdentifiableData(exampleIdentifiableData);
+
+        Example<Participant> example = Example.of(exampleParticipant);
+        return participantRepository.findOne(example);
+    }
+
+    @Override
+    public ParticipantExistsDTO exists(String nhsNumber, LocalDate dateOfBirth) {
+        Optional<Participant> participantOptional = findOne(nhsNumber, dateOfBirth);
+
+        if (!participantOptional.isPresent()) {
             return ParticipantExistsDTO.NOT_FOUND;
         }
 
-        IdentifiableData identifiableData = identifiableDataOptional.get();
-        String email =identifiableData.getEmail();
-        String password = identifiableData.getParticipant().getUser().getPassword() ;
+        Participant participant = participantOptional.get();
+        String email = participant.getIdentifiableData().getEmail();
+        String password = participant.getUser().getPassword();
 
         if ((email != null) || (password != null)) {
             return ParticipantExistsDTO.ALREADY_REGISTERED;
@@ -148,13 +161,13 @@ public class ParticipantServiceImpl implements ParticipantService {
             throw new EmailAlreadyUsedException();
         }
 
-        Optional<IdentifiableData> identifiableDataOptional =
-            identifiableDataService.findOne(
+        Optional<Participant> participantOptional =
+            findOne(
                 participantActivationDTO.getNhsNumber(),
                 participantActivationDTO.getDateOfBirth()
             );
 
-        if (!identifiableDataOptional.isPresent()) {
+        if (!participantOptional.isPresent()) {
             throw new RuntimeException(
                 "Participant does not exist. "
                 + " nhsNumber: " + participantActivationDTO.getNhsNumber()
@@ -162,8 +175,8 @@ public class ParticipantServiceImpl implements ParticipantService {
             );
         }
 
-        IdentifiableData identifiableData = identifiableDataOptional.get();
-        Participant participant = identifiableData.getParticipant();
+        Participant participant = participantOptional.get();
+        IdentifiableData identifiableData = participant.getIdentifiableData();
         User user = participant.getUser();
 
         if (

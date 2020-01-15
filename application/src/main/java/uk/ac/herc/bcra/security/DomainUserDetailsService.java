@@ -1,8 +1,8 @@
 package uk.ac.herc.bcra.security;
 
-import uk.ac.herc.bcra.domain.IdentifiableData;
+import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.domain.User;
-import uk.ac.herc.bcra.repository.IdentifiableDataRepository;
+import uk.ac.herc.bcra.repository.ParticipantRepository;
 import uk.ac.herc.bcra.repository.UserRepository;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
@@ -28,14 +28,14 @@ public class DomainUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    private final IdentifiableDataRepository identifiableDataRepository;
+    private final ParticipantRepository participantRepository;
 
     public DomainUserDetailsService(
         UserRepository userRepository,
-        IdentifiableDataRepository identifiableDataRepository
+        ParticipantRepository participantRepository
     ) {
         this.userRepository = userRepository;
-        this.identifiableDataRepository = identifiableDataRepository;
+        this.participantRepository = participantRepository;
     }
 
     @Override
@@ -47,13 +47,12 @@ public class DomainUserDetailsService implements UserDetailsService {
             Optional<User> userOptional = userRepository.findOneWithAuthoritiesByEmailIgnoreCase(login);
 
             if (!userOptional.isPresent()) {
-                Optional<IdentifiableData> identifiableDataOptional = identifiableDataRepository.findOneByEmail(login);
+                Optional<Participant> participantOptional = participantRepository.findOneByIdentifiableDataEmailIgnoreCase(login);
 
-                if (identifiableDataOptional.isPresent()) {
+                if (participantOptional.isPresent()) {
                     userOptional = Optional.of(
-                        identifiableDataOptional
+                        participantOptional
                         .get()
-                        .getParticipant()
                         .getUser()
                     );
                     userOptional.get().getAuthorities();

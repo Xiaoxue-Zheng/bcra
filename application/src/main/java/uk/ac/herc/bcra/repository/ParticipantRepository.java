@@ -18,4 +18,7 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long>,
 
     Optional<Participant> findOneByUser(User user);
 
+    Optional<Participant> findOneByIdentifiableDataEmailIgnoreCase(String email);
+
+    Optional<Participant> findOneByUserLogin(String login);
 }

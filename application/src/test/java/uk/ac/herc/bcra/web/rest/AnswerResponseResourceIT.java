@@ -2,6 +2,7 @@ package uk.ac.herc.bcra.web.rest;
 
 import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.AnswerResponse;
+import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.domain.Questionnaire;
 import uk.ac.herc.bcra.repository.AnswerResponseRepository;
 import uk.ac.herc.bcra.service.AnswerResponseService;
@@ -17,12 +18,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
+
+import java.security.Principal;
 import java.util.List;
 
 import static uk.ac.herc.bcra.web.rest.TestUtil.createFormattingConversionService;
@@ -84,7 +88,8 @@ public class AnswerResponseResourceIT {
             answerResponseGenerator,
             answerResponseMapper
         );
-        this.restAnswerResponseMockMvc = MockMvcBuilders.standaloneSetup(answerResponseResource)
+        this.restAnswerResponseMockMvc = MockMvcBuilders
+            .standaloneSetup(answerResponseResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
@@ -144,119 +149,70 @@ public class AnswerResponseResourceIT {
 
     @Test
     @Transactional
-    public void createAnswerResponse() throws Exception {
-        int databaseSizeBeforeCreate = answerResponseRepository.findAll().size();
-
-        // Create the AnswerResponse
-        AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(answerResponse);
-        restAnswerResponseMockMvc.perform(post("/api/answer-responses")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(answerResponseDTO)))
-            .andExpect(status().isCreated());
-
-        // Validate the AnswerResponse in the database
-        List<AnswerResponse> answerResponseList = answerResponseRepository.findAll();
-        assertThat(answerResponseList).hasSize(databaseSizeBeforeCreate + 1);
-        AnswerResponse testAnswerResponse = answerResponseList.get(answerResponseList.size() - 1);
-        assertThat(testAnswerResponse.getState()).isEqualTo(ResponseState.SUBMITTED);
-        assertThat(testAnswerResponse.getStatus()).isEqualTo(null);
-    }
-
-    @Test
-    @Transactional
-    public void createAnswerResponseWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = answerResponseRepository.findAll().size();
-
-        // Create the AnswerResponse with an existing ID
-        answerResponse.setId(1L);
-        AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(answerResponse);
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restAnswerResponseMockMvc.perform(post("/api/answer-responses")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(answerResponseDTO)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the AnswerResponse in the database
-        List<AnswerResponse> answerResponseList = answerResponseRepository.findAll();
-        assertThat(answerResponseList).hasSize(databaseSizeBeforeCreate);
-    }
-
-
-    @Test
-    @Transactional
-    public void checkStateIsSetToSubmitted() throws Exception {
-        int databaseSizeBeforeCreate = answerResponseRepository.findAll().size();
-        // set the field null
-        answerResponse.setState(null);
-
-        // Create the AnswerResponse, which fails.
-        AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(answerResponse);
-
-        restAnswerResponseMockMvc.perform(post("/api/answer-responses")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(answerResponseDTO)))
-            .andExpect(status().is2xxSuccessful());
-
-        // Validate the AnswerResponse in the database
-        List<AnswerResponse> answerResponseList = answerResponseRepository.findAll();
-        assertThat(answerResponseList).hasSize(databaseSizeBeforeCreate + 1);
-        AnswerResponse testAnswerResponse = answerResponseList.get(answerResponseList.size() - 1);
-        assertThat(testAnswerResponse.getState()).isEqualTo(ResponseState.SUBMITTED);
-    }
-
-    @Test
-    @Transactional
-    public void getAllAnswerResponses() throws Exception {
-        // Initialize the database
-        answerResponseRepository.saveAndFlush(answerResponse);
-
-        // Get all the answerResponseList
-        restAnswerResponseMockMvc.perform(get("/api/answer-responses?sort=id,desc"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(answerResponse.getId().intValue())));
-    }
-    
-    @Test
-    @Transactional
-    public void getAnswerResponse() throws Exception {
-        // Initialize the database
-        answerResponseRepository.saveAndFlush(answerResponse);
-
-        // Get the answerResponse
-        restAnswerResponseMockMvc.perform(get("/api/answer-responses/{id}", answerResponse.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(answerResponse.getId().intValue()));
-    }
-
-    @Test
-    @Transactional
-    public void generateAnswerResponse() throws Exception {
+    public void getConsentAnswerResponse() throws Exception {
         
-        Questionnaire questionnaire;
-        if (TestUtil.findAll(em, Questionnaire.class).isEmpty()) {
-            questionnaire = QuestionnaireResourceIT.createUpdatedEntity(em);
-            em.persist(questionnaire);
+        Participant participant;
+        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
+            participant = ParticipantResourceIT.createUpdatedEntity(em);
+            em.persist(participant);
             em.flush();
         } else {
-            questionnaire = TestUtil.findAll(em, Questionnaire.class).get(0);
+            participant = TestUtil.findAll(em, Participant.class).get(0);
         }
 
-        // Generate the empty answerResponse
-        restAnswerResponseMockMvc.perform(get("/api/answer-responses/empty?type={type}", questionnaire.getType()))
+        restAnswerResponseMockMvc.perform(
+                get("/api/answer-responses/consent")
+                .principal(new Principal() {
+                    @Override
+                    public String getName() {
+                        return participant.getUser().getLogin();
+                    }
+                })
+            )
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.questionnaireId").value(questionnaire.getId().intValue()));
+            .andExpect(jsonPath("$.questionnaireId").value(
+                participant
+                    .getProcedure()
+                    .getConsentResponse()
+                    .getQuestionnaire()
+                    .getId()
+                    .intValue()
+            ));
     }
 
     @Test
     @Transactional
-    public void getNonExistingAnswerResponse() throws Exception {
-        // Get the answerResponse
-        restAnswerResponseMockMvc.perform(get("/api/answer-responses/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
+    public void getRiskAssesmentAnswerResponse() throws Exception {
+        
+        Participant participant;
+        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
+            participant = ParticipantResourceIT.createUpdatedEntity(em);
+            em.persist(participant);
+            em.flush();
+        } else {
+            participant = TestUtil.findAll(em, Participant.class).get(0);
+        }
+
+        restAnswerResponseMockMvc.perform(
+                get("/api/answer-responses/questionnaire")
+                .principal(new Principal() {
+                    @Override
+                    public String getName() {
+                        return participant.getUser().getLogin();
+                    }
+                })
+            )
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.questionnaireId").value(
+                participant
+                    .getProcedure()
+                    .getRiskAssesmentResponse()
+                    .getQuestionnaire()
+                    .getId()
+                    .intValue()
+            ));
     }
 
     @Test
@@ -308,24 +264,6 @@ public class AnswerResponseResourceIT {
         // Validate the AnswerResponse in the database
         List<AnswerResponse> answerResponseList = answerResponseRepository.findAll();
         assertThat(answerResponseList).hasSize(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    @Transactional
-    public void deleteAnswerResponse() throws Exception {
-        // Initialize the database
-        answerResponseRepository.saveAndFlush(answerResponse);
-
-        int databaseSizeBeforeDelete = answerResponseRepository.findAll().size();
-
-        // Delete the answerResponse
-        restAnswerResponseMockMvc.perform(delete("/api/answer-responses/{id}", answerResponse.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
-            .andExpect(status().isNoContent());
-
-        // Validate the database contains one less item
-        List<AnswerResponse> answerResponseList = answerResponseRepository.findAll();
-        assertThat(answerResponseList).hasSize(databaseSizeBeforeDelete - 1);
     }
 
     @Test

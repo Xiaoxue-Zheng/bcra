@@ -232,6 +232,7 @@ entity AnswerResponse {
 }
 
 enum ResponseState {
+    NOT_STARTED,
     SUBMITTED,
     INVALID,
     VALIDATED,
@@ -365,13 +366,21 @@ entity IdentifiableData{
 }
 
 relationship OneToOne {
-    IdentifiableData{participant required} to Participant
+    Participant{identifiableData required} to IdentifiableData
 }
 
 relationship ManyToOne {
-    IdentifiableData{CsvFile(fileName)} to CsvFile
+    Participant{CsvFile(fileName)} to CsvFile
 }
 
+/* Procedure */
+entity Procedure
+
+relationship OneToOne {
+    Participant{procedure required} to Procedure{participant required}
+    Procedure{consentResponse required} to AnswerResponse
+    Procedure{riskAssesmentResponse required} to AnswerResponse
+}
 
 /* Generation */
 dto * with mapstruct

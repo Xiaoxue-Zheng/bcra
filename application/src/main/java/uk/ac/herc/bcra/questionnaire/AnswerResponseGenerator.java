@@ -15,6 +15,8 @@ import uk.ac.herc.bcra.repository.QuestionnaireRepository;
 @Transactional
 public class AnswerResponseGenerator {
 
+    private final static ResponseState INITIAL_RESPONSE_STATE = ResponseState.NOT_STARTED;
+
     private final QuestionnaireRepository questionnaireRepository;
     private final AnswerResponseRepository answerResponseRepository;
 
@@ -28,7 +30,6 @@ public class AnswerResponseGenerator {
 
     public AnswerResponse generateAnswerResponseToQuestionniare(
         QuestionnaireType questionnaireType
-        /* , Participant participant */
     ) {
         AnswerResponse response = 
             generateAnswerResponse(
@@ -37,8 +38,6 @@ public class AnswerResponseGenerator {
                 )
             );
 
-        /* response.setParticipant(participant); */
-
         return answerResponseRepository.saveAndFlush(response);
     }    
 
@@ -46,7 +45,7 @@ public class AnswerResponseGenerator {
         
         AnswerResponse response = new AnswerResponse();
         response.setQuestionnaire(questionnaire);
-        response.setState(ResponseState.SUBMITTED);
+        response.setState(INITIAL_RESPONSE_STATE);
         response.setStatus(null);
 
         for (QuestionSection questionSection: questionnaire.getQuestionSections()) {

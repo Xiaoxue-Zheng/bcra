@@ -36,6 +36,12 @@ public class ParticipantCriteria implements Serializable, Criteria {
 
     private LongFilter userId;
 
+    private LongFilter identifiableDataId;
+
+    private LongFilter procedureId;
+
+    private LongFilter csvFileId;
+
     private StringFilter nhsNumber;
 
     public ParticipantCriteria(){
@@ -47,6 +53,9 @@ public class ParticipantCriteria implements Serializable, Criteria {
         this.lastLoginDatetime = other.lastLoginDatetime == null ? null : other.lastLoginDatetime.copy();
         this.userId = other.userId == null ? null : other.userId.copy();
         this.nhsNumber = other.nhsNumber == null ? null : other.nhsNumber.copy();
+        this.identifiableDataId = other.identifiableDataId == null ? null : other.identifiableDataId.copy();
+        this.procedureId = other.procedureId == null ? null : other.procedureId.copy();
+        this.csvFileId = other.csvFileId == null ? null : other.csvFileId.copy();
     }
 
     @Override
@@ -86,6 +95,30 @@ public class ParticipantCriteria implements Serializable, Criteria {
         this.userId = userId;
     }
 
+    public LongFilter getIdentifiableDataId() {
+        return identifiableDataId;
+    }
+
+    public void setIdentifiableDataId(LongFilter identifiableDataId) {
+        this.identifiableDataId = identifiableDataId;
+    }
+
+    public LongFilter getProcedureId() {
+        return procedureId;
+    }
+
+    public void setProcedureId(LongFilter procedureId) {
+        this.procedureId = procedureId;
+    }
+
+    public LongFilter getCsvFileId() {
+        return csvFileId;
+    }
+
+    public void setCsvFileId(LongFilter csvFileId) {
+        this.csvFileId = csvFileId;
+    }
+
     public StringFilter getNhsNumber() {
         return nhsNumber;
     }
@@ -108,6 +141,9 @@ public class ParticipantCriteria implements Serializable, Criteria {
             Objects.equals(registerDatetime, that.registerDatetime) &&
             Objects.equals(lastLoginDatetime, that.lastLoginDatetime) &&
             Objects.equals(userId, that.userId) &&
+            Objects.equals(identifiableDataId, that.identifiableDataId) &&
+            Objects.equals(procedureId, that.procedureId) &&
+            Objects.equals(csvFileId, that.csvFileId) &&
             Objects.equals(nhsNumber, that.nhsNumber);
     }
 
@@ -118,6 +154,9 @@ public class ParticipantCriteria implements Serializable, Criteria {
         registerDatetime,
         lastLoginDatetime,
         userId,
+        identifiableDataId,
+        procedureId,
+        csvFileId,
         nhsNumber
         );
     }
@@ -129,6 +168,9 @@ public class ParticipantCriteria implements Serializable, Criteria {
                 (registerDatetime != null ? "registerDatetime=" + registerDatetime + ", " : "") +
                 (lastLoginDatetime != null ? "lastLoginDatetime=" + lastLoginDatetime + ", " : "") +
                 (userId != null ? "userId=" + userId + ", " : "") +
+                (identifiableDataId != null ? "identifiableDataId=" + identifiableDataId + ", " : "") +
+                (procedureId != null ? "procedureId=" + procedureId + ", " : "") +
+                (csvFileId != null ? "csvFileId=" + csvFileId + ", " : "") +
                 (nhsNumber != null ? "nhsNumber=" + nhsNumber + ", " : "") +
             "}";
     }

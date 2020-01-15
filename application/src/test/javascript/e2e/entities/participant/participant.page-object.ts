@@ -29,6 +29,9 @@ export class ParticipantUpdatePage {
   registerDatetimeInput = element(by.id('field_registerDatetime'));
   lastLoginDatetimeInput = element(by.id('field_lastLoginDatetime'));
   userSelect = element(by.id('field_user'));
+  identifiableDataSelect = element(by.id('field_identifiableData'));
+  procedureSelect = element(by.id('field_procedure'));
+  csvFileSelect = element(by.id('field_csvFile'));
 
   async getPageTitle() {
     return this.pageTitle.getText();
@@ -67,6 +70,63 @@ export class ParticipantUpdatePage {
 
   async getUserSelectedOption() {
     return await this.userSelect.element(by.css('option:checked')).getText();
+  }
+
+  async identifiableDataSelectLastOption(timeout?: number) {
+    await this.identifiableDataSelect
+      .all(by.tagName('option'))
+      .last()
+      .click();
+  }
+
+  async identifiableDataSelectOption(option) {
+    await this.identifiableDataSelect.sendKeys(option);
+  }
+
+  getIdentifiableDataSelect(): ElementFinder {
+    return this.identifiableDataSelect;
+  }
+
+  async getIdentifiableDataSelectedOption() {
+    return await this.identifiableDataSelect.element(by.css('option:checked')).getText();
+  }
+
+  async procedureSelectLastOption(timeout?: number) {
+    await this.procedureSelect
+      .all(by.tagName('option'))
+      .last()
+      .click();
+  }
+
+  async procedureSelectOption(option) {
+    await this.procedureSelect.sendKeys(option);
+  }
+
+  getProcedureSelect(): ElementFinder {
+    return this.procedureSelect;
+  }
+
+  async getProcedureSelectedOption() {
+    return await this.procedureSelect.element(by.css('option:checked')).getText();
+  }
+
+  async csvFileSelectLastOption(timeout?: number) {
+    await this.csvFileSelect
+      .all(by.tagName('option'))
+      .last()
+      .click();
+  }
+
+  async csvFileSelectOption(option) {
+    await this.csvFileSelect.sendKeys(option);
+  }
+
+  getCsvFileSelect(): ElementFinder {
+    return this.csvFileSelect;
+  }
+
+  async getCsvFileSelectedOption() {
+    return await this.csvFileSelect.element(by.css('option:checked')).getText();
   }
 
   async save(timeout?: number) {

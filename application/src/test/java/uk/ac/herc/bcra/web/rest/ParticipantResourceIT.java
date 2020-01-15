@@ -3,6 +3,9 @@ package uk.ac.herc.bcra.web.rest;
 import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.domain.User;
+import uk.ac.herc.bcra.domain.IdentifiableData;
+import uk.ac.herc.bcra.domain.Procedure;
+import uk.ac.herc.bcra.domain.CsvFile;
 import uk.ac.herc.bcra.repository.ParticipantRepository;
 import uk.ac.herc.bcra.service.ParticipantService;
 import uk.ac.herc.bcra.service.dto.ParticipantDTO;
@@ -10,8 +13,6 @@ import uk.ac.herc.bcra.service.mapper.ParticipantMapper;
 import uk.ac.herc.bcra.web.rest.errors.ExceptionTranslator;
 import uk.ac.herc.bcra.service.ParticipantQueryService;
 
-import org.hamcrest.Matchers;
-import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -44,10 +45,10 @@ public class ParticipantResourceIT {
 
     private static final Instant DEFAULT_REGISTER_DATETIME = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_REGISTER_DATETIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
-    
+
     private static final Instant DEFAULT_LAST_LOGIN_DATETIME = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_LAST_LOGIN_DATETIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
-    
+
     @Autowired
     private ParticipantRepository participantRepository;
 
@@ -106,6 +107,18 @@ public class ParticipantResourceIT {
         em.persist(user);
         em.flush();
         participant.setUser(user);
+        // Add required entity
+        IdentifiableData identifiableData;
+        identifiableData = IdentifiableDataResourceIT.createEntity(em);
+        em.persist(identifiableData);
+        em.flush();
+        participant.setIdentifiableData(identifiableData);
+        // Add required entity
+        Procedure procedure;
+        procedure = ProcedureResourceIT.createEntity(em);
+        em.persist(procedure);
+        em.flush();
+        participant.setProcedure(procedure);
         return participant;
     }
     /**
@@ -123,6 +136,26 @@ public class ParticipantResourceIT {
         em.persist(user);
         em.flush();
         participant.setUser(user);
+        // Add required entity
+        IdentifiableData identifiableData;
+        if (TestUtil.findAll(em, IdentifiableData.class).isEmpty()) {
+            identifiableData = IdentifiableDataResourceIT.createUpdatedEntity(em);
+            em.persist(identifiableData);
+            em.flush();
+        } else {
+            identifiableData = TestUtil.findAll(em, IdentifiableData.class).get(0);
+        }
+        participant.setIdentifiableData(identifiableData);
+        // Add required entity
+        Procedure procedure;
+        if (TestUtil.findAll(em, Procedure.class).isEmpty()) {
+            procedure = ProcedureResourceIT.createUpdatedEntity(em);
+            em.persist(procedure);
+            em.flush();
+        } else {
+            procedure = TestUtil.findAll(em, Procedure.class).get(0);
+        }
+        participant.setProcedure(procedure);
         return participant;
     }
 
@@ -130,44 +163,6 @@ public class ParticipantResourceIT {
     public void initTest() {
         participant = createEntity(em);
     }
-
-    @Test
-    @Transactional
-    public void createParticipant() throws Exception {
-        int databaseSizeBeforeCreate = participantRepository.findAll().size();
-
-        // Create the Participant
-        ParticipantDTO participantDTO = participantMapper.toDto(participant);
-        restParticipantMockMvc.perform(post("/api/participants")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(participantDTO)))
-            .andExpect(status().isCreated());
-
-        // Validate the Participant in the database
-        List<Participant> participantList = participantRepository.findAll();
-        assertThat(participantList).hasSize(databaseSizeBeforeCreate + 1);
-    }
-
-    @Test
-    @Transactional
-    public void createParticipantWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = participantRepository.findAll().size();
-
-        // Create the Participant with an existing ID
-        participant.setId(1L);
-        ParticipantDTO participantDTO = participantMapper.toDto(participant);
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restParticipantMockMvc.perform(post("/api/participants")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(participantDTO)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the Participant in the database
-        List<Participant> participantList = participantRepository.findAll();
-        assertThat(participantList).hasSize(databaseSizeBeforeCreate);
-    }
-
 
     @Test
     @Transactional
@@ -233,9 +228,6 @@ public class ParticipantResourceIT {
 
         // Get all the participantList where registerDatetime is not null
         defaultParticipantShouldBeFound("registerDatetime.specified=true");
-
-        // Get all the participantList where registerDatetime is null
-        participantsShouldHaveNullRegisterDatetime("registerDatetime.specified=false");
     }
 
     @Test
@@ -272,9 +264,6 @@ public class ParticipantResourceIT {
 
         // Get all the participantList where lastLoginDatetime is not null
         defaultParticipantShouldBeFound("lastLoginDatetime.specified=true");
-
-        // Get all the participantList where lastLoginDatetime is null
-        participantsShouldHaveNullLastLoginDatetime("lastLoginDatetime.specified=false");
     }
 
     @Test
@@ -289,7 +278,59 @@ public class ParticipantResourceIT {
         defaultParticipantShouldBeFound("userId.equals=" + userId);
 
         // Get all the participantList where user equals to userId + 1
-        defaultParticipantShouldNotBeFound("userId.equals=" + (userId + 1));
+        defaultParticipantShouldNotBeFound("userId.equals=" + (userId + 1000));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllParticipantsByIdentifiableDataIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        IdentifiableData identifiableData = participant.getIdentifiableData();
+        participantRepository.saveAndFlush(participant);
+        Long identifiableDataId = identifiableData.getId();
+
+        // Get all the participantList where identifiableData equals to identifiableDataId
+        defaultParticipantShouldBeFound("identifiableDataId.equals=" + identifiableDataId);
+
+        // Get all the participantList where identifiableData equals to identifiableDataId + 1
+        defaultParticipantShouldNotBeFound("identifiableDataId.equals=" + (identifiableDataId + 1000));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllParticipantsByProcedureIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        Procedure procedure = participant.getProcedure();
+        participantRepository.saveAndFlush(participant);
+        Long procedureId = procedure.getId();
+
+        // Get all the participantList where procedure equals to procedureId
+        defaultParticipantShouldBeFound("procedureId.equals=" + procedureId);
+
+        // Get all the participantList where procedure equals to procedureId + 1
+        defaultParticipantShouldNotBeFound("procedureId.equals=" + (procedureId + 1000));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllParticipantsByCsvFileIsEqualToSomething() throws Exception {
+        // Initialize the database
+        participantRepository.saveAndFlush(participant);
+        CsvFile csvFile = CsvFileResourceIT.createEntity(em);
+        em.persist(csvFile);
+        em.flush();
+        participant.setCsvFile(csvFile);
+        participantRepository.saveAndFlush(participant);
+        Long csvFileId = csvFile.getId();
+
+        // Get all the participantList where csvFile equals to csvFileId
+        defaultParticipantShouldBeFound("csvFileId.equals=" + csvFileId);
+
+        // Get all the participantList where csvFile equals to csvFileId + 1
+        defaultParticipantShouldNotBeFound("csvFileId.equals=" + (csvFileId + 1000));
     }
 
     /**
@@ -303,25 +344,11 @@ public class ParticipantResourceIT {
             .andExpect(jsonPath("$.[*].registerDatetime").value(hasItem(DEFAULT_REGISTER_DATETIME.toString())))
             .andExpect(jsonPath("$.[*].lastLoginDatetime").value(hasItem(DEFAULT_LAST_LOGIN_DATETIME.toString())));
 
-        // Check, that the count call also returns 1
+        // Check, that the count is greater than zero
         restParticipantMockMvc.perform(get("/api/participants/count?sort=id,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(content().string("1"));
-    }
-
-    private void participantsShouldHaveNullRegisterDatetime(String filter) throws Exception {
-        restParticipantMockMvc.perform(get("/api/participants?sort=id,desc&" + filter))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].registerDatetime", Matchers.hasItem(IsNull.nullValue())));
-    }
-
-    private void participantsShouldHaveNullLastLoginDatetime(String filter) throws Exception {
-        restParticipantMockMvc.perform(get("/api/participants?sort=id,desc&" + filter))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].lastLoginDatetime", Matchers.hasItem(IsNull.nullValue())));
+            .andExpect(content().string(org.hamcrest.Matchers.not("0")));
     }
 
     /**
@@ -348,49 +375,6 @@ public class ParticipantResourceIT {
         // Get the participant
         restParticipantMockMvc.perform(get("/api/participants/{id}", Long.MAX_VALUE))
             .andExpect(status().isNotFound());
-    }
-
-    @Test
-    @Transactional
-    public void updateParticipant() throws Exception {
-        // Initialize the database
-        participantRepository.saveAndFlush(participant);
-
-        int databaseSizeBeforeUpdate = participantRepository.findAll().size();
-
-        // Update the participant
-        Participant updatedParticipant = participantRepository.findById(participant.getId()).get();
-        // Disconnect from session so that the updates on updatedParticipant are not directly saved in db
-        em.detach(updatedParticipant);
-        ParticipantDTO participantDTO = participantMapper.toDto(updatedParticipant);
-
-        restParticipantMockMvc.perform(put("/api/participants")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(participantDTO)))
-            .andExpect(status().isOk());
-
-        // Validate the Participant in the database
-        List<Participant> participantList = participantRepository.findAll();
-        assertThat(participantList).hasSize(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    @Transactional
-    public void updateNonExistingParticipant() throws Exception {
-        int databaseSizeBeforeUpdate = participantRepository.findAll().size();
-
-        // Create the Participant
-        ParticipantDTO participantDTO = participantMapper.toDto(participant);
-
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restParticipantMockMvc.perform(put("/api/participants")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(participantDTO)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the Participant in the database
-        List<Participant> participantList = participantRepository.findAll();
-        assertThat(participantList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test

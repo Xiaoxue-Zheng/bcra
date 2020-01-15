@@ -112,8 +112,6 @@ public class QuestionnaireResourceIT {
         questionnaire = createEntity(em);
     }
 
-
-
     @Test
     @Transactional
     public void getAllQuestionnaires() throws Exception {

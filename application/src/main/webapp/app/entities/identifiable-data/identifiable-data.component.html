@@ -30,8 +30,6 @@
             <th><span>Address 5</span></th>
             <th><span>Postcode</span></th>
             <th><span>Practice Name</span></th>
-            <th><span>Participant</span></th>
-            <th><span>Csv File</span></th>
             <th></th>
             </tr>
             </thead>
@@ -50,16 +48,6 @@
                 <td>{{identifiableData.address5}}</td>
                 <td>{{identifiableData.postcode}}</td>
                 <td>{{identifiableData.practiceName}}</td>
-                <td>
-                    <div *ngIf="identifiableData.participantId">
-                        <a [routerLink]="['/participant', identifiableData.participantId , 'view' ]" >{{identifiableData.participantId}}</a>
-                    </div>
-                </td>
-                <td>
-                    <div *ngIf="identifiableData.csvFileId">
-                        <a [routerLink]="['/csv-file', identifiableData.csvFileId , 'view' ]" >{{identifiableData.csvFileFileName}}</a>
-                    </div>
-                </td>
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"

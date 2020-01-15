@@ -19,6 +19,31 @@
             "relationshipName": "user",
             "otherEntityField": "login",
             "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "identifiableData",
+            "otherEntityRelationshipName": "participant",
+            "relationshipValidateRules": "required",
+            "relationshipName": "identifiableData",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "procedure",
+            "otherEntityRelationshipName": "participant",
+            "relationshipValidateRules": "required",
+            "relationshipName": "procedure",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "csvFile",
+            "otherEntityRelationshipName": "participant",
+            "relationshipName": "csvFile",
+            "otherEntityField": "fileName"
         }
     ],
     "changelogDate": "20191119110520",

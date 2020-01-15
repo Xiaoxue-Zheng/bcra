@@ -38,8 +38,6 @@ export class IdentifiableDataUpdatePage {
   address5Input = element(by.id('field_address5'));
   postcodeInput = element(by.id('field_postcode'));
   practiceNameInput = element(by.id('field_practiceName'));
-  participantSelect = element(by.id('field_participant'));
-  csvFileSelect = element(by.id('field_csvFile'));
 
   async getPageTitle() {
     return this.pageTitle.getText();
@@ -139,44 +137,6 @@ export class IdentifiableDataUpdatePage {
 
   async getPracticeNameInput() {
     return await this.practiceNameInput.getAttribute('value');
-  }
-
-  async participantSelectLastOption(timeout?: number) {
-    await this.participantSelect
-      .all(by.tagName('option'))
-      .last()
-      .click();
-  }
-
-  async participantSelectOption(option) {
-    await this.participantSelect.sendKeys(option);
-  }
-
-  getParticipantSelect(): ElementFinder {
-    return this.participantSelect;
-  }
-
-  async getParticipantSelectedOption() {
-    return await this.participantSelect.element(by.css('option:checked')).getText();
-  }
-
-  async csvFileSelectLastOption(timeout?: number) {
-    await this.csvFileSelect
-      .all(by.tagName('option'))
-      .last()
-      .click();
-  }
-
-  async csvFileSelectOption(option) {
-    await this.csvFileSelect.sendKeys(option);
-  }
-
-  getCsvFileSelect(): ElementFinder {
-    return this.csvFileSelect;
-  }
-
-  async getCsvFileSelectedOption() {
-    return await this.csvFileSelect.element(by.css('option:checked')).getText();
   }
 
   async save(timeout?: number) {

@@ -53,18 +53,6 @@
                 <dd>
                     <span>{{identifiableData.practiceName}}</span>
                 </dd>
-                <dt><span>Participant</span></dt>
-                <dd>
-                    <div *ngIf="identifiableData.participantId">
-                        <a [routerLink]="['/participant', identifiableData.participantId, 'view']">{{identifiableData.participantId}}</a>
-                    </div>
-                </dd>
-                <dt><span>Csv File</span></dt>
-                <dd>
-                    <div *ngIf="identifiableData.csvFileId">
-                        <a [routerLink]="['/csv-file', identifiableData.csvFileId, 'view']">{{identifiableData.csvFileFileName}}</a>
-                    </div>
-                </dd>
             </dl>
 
             <button type="submit"

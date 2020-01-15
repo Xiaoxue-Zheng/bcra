@@ -1,5 +1,6 @@
 package uk.ac.herc.bcra.service;
 
+import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.service.dto.ParticipantActivationDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantExistsDTO;
@@ -46,6 +47,8 @@ public interface ParticipantService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    public Optional<Participant> findOne(String nhsNumber, LocalDate dateOfBirth);
 
     ParticipantExistsDTO exists(String nhsNumber, LocalDate dateOfBirth);
 

@@ -11,6 +11,8 @@ import java.util.Set;
  */
 public class AnswerGroupDTO implements Serializable {
 
+    private static final long serialVersionUID = 3170335748708421879L;
+
     private Long id;
 
     @NotNull

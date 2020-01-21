@@ -1,17 +1,16 @@
 package uk.ac.herc.bcra.service.dto;
 
-import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import uk.ac.herc.bcra.domain.enumeration.QuestionSectionIdentifier;
-
 /**
  * A DTO for the {@link uk.ac.herc.bcra.domain.AnswerSection} entity.
  */
 public class AnswerSectionDTO implements Serializable {
+
+    private static final long serialVersionUID = 5709169230106580229L;
 
     private Long id;
 

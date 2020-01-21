@@ -1,18 +1,18 @@
 package uk.ac.herc.bcra.service.dto;
 
-import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import uk.ac.herc.bcra.domain.enumeration.QuestionIdentifier;
 import uk.ac.herc.bcra.domain.enumeration.AnswerUnits;
 
 /**
  * A DTO for the {@link uk.ac.herc.bcra.domain.Answer} entity.
  */
 public class AnswerDTO implements Serializable {
+
+    private static final long serialVersionUID = 4252959733760901017L;
 
     private Long id;
 

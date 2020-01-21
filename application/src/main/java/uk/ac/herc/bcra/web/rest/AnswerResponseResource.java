@@ -1,12 +1,9 @@
 package uk.ac.herc.bcra.web.rest;
 
-import uk.ac.herc.bcra.domain.AnswerResponse;
 import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
-import uk.ac.herc.bcra.questionnaire.AnswerResponseGenerator;
 import uk.ac.herc.bcra.service.AnswerResponseService;
 import uk.ac.herc.bcra.web.rest.errors.BadRequestAlertException;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
-import uk.ac.herc.bcra.service.mapper.AnswerResponseMapper;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
@@ -16,10 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.Principal;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -37,17 +32,11 @@ public class AnswerResponseResource {
     private String applicationName;
 
     private final AnswerResponseService answerResponseService;
-    private final AnswerResponseGenerator answerResponseGenerator;
-    private final AnswerResponseMapper answerResponseMapper;
 
     public AnswerResponseResource(
-        AnswerResponseService answerResponseService,
-        AnswerResponseGenerator answerResponseGenerator,
-        AnswerResponseMapper answerResponseMapper
+        AnswerResponseService answerResponseService
     ) {
         this.answerResponseService = answerResponseService;
-        this.answerResponseGenerator = answerResponseGenerator;
-        this.answerResponseMapper = answerResponseMapper;
     }
 
     @GetMapping("/answer-responses/consent")

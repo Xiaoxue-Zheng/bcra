@@ -13,6 +13,8 @@ import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
  */
 public class QuestionnaireDTO implements Serializable {
 
+    private static final long serialVersionUID = 590489475255490274L;
+
     private Long id;
 
     @NotNull

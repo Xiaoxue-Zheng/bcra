@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 /**
  * Spring Data  repository for the Answer entity.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface AnswerRepository extends JpaRepository<Answer, Long> {
 

@@ -2,12 +2,13 @@ package uk.ac.herc.bcra.service.dto;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
-import uk.ac.herc.bcra.domain.enumeration.QuestionItemIdentifier;
 
 /**
  * A DTO for the {@link uk.ac.herc.bcra.domain.AnswerItem} entity.
  */
 public class AnswerItemDTO implements Serializable {
+
+    private static final long serialVersionUID = 2293829797812414191L;
 
     private Long id;
 

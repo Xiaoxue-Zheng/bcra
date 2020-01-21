@@ -13,6 +13,8 @@ import uk.ac.herc.bcra.domain.enumeration.QuestionSectionIdentifier;
  */
 public class QuestionSectionDTO implements Serializable {
 
+    private static final long serialVersionUID = 2084223380440030877L;
+
     private Long id;
 
     @NotNull

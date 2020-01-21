@@ -18,7 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,12 +30,10 @@ import java.util.List;
 
 import static uk.ac.herc.bcra.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import uk.ac.herc.bcra.domain.enumeration.ResponseState;
-import uk.ac.herc.bcra.questionnaire.AnswerResponseGenerator;
 /**
  * Integration tests for the {@link AnswerResponseResource} REST controller.
  */
@@ -57,9 +54,6 @@ public class AnswerResponseResourceIT {
 
     @Autowired
     private AnswerResponseService answerResponseService;
-
-    @Autowired
-    private AnswerResponseGenerator answerResponseGenerator;
     
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -84,9 +78,7 @@ public class AnswerResponseResourceIT {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         final AnswerResponseResource answerResponseResource = new AnswerResponseResource(
-            answerResponseService,
-            answerResponseGenerator,
-            answerResponseMapper
+            answerResponseService
         );
         this.restAnswerResponseMockMvc = MockMvcBuilders
             .standaloneSetup(answerResponseResource)

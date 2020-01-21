@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 /**
  * Spring Data  repository for the AnswerResponse entity.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface AnswerResponseRepository extends JpaRepository<AnswerResponse, Long> {
 

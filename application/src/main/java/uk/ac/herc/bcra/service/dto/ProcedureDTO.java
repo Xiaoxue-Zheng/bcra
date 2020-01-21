@@ -1,5 +1,4 @@
 package uk.ac.herc.bcra.service.dto;
-import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -7,6 +6,8 @@ import java.util.Objects;
  * A DTO for the {@link uk.ac.herc.bcra.domain.Procedure} entity.
  */
 public class ProcedureDTO implements Serializable {
+
+    private static final long serialVersionUID = 4584162217874220059L;
 
     private Long id;
 

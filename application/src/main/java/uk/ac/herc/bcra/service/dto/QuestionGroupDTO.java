@@ -14,6 +14,8 @@ import uk.ac.herc.bcra.domain.enumeration.QuestionGroupIdentifier;
  */
 public class QuestionGroupDTO implements Serializable {
 
+    private static final long serialVersionUID = 4393843856797568463L;
+
     private Long id;
 
     @NotNull

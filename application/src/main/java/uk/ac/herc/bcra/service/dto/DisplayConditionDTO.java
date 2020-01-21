@@ -9,6 +9,8 @@ import uk.ac.herc.bcra.domain.enumeration.QuestionItemIdentifier;
  */
 public class DisplayConditionDTO implements Serializable {
 
+    private static final long serialVersionUID = -3750583351633480361L;
+
     private Long id;
 
     private QuestionIdentifier questionIdentifier;

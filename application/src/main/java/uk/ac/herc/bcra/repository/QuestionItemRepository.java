@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 /**
  * Spring Data  repository for the QuestionItem entity.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface QuestionItemRepository extends JpaRepository<QuestionItem, Long> {
 

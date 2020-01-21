@@ -9,6 +9,8 @@ import java.util.Objects;
  */
 public class IdentifiableDataDTO implements Serializable {
 
+    private static final long serialVersionUID = -3193270577706338716L;
+
     private Long id;
 
     @NotNull

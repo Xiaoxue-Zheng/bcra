@@ -11,6 +11,8 @@ import uk.ac.herc.bcra.domain.enumeration.QuestionItemIdentifier;
  */
 public class ReferralConditionDTO implements Serializable {
 
+    private static final long serialVersionUID = 3133538860823470889L;
+
     private Long id;
 
     private Integer andGroup;

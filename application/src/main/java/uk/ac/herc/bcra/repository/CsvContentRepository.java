@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 /**
  * Spring Data  repository for the CsvContent entity.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface CsvContentRepository extends JpaRepository<CsvContent, Long> {
 

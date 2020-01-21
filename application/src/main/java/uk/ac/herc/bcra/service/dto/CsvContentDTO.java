@@ -1,5 +1,4 @@
 package uk.ac.herc.bcra.service.dto;
-import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Lob;
@@ -8,6 +7,8 @@ import javax.persistence.Lob;
  * A DTO for the {@link uk.ac.herc.bcra.domain.CsvContent} entity.
  */
 public class CsvContentDTO implements Serializable {
+
+    private static final long serialVersionUID = -3883239204647515771L;
 
     private Long id;
 

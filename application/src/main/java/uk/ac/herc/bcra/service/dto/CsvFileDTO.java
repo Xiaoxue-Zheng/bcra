@@ -10,6 +10,8 @@ import uk.ac.herc.bcra.domain.enumeration.CsvFileState;
  */
 public class CsvFileDTO implements Serializable {
 
+    private static final long serialVersionUID = -7766914596543678711L;
+
     private Long id;
 
     @NotNull

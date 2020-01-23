@@ -50,6 +50,11 @@ const router = new Router({
       path: '/components',
       name: 'components',
       component: () => import('../views/ComponentLibrary.vue')
+    },
+    {
+      path: '/consent',
+      name: 'consent',
+      component: () => import('../views/Consent.vue')
     }
   ],
   scrollBehavior (to, from, savedPosition) {

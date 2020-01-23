@@ -69,6 +69,12 @@ public class AnswerResourceIT {
             question = TestUtil.findAll(em, Question.class).get(0);
         }
         answer.setQuestion(question);
+        em.persist(answer);
+        em.flush();
+
+        answer.addAnswerItem(
+            AnswerItemResourceIT.createEntity(em)
+        );
         return answer;
     }
     /**

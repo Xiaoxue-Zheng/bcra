@@ -14,14 +14,16 @@
     </div>
     <p>We are looking for new ways to identify young women at increased risk of breast cancer. Participants in the study are invited to complete three steps: a questionnaire, a saliva (spit) sample and a low dose breast X-ray (mammogram).</p>
     <ul class="accordion-list">
-      <li v-for="accordion in accordions" v-bind:key="accordion">
+      <li v-for="accordion in accordions" v-bind:key="accordion.title">
         <Accordion class="blue">
           <template v-slot:title>{{ accordion.title }}</template>
           <template v-slot:text>{{ accordion.text }}</template>
         </Accordion>
       </li>
     </ul>
-    <router-link class="pure-button pure-button-primary" to="/Register">Register to take part</router-link>
+    <PrimaryButton v-if="!authenticated" to="/register">Register to take part</PrimaryButton>
+    <SecondaryButton v-if="!authenticated" to="/signin">Sign in</SecondaryButton>
+    <PrimaryButton v-if="authenticated" to="/consent">Start Questionnaire</PrimaryButton>
     <div class="info-box">
       <h3>Participation in this trial requires the following:</h3>
       <ul>
@@ -42,13 +44,21 @@
 </template>
 
 <script>
-
 import Accordion from '@/components/Accordion.vue'
+import PrimaryButton from '@/components/PrimaryButton.vue'
+import SecondaryButton from '@/components/SecondaryButton.vue'
+import { createHelpers } from 'vuex-map-fields'
+
+const { mapFields } = createHelpers({
+  getterType: 'security/isAuthenticated'
+})
 
 export default {
   name: 'home',
   components: {
-    'Accordion': Accordion
+    'Accordion': Accordion,
+    'PrimaryButton': PrimaryButton,
+    'SecondaryButton': SecondaryButton
   },
   data () {
     return {
@@ -67,6 +77,11 @@ export default {
         }
       ]
     }
+  },
+  computed: {
+    ...mapFields([
+      'authenticated'
+    ])
   }
 }
 </script>

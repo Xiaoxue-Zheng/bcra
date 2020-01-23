@@ -30,7 +30,7 @@ fieldset {
     border-color: rgb(34, 119, 204) !important;
 }
 
-.pure-form .pure-button {
+.pure-form {
     margin-top: 2em;
     display: block;
 }

@@ -23,7 +23,7 @@ describe('Service Tests', () => {
       service = injector.get(AnswerResponseService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new AnswerResponse(0, ResponseState.SUBMITTED, 'AAAAAAA');
+      elemDefault = new AnswerResponse(0, ResponseState.NOT_STARTED, 'AAAAAAA');
     });
 
     describe('Service methods', () => {

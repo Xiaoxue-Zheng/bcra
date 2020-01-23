@@ -7,7 +7,6 @@
 </template>
 
 <script>
-import '@/assets/css/buttons.css'
 import '@/assets/css/content.css'
 import '@/assets/css/fonts.css'
 import '@/assets/css/footer.css'

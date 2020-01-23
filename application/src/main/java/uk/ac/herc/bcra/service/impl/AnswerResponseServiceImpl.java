@@ -4,6 +4,7 @@ import uk.ac.herc.bcra.service.AnswerResponseService;
 import uk.ac.herc.bcra.domain.AnswerResponse;
 import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
+import uk.ac.herc.bcra.domain.enumeration.ResponseState;
 import uk.ac.herc.bcra.repository.AnswerResponseRepository;
 import uk.ac.herc.bcra.repository.ParticipantRepository;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
@@ -56,6 +57,38 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
         AnswerResponse answerResponse = answerResponseMapper.toEntity(answerResponseDTO);
         answerResponse = answerResponseRepository.save(answerResponse);
         return answerResponseMapper.toDto(answerResponse);
+    }
+
+    @Override
+    public boolean save(
+        String login,
+        AnswerResponseDTO answerResponseDTO,
+        QuestionnaireType questionnaireType,
+        ResponseState responseState
+    ) {
+        log.debug("Request to save AnswerResponse");
+        Optional<Participant> participantOptional = participantRepository.findOneByUserLogin(login);
+        if (participantOptional.isPresent()) {
+            Long answerResponseId;
+            if (questionnaireType == QuestionnaireType.CONSENT_FORM) {
+                answerResponseId = participantOptional.get().getProcedure().getConsentResponse().getId();
+                save(answerResponseDTO, answerResponseId, responseState);
+                return true;
+            } else if (questionnaireType == QuestionnaireType.RISK_ASSESMENT) {
+                answerResponseId = participantOptional.get().getProcedure().getRiskAssesmentResponse().getId();
+                save(answerResponseDTO, answerResponseId, responseState);
+                return true;
+            } 
+        }
+        return false;        
+    }
+
+    private void save(AnswerResponseDTO answerResponseDTO, Long answerResponseId, ResponseState responseState) {
+        AnswerResponse answerResponse = answerResponseMapper.toEntity(answerResponseDTO);
+        answerResponse.setId(answerResponseId);
+        answerResponse.setState(responseState);
+        answerResponse.setStatus("");
+        answerResponseRepository.save(answerResponse);
     }
 
     /**

@@ -97,7 +97,7 @@ export default {
       }
       const loginOutcome = await this.$store.dispatch('security/login', parameters)
       if (loginOutcome === 'SUCCESS') {
-        this.$router.push('/')
+        this.$router.push('/consent')
       } else {
         this.displayErrorMessage = true
       }

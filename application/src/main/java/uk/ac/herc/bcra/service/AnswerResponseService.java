@@ -1,10 +1,12 @@
 package uk.ac.herc.bcra.service;
 
 import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
+import uk.ac.herc.bcra.domain.enumeration.ResponseState;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
 
 import java.util.List;
 import java.util.Optional;
+
 
 /**
  * Service Interface for managing {@link uk.ac.herc.bcra.domain.AnswerResponse}.
@@ -18,6 +20,7 @@ public interface AnswerResponseService {
      * @return the persisted entity.
      */
     AnswerResponseDTO save(AnswerResponseDTO answerResponseDTO);
+    boolean save(String login, AnswerResponseDTO answerResponseDTO, QuestionnaireType questionnaireType, ResponseState responseState);
 
     /**
      * Get all the answerResponses.
@@ -26,7 +29,6 @@ public interface AnswerResponseService {
      */
     List<AnswerResponseDTO> findAll();
 
-
     /**
      * Get the "id" answerResponse.
      *
@@ -34,7 +36,6 @@ public interface AnswerResponseService {
      * @return the entity.
      */
     Optional<AnswerResponseDTO> findOne(Long id);
-
     Optional<AnswerResponseDTO> findOne(String login, QuestionnaireType questionnaireType);
 
     /**

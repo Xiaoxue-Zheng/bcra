@@ -80,7 +80,7 @@
             <label>Input group</label>
             <div class="input-group">
               <div class="input-group-area">
-                <input required v-model="age" type="text" class="pure-input-1"/>
+                <input required type="text" class="pure-input-1"/><!--v-model="age"-->
               </div>
               <div class="input-group-unit">
                 Years
@@ -93,7 +93,7 @@
             <label>Input group select</label>
             <div class="input-group-select">
                 <div>
-                <input required v-model="height" type="text" />
+                <input required type="text" /><!--v-model="height"-->
                 <select id="height" class="select-css">
                     <option>Metres</option>
                     <option>Feet</option>
@@ -117,13 +117,8 @@
               </div>
           </fieldset>
 
-          <!-- Buttons -->
-
-          <button class="pure-button pure-button-primary" type="submit">Primary button</button>
-          <button class="pure-button pure-button-secondary" type="submit">Secondary button</button>
-        </form>
-
         <!-- Form end -->
+        </form>
 
     <!-- Yellow info box -->
     <div class="info-box">

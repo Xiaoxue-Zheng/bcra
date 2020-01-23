@@ -60,6 +60,12 @@ public class AnswerSectionResourceIT {
             questionSection = TestUtil.findAll(em, QuestionSection.class).get(0);
         }
         answerSection.setQuestionSection(questionSection);
+        em.persist(answerSection);
+        em.flush();
+
+        answerSection.addAnswerGroup(
+            AnswerGroupResourceIT.createEntity(em)
+        );
         return answerSection;
     }
     /**

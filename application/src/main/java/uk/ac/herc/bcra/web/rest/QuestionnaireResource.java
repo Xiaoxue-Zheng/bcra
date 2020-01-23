@@ -1,5 +1,6 @@
 package uk.ac.herc.bcra.web.rest;
 
+import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 import uk.ac.herc.bcra.service.QuestionnaireService;
 import uk.ac.herc.bcra.service.dto.QuestionnaireDTO;
 
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +33,30 @@ public class QuestionnaireResource {
         this.questionnaireService = questionnaireService;
     }
 
+    @GetMapping("/questionnaires/consent")
+    public ResponseEntity<QuestionnaireDTO> getRiskAssesment(Principal principal) {
+        log.debug("REST request to get Consent Questionnaire");
+        Optional<QuestionnaireDTO> questionnaireDTO = 
+            questionnaireService
+                .findOne(
+                    principal.getName(),
+                    QuestionnaireType.CONSENT_FORM
+            );
+        return ResponseUtil.wrapOrNotFound(questionnaireDTO);
+    }
+
+    @GetMapping("/questionnaires/risk-assesment")
+    public ResponseEntity<QuestionnaireDTO> getConsent(Principal principal) {
+        log.debug("REST request to get Risk Assesment Questionnaire");
+        Optional<QuestionnaireDTO> questionnaireDTO = 
+            questionnaireService
+                .findOne(
+                    principal.getName(),
+                    QuestionnaireType.RISK_ASSESMENT
+            );
+        return ResponseUtil.wrapOrNotFound(questionnaireDTO);
+    }
+
     /**
      * {@code GET  /questionnaires} : get all the questionnaires.
      *
@@ -41,18 +67,5 @@ public class QuestionnaireResource {
     public List<QuestionnaireDTO> getAllQuestionnaires() {
         log.debug("REST request to get all Questionnaires");
         return questionnaireService.findAll();
-    }
-
-    /**
-     * {@code GET  /questionnaires/:id} : get the "id" questionnaire.
-     *
-     * @param id the id of the questionnaireDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the questionnaireDTO, or with status {@code 404 (Not Found)}.
-     */
-    @GetMapping("/questionnaires/{id}")
-    public ResponseEntity<QuestionnaireDTO> getQuestionnaire(@PathVariable Long id) {
-        log.debug("REST request to get Questionnaire : {}", id);
-        Optional<QuestionnaireDTO> questionnaireDTO = questionnaireService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(questionnaireDTO);
     }
 }

@@ -1,6 +1,4 @@
-import {
-  AnswerService
-} from '@/api/answer.service'
+import { AnswerResponseService } from '@/api/answer-response.service'
 
 const state = {
   answers: {}
@@ -10,7 +8,7 @@ const getters = {}
 
 const actions = {
   async saveAnswers ({ commit }, answers) {
-    const savedAnswers = await AnswerService.create(answers)
+    const savedAnswers = await AnswerResponseService.create(answers)
     commit('setAnswers', savedAnswers.data)
     return savedAnswers
   }

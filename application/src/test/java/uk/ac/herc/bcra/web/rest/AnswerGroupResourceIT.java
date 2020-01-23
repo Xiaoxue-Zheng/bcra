@@ -53,6 +53,12 @@ public class AnswerGroupResourceIT {
             answerSection = TestUtil.findAll(em, AnswerSection.class).get(0);
         }
         answerGroup.setAnswerSection(answerSection);
+        em.persist(answerGroup);
+        em.flush();
+
+        answerGroup.addAnswer(
+            AnswerResourceIT.createEntity(em)
+        );
         return answerGroup;
     }
     /**

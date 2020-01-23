@@ -1,6 +1,7 @@
 package uk.ac.herc.bcra.web.rest;
 
 import uk.ac.herc.bcra.BcraApp;
+import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.domain.Questionnaire;
 import uk.ac.herc.bcra.repository.QuestionnaireRepository;
 import uk.ac.herc.bcra.service.QuestionnaireService;
@@ -24,6 +25,9 @@ import org.springframework.validation.Validator;
 import javax.persistence.EntityManager;
 
 import static uk.ac.herc.bcra.web.rest.TestUtil.createFormattingConversionService;
+
+import java.security.Principal;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -129,16 +133,61 @@ public class QuestionnaireResourceIT {
     
     @Test
     @Transactional
-    public void getQuestionnaire() throws Exception {
+    public void getConsentQuestionnaire() throws Exception {
         // Initialize the database
-        questionnaireRepository.saveAndFlush(questionnaire);
+        Participant participant;
+        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
+            participant = ParticipantResourceIT.createUpdatedEntity(em);
+            em.persist(participant);
+            em.flush();
+        } else {
+            participant = TestUtil.findAll(em, Participant.class).get(0);
+        }
 
         // Get the questionnaire
-        restQuestionnaireMockMvc.perform(get("/api/questionnaires/{id}", questionnaire.getId()))
+        restQuestionnaireMockMvc.perform(
+            get("/api/questionnaires/consent", questionnaire.getId())
+            .principal(new Principal() {
+                @Override
+                public String getName() {
+                    return participant.getUser().getLogin();
+                }
+            })
+        )
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(questionnaire.getId().intValue()))
-            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
+            .andExpect(jsonPath("$.id").value(participant.getProcedure().getConsentResponse().getQuestionnaire().getId().intValue()))
+            .andExpect(jsonPath("$.type").value(QuestionnaireType.CONSENT_FORM.toString()))
+            .andExpect(jsonPath("$.version").value(DEFAULT_VERSION));
+    }
+
+    @Test
+    @Transactional
+    public void getRiskAssesmentQuestionnaire() throws Exception {
+        // Initialize the database
+        Participant participant;
+        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
+            participant = ParticipantResourceIT.createUpdatedEntity(em);
+            em.persist(participant);
+            em.flush();
+        } else {
+            participant = TestUtil.findAll(em, Participant.class).get(0);
+        }
+
+        // Get the questionnaire
+        restQuestionnaireMockMvc.perform(
+            get("/api/questionnaires/risk-assesment", questionnaire.getId())
+            .principal(new Principal() {
+                @Override
+                public String getName() {
+                    return participant.getUser().getLogin();
+                }
+            })
+        )
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.id").value(participant.getProcedure().getRiskAssesmentResponse().getQuestionnaire().getId().intValue()))
+            .andExpect(jsonPath("$.type").value(QuestionnaireType.RISK_ASSESMENT.toString()))
             .andExpect(jsonPath("$.version").value(DEFAULT_VERSION));
     }
 

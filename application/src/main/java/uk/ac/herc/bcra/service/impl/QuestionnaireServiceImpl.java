@@ -1,7 +1,10 @@
 package uk.ac.herc.bcra.service.impl;
 
 import uk.ac.herc.bcra.service.QuestionnaireService;
+import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.domain.Questionnaire;
+import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
+import uk.ac.herc.bcra.repository.ParticipantRepository;
 import uk.ac.herc.bcra.repository.QuestionnaireRepository;
 import uk.ac.herc.bcra.service.dto.QuestionnaireDTO;
 import uk.ac.herc.bcra.service.mapper.QuestionnaireMapper;
@@ -29,9 +32,16 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 
     private final QuestionnaireMapper questionnaireMapper;
 
-    public QuestionnaireServiceImpl(QuestionnaireRepository questionnaireRepository, QuestionnaireMapper questionnaireMapper) {
+    private final ParticipantRepository participantRepository;
+
+    public QuestionnaireServiceImpl(
+        QuestionnaireRepository questionnaireRepository,
+        QuestionnaireMapper questionnaireMapper,
+        ParticipantRepository participantRepository
+    ) {
         this.questionnaireRepository = questionnaireRepository;
         this.questionnaireMapper = questionnaireMapper;
+        this.participantRepository = participantRepository;
     }
 
     /**
@@ -75,6 +85,27 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
         log.debug("Request to get Questionnaire : {}", id);
         return questionnaireRepository.findById(id)
             .map(questionnaireMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<QuestionnaireDTO> findOne(String login, QuestionnaireType questionnaireType) {
+        log.debug("Request to get Questionnaire");
+        Optional<Participant> participantOptional = participantRepository.findOneByUserLogin(login);
+        if (participantOptional.isPresent()) {
+            if (questionnaireType == QuestionnaireType.CONSENT_FORM) {
+                return 
+                    Optional
+                    .of(participantOptional.get().getProcedure().getConsentResponse().getQuestionnaire())
+                    .map(questionnaireMapper::toDto);
+            } else if (questionnaireType == QuestionnaireType.RISK_ASSESMENT) {
+                return 
+                    Optional
+                    .of(participantOptional.get().getProcedure().getRiskAssesmentResponse().getQuestionnaire())
+                    .map(questionnaireMapper::toDto);
+            }
+        }
+        return Optional.empty();
     }
 
     /**

@@ -233,6 +233,7 @@ entity AnswerResponse {
 
 enum ResponseState {
     NOT_STARTED,
+    IN_PROGRESS,
     SUBMITTED,
     INVALID,
     VALIDATED,

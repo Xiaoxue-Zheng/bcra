@@ -1,14 +1,14 @@
 package uk.ac.herc.bcra.web.rest;
 
 import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
+import uk.ac.herc.bcra.domain.enumeration.ResponseState;
 import uk.ac.herc.bcra.service.AnswerResponseService;
-import uk.ac.herc.bcra.web.rest.errors.BadRequestAlertException;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
-import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,8 +26,6 @@ public class AnswerResponseResource {
 
     private final Logger log = LoggerFactory.getLogger(AnswerResponseResource.class);
 
-    private static final String ENTITY_NAME = "answerResponse";
-
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
@@ -40,8 +38,8 @@ public class AnswerResponseResource {
     }
 
     @GetMapping("/answer-responses/consent")
-    public ResponseEntity<AnswerResponseDTO> getConsentAnswerResponse(Principal principal) {
-        log.debug("REST request to get Consent");
+    public ResponseEntity<AnswerResponseDTO> getConsent(Principal principal) {
+        log.debug("REST request to get Consent AnswerResponse");
         Optional<AnswerResponseDTO> answerResponseDTO = 
             answerResponseService
                 .findOne(
@@ -51,36 +49,86 @@ public class AnswerResponseResource {
         return ResponseUtil.wrapOrNotFound(answerResponseDTO);
     }
 
-    @GetMapping("/answer-responses/questionnaire")
-    public ResponseEntity<AnswerResponseDTO> getRiskAssesmentAnswerResponse(Principal principal) {
-        log.debug("REST request to get Risk Assesment");
+    @PutMapping("/answer-responses/consent/save")
+    public ResponseEntity<String> saveConsent(
+            Principal principal,
+            @Valid @RequestBody AnswerResponseDTO answerResponseDTO
+    ) throws URISyntaxException {
+        log.debug("REST request to save Consent AnswerResponse: {}", answerResponseDTO);
+        if(answerResponseService.save(
+            principal.getName(),
+            answerResponseDTO,
+            QuestionnaireType.CONSENT_FORM,
+            ResponseState.IN_PROGRESS
+        )) {
+            return ResponseEntity.ok().body("SAVED");
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("FAILED");
+        }
+    }
+
+    @PutMapping("/answer-responses/consent/submit")
+    public ResponseEntity<String> submitConsent(
+            Principal principal,
+            @Valid @RequestBody AnswerResponseDTO answerResponseDTO
+    ) throws URISyntaxException {
+        log.debug("REST request to submit Consent AnswerResponse: {}", answerResponseDTO);
+        if(answerResponseService.save(
+            principal.getName(),
+            answerResponseDTO,
+            QuestionnaireType.CONSENT_FORM,
+            ResponseState.SUBMITTED
+        )) {
+            return ResponseEntity.ok().body("SUBMITTED");
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("FAILED");
+        }
+    }
+
+    @GetMapping("/answer-responses/risk-assesment")
+    public ResponseEntity<AnswerResponseDTO> getRiskAssesment(Principal principal) {
+        log.debug("REST request to get Risk Assesment AnswerResponse");
         Optional<AnswerResponseDTO> answerResponseDTO = 
-            answerResponseService
-                .findOne(
-                    principal.getName(),
-                    QuestionnaireType.RISK_ASSESMENT
+            answerResponseService.findOne(
+                principal.getName(),
+                QuestionnaireType.RISK_ASSESMENT
             );
         return ResponseUtil.wrapOrNotFound(answerResponseDTO);
     }
 
-    /**
-     * {@code PUT  /answer-responses} : Updates an existing answerResponse.
-     *
-     * @param answerResponseDTO the answerResponseDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated answerResponseDTO,
-     * or with status {@code 400 (Bad Request)} if the answerResponseDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the answerResponseDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PutMapping("/answer-responses")
-    public ResponseEntity<AnswerResponseDTO> updateAnswerResponse(@Valid @RequestBody AnswerResponseDTO answerResponseDTO) throws URISyntaxException {
-        log.debug("REST request to update AnswerResponse : {}", answerResponseDTO);
-        if (answerResponseDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+    @PutMapping("/answer-responses/risk-assesment/save")
+    public ResponseEntity<String> saveRiskAssesment(
+            Principal principal,
+            @Valid @RequestBody AnswerResponseDTO answerResponseDTO
+    ) throws URISyntaxException {
+        log.debug("REST request to save Risk Assesment AnswerResponse: {}", answerResponseDTO);
+        if(answerResponseService.save(
+            principal.getName(),
+            answerResponseDTO,
+            QuestionnaireType.RISK_ASSESMENT,
+            ResponseState.IN_PROGRESS
+        )) {
+            return ResponseEntity.ok().body("SAVED");
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("FAILED");
         }
-        AnswerResponseDTO result = answerResponseService.save(answerResponseDTO);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, answerResponseDTO.getId().toString()))
-            .body(result);
+    }
+
+    @PutMapping("/answer-responses/risk-assesment/submit")
+    public ResponseEntity<String> submitRiskAssesment(
+            Principal principal,
+            @Valid @RequestBody AnswerResponseDTO answerResponseDTO
+    ) throws URISyntaxException {
+        log.debug("REST request to submit Risk Assesment AnswerResponse: {}", answerResponseDTO);
+        if(answerResponseService.save(
+            principal.getName(),
+            answerResponseDTO,
+            QuestionnaireType.RISK_ASSESMENT,
+            ResponseState.SUBMITTED
+        )) {
+            return ResponseEntity.ok().body("SUBMITTED");
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("FAILED");
+        }
     }
 }

@@ -33,8 +33,8 @@ public class ReferralConditionResourceIT {
     private static final QuestionIdentifier DEFAULT_QUESTION_IDENTIFIER = QuestionIdentifier.CONSENT_INFO_SHEET;
     private static final QuestionIdentifier UPDATED_QUESTION_IDENTIFIER = QuestionIdentifier.CONSENT_WITHDRAWAL;
 
-    private static final QuestionItemIdentifier DEFAULT_ITEM_IDENTIFIER = QuestionItemIdentifier.CONSENT_INFO_SHEET_2_YES;
-    private static final QuestionItemIdentifier UPDATED_ITEM_IDENTIFIER = QuestionItemIdentifier.CONSENT_INFO_SHEET_2_NO;
+    private static final QuestionItemIdentifier DEFAULT_ITEM_IDENTIFIER = QuestionItemIdentifier.CONSENT_INFO_SHEET_YES;
+    private static final QuestionItemIdentifier UPDATED_ITEM_IDENTIFIER = QuestionItemIdentifier.CONSENT_INFO_SHEET_NO;
 
     private static final Integer DEFAULT_NUMBER = 1;
     private static final Integer UPDATED_NUMBER = 2;

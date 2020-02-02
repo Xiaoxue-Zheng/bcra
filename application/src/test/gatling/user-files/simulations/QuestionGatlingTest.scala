@@ -33,14 +33,14 @@ class QuestionGatlingTest extends Simulation {
         "Accept" -> """application/json"""
     )
 
-    val headers_http_authentication = Map(
-        "Content-Type" -> """application/json""",
-        "Accept" -> """application/json"""
-    )
-
     val headers_http_authenticated = Map(
         "Accept" -> """application/json""",
-        "Authorization" -> "${access_token}"
+        "X-XSRF-TOKEN" -> "${xsrf_token}"
+    )
+
+    val keycloakHeaders = Map(
+        "Accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Upgrade-Insecure-Requests" -> "1"
     )
 
     val scn = scenario("Test the Question entity")
@@ -48,13 +48,17 @@ class QuestionGatlingTest extends Simulation {
         .get("/api/account")
         .headers(headers_http)
         .check(status.is(401))
+        .check(headerRegex("Set-Cookie", "XSRF-TOKEN=(.*);[\\s]").saveAs("xsrf_token"))
         ).exitHereIfFailed
         .pause(10)
         .exec(http("Authentication")
-        .post("/api/authenticate")
-        .headers(headers_http_authentication)
-        .body(StringBody("""{"username":"admin", "password":"admin"}""")).asJson
-        .check(header("Authorization").saveAs("access_token"))).exitHereIfFailed
+        .post("/api/authentication")
+        .headers(headers_http_authenticated)
+        .formParam("username", "admin")
+        .formParam("password", "admin")
+        .formParam("remember-me", "true")
+        .formParam("submit", "Login")
+        .check(headerRegex("Set-Cookie", "XSRF-TOKEN=(.*);[\\s]").saveAs("xsrf_token"))).exitHereIfFailed
         .pause(2)
         .exec(http("Authenticated request")
         .get("/api/account")

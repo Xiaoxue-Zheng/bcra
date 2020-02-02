@@ -11,6 +11,13 @@
             ]
         },
         {
+            "fieldName": "title",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "order",
             "fieldType": "Integer",
             "fieldValidateRules": [

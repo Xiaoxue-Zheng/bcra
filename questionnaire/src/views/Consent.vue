@@ -1,54 +1,59 @@
 <template>
-  <div class="pure-g">
-      <div class="pure-u-1-4"><pre>{{ consent.questionnaire | formatJson}}</pre></div>
-      <div class="pure-u-1-4"><pre>{{ consent.answerResponse | formatJson}}</pre></div>
-      <div class="pure-u-1-4"><pre>{{ consent.saveResult | formatJson}}</pre></div>
-      <div class="pure-u-1-4"><pre>{{ consent.submitResult | formatJson}}</pre></div>
+  <div>
+    <!-- <pre v-if="answerSection">{{ answerSection.answerGroups[0].answers[0].answerItems }}</pre> -->
+    <QuestionSection
+      progressStage="1"
+      :questionSection="questionSection"
+      :answerSection="answerSection"
+      submitText="I give my consent"
+      :submitForm="submitConsent"
+      :submitError="submitError"
+    >
+      <p class="introduction">
+        In order to participate in this study, we need your consent.
+        Please read the <router-link to="/info-sheet">Participant Information Sheet</router-link> and complete the following to indicate that you understand
+        and agree to the terms.
+      </p>
+    </QuestionSection>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import router from '@/router'
+import QuestionSection from '@/components/QuestionSection.vue'
+import { QuestionnaireService } from '@/api/questionnaire.service'
+import { AnswerResponseService } from '@/api/answer-response.service'
 
 export default {
   name: 'consent',
+  components: {
+    'QuestionSection': QuestionSection
+  },
   data () {
     return {
-      query: router.history.current.query
+      progress: 5,
+      questionSection: null,
+      answerResponse: null,
+      answerSection: null,
+      submitError: false
     }
   },
-  computed: mapState({
-    consent: state => state.consent
-  }),
-  created () {
-    this.$store.dispatch('consent/getQuestionnaire')
-    this.$store.dispatch('consent/getAnswerResponse').then(() => {
-      this.$store.dispatch(
-        'consent/saveAnswerResponse',
-        this.$store.getters['consent/answerResponse']
-      ).then(() => {
-        this.$store.dispatch(
-          'consent/submitAnswerResponse',
-          this.$store.getters['consent/answerResponse']
-        )
-      })
-    })
+  async created () {
+    const questionnaire = await QuestionnaireService.getConsent()
+    this.questionSection = questionnaire.questionSections[0]
+
+    this.answerResponse = await AnswerResponseService.getConsent()
+    this.answerSection = this.answerResponse.answerSections[0]
   },
-  filters: {
-    formatJson: function (value) {
-      return JSON.stringify(value, null, 2)
+  methods: {
+    async submitConsent () {
+      this.submitError = false
+      const submitResult = await AnswerResponseService.submitConsent(this.answerResponse)
+      if (submitResult.data === 'SUBMITTED') {
+        this.$router.push('/')
+      } else {
+        this.submitError = true
+      }
     }
   }
 }
 </script>
-
-<style scoped>
-pre {
-  font-size: 0.5em;
-  line-height: 1.3em;
-  text-overflow: ellipsis;
-  border: 1px solid #888;
-  padding: 0.5em;
-}
-</style>

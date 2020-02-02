@@ -23,7 +23,7 @@ describe('Service Tests', () => {
       service = injector.get(AnswerService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new Answer(0, 0, AnswerUnits.GRAMS);
+      elemDefault = new Answer(0, 0, false, AnswerUnits.GRAMS);
     });
 
     describe('Service methods', () => {
@@ -60,6 +60,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             number: 1,
+            ticked: true,
             units: 'BBBBBB'
           },
           elemDefault
@@ -79,6 +80,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             number: 1,
+            ticked: true,
             units: 'BBBBBB'
           },
           elemDefault

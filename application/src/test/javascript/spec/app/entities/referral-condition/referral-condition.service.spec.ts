@@ -34,7 +34,7 @@ describe('Service Tests', () => {
         0,
         ReferralConditionType.ITEMS_AT_LEAST,
         QuestionIdentifier.CONSENT_INFO_SHEET,
-        QuestionItemIdentifier.CONSENT_INFO_SHEET_2_YES,
+        QuestionItemIdentifier.CONSENT_INFO_SHEET_YES,
         0
       );
     });

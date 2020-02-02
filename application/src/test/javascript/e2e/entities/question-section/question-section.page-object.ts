@@ -27,6 +27,7 @@ export class QuestionSectionUpdatePage {
   saveButton = element(by.id('save-entity'));
   cancelButton = element(by.id('cancel-save'));
   identifierSelect = element(by.id('field_identifier'));
+  titleInput = element(by.id('field_title'));
   orderInput = element(by.id('field_order'));
   questionnaireSelect = element(by.id('field_questionnaire'));
   questionGroupSelect = element(by.id('field_questionGroup'));
@@ -48,6 +49,14 @@ export class QuestionSectionUpdatePage {
       .all(by.tagName('option'))
       .last()
       .click();
+  }
+
+  async setTitleInput(title) {
+    await this.titleInput.sendKeys(title);
+  }
+
+  async getTitleInput() {
+    return await this.titleInput.getAttribute('value');
   }
 
   async setOrderInput(order) {

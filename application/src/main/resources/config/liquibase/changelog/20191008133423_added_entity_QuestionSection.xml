@@ -18,6 +18,10 @@
             <column name="identifier" type="varchar(255)">
                 <constraints nullable="false" unique="true" uniqueConstraintName="ux_question_section_identifier" />
             </column>
+            
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
 
             <column name="jhi_order" type="integer">
                 <constraints nullable="false" />
@@ -56,6 +60,7 @@
                   tableName="question_section">
             <column name="id" type="numeric"/>
             <column name="identifier" type="string"/>
+            <column name="title" type="string"/>
             <column name="jhi_order" type="numeric"/>
             <column name="questionnaire_id" type="numeric"/>
             <column name="question_group_id" type="numeric"/>

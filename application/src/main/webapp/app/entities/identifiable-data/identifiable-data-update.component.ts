@@ -3,7 +3,6 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import moment from 'moment';
 import { IIdentifiableData, IdentifiableData } from 'app/shared/model/identifiable-data.model';
 import { IdentifiableDataService } from './identifiable-data.service';
 

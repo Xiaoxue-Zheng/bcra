@@ -21,6 +21,9 @@ public class QuestionSectionDTO implements Serializable {
     private QuestionSectionIdentifier identifier;
 
     @NotNull
+    private String title;
+
+    @NotNull
     private Integer order;
 
     private QuestionGroupDTO questionGroup;
@@ -41,6 +44,14 @@ public class QuestionSectionDTO implements Serializable {
 
     public void setIdentifier(QuestionSectionIdentifier identifier) {
         this.identifier = identifier;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Integer getOrder() {
@@ -93,6 +104,7 @@ public class QuestionSectionDTO implements Serializable {
         return "QuestionSectionDTO{" +
             "id=" + getId() +
             ", identifier='" + getIdentifier() + "'" +
+            ", title='" + getTitle() + "'" +
             ", order=" + getOrder() +
             ", questionGroup=" + getQuestionGroup() +
             ", displayConditions=" + getDisplayConditions() +

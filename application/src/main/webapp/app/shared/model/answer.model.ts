@@ -10,6 +10,7 @@ export const enum AnswerUnits {
 export interface IAnswer {
   id?: number;
   number?: number;
+  ticked?: boolean;
   units?: AnswerUnits;
   answerGroupId?: number;
   questionId?: number;
@@ -20,9 +21,12 @@ export class Answer implements IAnswer {
   constructor(
     public id?: number,
     public number?: number,
+    public ticked?: boolean,
     public units?: AnswerUnits,
     public answerGroupId?: number,
     public questionId?: number,
     public answerItems?: IAnswerItem[]
-  ) {}
+  ) {
+    this.ticked = this.ticked || false;
+  }
 }

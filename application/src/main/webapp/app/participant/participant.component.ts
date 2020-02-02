@@ -26,6 +26,7 @@ export class ParticipantComponent implements OnInit {
   previousPage: any;
   links: any;
   totalItems: any;
+  showDetails: any;
 
   constructor(
     private participantService: ParticipantService,

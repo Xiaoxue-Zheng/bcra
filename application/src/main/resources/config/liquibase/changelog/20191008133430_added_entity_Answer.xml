@@ -19,6 +19,10 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="ticked" type="boolean">
+                <constraints nullable="true" />
+            </column>
+
             <column name="units" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -56,6 +60,7 @@
                   tableName="answer">
             <column name="id" type="numeric"/>
             <column name="number" type="numeric"/>
+            <column name="ticked" type="boolean"/>
             <column name="units" type="string"/>
             <column name="answer_group_id" type="numeric"/>
             <column name="question_id" type="numeric"/>

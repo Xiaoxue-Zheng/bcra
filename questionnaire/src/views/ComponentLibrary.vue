@@ -1,79 +1,10 @@
 <template>
   <div class="components content">
     <!-- Section title with progress badges -->
-    <h1>UI components<div class="badge">3</div><div class="badge current">2</div><div class="badge complete"><div>1</div></div></h1>
-    <!-- Section introduction paragraph -->
-    <p class="introduction">
-      Introduction lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non urna orci. Integer rutrum a leo et eleifend. Nam at lorem sollicitudin, vulputate neque id, commodo ipsum.
-    </p>
+    <h1>UI components</h1>
 
         <!-- Form start -->
-
         <form class="pure-form">
-
-          <!-- Radio buttons -->
-
-          <fieldset>
-            <label>Radio buttons</label>
-            <div class="radio-buttons">
-              <div>
-                <input type="radio" id="radio1" name="radio" value="">
-                <label for="radio1">Radio button 1</label>
-              </div>
-              <div>
-                <input type="radio" id="radio2" name="radio" value="">
-                <label for="radio2">Radio button 2</label>
-              </div>
-              <div>
-                <input type="radio" id="radio3" name="radio" value="">
-                <label for="radio3">Radio button 3</label>
-              </div>
-            </div>
-          </fieldset>
-
-          <!-- Check buttons -->
-
-          <fieldset>
-            <label>Check buttons</label>
-            <div class="check-buttons">
-              <div>
-                <input type="checkbox" id="checkbutton1" name="radio" value="">
-                <label for="checkbutton1">Check button 1</label>
-              </div>
-              <div>
-                <input type="checkbox" id="checkbutton2" name="radio" value="">
-                <label for="checkbutton2">Check button 2</label>
-              </div>
-              <div>
-                <input type="checkbox" id="checkbutton3" name="radio" value="">
-                <label for="checkbutton3">Check button 3</label>
-              </div>
-            </div>
-          </fieldset>
-
-          <!-- Checkboxes for consent page -->
-
-          <br>
-          <h1>Checkboxes</h1>
-          <p class="instructions">
-            Instructions lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non urna orci. Integer rutrum a leo et eleifend. Nam at lorem sollicitudin, vulputate neque id, commodo ipsum.
-          </p>
-          <fieldset>
-            <div class="checkboxes">
-              <div class="pure-u-1">
-                <input type="checkbox" id="checkbox1" name="" value="">
-                <label for="checkbox1">I confirm that I have read the information sheet for this study. I have had the opportunity to consider the information, ask questions and have had these answered satisfactorily.</label>
-              </div>
-              <div class="pure-u-1">
-                <input type="checkbox" id="checkbox2" name="" value="">
-                <label for="checkbox2">I understand that my participation is voluntary and that I am free to withdraw at any time without giving any reason, without my medical care or legal rights being affected.</label>
-              </div>
-              <div class="pure-u-1">
-                <input type="checkbox" id="checkbox3" name="" value="">
-                <label for="checkbox3">I agree to take part in the above study.</label>
-              </div>
-            </div>
-          </fieldset>
 
           <!-- Input group -->
           <fieldset>

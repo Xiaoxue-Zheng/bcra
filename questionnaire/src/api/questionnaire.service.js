@@ -1,7 +1,8 @@
 import ApiService from './api.service'
 
 export const QuestionnaireService = {
-  getConsent () {
-    return ApiService.get('questionnaires/consent')
+  async getConsent () {
+    const response = await ApiService.get('questionnaires/consent')
+    return response.data
   }
 }

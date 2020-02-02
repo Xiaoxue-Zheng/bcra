@@ -1,7 +1,8 @@
 <script>
 export default {
   props: [
-    'to'
+    'to',
+    'clickEvent'
   ]
 }
 </script>
@@ -23,11 +24,5 @@ export default {
 .pure-button-disabled {
     background-color: rgba(34, 51, 68, 0.25);
     color:  rgba(34, 51, 68, 0.75);
-}
-
-.pure-button:hover {
-    background: rgba(34, 119, 204, 0.2);
-    color: rgb(34, 119, 204);
-    transition: all 0.5s ease;
 }
 </style>

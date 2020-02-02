@@ -37,9 +37,9 @@
                 <td></td>
             </tr>
             <tr>
-                <td>{{ participant.importedDatetime | date: shortDate | defaultValue: '-' }}</td>
-                <td>{{ participant.registerDatetime | date: shortDate | defaultValue: '-' }}</td>
-                <td>{{ participant.lastLoginDatetime | date: shortDate | defaultValue: '-' }}</td>
+                <td>{{ participant.importedDatetime | date: 'shortDate' | defaultValue: '-' }}</td>
+                <td>{{ participant.registerDatetime | date: 'shortDate' | defaultValue: '-' }}</td>
+                <td>{{ participant.lastLoginDatetime | date: 'shortDate' | defaultValue: '-' }}</td>
                 <td></td>
             </tr>
             

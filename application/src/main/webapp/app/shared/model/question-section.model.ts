@@ -19,6 +19,7 @@ export const enum QuestionSectionIdentifier {
 export interface IQuestionSection {
   id?: number;
   identifier?: QuestionSectionIdentifier;
+  title?: string;
   order?: number;
   displayConditions?: IDisplayCondition[];
   questionnaireId?: number;
@@ -29,6 +30,7 @@ export class QuestionSection implements IQuestionSection {
   constructor(
     public id?: number,
     public identifier?: QuestionSectionIdentifier,
+    public title?: string,
     public order?: number,
     public displayConditions?: IDisplayCondition[],
     public questionnaireId?: number,

@@ -27,6 +27,7 @@ export class AnswerUpdatePage {
   saveButton = element(by.id('save-entity'));
   cancelButton = element(by.id('cancel-save'));
   numberInput = element(by.id('field_number'));
+  tickedInput = element(by.id('field_ticked'));
   unitsSelect = element(by.id('field_units'));
   answerGroupSelect = element(by.id('field_answerGroup'));
   questionSelect = element(by.id('field_question'));
@@ -43,6 +44,9 @@ export class AnswerUpdatePage {
     return await this.numberInput.getAttribute('value');
   }
 
+  getTickedInput(timeout?: number) {
+    return this.tickedInput;
+  }
   async setUnitsSelect(units) {
     await this.unitsSelect.sendKeys(units);
   }

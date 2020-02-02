@@ -23,7 +23,7 @@ describe('Service Tests', () => {
       service = injector.get(DisplayConditionService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new DisplayCondition(0, QuestionIdentifier.CONSENT_INFO_SHEET, QuestionItemIdentifier.CONSENT_INFO_SHEET_2_YES);
+      elemDefault = new DisplayCondition(0, QuestionIdentifier.CONSENT_INFO_SHEET, QuestionItemIdentifier.CONSENT_INFO_SHEET_YES);
     });
 
     describe('Service methods', () => {

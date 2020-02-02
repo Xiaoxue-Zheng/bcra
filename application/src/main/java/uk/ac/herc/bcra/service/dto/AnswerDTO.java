@@ -18,6 +18,8 @@ public class AnswerDTO implements Serializable {
 
     private Integer number;
 
+    private Boolean ticked;
+
     private AnswerUnits units;
 
     private Long answerGroupId;
@@ -40,6 +42,14 @@ public class AnswerDTO implements Serializable {
 
     public void setNumber(Integer number) {
         this.number = number;
+    }
+
+    public Boolean isTicked() {
+        return ticked;
+    }
+
+    public void setTicked(Boolean ticked) {
+        this.ticked = ticked;
     }
 
     public AnswerUnits getUnits() {
@@ -100,6 +110,7 @@ public class AnswerDTO implements Serializable {
         return "AnswerDTO{" +
             "id=" + getId() +
             ", number=" + getNumber() +
+            ", ticked='" + isTicked() + "'" +
             ", units='" + getUnits() + "'" +
             ", answerGroup=" + getAnswerGroupId() +
             ", question=" + getQuestionId() +

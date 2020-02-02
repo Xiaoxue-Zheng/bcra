@@ -33,6 +33,10 @@ public class QuestionSection implements Serializable {
     private QuestionSectionIdentifier identifier;
 
     @NotNull
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @NotNull
     @Column(name = "jhi_order", nullable = false)
     private Integer order;
 
@@ -70,6 +74,19 @@ public class QuestionSection implements Serializable {
 
     public void setIdentifier(QuestionSectionIdentifier identifier) {
         this.identifier = identifier;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public QuestionSection title(String title) {
+        this.title = title;
+        return this;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Integer getOrder() {
@@ -158,6 +175,7 @@ public class QuestionSection implements Serializable {
         return "QuestionSection{" +
             "id=" + getId() +
             ", identifier='" + getIdentifier() + "'" +
+            ", title='" + getTitle() + "'" +
             ", order=" + getOrder() +
             "}";
     }

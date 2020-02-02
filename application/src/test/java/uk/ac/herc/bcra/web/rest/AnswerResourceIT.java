@@ -28,6 +28,9 @@ public class AnswerResourceIT {
     private static final Integer DEFAULT_NUMBER = 1;
     private static final Integer UPDATED_NUMBER = 2;
 
+    private static final Boolean DEFAULT_TICKED = false;
+    private static final Boolean UPDATED_TICKED = true;
+    
     private static final AnswerUnits DEFAULT_UNITS = AnswerUnits.GRAMS;
     private static final AnswerUnits UPDATED_UNITS = AnswerUnits.POUNDS;
 
@@ -48,6 +51,7 @@ public class AnswerResourceIT {
     public static Answer createEntity(EntityManager em) {
         Answer answer = new Answer()
             .number(DEFAULT_NUMBER)
+            .ticked(DEFAULT_TICKED)
             .units(DEFAULT_UNITS);
         // Add required entity
         AnswerGroup answerGroup;
@@ -86,6 +90,7 @@ public class AnswerResourceIT {
     public static Answer createUpdatedEntity(EntityManager em) {
         Answer answer = new Answer()
             .number(UPDATED_NUMBER)
+            .ticked(UPDATED_TICKED)
             .units(UPDATED_UNITS);
         // Add required entity
         AnswerGroup answerGroup;

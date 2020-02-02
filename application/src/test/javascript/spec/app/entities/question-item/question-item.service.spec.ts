@@ -23,7 +23,7 @@ describe('Service Tests', () => {
       service = injector.get(QuestionItemService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new QuestionItem(0, QuestionItemIdentifier.CONSENT_INFO_SHEET_2_YES, 0, 'AAAAAAA', false, false);
+      elemDefault = new QuestionItem(0, QuestionItemIdentifier.CONSENT_INFO_SHEET_YES, 0, 'AAAAAAA', false, false);
     });
 
     describe('Service methods', () => {

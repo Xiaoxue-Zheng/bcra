@@ -41,10 +41,12 @@ describe('QuestionSection e2e test', () => {
         await questionSectionComponentsPage.clickOnCreateButton();
         await promise.all([
             questionSectionUpdatePage.identifierSelectLastOption(),
+            questionSectionUpdatePage.setTitleInput('title'),
             questionSectionUpdatePage.setOrderInput('5'),
             questionSectionUpdatePage.questionnaireSelectLastOption(),
             questionSectionUpdatePage.questionGroupSelectLastOption(),
         ]);
+        expect(await questionSectionUpdatePage.getTitleInput()).to.eq('title', 'Expected Title value to be equals to title');
         expect(await questionSectionUpdatePage.getOrderInput()).to.eq('5', 'Expected order value to be equals to 5');
         await questionSectionUpdatePage.save();
         expect(await questionSectionUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;

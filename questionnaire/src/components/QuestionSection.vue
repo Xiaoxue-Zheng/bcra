@@ -1,0 +1,114 @@
+<template>
+  <div v-if='questionSection && answerSection' class="content">
+    <h1>{{ questionSection.title }}<ProgressState :progressStage="progressStage"></ProgressState></h1>
+    <slot></slot>
+    <form class="pure-form">
+      <div v-for="question in questions" v-bind:key='question.id'>
+        <TickboxQuestion v-if="question.type === 'TICKBOX_CONSENT'" :question="question" :answer="getAnswer(question)"></TickboxQuestion>
+        <CheckboxQuestion v-if="question.type === 'CHECKBOX'" :question="question" :answer="getAnswer(question)"></CheckboxQuestion>
+        <RadioQuestion v-if="question.type === 'RADIO'" :question="question" :answer="getAnswer(question)"></RadioQuestion>
+      </div>
+      <PrimaryButton :clickEvent="submitClick">{{ submitText }}</PrimaryButton>
+      <div v-if="submitError">There was an error. Please try again or contact the study team.</div>
+      <div v-if="invalid">Please complete all of the questions above to continue.</div>
+    </form>
+  </div>
+</template>
+
+<script>
+import ProgressState from '@/components/ProgressState.vue'
+import TickboxQuestion from '@/components/TickboxQuestion.vue'
+import CheckboxQuestion from '@/components/CheckboxQuestion.vue'
+import RadioQuestion from '@/components/RadioQuestion.vue'
+import PrimaryButton from '@/components/PrimaryButton.vue'
+
+export default {
+  components: {
+    'ProgressState': ProgressState,
+    'TickboxQuestion': TickboxQuestion,
+    'CheckboxQuestion': CheckboxQuestion,
+    'RadioQuestion': RadioQuestion,
+    'PrimaryButton': PrimaryButton
+  },
+  props: [
+    'progressStage',
+    'questionSection',
+    'answerSection',
+    'submitText',
+    'submitForm',
+    'submitError'
+  ],
+  data () {
+    return {
+      invalid: false
+    }
+  },
+  computed: {
+    questions: (state) => {
+      let questions = state.questionSection.questionGroup.questions
+      return questions.sort((questionA, questionB) => {
+        return questionA.order - questionB.order
+      })
+    }
+  },
+  methods: {
+    getAnswer (question) {
+      let answers = this.$props.answerSection.answerGroups[0].answers
+      return answers.find(answer => answer.questionId === question.id)
+    },
+    submitClick () {
+      this.invalid = false
+      if (this.valid()) {
+        this.submitForm()
+      } else {
+        this.invalid = true
+      }
+    },
+    valid () {
+      let questions = this.questionSection.questionGroup.questions
+      for (const question of questions) {
+        const answer = this.getAnswer(question)
+        if (
+          ((question.type === 'TICKBOX_CONSENT') && this.tickboxInvalid(answer)) ||
+          ((question.type === 'RADIO') && this.radioInvalid(question, answer))
+        ) {
+          return false
+        }
+      }
+      return true
+    },
+    tickboxInvalid (answer) {
+      return !answer.ticked
+    },
+    radioInvalid (question, answer) {
+      let necessaryQuestionItem =
+        question.questionItems.find(questionItem => questionItem.necessary)
+      if (necessaryQuestionItem) {
+        let necessaryAnswerItem =
+          answer.answerItems.find(answerItem => answerItem.questionItemId === necessaryQuestionItem.id)
+        return !necessaryAnswerItem.selected
+      }
+      return false
+    }
+  }
+}
+</script>
+
+<style scoped>
+h1 {
+  padding-top: 1em;
+  padding-bottom: 2.5em;
+  border-bottom: 1px solid rgba(34, 51, 68, 0.15);
+}
+
+.introduction {
+  border-bottom: 1px solid rgba(34, 51, 68, 0.15);
+  padding: 1.5em 0;
+  margin: 0;
+  font-weight: 700;
+}
+
+form {
+  margin: 0
+}
+</style>

@@ -19,6 +19,7 @@
             <tr>
             <th><span>ID</span></th>
             <th><span>Number</span></th>
+            <th><span>Ticked</span></th>
             <th><span>Units</span></th>
             <th><span>Answer Group</span></th>
             <th><span>Question</span></th>
@@ -29,6 +30,7 @@
             <tr *ngFor="let answer of answers ;trackBy: trackId">
                 <td><a [routerLink]="['/answer', answer.id, 'view' ]">{{answer.id}}</a></td>
                 <td>{{answer.number}}</td>
+                <td>{{answer.ticked}}</td>
                 <td>{{answer.units}}</td>
                 <td>
                     <div *ngIf="answer.answerGroupId">

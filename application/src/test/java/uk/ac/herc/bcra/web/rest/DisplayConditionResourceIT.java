@@ -26,8 +26,8 @@ public class DisplayConditionResourceIT {
     private static final QuestionIdentifier DEFAULT_QUESTION_IDENTIFIER = QuestionIdentifier.CONSENT_INFO_SHEET;
     private static final QuestionIdentifier UPDATED_QUESTION_IDENTIFIER = QuestionIdentifier.CONSENT_WITHDRAWAL;
 
-    private static final QuestionItemIdentifier DEFAULT_ITEM_IDENTIFIER = QuestionItemIdentifier.CONSENT_INFO_SHEET_2_YES;
-    private static final QuestionItemIdentifier UPDATED_ITEM_IDENTIFIER = QuestionItemIdentifier.CONSENT_INFO_SHEET_2_NO;
+    private static final QuestionItemIdentifier DEFAULT_ITEM_IDENTIFIER = QuestionItemIdentifier.CONSENT_INFO_SHEET_YES;
+    private static final QuestionItemIdentifier UPDATED_ITEM_IDENTIFIER = QuestionItemIdentifier.CONSENT_INFO_SHEET_NO;
 
     @Autowired
     private DisplayConditionMapper displayConditionMapper;

@@ -15,6 +15,7 @@ enum Algorithm {
 
 entity QuestionSection {
 	identifier QuestionSectionIdentifier required unique
+    title String required
     order Integer required
 }
 
@@ -97,7 +98,6 @@ enum QuestionIdentifier {
     CONSENT_INFORM_GP,
     CONSENT_TAKE_PART,
     CONSENT_BY_LETTER,
-    CONSENT_INFO_SHEET_2,
     CONSENT_FUTURE_RESEARCH,
 
     FAMILY_BREAST_AFFECTED,
@@ -155,8 +155,8 @@ relationship ManyToOne {
 }
 
 enum QuestionItemIdentifier {
-    CONSENT_INFO_SHEET_2_YES,
-    CONSENT_INFO_SHEET_2_NO,
+    CONSENT_INFO_SHEET_YES,
+    CONSENT_INFO_SHEET_NO,
 
     CONSENT_FUTURE_RESEARCH_YES,
     CONSENT_FUTURE_RESEARCH_NO,
@@ -263,6 +263,7 @@ relationship ManyToOne {
 
 entity Answer {
     number Integer
+    ticked Boolean
     units AnswerUnits
 }
 

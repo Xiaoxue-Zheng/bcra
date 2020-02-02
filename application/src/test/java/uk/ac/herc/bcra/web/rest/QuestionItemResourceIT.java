@@ -22,8 +22,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(classes = BcraApp.class)
 public class QuestionItemResourceIT {
 
-    private static final QuestionItemIdentifier DEFAULT_IDENTIFIER = QuestionItemIdentifier.CONSENT_INFO_SHEET_2_YES;
-    private static final QuestionItemIdentifier UPDATED_IDENTIFIER = QuestionItemIdentifier.CONSENT_INFO_SHEET_2_NO;
+    private static final QuestionItemIdentifier DEFAULT_IDENTIFIER = QuestionItemIdentifier.CONSENT_INFO_SHEET_YES;
+    private static final QuestionItemIdentifier UPDATED_IDENTIFIER = QuestionItemIdentifier.CONSENT_INFO_SHEET_NO;
 
     private static final Integer DEFAULT_ORDER = 1;
     private static final Integer UPDATED_ORDER = 2;

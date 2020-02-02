@@ -26,6 +26,9 @@ public class QuestionSectionResourceIT {
     private static final QuestionSectionIdentifier DEFAULT_IDENTIFIER = QuestionSectionIdentifier.CONSENT_FORM;
     private static final QuestionSectionIdentifier UPDATED_IDENTIFIER = QuestionSectionIdentifier.FAMILY_BREAST_AFFECTED;
 
+    private static final String DEFAULT_TITLE = "AAAAAAAAAA";
+    private static final String UPDATED_TITLE = "BBBBBBBBBB";
+
     private static final Integer DEFAULT_ORDER = 1;
     private static final Integer UPDATED_ORDER = 2;
 
@@ -46,6 +49,7 @@ public class QuestionSectionResourceIT {
     public static QuestionSection createEntity(EntityManager em) {
         QuestionSection questionSection = new QuestionSection()
             .identifier(DEFAULT_IDENTIFIER)
+            .title(DEFAULT_TITLE)
             .order(DEFAULT_ORDER);
         // Add required entity
         Questionnaire questionnaire;
@@ -78,6 +82,7 @@ public class QuestionSectionResourceIT {
     public static QuestionSection createUpdatedEntity(EntityManager em) {
         QuestionSection questionSection = new QuestionSection()
             .identifier(UPDATED_IDENTIFIER)
+            .title(UPDATED_TITLE)
             .order(UPDATED_ORDER);
         // Add required entity
         Questionnaire questionnaire;

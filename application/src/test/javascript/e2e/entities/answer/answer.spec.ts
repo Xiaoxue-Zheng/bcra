@@ -46,6 +46,14 @@ describe('Answer e2e test', () => {
             answerUpdatePage.questionSelectLastOption(),
         ]);
         expect(await answerUpdatePage.getNumberInput()).to.eq('5', 'Expected number value to be equals to 5');
+        const selectedTicked = answerUpdatePage.getTickedInput();
+        if (await selectedTicked.isSelected()) {
+            await answerUpdatePage.getTickedInput().click();
+            expect(await answerUpdatePage.getTickedInput().isSelected(), 'Expected ticked not to be selected').to.be.false;
+        } else {
+            await answerUpdatePage.getTickedInput().click();
+            expect(await answerUpdatePage.getTickedInput().isSelected(), 'Expected ticked to be selected').to.be.true;
+        }
         await answerUpdatePage.save();
         expect(await answerUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 

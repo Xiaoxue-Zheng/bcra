@@ -6,6 +6,10 @@
             "fieldType": "Integer"
         },
         {
+            "fieldName": "ticked",
+            "fieldType": "Boolean"
+        },
+        {
             "fieldName": "units",
             "fieldType": "AnswerUnits",
             "fieldValues": "GRAMS,POUNDS,CENTIMETERS,INCHES"

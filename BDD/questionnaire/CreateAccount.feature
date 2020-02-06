@@ -24,3 +24,15 @@ Scenario: A Participant enters a mismatching passwords
 	When the Participant repeats a different password
 	Then a message prompts the participant to enter a matching password
 	And the Create Account button is disabled
+
+Scenario: A Participant creates their account
+	Given the Participant is viewing the Create Account page
+	And the Participant has entered their email address
+	And the Participant enters a strong password
+	And the Participant repeats a matching password
+	When the Participant clicks the Create Account button
+	Then the Participants account is created
+	And the Participant is automatically signed in
+	And the user is redirected to the Consent page
+	And the Sign In menu option has changed to Sign Out
+	And the Register menu option is not visible

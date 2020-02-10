@@ -94,15 +94,15 @@ public class ParticipantCreator {
 
         procedure.setConsentResponse(
             answerResponseGenerator
-                .generateAnswerResponseToQuestionniare(
+                .generateAnswerResponseToQuestionnaire(
                     QuestionnaireType.CONSENT_FORM
                 )
         );
 
-        procedure.setRiskAssesmentResponse(
+        procedure.setRiskAssessmentResponse(
             answerResponseGenerator
-                .generateAnswerResponseToQuestionniare(
-                    QuestionnaireType.RISK_ASSESMENT
+                .generateAnswerResponseToQuestionnaire(
+                    QuestionnaireType.RISK_ASSESSMENT
                 )
         );
 

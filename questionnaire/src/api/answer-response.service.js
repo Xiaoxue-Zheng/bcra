@@ -10,5 +10,15 @@ export const AnswerResponseService = {
   },
   submitConsent (answerResponse) {
     return ApiService.put('answer-responses/consent/submit', answerResponse)
+  },
+  async getRiskAssessment () {
+    const response = await ApiService.get('answer-responses/risk-assessment')
+    return response.data
+  },
+  saveRiskAssessment (answerResponse) {
+    return ApiService.put('answer-responses/risk-assessment/save', answerResponse)
+  },
+  submitRiskAssessment (answerResponse) {
+    return ApiService.put('answer-responses/risk-assessment/submit', answerResponse)
   }
 }

@@ -17,6 +17,7 @@
 <style scoped>
 .progress {
     float: right;
+    font-size: 0.9em;
 }
 
 .badge {

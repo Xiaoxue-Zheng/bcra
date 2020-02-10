@@ -12,7 +12,7 @@
         {
             "fieldName": "units",
             "fieldType": "AnswerUnits",
-            "fieldValues": "GRAMS,POUNDS,CENTIMETERS,INCHES"
+            "fieldValues": "KILOS,POUNDS,CENTIMETERS,INCHES"
         }
     ],
     "relationships": [

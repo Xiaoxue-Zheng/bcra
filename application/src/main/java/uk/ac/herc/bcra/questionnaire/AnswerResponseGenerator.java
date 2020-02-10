@@ -28,7 +28,7 @@ public class AnswerResponseGenerator {
         this.answerResponseRepository = answerResponseRepository;
     }
 
-    public AnswerResponse generateAnswerResponseToQuestionniare(
+    public AnswerResponse generateAnswerResponseToQuestionnaire(
         QuestionnaireType questionnaireType
     ) {
         AnswerResponse response = 
@@ -90,7 +90,7 @@ public class AnswerResponseGenerator {
             answer.setUnits(AnswerUnits.CENTIMETERS);
         }
         else if (questionType == QuestionType.NUMBER_WEIGHT) {
-            answer.setUnits(AnswerUnits.GRAMS);
+            answer.setUnits(AnswerUnits.KILOS);
         }
         else {
             answer.setUnits(null);

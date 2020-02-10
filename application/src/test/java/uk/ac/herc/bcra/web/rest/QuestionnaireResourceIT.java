@@ -41,7 +41,7 @@ import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 public class QuestionnaireResourceIT {
 
     private static final QuestionnaireType DEFAULT_TYPE = QuestionnaireType.CONSENT_FORM;
-    private static final QuestionnaireType UPDATED_TYPE = QuestionnaireType.RISK_ASSESMENT;
+    private static final QuestionnaireType UPDATED_TYPE = QuestionnaireType.RISK_ASSESSMENT;
 
     private static final Integer DEFAULT_VERSION = 1;
     private static final Integer UPDATED_VERSION = 2;
@@ -163,7 +163,7 @@ public class QuestionnaireResourceIT {
 
     @Test
     @Transactional
-    public void getRiskAssesmentQuestionnaire() throws Exception {
+    public void getRiskAssessmentQuestionnaire() throws Exception {
         // Initialize the database
         Participant participant;
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
@@ -176,7 +176,7 @@ public class QuestionnaireResourceIT {
 
         // Get the questionnaire
         restQuestionnaireMockMvc.perform(
-            get("/api/questionnaires/risk-assesment", questionnaire.getId())
+            get("/api/questionnaires/risk-assessment", questionnaire.getId())
             .principal(new Principal() {
                 @Override
                 public String getName() {
@@ -186,8 +186,8 @@ public class QuestionnaireResourceIT {
         )
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(participant.getProcedure().getRiskAssesmentResponse().getQuestionnaire().getId().intValue()))
-            .andExpect(jsonPath("$.type").value(QuestionnaireType.RISK_ASSESMENT.toString()))
+            .andExpect(jsonPath("$.id").value(participant.getProcedure().getRiskAssessmentResponse().getQuestionnaire().getId().intValue()))
+            .andExpect(jsonPath("$.type").value(QuestionnaireType.RISK_ASSESSMENT.toString()))
             .andExpect(jsonPath("$.version").value(DEFAULT_VERSION));
     }
 

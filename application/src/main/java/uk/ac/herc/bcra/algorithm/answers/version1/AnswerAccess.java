@@ -18,7 +18,6 @@ public class AnswerAccess {
 
     private final static Float CENTIMETERS_PER_METER = 100f;
     private final static Float INCHES_PER_METER = 39.3701f;
-    private final static Float GRAMS_PER_KILO = 1000.0f;
     private final static Float POUNDS_PER_KILO = 2.20462f;
 
     private Answer answer;
@@ -87,8 +86,8 @@ public class AnswerAccess {
         }
 
         Integer weight = answer.getNumber();
-        if (answer.getUnits() == AnswerUnits.GRAMS) {
-            return Math.round(weight / GRAMS_PER_KILO);
+        if (answer.getUnits() == AnswerUnits.KILOS) {
+            return weight;
         }
         else if (answer.getUnits() == AnswerUnits.POUNDS) {
             return Math.round(weight / POUNDS_PER_KILO);

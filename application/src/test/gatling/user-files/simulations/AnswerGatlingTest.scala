@@ -78,7 +78,7 @@ class AnswerGatlingTest extends Simulation {
                 "id":null
                 , "number":"0"
                 , "ticked":null
-                , "units":"GRAMS"
+                , "units":"KILOS"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_answer_url"))).exitHereIfFailed

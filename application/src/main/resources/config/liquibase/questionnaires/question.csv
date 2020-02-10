@@ -26,7 +26,7 @@ id,identifier,type,jhi_order,minimum,maximum,question_group_id,variable_name,tex
 26,SELF_FIRST_PERIOD,NUMBER_UNKNOWN,1,5,30,12,,Approximately how old were you when you had your first period?,,
 27,SELF_PREMENOPAUSAL,RADIO,2,,,12,,Are you premenopausal?,What does premenopausal mean?,Definition of premenopausal to go here.
 28,SELF_MENOPAUSAL_AGE,NUMBER,3,20,45,12,,At approximately what age did you become menopausal?,,
-29,SELF_PREGNANCIES,DROPDOWN_NUMBER,4,1,9,12,,How many pregnancies have you had that have continued into the third trimester (more than 28 weeks)?,,
+29,SELF_PREGNANCIES,DROPDOWN_NUMBER,4,0,5,12,,How many pregnancies have you had that have continued into the third trimester (more than 28 weeks)?,,
 30,SELF_PREGNANCY_FIRST_AGE,NUMBER,5,10,45,12,,How old were you when you had your first pregnancy that continued into the third trimester (more than 28 weeks)?,,
 31,SELF_HEIGHT,NUMBER_HEIGHT,6,100,300,12,,What is your approximate height?,,
 32,SELF_WEIGHT,NUMBER_WEIGHT,7,30,300,12,,What is your approximate weight?,,

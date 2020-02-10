@@ -31,7 +31,7 @@ public class Procedure implements Serializable {
     @OneToOne(optional = false)
     @NotNull
     @JoinColumn(unique = true)
-    private AnswerResponse riskAssesmentResponse;
+    private AnswerResponse riskAssessmentResponse;
 
     @OneToOne(mappedBy = "procedure")
     @JsonIgnore
@@ -59,17 +59,17 @@ public class Procedure implements Serializable {
         this.consentResponse = answerResponse;
     }
 
-    public AnswerResponse getRiskAssesmentResponse() {
-        return riskAssesmentResponse;
+    public AnswerResponse getRiskAssessmentResponse() {
+        return riskAssessmentResponse;
     }
 
-    public Procedure riskAssesmentResponse(AnswerResponse answerResponse) {
-        this.riskAssesmentResponse = answerResponse;
+    public Procedure riskAssessmentResponse(AnswerResponse answerResponse) {
+        this.riskAssessmentResponse = answerResponse;
         return this;
     }
 
-    public void setRiskAssesmentResponse(AnswerResponse answerResponse) {
-        this.riskAssesmentResponse = answerResponse;
+    public void setRiskAssessmentResponse(AnswerResponse answerResponse) {
+        this.riskAssessmentResponse = answerResponse;
     }
 
     public Participant getParticipant() {

@@ -2,7 +2,7 @@ import { IQuestionSection } from 'app/shared/model/question-section.model';
 
 export const enum QuestionnaireType {
   CONSENT_FORM = 'CONSENT_FORM',
-  RISK_ASSESMENT = 'RISK_ASSESMENT'
+  RISK_ASSESSMENT = 'RISK_ASSESSMENT'
 }
 
 export interface IQuestionnaire {

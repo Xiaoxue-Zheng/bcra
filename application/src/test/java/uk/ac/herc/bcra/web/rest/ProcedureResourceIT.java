@@ -91,12 +91,12 @@ public class ProcedureResourceIT {
         em.persist(consentResponse);
         em.flush();
 
-        AnswerResponse riskAssesmentResponse = AnswerResponseResourceIT.createEntity(em);
-        em.persist(riskAssesmentResponse);
+        AnswerResponse riskAssessmentResponse = AnswerResponseResourceIT.createEntity(em);
+        em.persist(riskAssessmentResponse);
         em.flush();
         procedure.setConsentResponse(consentResponse);
         // Add required entity
-        procedure.setRiskAssesmentResponse(riskAssesmentResponse);
+        procedure.setRiskAssessmentResponse(riskAssessmentResponse);
         // Add required entity
         Participant participant;
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
@@ -128,7 +128,7 @@ public class ProcedureResourceIT {
         }
         procedure.setConsentResponse(answerResponse);
         // Add required entity
-        procedure.setRiskAssesmentResponse(answerResponse);
+        procedure.setRiskAssessmentResponse(answerResponse);
         return procedure;
     }
 

@@ -12,11 +12,11 @@ import org.mapstruct.*;
 public interface ProcedureMapper extends EntityMapper<ProcedureDTO, Procedure> {
 
     @Mapping(source = "consentResponse.id", target = "consentResponseId")
-    @Mapping(source = "riskAssesmentResponse.id", target = "riskAssesmentResponseId")
+    @Mapping(source = "riskAssessmentResponse.id", target = "riskAssessmentResponseId")
     ProcedureDTO toDto(Procedure procedure);
 
     @Mapping(source = "consentResponseId", target = "consentResponse")
-    @Mapping(source = "riskAssesmentResponseId", target = "riskAssesmentResponse")
+    @Mapping(source = "riskAssessmentResponseId", target = "riskAssessmentResponse")
     @Mapping(target = "participant", ignore = true)
     Procedure toEntity(ProcedureDTO procedureDTO);
 

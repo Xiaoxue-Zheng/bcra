@@ -14,7 +14,7 @@ public class ProcedureDTO implements Serializable {
 
     private Long consentResponseId;
 
-    private Long riskAssesmentResponseId;
+    private Long riskAssessmentResponseId;
 
     public Long getId() {
         return id;
@@ -32,12 +32,12 @@ public class ProcedureDTO implements Serializable {
         this.consentResponseId = answerResponseId;
     }
 
-    public Long getRiskAssesmentResponseId() {
-        return riskAssesmentResponseId;
+    public Long getRiskAssessmentResponseId() {
+        return riskAssessmentResponseId;
     }
 
-    public void setRiskAssesmentResponseId(Long answerResponseId) {
-        this.riskAssesmentResponseId = answerResponseId;
+    public void setRiskAssessmentResponseId(Long answerResponseId) {
+        this.riskAssessmentResponseId = answerResponseId;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class ProcedureDTO implements Serializable {
         return "ProcedureDTO{" +
             "id=" + getId() +
             ", consentResponse=" + getConsentResponseId() +
-            ", riskAssesmentResponse=" + getRiskAssesmentResponseId() +
+            ", riskAssessmentResponse=" + getRiskAssessmentResponseId() +
             "}";
     }
 }

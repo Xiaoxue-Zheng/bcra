@@ -4,7 +4,7 @@
         {
             "fieldName": "type",
             "fieldType": "QuestionnaireType",
-            "fieldValues": "CONSENT_FORM,RISK_ASSESMENT",
+            "fieldValues": "CONSENT_FORM,RISK_ASSESSMENT",
             "fieldValidateRules": [
                 "required"
             ]

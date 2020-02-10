@@ -16,7 +16,7 @@
             "otherEntityName": "answerResponse",
             "otherEntityRelationshipName": "procedure",
             "relationshipValidateRules": "required",
-            "relationshipName": "riskAssesmentResponse",
+            "relationshipName": "riskAssessmentResponse",
             "otherEntityField": "id",
             "ownerSide": true
         },

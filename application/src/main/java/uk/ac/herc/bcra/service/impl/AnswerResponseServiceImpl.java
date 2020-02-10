@@ -74,8 +74,8 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
                 answerResponseId = participantOptional.get().getProcedure().getConsentResponse().getId();
                 save(answerResponseDTO, answerResponseId, responseState);
                 return true;
-            } else if (questionnaireType == QuestionnaireType.RISK_ASSESMENT) {
-                answerResponseId = participantOptional.get().getProcedure().getRiskAssesmentResponse().getId();
+            } else if (questionnaireType == QuestionnaireType.RISK_ASSESSMENT) {
+                answerResponseId = participantOptional.get().getProcedure().getRiskAssessmentResponse().getId();
                 save(answerResponseDTO, answerResponseId, responseState);
                 return true;
             } 
@@ -131,10 +131,10 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
                     Optional
                     .of(participantOptional.get().getProcedure().getConsentResponse())
                     .map(answerResponseMapper::toDto);
-            } else if (questionnaireType == QuestionnaireType.RISK_ASSESMENT) {
+            } else if (questionnaireType == QuestionnaireType.RISK_ASSESSMENT) {
                 return 
                     Optional
-                    .of(participantOptional.get().getProcedure().getRiskAssesmentResponse())
+                    .of(participantOptional.get().getProcedure().getRiskAssessmentResponse())
                     .map(answerResponseMapper::toDto);
             }
         }

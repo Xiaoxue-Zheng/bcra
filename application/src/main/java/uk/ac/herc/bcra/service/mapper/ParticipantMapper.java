@@ -17,7 +17,7 @@ public interface ParticipantMapper extends EntityMapper<ParticipantDTO, Particip
     @Mapping(source = "participant.registerDatetime", target = "registerDatetime")
     @Mapping(source = "participant.lastLoginDatetime", target = "lastLoginDatetime")
     @Mapping(source = "participant.procedure.consentResponse.state", target = "consentStatus")
-    @Mapping(source = "participant.procedure.riskAssesmentResponse.state", target = "questionnaireStatus")
+    @Mapping(source = "participant.procedure.riskAssessmentResponse.state", target = "questionnaireStatus")
     ParticipantDTO toDto(Participant participant);
 
     @Mapping(target = "identifiableData", ignore=true)

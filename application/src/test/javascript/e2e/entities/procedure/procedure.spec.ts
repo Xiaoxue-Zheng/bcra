@@ -41,7 +41,7 @@ describe('Procedure e2e test', () => {
         await procedureComponentsPage.clickOnCreateButton();
         await promise.all([
             procedureUpdatePage.consentResponseSelectLastOption(),
-            procedureUpdatePage.riskAssesmentResponseSelectLastOption(),
+            procedureUpdatePage.riskAssessmentResponseSelectLastOption(),
         ]);
         await procedureUpdatePage.save();
         expect(await procedureUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;

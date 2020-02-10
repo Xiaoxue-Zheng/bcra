@@ -3,12 +3,18 @@
     <div class="pure-u-1">
       <label>{{ question.text }}</label>
       <div class="items checkboxes">
-        <div v-for="questionItem in question.questionItems" v-bind:key="questionItem.id">
-          <input type="checkbox" :id="questionItem.identifier">
+        <div v-for="questionItem in sortQuestionItems(question.questionItems)" v-bind:key="questionItem.id">
+          <input
+            type="checkbox"
+            :id="questionItem.identifier"
+            :value="questionItem.id"
+            v-model="answerItemValue"
+          />
           <label :for="questionItem.identifier">{{ questionItem.label }}</label>
         </div>
       </div>
     </div>
+    <QuestionHint :hint="question.hint" :text="question.hintText"></QuestionHint>
   </fieldset>
 </template>
 <script>
@@ -16,8 +22,32 @@ import ItemQuestionBase from '@/components/ItemQuestionBase.vue'
 export default {
   extends: ItemQuestionBase,
   inheritAttrs: false,
-  props: [
-  ]
+  computed: {
+    answerItemValue: {
+      get () {
+        let checks = []
+        for (const answerItem of this.answer.answerItems) {
+          if (answerItem.selected) {
+            checks.push(answerItem.questionItemId)
+          }
+        }
+        return checks
+      },
+      set (checks) {
+        for (const answerItem of this.answer.answerItems) {
+          answerItem.selected = checks.includes(answerItem.questionItemId)
+        }
+      }
+    }
+  },
+  methods: {
+    sortQuestionItems (questionItems) {
+      let itemClone = questionItems.slice()
+      return itemClone.sort((itemA, itemB) => {
+        return itemA.order - itemB.order
+      })
+    }
+  }
 }
 </script>
 <style scoped>

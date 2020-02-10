@@ -105,12 +105,12 @@ public class ParticipantCsvUploadResourceIT {
             .type(QuestionnaireType.CONSENT_FORM)
             .version(1);
 
-        Questionnaire riskAssesmentQuestionnaire = new Questionnaire()
-            .type(QuestionnaireType.RISK_ASSESMENT)
+        Questionnaire riskAssessmentQuestionnaire = new Questionnaire()
+            .type(QuestionnaireType.RISK_ASSESSMENT)
             .version(1);
 
         questionnaireRepository.saveAndFlush(consentQuestionnaire);
-        questionnaireRepository.saveAndFlush(riskAssesmentQuestionnaire);
+        questionnaireRepository.saveAndFlush(riskAssessmentQuestionnaire);
 
         final CsvFileResource csvFileResource = new CsvFileResource(csvFileService);
         mockMvc = MockMvcBuilders.standaloneSetup(csvFileResource)

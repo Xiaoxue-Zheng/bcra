@@ -3,7 +3,7 @@
     <div class="pure-u-1">
       <label>{{ question.text }}</label>
       <div class="items radios">
-        <div v-for="questionItem in question.questionItems" v-bind:key="questionItem.id">
+        <div v-for="questionItem in sortQuestionItems(question.questionItems)" v-bind:key="questionItem.id">
           <input
             type="radio"
             :id="questionItem.identifier"
@@ -14,7 +14,8 @@
           <label :for="questionItem.identifier">{{ questionItem.label }}</label>
         </div>
       </div>
-    </div>
+     </div>
+    <QuestionHint :hint="question.hint" :text="question.hintText"></QuestionHint>
   </fieldset>
 </template>
 <script>
@@ -39,6 +40,14 @@ export default {
           answerItem.selected = (answerItem.questionItemId === questionItemId)
         }
       }
+    }
+  },
+  methods: {
+    sortQuestionItems (questionItems) {
+      let itemClone = questionItems.slice()
+      return itemClone.sort((itemA, itemB) => {
+        return itemA.order - itemB.order
+      })
     }
   }
 }

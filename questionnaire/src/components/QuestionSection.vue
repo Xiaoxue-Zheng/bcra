@@ -4,9 +4,11 @@
     <slot></slot>
     <form class="pure-form">
       <div v-for="question in questions" v-bind:key='question.id'>
-        <TickboxQuestion v-if="question.type === 'TICKBOX_CONSENT'" :question="question" :answer="getAnswer(question)"></TickboxQuestion>
-        <CheckboxQuestion v-if="question.type === 'CHECKBOX'" :question="question" :answer="getAnswer(question)"></CheckboxQuestion>
-        <RadioQuestion v-if="question.type === 'RADIO'" :question="question" :answer="getAnswer(question)"></RadioQuestion>
+        <component
+          :is="getComponentType(question)"
+          :question="question"
+          :answer="getAnswer(question)"
+        ></component>
       </div>
       <PrimaryButton :clickEvent="submitClick">{{ submitText }}</PrimaryButton>
       <div v-if="submitError">There was an error. Please try again or contact the study team.</div>
@@ -17,18 +19,26 @@
 
 <script>
 import ProgressState from '@/components/ProgressState.vue'
+import PrimaryButton from '@/components/PrimaryButton.vue'
 import TickboxQuestion from '@/components/TickboxQuestion.vue'
 import CheckboxQuestion from '@/components/CheckboxQuestion.vue'
 import RadioQuestion from '@/components/RadioQuestion.vue'
-import PrimaryButton from '@/components/PrimaryButton.vue'
+import NumberQuestion from '@/components/NumberQuestion.vue'
+import NumberUnknownQuestion from '@/components/NumberUnknownQuestion.vue'
+import HeightWeightQuestion from '@/components/HeightWeightQuestion.vue'
+import DropdownNumberQuestion from '@/components/DropdownNumberQuestion.vue'
 
 export default {
   components: {
     'ProgressState': ProgressState,
+    'PrimaryButton': PrimaryButton,
     'TickboxQuestion': TickboxQuestion,
     'CheckboxQuestion': CheckboxQuestion,
     'RadioQuestion': RadioQuestion,
-    'PrimaryButton': PrimaryButton
+    'NumberQuestion': NumberQuestion,
+    'NumberUnknownQuestion': NumberUnknownQuestion,
+    'HeightWeightQuestion': HeightWeightQuestion,
+    'DropdownNumberQuestion': DropdownNumberQuestion
   },
   props: [
     'progressStage',
@@ -52,6 +62,18 @@ export default {
     }
   },
   methods: {
+    getComponentType (question) {
+      return {
+        'TICKBOX_CONSENT': 'TickboxQuestion',
+        'CHECKBOX': 'CheckboxQuestion',
+        'RADIO': 'RadioQuestion',
+        'NUMBER': 'NumberQuestion',
+        'NUMBER_UNKNOWN': 'NumberUnknownQuestion',
+        'NUMBER_HEIGHT': 'HeightWeightQuestion',
+        'NUMBER_WEIGHT': 'HeightWeightQuestion',
+        'DROPDOWN_NUMBER': 'DropdownNumberQuestion'
+      }[question.type]
+    },
     getAnswer (question) {
       let answers = this.$props.answerSection.answerGroups[0].answers
       return answers.find(answer => answer.questionId === question.id)
@@ -99,6 +121,7 @@ h1 {
   padding-top: 1em;
   padding-bottom: 2.5em;
   border-bottom: 1px solid rgba(34, 51, 68, 0.15);
+  font-size: 1.4em;
 }
 
 .introduction {

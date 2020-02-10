@@ -98,10 +98,10 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
                     Optional
                     .of(participantOptional.get().getProcedure().getConsentResponse().getQuestionnaire())
                     .map(questionnaireMapper::toDto);
-            } else if (questionnaireType == QuestionnaireType.RISK_ASSESMENT) {
+            } else if (questionnaireType == QuestionnaireType.RISK_ASSESSMENT) {
                 return 
                     Optional
-                    .of(participantOptional.get().getProcedure().getRiskAssesmentResponse().getQuestionnaire())
+                    .of(participantOptional.get().getProcedure().getRiskAssessmentResponse().getQuestionnaire())
                     .map(questionnaireMapper::toDto);
             }
         }

@@ -183,7 +183,7 @@ public class AnswerResponseResourceIT {
 
     @Test
     @Transactional
-    public void getRiskAssesmentAnswerResponse() throws Exception {
+    public void getRiskAssessmentAnswerResponse() throws Exception {
         
         Participant participant;
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
@@ -195,7 +195,7 @@ public class AnswerResponseResourceIT {
         }
 
         restAnswerResponseMockMvc.perform(
-                get("/api/answer-responses/risk-assesment")
+                get("/api/answer-responses/risk-assessment")
                 .principal(new Principal() {
                     @Override
                     public String getName() {
@@ -208,7 +208,7 @@ public class AnswerResponseResourceIT {
             .andExpect(jsonPath("$.questionnaireId").value(
                 participant
                     .getProcedure()
-                    .getRiskAssesmentResponse()
+                    .getRiskAssessmentResponse()
                     .getQuestionnaire()
                     .getId()
                     .intValue()
@@ -353,7 +353,7 @@ public class AnswerResponseResourceIT {
 
     @Test
     @Transactional
-    public void saveRiskAssesmentAnswerResponse() throws Exception {
+    public void saveRiskAssessmentAnswerResponse() throws Exception {
 
         int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
 
@@ -370,7 +370,7 @@ public class AnswerResponseResourceIT {
         // Update the answerResponse
         AnswerResponse updatedAnswerResponse = 
             answerResponseRepository.findById(
-                participant.getProcedure().getRiskAssesmentResponse().getId()
+                participant.getProcedure().getRiskAssessmentResponse().getId()
             ).get();
 
         em.detach(updatedAnswerResponse);
@@ -386,7 +386,7 @@ public class AnswerResponseResourceIT {
         // Save
         AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(updatedAnswerResponse);
         restAnswerResponseMockMvc.perform(
-            put("/api/answer-responses/risk-assesment/save")
+            put("/api/answer-responses/risk-assessment/save")
             .principal(new Principal() {
                 @Override
                 public String getName() {
@@ -403,7 +403,7 @@ public class AnswerResponseResourceIT {
 
         // Check that State and Status cannot be modified via API
         AnswerResponse testAnswerResponse = 
-            answerResponseRepository.getOne(participant.getProcedure().getRiskAssesmentResponse().getId());
+            answerResponseRepository.getOne(participant.getProcedure().getRiskAssessmentResponse().getId());
 
         assertThat(testAnswerResponse.getState()).isNotEqualTo(UPDATED_STATE);
         assertThat(testAnswerResponse.getStatus()).isNotEqualTo(UPDATED_STATUS);
@@ -422,7 +422,7 @@ public class AnswerResponseResourceIT {
     
     @Test
     @Transactional
-    public void submitRiskAssesmentAnswerResponse() throws Exception {
+    public void submitRiskAssessmentAnswerResponse() throws Exception {
 
         int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
 
@@ -439,7 +439,7 @@ public class AnswerResponseResourceIT {
         // Update the answerResponse
         AnswerResponse updatedAnswerResponse = 
             answerResponseRepository.findById(
-                participant.getProcedure().getRiskAssesmentResponse().getId()
+                participant.getProcedure().getRiskAssessmentResponse().getId()
             ).get();
 
         em.detach(updatedAnswerResponse);
@@ -455,7 +455,7 @@ public class AnswerResponseResourceIT {
         // Save
         AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(updatedAnswerResponse);
         restAnswerResponseMockMvc.perform(
-            put("/api/answer-responses/risk-assesment/submit")
+            put("/api/answer-responses/risk-assessment/submit")
             .principal(new Principal() {
                 @Override
                 public String getName() {
@@ -472,7 +472,7 @@ public class AnswerResponseResourceIT {
 
         // Check that State and Status cannot be modified via API
         AnswerResponse testAnswerResponse = 
-            answerResponseRepository.getOne(participant.getProcedure().getRiskAssesmentResponse().getId());
+            answerResponseRepository.getOne(participant.getProcedure().getRiskAssessmentResponse().getId());
 
         assertThat(testAnswerResponse.getState()).isNotEqualTo(UPDATED_STATE);
         assertThat(testAnswerResponse.getStatus()).isNotEqualTo(UPDATED_STATUS);

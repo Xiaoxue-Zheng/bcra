@@ -6,7 +6,7 @@ entity Questionnaire {
 
 enum QuestionnaireType {
     CONSENT_FORM,
-    RISK_ASSESMENT
+    RISK_ASSESSMENT
 }
 
 enum Algorithm {
@@ -273,7 +273,7 @@ relationship ManyToOne {
 }
 
 enum AnswerUnits {
-    GRAMS,
+    KILOS,
     POUNDS,
     CENTIMETERS,
     INCHES
@@ -381,7 +381,7 @@ entity Procedure
 relationship OneToOne {
     Participant{procedure required} to Procedure{participant required}
     Procedure{consentResponse required} to AnswerResponse
-    Procedure{riskAssesmentResponse required} to AnswerResponse
+    Procedure{riskAssessmentResponse required} to AnswerResponse
 }
 
 /* Generation */

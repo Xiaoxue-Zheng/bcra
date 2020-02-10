@@ -55,6 +55,11 @@ const router = new Router({
       path: '/consent',
       name: 'consent',
       component: () => import('../views/Consent.vue')
+    },
+    {
+      path: '/questionnaire',
+      name: 'riskAssessment',
+      component: () => import('../views/RiskAssessment.vue')
     }
   ],
   scrollBehavior (to, from, savedPosition) {

@@ -1,7 +1,7 @@
 import { IAnswerItem } from 'app/shared/model/answer-item.model';
 
 export const enum AnswerUnits {
-  GRAMS = 'GRAMS',
+  KILOS = 'KILOS',
   POUNDS = 'POUNDS',
   CENTIMETERS = 'CENTIMETERS',
   INCHES = 'INCHES'

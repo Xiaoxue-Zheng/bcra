@@ -27,7 +27,7 @@ export class ProcedureUpdatePage {
   saveButton = element(by.id('save-entity'));
   cancelButton = element(by.id('cancel-save'));
   consentResponseSelect = element(by.id('field_consentResponse'));
-  riskAssesmentResponseSelect = element(by.id('field_riskAssesmentResponse'));
+  riskAssessmentResponseSelect = element(by.id('field_riskAssessmentResponse'));
 
   async getPageTitle() {
     return this.pageTitle.getText();
@@ -52,23 +52,23 @@ export class ProcedureUpdatePage {
     return await this.consentResponseSelect.element(by.css('option:checked')).getText();
   }
 
-  async riskAssesmentResponseSelectLastOption(timeout?: number) {
-    await this.riskAssesmentResponseSelect
+  async riskAssessmentResponseSelectLastOption(timeout?: number) {
+    await this.riskAssessmentResponseSelect
       .all(by.tagName('option'))
       .last()
       .click();
   }
 
-  async riskAssesmentResponseSelectOption(option) {
-    await this.riskAssesmentResponseSelect.sendKeys(option);
+  async riskAssessmentResponseSelectOption(option) {
+    await this.riskAssessmentResponseSelect.sendKeys(option);
   }
 
-  getRiskAssesmentResponseSelect(): ElementFinder {
-    return this.riskAssesmentResponseSelect;
+  getRiskAssessmentResponseSelect(): ElementFinder {
+    return this.riskAssessmentResponseSelect;
   }
 
-  async getRiskAssesmentResponseSelectedOption() {
-    return await this.riskAssesmentResponseSelect.element(by.css('option:checked')).getText();
+  async getRiskAssessmentResponseSelectedOption() {
+    return await this.riskAssessmentResponseSelect.element(by.css('option:checked')).getText();
   }
 
   async save(timeout?: number) {

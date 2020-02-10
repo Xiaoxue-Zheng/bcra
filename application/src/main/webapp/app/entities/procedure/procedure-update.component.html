@@ -24,15 +24,15 @@
                     </small>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" for="field_riskAssesmentResponse">Risk Assesment Response</label>
-                    <select class="form-control" id="field_riskAssesmentResponse" name="riskAssesmentResponse" formControlName="riskAssesmentResponseId">
-                        <option *ngIf="!editForm.get('riskAssesmentResponseId').value" [ngValue]="null" selected></option>
-                        <option [ngValue]="answerResponseOption.id" *ngFor="let answerResponseOption of riskassesmentresponses; trackBy: trackAnswerResponseById">{{answerResponseOption.id}}</option>
+                    <label class="form-control-label" for="field_riskAssessmentResponse">Risk Assessment Response</label>
+                    <select class="form-control" id="field_riskAssessmentResponse" name="riskAssessmentResponse" formControlName="riskAssessmentResponseId">
+                        <option *ngIf="!editForm.get('riskAssessmentResponseId').value" [ngValue]="null" selected></option>
+                        <option [ngValue]="answerResponseOption.id" *ngFor="let answerResponseOption of riskassessmentresponses; trackBy: trackAnswerResponseById">{{answerResponseOption.id}}</option>
                     </select>
                 </div>
-                <div *ngIf="editForm.get('riskAssesmentResponseId').invalid && (editForm.get('riskAssesmentResponseId').dirty || editForm.get('riskAssesmentResponseId').touched)">
+                <div *ngIf="editForm.get('riskAssessmentResponseId').invalid && (editForm.get('riskAssessmentResponseId').dirty || editForm.get('riskAssessmentResponseId').touched)">
                     <small class="form-text text-danger"
-                           *ngIf="editForm.get('riskAssesmentResponseId').errors.required">
+                           *ngIf="editForm.get('riskAssessmentResponseId').errors.required">
                         This field is required.
                     </small>
                 </div>

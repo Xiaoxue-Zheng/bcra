@@ -14,9 +14,9 @@
                                  referencedColumnNames="id"
                                  referencedTableName="answer_response"/>
 
-        <addForeignKeyConstraint baseColumnNames="risk_assesment_response_id"
+        <addForeignKeyConstraint baseColumnNames="risk_assessment_response_id"
                                  baseTableName="procedure"
-                                 constraintName="fk_procedure_risk_assesment_response_id"
+                                 constraintName="fk_procedure_risk_assessment_response_id"
                                  referencedColumnNames="id"
                                  referencedTableName="answer_response"/>
 

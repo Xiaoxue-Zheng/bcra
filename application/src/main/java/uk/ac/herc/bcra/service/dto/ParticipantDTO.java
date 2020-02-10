@@ -27,7 +27,7 @@ public class ParticipantDTO implements Serializable {
     private ResponseState consentStatus;
     private ResponseState questionnaireStatus;
     //private SwabState swabState;
-    //private MammogramState mamogramState;
+    //private MammoKILOState mamoKILOState;
 
     // Letters
     //private Instant invitationDownloadedDatetime;

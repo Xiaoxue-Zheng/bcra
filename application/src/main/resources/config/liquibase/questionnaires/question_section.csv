@@ -10,5 +10,5 @@ id,identifier,title,jhi_order,questionnaire_id,question_group_id
 9,FAMILY_AFFECTED_AUNT,Family History,9,2,9
 10,FAMILY_AFFECTED_NIECE,Family History,10,2,10
 11,FAMILY_AFFECTED_HALF_SISTER,Family History,11,2,11
-12,PERSONAL_HISTORY,Personal History,12,2,12
+12,PERSONAL_HISTORY,Your History,12,2,12
 13,MALE_BREAST_CANCER,Male Breast Cancer,13,2,13

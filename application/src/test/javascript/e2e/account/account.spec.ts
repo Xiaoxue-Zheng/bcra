@@ -16,7 +16,7 @@ describe('account', () => {
   });
 
   it('should fail to login with bad password', async () => {
-    const expect1 = 'Breast Cancer Risk Assesment';
+    const expect1 = 'Breast Cancer Risk Assessment';
     const value1 = await element(by.css('h1')).getText();
     expect(value1).to.eq(expect1);
     signInPage = await navBarPage.getSignInPage();

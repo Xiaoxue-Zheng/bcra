@@ -31,7 +31,7 @@ public class AnswerResourceIT {
     private static final Boolean DEFAULT_TICKED = false;
     private static final Boolean UPDATED_TICKED = true;
     
-    private static final AnswerUnits DEFAULT_UNITS = AnswerUnits.GRAMS;
+    private static final AnswerUnits DEFAULT_UNITS = AnswerUnits.KILOS;
     private static final AnswerUnits UPDATED_UNITS = AnswerUnits.POUNDS;
 
     @Autowired

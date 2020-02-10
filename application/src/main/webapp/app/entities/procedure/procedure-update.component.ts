@@ -21,14 +21,14 @@ export class ProcedureUpdateComponent implements OnInit {
 
   consentresponses: IAnswerResponse[];
 
-  riskassesmentresponses: IAnswerResponse[];
+  riskassessmentresponses: IAnswerResponse[];
 
   participants: IParticipant[];
 
   editForm = this.fb.group({
     id: [],
     consentResponseId: [null, Validators.required],
-    riskAssesmentResponseId: [null, Validators.required]
+    riskAssessmentResponseId: [null, Validators.required]
   });
 
   constructor(
@@ -78,17 +78,17 @@ export class ProcedureUpdateComponent implements OnInit {
       )
       .subscribe(
         (res: IAnswerResponse[]) => {
-          if (!this.editForm.get('riskAssesmentResponseId').value) {
-            this.riskassesmentresponses = res;
+          if (!this.editForm.get('riskAssessmentResponseId').value) {
+            this.riskassessmentresponses = res;
           } else {
             this.answerResponseService
-              .find(this.editForm.get('riskAssesmentResponseId').value)
+              .find(this.editForm.get('riskAssessmentResponseId').value)
               .pipe(
                 filter((subResMayBeOk: HttpResponse<IAnswerResponse>) => subResMayBeOk.ok),
                 map((subResponse: HttpResponse<IAnswerResponse>) => subResponse.body)
               )
               .subscribe(
-                (subRes: IAnswerResponse) => (this.riskassesmentresponses = [subRes].concat(res)),
+                (subRes: IAnswerResponse) => (this.riskassessmentresponses = [subRes].concat(res)),
                 (subRes: HttpErrorResponse) => this.onError(subRes.message)
               );
           }
@@ -108,7 +108,7 @@ export class ProcedureUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: procedure.id,
       consentResponseId: procedure.consentResponseId,
-      riskAssesmentResponseId: procedure.riskAssesmentResponseId
+      riskAssessmentResponseId: procedure.riskAssessmentResponseId
     });
   }
 
@@ -131,7 +131,7 @@ export class ProcedureUpdateComponent implements OnInit {
       ...new Procedure(),
       id: this.editForm.get(['id']).value,
       consentResponseId: this.editForm.get(['consentResponseId']).value,
-      riskAssesmentResponseId: this.editForm.get(['riskAssesmentResponseId']).value
+      riskAssessmentResponseId: this.editForm.get(['riskAssessmentResponseId']).value
     };
   }
 

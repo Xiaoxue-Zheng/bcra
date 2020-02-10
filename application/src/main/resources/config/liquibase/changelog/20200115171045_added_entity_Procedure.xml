@@ -16,8 +16,8 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>            <column name="consent_response_id" type="bigint">
                 <constraints unique="true" nullable="false" uniqueConstraintName="ux_procedure_consent_response_id" />
-            </column>            <column name="risk_assesment_response_id" type="bigint">
-                <constraints unique="true" nullable="false" uniqueConstraintName="ux_procedure_risk_assesment_response_id" />
+            </column>            <column name="risk_assessment_response_id" type="bigint">
+                <constraints unique="true" nullable="false" uniqueConstraintName="ux_procedure_risk_assessment_response_id" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>

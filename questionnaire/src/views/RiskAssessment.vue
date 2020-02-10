@@ -1,19 +1,13 @@
 <template>
   <div>
-    <!-- <pre v-if="answerSection">{{ answerSection.answerGroups[0].answers[0].answerItems }}</pre> -->
     <QuestionSection
-      progressStage="1"
+      progressStage="2"
       :questionSection="questionSection"
       :answerSection="answerSection"
-      submitText="I give my consent"
-      :submitForm="submitConsent"
+      submitText="Save and continue"
+      :submitForm="submitQuestionnaire"
       :submitError="submitError"
     >
-      <p class="introduction">
-        In order to participate in this study, we need your consent.
-        Please read the <router-link to="/info-sheet">Participant Information Sheet</router-link> and complete the following to indicate that you understand
-        and agree to the terms.
-      </p>
     </QuestionSection>
   </div>
 </template>
@@ -24,7 +18,7 @@ import { QuestionnaireService } from '@/api/questionnaire.service'
 import { AnswerResponseService } from '@/api/answer-response.service'
 
 export default {
-  name: 'consent',
+  name: 'riskAssessment',
   components: {
     'QuestionSection': QuestionSection
   },
@@ -38,21 +32,21 @@ export default {
     }
   },
   async created () {
-    const questionnaire = await QuestionnaireService.getConsent()
+    const questionnaire = await QuestionnaireService.getRiskAssessment()
     this.questionSection = questionnaire.questionSections.find(
-      questionSection => (questionSection.identifier === 'CONSENT_FORM')
+      questionSection => (questionSection.identifier === 'PERSONAL_HISTORY')
     )
-    this.answerResponse = await AnswerResponseService.getConsent()
+    this.answerResponse = await AnswerResponseService.getRiskAssessment()
     this.answerSection = this.answerResponse.answerSections.find(
       answerSection => (answerSection.questionSectionId === this.questionSection.id)
     )
   },
   methods: {
-    async submitConsent () {
+    async submitQuestionnaire () {
       this.submitError = false
-      const submitResult = await AnswerResponseService.submitConsent(this.answerResponse)
+      const submitResult = await AnswerResponseService.submitRiskAssessment(this.answerResponse)
       if (submitResult.data === 'SUBMITTED') {
-        this.$router.push('/questionnaire')
+        this.$router.push('/')
       } else {
         this.submitError = true
       }

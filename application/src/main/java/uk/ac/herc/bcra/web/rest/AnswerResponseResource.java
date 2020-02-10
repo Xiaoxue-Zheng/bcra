@@ -85,27 +85,27 @@ public class AnswerResponseResource {
         }
     }
 
-    @GetMapping("/answer-responses/risk-assesment")
-    public ResponseEntity<AnswerResponseDTO> getRiskAssesment(Principal principal) {
-        log.debug("REST request to get Risk Assesment AnswerResponse");
+    @GetMapping("/answer-responses/risk-assessment")
+    public ResponseEntity<AnswerResponseDTO> getRiskAssessment(Principal principal) {
+        log.debug("REST request to get Risk Assessment AnswerResponse");
         Optional<AnswerResponseDTO> answerResponseDTO = 
             answerResponseService.findOne(
                 principal.getName(),
-                QuestionnaireType.RISK_ASSESMENT
+                QuestionnaireType.RISK_ASSESSMENT
             );
         return ResponseUtil.wrapOrNotFound(answerResponseDTO);
     }
 
-    @PutMapping("/answer-responses/risk-assesment/save")
-    public ResponseEntity<String> saveRiskAssesment(
+    @PutMapping("/answer-responses/risk-assessment/save")
+    public ResponseEntity<String> saveRiskAssessment(
             Principal principal,
             @Valid @RequestBody AnswerResponseDTO answerResponseDTO
     ) throws URISyntaxException {
-        log.debug("REST request to save Risk Assesment AnswerResponse: {}", answerResponseDTO);
+        log.debug("REST request to save Risk Assessment AnswerResponse: {}", answerResponseDTO);
         if(answerResponseService.save(
             principal.getName(),
             answerResponseDTO,
-            QuestionnaireType.RISK_ASSESMENT,
+            QuestionnaireType.RISK_ASSESSMENT,
             ResponseState.IN_PROGRESS
         )) {
             return ResponseEntity.ok().body("SAVED");
@@ -114,16 +114,16 @@ public class AnswerResponseResource {
         }
     }
 
-    @PutMapping("/answer-responses/risk-assesment/submit")
-    public ResponseEntity<String> submitRiskAssesment(
+    @PutMapping("/answer-responses/risk-assessment/submit")
+    public ResponseEntity<String> submitRiskAssessment(
             Principal principal,
             @Valid @RequestBody AnswerResponseDTO answerResponseDTO
     ) throws URISyntaxException {
-        log.debug("REST request to submit Risk Assesment AnswerResponse: {}", answerResponseDTO);
+        log.debug("REST request to submit Risk Assessment AnswerResponse: {}", answerResponseDTO);
         if(answerResponseService.save(
             principal.getName(),
             answerResponseDTO,
-            QuestionnaireType.RISK_ASSESMENT,
+            QuestionnaireType.RISK_ASSESSMENT,
             ResponseState.SUBMITTED
         )) {
             return ResponseEntity.ok().body("SUBMITTED");

@@ -36,6 +36,7 @@ export default {
   margin: 0 0.4em !important;
   display: inline-block;
   cursor: pointer;
+  user-select: none;
 }
 
 .items label:hover {

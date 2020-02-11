@@ -72,10 +72,10 @@ public class OutputArray {
 
     private static void mapSelfOutput(Self self, List<Object>array) {
 
-        // Patient identifier
+        // Participant identifier
         array.add(self.participantIdentifier);
 
-        // Current age (of patient)
+        // Current age (of participant)
         array.add(swapIfNull(self.ageInYears, MINUS_NINETY_NINE));
 
         // Age at menarche

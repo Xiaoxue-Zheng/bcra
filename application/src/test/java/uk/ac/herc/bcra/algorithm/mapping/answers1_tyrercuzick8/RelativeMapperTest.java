@@ -20,7 +20,7 @@ import uk.ac.herc.bcra.domain.enumeration.QuestionType;
 
 public class RelativeMapperTest {
 
-    private final String patientIdentifier = "TEST_PATIENT_IDENTIFIER";
+    private final String participantIdentifier = "TEST_PARTICIPANT_IDENTIFIER";
 
     @Test
     public void testMotherBreast() throws Exception {
@@ -40,10 +40,10 @@ public class RelativeMapperTest {
             null
         );
 
-        AlgorithmModel algorithm = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel algorithm = new AlgorithmModel(participantIdentifier);
         RelativeMapper.map(response, algorithm);
 
-        AlgorithmModel expected = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel expected = new AlgorithmModel(participantIdentifier);
         expected.mother.breastCancer = true;
         expected.mother.breastAge = 34;
 
@@ -68,10 +68,10 @@ public class RelativeMapperTest {
             null
         );
 
-        AlgorithmModel algorithm = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel algorithm = new AlgorithmModel(participantIdentifier);
         RelativeMapper.map(response, algorithm);
 
-        AlgorithmModel expected = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel expected = new AlgorithmModel(participantIdentifier);
         Parent sister = new Parent();
         sister.breastCancer = true;
         sister.breastAge = 47;        
@@ -100,10 +100,10 @@ public class RelativeMapperTest {
             43
         );
 
-        AlgorithmModel algorithm = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel algorithm = new AlgorithmModel(participantIdentifier);
         RelativeMapper.map(response, algorithm);
 
-        AlgorithmModel expected = new AlgorithmModel(patientIdentifier);    
+        AlgorithmModel expected = new AlgorithmModel(participantIdentifier);    
         expected.maternalGrandmother.breastCancer = true;
         expected.maternalGrandmother.breastAge = 65;
         expected.mother.breastCancer = false;
@@ -131,10 +131,10 @@ public class RelativeMapperTest {
             null
         );
 
-        AlgorithmModel algorithm = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel algorithm = new AlgorithmModel(participantIdentifier);
         RelativeMapper.map(response, algorithm);
 
-        AlgorithmModel expected = new AlgorithmModel(patientIdentifier);    
+        AlgorithmModel expected = new AlgorithmModel(participantIdentifier);    
         expected.paternalGrandmother.breastCancer = true;
         expected.paternalGrandmother.breastAge = 81;
 
@@ -160,10 +160,10 @@ public class RelativeMapperTest {
             37
         );
 
-        AlgorithmModel algorithm = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel algorithm = new AlgorithmModel(participantIdentifier);
         RelativeMapper.map(response, algorithm);
 
-        AlgorithmModel expected = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel expected = new AlgorithmModel(participantIdentifier);
         Parent maternalAunt = new Parent();
         maternalAunt.breastCancer = true;
         maternalAunt.breastAge = 54;
@@ -193,10 +193,10 @@ public class RelativeMapperTest {
             null
         );
 
-        AlgorithmModel algorithm = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel algorithm = new AlgorithmModel(participantIdentifier);
         RelativeMapper.map(response, algorithm);
 
-        AlgorithmModel expected = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel expected = new AlgorithmModel(participantIdentifier);
         Parent paternalAunt = new Parent();
         paternalAunt.breastCancer = true;
         paternalAunt.breastAge = 73;
@@ -224,10 +224,10 @@ public class RelativeMapperTest {
             79
         );
 
-        AlgorithmModel algorithm = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel algorithm = new AlgorithmModel(participantIdentifier);
         RelativeMapper.map(response, algorithm);
 
-        AlgorithmModel expected = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel expected = new AlgorithmModel(participantIdentifier);
         Relative maternalHalfSister = new Relative();
         maternalHalfSister.breastCancer = true;
         maternalHalfSister.breastAge = 35;
@@ -257,10 +257,10 @@ public class RelativeMapperTest {
             null
         );
 
-        AlgorithmModel algorithm = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel algorithm = new AlgorithmModel(participantIdentifier);
         RelativeMapper.map(response, algorithm);
 
-        AlgorithmModel expected = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel expected = new AlgorithmModel(participantIdentifier);
         Relative paternalHalfSister = new Relative();
         paternalHalfSister.breastCancer = true;
         paternalHalfSister.breastAge = 28;
@@ -288,10 +288,10 @@ public class RelativeMapperTest {
             46
         );
 
-        AlgorithmModel algorithm = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel algorithm = new AlgorithmModel(participantIdentifier);
         RelativeMapper.map(response, algorithm);
 
-        AlgorithmModel expected = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel expected = new AlgorithmModel(participantIdentifier);
         Parent sister = new Parent();
         sister.breastCancer = false;
         sister.breastAge = 46;
@@ -323,10 +323,10 @@ public class RelativeMapperTest {
             null
         );
 
-        AlgorithmModel algorithm = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel algorithm = new AlgorithmModel(participantIdentifier);
         RelativeMapper.map(response, algorithm);
 
-        AlgorithmModel expected = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel expected = new AlgorithmModel(participantIdentifier);
         Relative niece = new Relative();
         niece.breastCancer = true;
         niece.breastAge = 42;
@@ -353,10 +353,10 @@ public class RelativeMapperTest {
             null
         );
 
-        AlgorithmModel algorithm = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel algorithm = new AlgorithmModel(participantIdentifier);
         RelativeMapper.map(response, algorithm);
 
-        AlgorithmModel expected = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel expected = new AlgorithmModel(participantIdentifier);
         expected.mother.ovarianCancer = true;
         expected.mother.ovarianAge = 51;
 
@@ -381,10 +381,10 @@ public class RelativeMapperTest {
             null
         );
 
-        AlgorithmModel algorithm = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel algorithm = new AlgorithmModel(participantIdentifier);
         RelativeMapper.map(response, algorithm);
 
-        AlgorithmModel expected = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel expected = new AlgorithmModel(participantIdentifier);
         Parent sister = new Parent();
         sister.ovarianCancer = true;
         sister.ovarianAge = 38;        
@@ -412,10 +412,10 @@ public class RelativeMapperTest {
             43
         );
 
-        AlgorithmModel algorithm = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel algorithm = new AlgorithmModel(participantIdentifier);
         RelativeMapper.map(response, algorithm);
 
-        AlgorithmModel expected = new AlgorithmModel(patientIdentifier);    
+        AlgorithmModel expected = new AlgorithmModel(participantIdentifier);    
         expected.maternalGrandmother.ovarianCancer = true;
         expected.maternalGrandmother.ovarianAge = 74;
         expected.mother.breastCancer = false;
@@ -443,10 +443,10 @@ public class RelativeMapperTest {
             null
         );
 
-        AlgorithmModel algorithm = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel algorithm = new AlgorithmModel(participantIdentifier);
         RelativeMapper.map(response, algorithm);
 
-        AlgorithmModel expected = new AlgorithmModel(patientIdentifier);    
+        AlgorithmModel expected = new AlgorithmModel(participantIdentifier);    
         expected.paternalGrandmother.ovarianCancer = true;
         expected.paternalGrandmother.ovarianAge = 85;
 
@@ -472,10 +472,10 @@ public class RelativeMapperTest {
             59
         );
 
-        AlgorithmModel algorithm = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel algorithm = new AlgorithmModel(participantIdentifier);
         RelativeMapper.map(response, algorithm);
 
-        AlgorithmModel expected = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel expected = new AlgorithmModel(participantIdentifier);
         Parent maternalAunt = new Parent();
         maternalAunt.ovarianCancer = true;
         maternalAunt.ovarianAge = 62;
@@ -505,10 +505,10 @@ public class RelativeMapperTest {
             null
         );
 
-        AlgorithmModel algorithm = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel algorithm = new AlgorithmModel(participantIdentifier);
         RelativeMapper.map(response, algorithm);
 
-        AlgorithmModel expected = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel expected = new AlgorithmModel(participantIdentifier);
         Parent paternalAunt = new Parent();
         paternalAunt.ovarianCancer = true;
         paternalAunt.ovarianAge = 77;
@@ -536,10 +536,10 @@ public class RelativeMapperTest {
             54
         );
 
-        AlgorithmModel algorithm = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel algorithm = new AlgorithmModel(participantIdentifier);
         RelativeMapper.map(response, algorithm);
 
-        AlgorithmModel expected = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel expected = new AlgorithmModel(participantIdentifier);
         Relative maternalHalfSister = new Relative();
         maternalHalfSister.ovarianCancer = true;
         maternalHalfSister.ovarianAge = 29;
@@ -569,10 +569,10 @@ public class RelativeMapperTest {
             null
         );
 
-        AlgorithmModel algorithm = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel algorithm = new AlgorithmModel(participantIdentifier);
         RelativeMapper.map(response, algorithm);
 
-        AlgorithmModel expected = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel expected = new AlgorithmModel(participantIdentifier);
         Relative paternalHalfSister = new Relative();
         paternalHalfSister.ovarianCancer = true;
         paternalHalfSister.ovarianAge = 35;
@@ -600,10 +600,10 @@ public class RelativeMapperTest {
             52
         );
 
-        AlgorithmModel algorithm = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel algorithm = new AlgorithmModel(participantIdentifier);
         RelativeMapper.map(response, algorithm);
 
-        AlgorithmModel expected = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel expected = new AlgorithmModel(participantIdentifier);
         Parent sister = new Parent();
         sister.breastCancer = false;
         sister.breastAge = 52;
@@ -635,10 +635,10 @@ public class RelativeMapperTest {
             null
         );
 
-        AlgorithmModel algorithm = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel algorithm = new AlgorithmModel(participantIdentifier);
         RelativeMapper.map(response, algorithm);
 
-        AlgorithmModel expected = new AlgorithmModel(patientIdentifier);
+        AlgorithmModel expected = new AlgorithmModel(participantIdentifier);
         Relative niece = new Relative();
         niece.ovarianCancer = true;
         niece.ovarianAge = 22;

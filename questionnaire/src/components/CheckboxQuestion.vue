@@ -2,7 +2,7 @@
   <fieldset>
     <div class="pure-u-1">
       <label>{{ question.text }}</label>
-      <div class="items checkboxes">
+      <div class="items checkboxes" :id="question.identifier">
         <div v-for="questionItem in sortQuestionItems(question.questionItems)" v-bind:key="questionItem.id">
           <input
             type="checkbox"

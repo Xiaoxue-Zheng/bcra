@@ -1,10 +1,10 @@
 describe('Register', () => {
   const getStore = () => cy.window().its('app.$store')
 
-  const NHS_NUMBER = '2244668899'
-  const DATE_OF_BIRTH = '1995-06-07'
+  const NHS_NUMBER = '7002403834'
+  const DATE_OF_BIRTH = '1984-09-11'
 
-  const NEW_EMAIL_ADDRESS = 'cypressnew@example.com'
+  const NEW_EMAIL_ADDRESS = 'create-account-testtest@example.com'
   
   const SHORT_PASSWORD = 'cat'
   const WEAK_PASSWORD = 'catdogcat'
@@ -12,8 +12,7 @@ describe('Register', () => {
   const STRONG_PASSWORD = 'zebra9456other3118leave2249'
 
   before(() =>{
-    cy.exec('psql -U bcra  -d bcra -c "UPDATE jhi_user SET password_hash=null where login=\'cypressnew\'"')
-    cy.exec('psql -U bcra  -d bcra -c "UPDATE identifiable_data set email=null where email=\'cypressnew@example.com\'"')
+    cy.unregisterParticipant(NHS_NUMBER)
   })
       
   it('starts with the register page', () => {
@@ -107,7 +106,7 @@ describe('Register', () => {
     cy.contains('Sign out').should('be.visible')
     cy.contains('Register').should('not.be.visible')
 
-    cy.url().should('equal', Cypress.config().baseUrl)
+    cy.url().should('equal', Cypress.config().baseUrl + 'consent')
   })  
 })
   

@@ -2,7 +2,7 @@
   <fieldset>
     <div class="pure-u-1">
       <label>{{ question.text }}</label>
-      <div>
+      <div :id="question.identifier">
         <div class="input-group-select">
           <input
             required
@@ -13,7 +13,7 @@
             class="select-css"
             v-model="units"
           >
-            <option v-if="question.type==='NUMBER_HEIGHT'" value="CENTIMETERS">Centimeters</option>
+            <option v-if="question.type==='NUMBER_HEIGHT'" value="CENTIMETERS">Centimetres</option>
             <option v-if="question.type==='NUMBER_HEIGHT'" value="INCHES">Feet</option>
             <option v-if="question.type==='NUMBER_WEIGHT'" value="KILOS">Kilos</option>
             <option v-if="question.type==='NUMBER_WEIGHT'" value="POUNDS">Stones</option>

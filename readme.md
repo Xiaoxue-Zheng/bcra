@@ -84,9 +84,10 @@ Build front-end: `npm run build`
 ### Run Tests
 
 #### Unit Tests
-npm run test:unit
+`npm run test:unit`
 
 #### End-to-End Tests
-(Launch back-end with 'mvnw' - see above)
+1. Launch back-end with `mvnw`(see above)
+2. Import **TestParticipantCsv.csv**
+3. `npm run test:e2e`
 
-npm run test:e2e

@@ -1,14 +1,19 @@
 describe('Register', () => {
   const getStore = () => cy.window().its('app.$store')
 
-  const EXISTING_NHSNUMBER = '2468101214'
-  const EXISTING_DATEOFBIRTH = '1995-06-07'
+  const EXISTING_NHSNUMBER = '5236394309'
+  const EXISTING_DATEOFBIRTH = '1987-07-13'
 
-  const VALID_NHSNUMBER = '2244668899'
-  const VALID_DATEOFBIRTH = '1995-06-07'
+  const VALID_NHSNUMBER = '8348860339'
+  const VALID_DATEOFBIRTH = '1983-09-02'
 
-  const INCORRECT_NHSNUMBER = '2972360441'
-  const INCORRECT_DATEOFBIRTH = '1996-06-07'
+  const INCORRECT_NHSNUMBER = '0000000000'
+  const INCORRECT_DATEOFBIRTH = '1000-01-01'
+
+  before(function () {
+    cy.registerParticipant(EXISTING_NHSNUMBER, 'register-test-existing@example.com', 'existing-password-hash')
+    cy.unregisterParticipant(VALID_NHSNUMBER)
+  })
   
   it('opens the register page', () => {
     cy.server()

@@ -4,6 +4,7 @@
         <div class="input-group">
             <div class="input-group-area">
                 <input
+                    :id="question.identifier"
                     type="number"
                     class="pure-input-1"
                     v-model="answer.number"

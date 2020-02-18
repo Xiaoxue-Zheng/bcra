@@ -10,8 +10,8 @@
                 "minlength",
                 "maxlength"
             ],
-            "fieldValidateRulesMinlength": 10,
-            "fieldValidateRulesMaxlength": 10
+            "fieldValidateRulesMinlength": "10",
+            "fieldValidateRulesMaxlength": "10"
         },
         {
             "fieldName": "dateOfBirth",
@@ -40,7 +40,7 @@
             "fieldValidateRules": [
                 "maxlength"
             ],
-            "fieldValidateRulesMaxlength": 254
+            "fieldValidateRulesMaxlength": "254"
         },
         {
             "fieldName": "address1",
@@ -73,8 +73,8 @@
                 "minlength",
                 "maxlength"
             ],
-            "fieldValidateRulesMinlength": 6,
-            "fieldValidateRulesMaxlength": 8
+            "fieldValidateRulesMinlength": "6",
+            "fieldValidateRulesMaxlength": "8"
         },
         {
             "fieldName": "practiceName",
@@ -93,5 +93,6 @@
     "jpaMetamodelFiltering": false,
     "fluentMethods": true,
     "clientRootFolder": "",
-    "applications": "*"
+    "applications": "*",
+    "readOnly": false
 }

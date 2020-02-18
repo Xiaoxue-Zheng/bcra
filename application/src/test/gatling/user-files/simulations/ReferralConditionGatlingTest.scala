@@ -81,6 +81,7 @@ class ReferralConditionGatlingTest extends Simulation {
                 , "questionIdentifier":"CONSENT_INFO_SHEET"
                 , "itemIdentifier":"CONSENT_INFO_SHEET_YES"
                 , "number":"0"
+                , "reason":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_referralCondition_url"))).exitHereIfFailed

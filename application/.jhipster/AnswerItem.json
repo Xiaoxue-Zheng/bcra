@@ -12,18 +12,18 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "answer",
-            "otherEntityRelationshipName": "answerItem",
-            "relationshipValidateRules": "required",
-            "relationshipName": "answer",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
             "otherEntityName": "questionItem",
             "otherEntityRelationshipName": "answerItem",
             "relationshipValidateRules": "required",
             "relationshipName": "questionItem",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "answer",
+            "otherEntityRelationshipName": "answerItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "answer",
             "otherEntityField": "id"
         }
     ],
@@ -35,5 +35,6 @@
     "jpaMetamodelFiltering": false,
     "fluentMethods": true,
     "clientRootFolder": "",
-    "applications": "*"
+    "applications": "*",
+    "readOnly": false
 }

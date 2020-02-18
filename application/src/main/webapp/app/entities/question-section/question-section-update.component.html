@@ -2,55 +2,55 @@
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
             <h2 id="jhi-question-section-heading">Create or edit a Question Section</h2>
+
             <div>
                 <jhi-alert-error></jhi-alert-error>
-                <div class="form-group" [hidden]="!editForm.get('id').value">
+
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
                     <label for="id">ID</label>
-                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
-                        readonly />
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
                 </div>
+
                 <div class="form-group">
                     <label class="form-control-label" for="field_identifier">Identifier</label>
                     <select class="form-control" name="identifier" formControlName="identifier" id="field_identifier">
                         <option value="CONSENT_FORM">CONSENT_FORM</option>
-                        <option value="FAMILY_BREAST_AFFECTED">FAMILY_BREAST_AFFECTED</option>
-                        <option value="FAMILY_BREAST_HOW_MANY">FAMILY_BREAST_HOW_MANY</option>
-                        <option value="FAMILY_BREAST_AGE">FAMILY_BREAST_AGE</option>
-                        <option value="FAMILY_OVARIAN_AFFECTED">FAMILY_OVARIAN_AFFECTED</option>
-                        <option value="FAMILY_OVARIAN_HOW_MANY">FAMILY_OVARIAN_HOW_MANY</option>
-                        <option value="FAMILY_OVARIAN_AGE">FAMILY_OVARIAN_AGE</option>
+                        <option value="FAMILY_AFFECTED">FAMILY_AFFECTED</option>
+                        <option value="FAMILY_BREAST">FAMILY_BREAST</option>
+                        <option value="FAMILY_OVARIAN">FAMILY_OVARIAN</option>
                         <option value="FAMILY_AFFECTED_GRANDMOTHER">FAMILY_AFFECTED_GRANDMOTHER</option>
                         <option value="FAMILY_AFFECTED_AUNT">FAMILY_AFFECTED_AUNT</option>
                         <option value="FAMILY_AFFECTED_NIECE">FAMILY_AFFECTED_NIECE</option>
                         <option value="FAMILY_AFFECTED_HALF_SISTER">FAMILY_AFFECTED_HALF_SISTER</option>
                         <option value="PERSONAL_HISTORY">PERSONAL_HISTORY</option>
-                        <option value="MALE_BREAST_CANCER">MALE_BREAST_CANCER</option>
                     </select>
-                    <div *ngIf="editForm.get('identifier').invalid && (editForm.get('identifier').dirty || editForm.get('identifier').touched)">
+                    <div *ngIf="editForm.get('identifier')!.invalid && (editForm.get('identifier')!.dirty || editForm.get('identifier')!.touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('identifier').errors.required">
+                               *ngIf="editForm.get('identifier')?.errors?.required">
                         This field is required.
                         </small>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label class="form-control-label" for="field_title">Title</label>
                     <input type="text" class="form-control" name="title" id="field_title"
                            formControlName="title"/>
-                    <div *ngIf="editForm.get('title').invalid && (editForm.get('title').dirty || editForm.get('title').touched)">
+                    <div *ngIf="editForm.get('title')!.invalid && (editForm.get('title')!.dirty || editForm.get('title')!.touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('title').errors.required">
+                               *ngIf="editForm.get('title')?.errors?.required">
                         This field is required.
                         </small>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label class="form-control-label" for="field_order">Order</label>
                     <input type="number" class="form-control" name="order" id="field_order"
                            formControlName="order"/>
-                    <div *ngIf="editForm.get('order').invalid && (editForm.get('order').dirty || editForm.get('order').touched)">
+                    <div *ngIf="editForm.get('order')!.invalid && (editForm.get('order')!.dirty || editForm.get('order')!.touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('order').errors.required">
+                               *ngIf="editForm.get('order')?.errors?.required">
                         This field is required.
                         </small>
                         <small class="form-text text-danger"
@@ -63,36 +63,39 @@
                 <div class="form-group">
                     <label class="form-control-label" for="field_questionnaire">Questionnaire</label>
                     <select class="form-control" id="field_questionnaire" name="questionnaire" formControlName="questionnaireId">
-                        <option *ngIf="!editForm.get('questionnaireId').value" [ngValue]="null" selected></option>
-                        <option [ngValue]="questionnaireOption.id" *ngFor="let questionnaireOption of questionnaires; trackBy: trackQuestionnaireById">{{questionnaireOption.id}}</option>
+                        <option *ngIf="!editForm.get('questionnaireId')!.value" [ngValue]="null" selected></option>
+                        <option [ngValue]="questionnaireOption.id" *ngFor="let questionnaireOption of questionnaires; trackBy: trackById">{{ questionnaireOption.id }}</option>
                     </select>
                 </div>
-                <div *ngIf="editForm.get('questionnaireId').invalid && (editForm.get('questionnaireId').dirty || editForm.get('questionnaireId').touched)">
+                <div *ngIf="editForm.get('questionnaireId')!.invalid && (editForm.get('questionnaireId')!.dirty || editForm.get('questionnaireId')!.touched)">
                     <small class="form-text text-danger"
-                           *ngIf="editForm.get('questionnaireId').errors.required">
+                           *ngIf="editForm.get('questionnaireId')?.errors?.required">
                         This field is required.
                     </small>
                 </div>
+
                 <div class="form-group">
                     <label class="form-control-label" for="field_questionGroup">Question Group</label>
                     <select class="form-control" id="field_questionGroup" name="questionGroup" formControlName="questionGroupId">
-                        <option *ngIf="!editForm.get('questionGroupId').value" [ngValue]="null" selected></option>
-                        <option [ngValue]="questionGroupOption.id" *ngFor="let questionGroupOption of questiongroups; trackBy: trackQuestionGroupById">{{questionGroupOption.id}}</option>
+                        <option *ngIf="!editForm.get('questionGroupId')!.value" [ngValue]="null" selected></option>
+                        <option [ngValue]="questionGroupOption.id" *ngFor="let questionGroupOption of questiongroups; trackBy: trackById">{{ questionGroupOption.id }}</option>
                     </select>
                 </div>
-                <div *ngIf="editForm.get('questionGroupId').invalid && (editForm.get('questionGroupId').dirty || editForm.get('questionGroupId').touched)">
+                <div *ngIf="editForm.get('questionGroupId')!.invalid && (editForm.get('questionGroupId')!.dirty || editForm.get('questionGroupId')!.touched)">
                     <small class="form-text text-danger"
-                           *ngIf="editForm.get('questionGroupId').errors.required">
+                           *ngIf="editForm.get('questionGroupId')?.errors?.required">
                         This field is required.
                     </small>
                 </div>
             </div>
+
             <div>
-                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
-                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
                 </button>
+
                 <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
-                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span>Save</span>
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
                 </button>
             </div>
         </form>

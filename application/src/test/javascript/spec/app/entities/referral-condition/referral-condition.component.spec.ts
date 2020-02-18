@@ -1,6 +1,5 @@
-/* tslint:disable max-line-length */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 
 import { BcraTestModule } from '../../../test.module';
@@ -17,8 +16,7 @@ describe('Component Tests', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [BcraTestModule],
-        declarations: [ReferralConditionComponent],
-        providers: []
+        declarations: [ReferralConditionComponent]
       })
         .overrideTemplate(ReferralConditionComponent, '')
         .compileComponents();
@@ -45,7 +43,7 @@ describe('Component Tests', () => {
 
       // THEN
       expect(service.query).toHaveBeenCalled();
-      expect(comp.referralConditions[0]).toEqual(jasmine.objectContaining({ id: 123 }));
+      expect(comp.referralConditions && comp.referralConditions[0]).toEqual(jasmine.objectContaining({ id: 123 }));
     });
   });
 });

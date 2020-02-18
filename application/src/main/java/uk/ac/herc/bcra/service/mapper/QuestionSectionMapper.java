@@ -4,6 +4,7 @@ import uk.ac.herc.bcra.domain.*;
 import uk.ac.herc.bcra.service.dto.DisplayConditionDTO;
 import uk.ac.herc.bcra.service.dto.QuestionGroupDTO;
 import uk.ac.herc.bcra.service.dto.QuestionSectionDTO;
+import uk.ac.herc.bcra.service.dto.ReferralConditionDTO;
 
 import java.util.Set;
 
@@ -17,11 +18,14 @@ public interface QuestionSectionMapper extends EntityMapper<QuestionSectionDTO, 
 
     QuestionGroupDTO questionGroupToQuestionGroupDTO(QuestionGroupDTO QuestionGroup);
     Set<DisplayConditionDTO> displayConditionsToDisplayConditionDTOs(Set<DisplayCondition> displayConditions);
+    Set<ReferralConditionDTO> referralConditionsToReferralConditionDTOs(Set<ReferralCondition> referralConditions);
 
     QuestionSectionDTO toDto(QuestionSection questionSection);
 
     @Mapping(target = "displayConditions", ignore = true)
     @Mapping(target = "removeDisplayCondition", ignore = true)
+    @Mapping(target = "referralConditions", ignore = true)
+    @Mapping(target = "removeReferralCondition", ignore = true)
     QuestionSection toEntity(QuestionSectionDTO questionSectionDTO);
 
     default QuestionSection fromId(Long id) {

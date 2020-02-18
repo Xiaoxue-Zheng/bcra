@@ -1,4 +1,5 @@
 package uk.ac.herc.bcra.domain;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -43,6 +44,10 @@ public class QuestionSection implements Serializable {
     @OneToMany(mappedBy = "questionSection")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<DisplayCondition> displayConditions = new HashSet<>();
+
+    @OneToMany(mappedBy = "questionSection")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<ReferralCondition> referralConditions = new HashSet<>();
 
     @ManyToOne(optional = false)
     @NotNull
@@ -125,6 +130,32 @@ public class QuestionSection implements Serializable {
 
     public void setDisplayConditions(Set<DisplayCondition> displayConditions) {
         this.displayConditions = displayConditions;
+    }
+
+    
+    public Set<ReferralCondition> getReferralConditions() {
+        return referralConditions;
+    }
+
+    public QuestionSection referralConditions(Set<ReferralCondition> referralConditions) {
+        this.referralConditions = referralConditions;
+        return this;
+    }
+
+    public QuestionSection addReferralCondition(ReferralCondition referralCondition) {
+        this.referralConditions.add(referralCondition);
+        referralCondition.setQuestionSection(this);
+        return this;
+    }
+
+    public QuestionSection removeReferralCondition(ReferralCondition referralCondition) {
+        this.referralConditions.remove(referralCondition);
+        referralCondition.setQuestionSection(null);
+        return this;
+    }
+
+    public void setReferralConditions(Set<ReferralCondition> referralConditions) {
+        this.referralConditions = referralConditions;
     }
 
     public Questionnaire getQuestionnaire() {

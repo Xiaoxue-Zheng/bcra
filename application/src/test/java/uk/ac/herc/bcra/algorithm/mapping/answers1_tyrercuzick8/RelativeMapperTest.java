@@ -29,7 +29,7 @@ public class RelativeMapperTest {
             QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_MOTHER,
             34,
 
-            QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_NONE,
+            QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_UNKNOWN,
             null,
 
             null,
@@ -57,7 +57,7 @@ public class RelativeMapperTest {
             QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_SISTER,
             47,
 
-            QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_NONE,
+            QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_UNKNOWN,
             null,
 
             null,
@@ -88,7 +88,7 @@ public class RelativeMapperTest {
             QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_GRANDMOTHER,
             65,
 
-            QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_NONE,
+            QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_UNKNOWN,
             null,
 
             QuestionSectionIdentifier.FAMILY_AFFECTED_GRANDMOTHER,
@@ -119,7 +119,7 @@ public class RelativeMapperTest {
             QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_GRANDMOTHER,
             81,
 
-            QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_NONE,
+            QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_UNKNOWN,
             null,
 
             QuestionSectionIdentifier.FAMILY_AFFECTED_GRANDMOTHER,
@@ -148,7 +148,7 @@ public class RelativeMapperTest {
             QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_AUNT,
             54,
 
-            QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_NONE,
+            QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_UNKNOWN,
             null,
 
             QuestionSectionIdentifier.FAMILY_AFFECTED_AUNT,
@@ -181,7 +181,7 @@ public class RelativeMapperTest {
             QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_AUNT,
             73,
 
-            QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_NONE,
+            QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_UNKNOWN,
             null,
 
             QuestionSectionIdentifier.FAMILY_AFFECTED_AUNT,
@@ -212,7 +212,7 @@ public class RelativeMapperTest {
             QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_HALFSISTER,
             35,
 
-            QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_NONE,
+            QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_UNKNOWN,
             null,
 
             QuestionSectionIdentifier.FAMILY_AFFECTED_HALF_SISTER,
@@ -245,7 +245,7 @@ public class RelativeMapperTest {
             QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_HALFSISTER,
             28,
 
-            QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_NONE,
+            QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_UNKNOWN,
             null,
 
             QuestionSectionIdentifier.FAMILY_AFFECTED_HALF_SISTER,
@@ -276,7 +276,7 @@ public class RelativeMapperTest {
             QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_NIECE,
             24,
 
-            QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_NONE,
+            QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_UNKNOWN,
             null,
 
             QuestionSectionIdentifier.FAMILY_AFFECTED_NIECE,
@@ -311,7 +311,7 @@ public class RelativeMapperTest {
             QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_NIECE,
             42,
 
-            QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_NONE,
+            QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_UNKNOWN,
             null,
 
             QuestionSectionIdentifier.FAMILY_AFFECTED_NIECE,
@@ -339,7 +339,7 @@ public class RelativeMapperTest {
     public void testMotherOvarian() throws Exception {
 
         ResponseAccess response = generateRelativeResponse(
-            QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_NONE,
+            QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_UNKNOWN,
             null,
 
             QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_MOTHER,
@@ -367,7 +367,7 @@ public class RelativeMapperTest {
     public void testSisterOvarian() throws Exception {
 
         ResponseAccess response = generateRelativeResponse(
-            QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_NONE,
+            QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_UNKNOWN,
             null,
 
             QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_SISTER,
@@ -397,7 +397,7 @@ public class RelativeMapperTest {
     public void testMaternalGrandmotherOvarian() throws Exception {
 
         ResponseAccess response = generateRelativeResponse(
-            QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_NONE,
+            QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_UNKNOWN,
             null,
 
             QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_GRANDMOTHER,
@@ -428,7 +428,7 @@ public class RelativeMapperTest {
     public void testPaternalGrandmotherOvarian() throws Exception {
 
         ResponseAccess response = generateRelativeResponse(
-            QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_NONE,
+            QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_UNKNOWN,
             null,
 
             QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_GRANDMOTHER,
@@ -457,7 +457,7 @@ public class RelativeMapperTest {
     public void testMaternalAuntOvarian() throws Exception {
 
         ResponseAccess response = generateRelativeResponse(
-            QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_NONE,
+            QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_UNKNOWN,
             null,
 
             QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_AUNT,
@@ -490,7 +490,7 @@ public class RelativeMapperTest {
     public void testPaternalAuntOvarian() throws Exception {
 
         ResponseAccess response = generateRelativeResponse(
-            QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_NONE,
+            QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_UNKNOWN,
             null,
 
             QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_AUNT,
@@ -521,7 +521,7 @@ public class RelativeMapperTest {
     public void testMaternalHalfsisterOvarian() throws Exception {
 
         ResponseAccess response = generateRelativeResponse(
-            QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_NONE,
+            QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_UNKNOWN,
             null,
 
             QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_HALFSISTER,
@@ -554,7 +554,7 @@ public class RelativeMapperTest {
     public void testPaternalHalfsisterOvarian() throws Exception {
 
         ResponseAccess response = generateRelativeResponse(
-            QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_NONE,
+            QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_UNKNOWN,
             null,
 
             QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_HALFSISTER,
@@ -585,7 +585,7 @@ public class RelativeMapperTest {
     public void testSisterNieceOvarian() throws Exception {
 
         ResponseAccess response = generateRelativeResponse(
-            QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_NONE,
+            QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_UNKNOWN,
             null,
 
             QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_NIECE,
@@ -620,7 +620,7 @@ public class RelativeMapperTest {
     public void testPaternalNieceOvarian() throws Exception {
 
         ResponseAccess response = generateRelativeResponse(
-            QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_NONE,
+            QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_UNKNOWN,
             null,
 
             QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_NIECE,
@@ -664,8 +664,8 @@ public class RelativeMapperTest {
     ) {
         AnswerResponse response = new AnswerResponse();
 
-        // FAMILY_BREAST_AFFECTED
-        AnswerGroup breastAffectedGroup = new AnswerGroup();
+        // FAMILY_AFFECTED
+        AnswerGroup affectedGroup = new AnswerGroup();
 
         Map<QuestionItemIdentifier, Boolean> breastAffectedItems 
             = new HashMap<QuestionItemIdentifier, Boolean>();
@@ -679,64 +679,19 @@ public class RelativeMapperTest {
             );
         }
 
-        if (breastItem != QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_NONE) {
+        if (breastItem != QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_UNKNOWN) {
             breastAffectedItems.put(
-                QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_NONE,
+                QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_UNKNOWN,
                 false
             );
         }
 
         MapperTestHelper.addAnswerAndItems(
-            breastAffectedGroup,
+            affectedGroup,
             QuestionIdentifier.FAMILY_BREAST_AFFECTED,
             QuestionType.CHECKBOX,
             breastAffectedItems
         );
-
-        response.addAnswerSection(
-            MapperTestHelper.createAnswerSection(
-                QuestionSectionIdentifier.FAMILY_BREAST_AFFECTED,
-                breastAffectedGroup
-            )
-        );
-        
-        // FAMILY_BREAST_HOW_MANY
-        AnswerGroup breastHowManyGroup = new AnswerGroup();
-
-        MapperTestHelper.addAnswerAndItem(
-            breastHowManyGroup,
-            QuestionIdentifier.FAMILY_BREAST_HOW_MANY,
-            QuestionType.CHECKBOX,
-            QuestionItemIdentifier.FAMILY_BREAST_HOW_MANY_ONE,
-            true
-        );
-        
-        response.addAnswerSection(
-            MapperTestHelper.createAnswerSection(
-                QuestionSectionIdentifier.FAMILY_BREAST_HOW_MANY,
-                breastHowManyGroup
-            )
-        );
-
-        // FAMILY_BREAST_AGE        
-        AnswerGroup breastAgeGroup = new AnswerGroup();
-
-        MapperTestHelper.addAnswerNumber(
-            breastAgeGroup,
-            QuestionIdentifier.FAMILY_BREAST_AGE,
-            QuestionType.NUMBER,
-            breastAge
-        );
-
-        response.addAnswerSection(
-            MapperTestHelper.createAnswerSection(
-                QuestionSectionIdentifier.FAMILY_BREAST_AGE,
-                breastAgeGroup
-            )
-        );
-
-        // FAMILY_OVARIAN_AFFECTED
-        AnswerGroup ovarianAffectedGroup = new AnswerGroup();
 
         Map<QuestionItemIdentifier, Boolean> ovarianAffectedItems 
             = new HashMap<QuestionItemIdentifier, Boolean>();
@@ -750,15 +705,15 @@ public class RelativeMapperTest {
             );
         }
 
-        if (ovarianItem != QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_NONE) {
+        if (ovarianItem != QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_UNKNOWN) {
             ovarianAffectedItems.put(
-                QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_NONE,
+                QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_UNKNOWN,
                 false
             );
         }
 
         MapperTestHelper.addAnswerAndItems(
-            ovarianAffectedGroup,
+            affectedGroup,
             QuestionIdentifier.FAMILY_OVARIAN_AFFECTED,
             QuestionType.CHECKBOX,
             ovarianAffectedItems
@@ -766,34 +721,49 @@ public class RelativeMapperTest {
 
         response.addAnswerSection(
             MapperTestHelper.createAnswerSection(
-                QuestionSectionIdentifier.FAMILY_OVARIAN_AFFECTED,
-                ovarianAffectedGroup
+                QuestionSectionIdentifier.FAMILY_AFFECTED,
+                affectedGroup
+            )
+        );
+        
+        // FAMILY_BREAST
+        AnswerGroup breastGroup = new AnswerGroup();
+
+        MapperTestHelper.addAnswerAndItem(
+            breastGroup,
+            QuestionIdentifier.FAMILY_BREAST_HOW_MANY,
+            QuestionType.CHECKBOX,
+            QuestionItemIdentifier.FAMILY_BREAST_HOW_MANY_ONE,
+            true
+        );
+
+        MapperTestHelper.addAnswerNumber(
+            breastGroup,
+            QuestionIdentifier.FAMILY_BREAST_AGE,
+            QuestionType.NUMBER,
+            breastAge
+        );
+
+        response.addAnswerSection(
+            MapperTestHelper.createAnswerSection(
+                QuestionSectionIdentifier.FAMILY_BREAST,
+                breastGroup
             )
         );
         
         // FAMILY_OVARIAN_HOW_MANY
-        AnswerGroup ovarianHowManyGroup = new AnswerGroup();
+        AnswerGroup ovarianGroup = new AnswerGroup();
 
         MapperTestHelper.addAnswerAndItem(
-            ovarianHowManyGroup,
+            ovarianGroup,
             QuestionIdentifier.FAMILY_OVARIAN_HOW_MANY,
             QuestionType.CHECKBOX,
             QuestionItemIdentifier.FAMILY_OVARIAN_HOW_MANY_ONE,
             true
         );
-        
-        response.addAnswerSection(
-            MapperTestHelper.createAnswerSection(
-                QuestionSectionIdentifier.FAMILY_OVARIAN_HOW_MANY,
-                ovarianHowManyGroup
-            )
-        );
-
-        // FAMILY_OVARIAN_AGE        
-        AnswerGroup ovarianAgeGroup = new AnswerGroup();
 
         MapperTestHelper.addAnswerNumber(
-            ovarianAgeGroup,
+            ovarianGroup,
             QuestionIdentifier.FAMILY_OVARIAN_AGE,
             QuestionType.NUMBER,
             ovarianAge
@@ -801,8 +771,8 @@ public class RelativeMapperTest {
 
         response.addAnswerSection(
             MapperTestHelper.createAnswerSection(
-                QuestionSectionIdentifier.FAMILY_OVARIAN_AGE,
-                ovarianAgeGroup
+                QuestionSectionIdentifier.FAMILY_OVARIAN,
+                ovarianGroup
             )
         );
 

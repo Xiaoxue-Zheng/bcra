@@ -35,7 +35,11 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="question_id" type="bigint">
+            <column name="reason" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="question_section_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 
@@ -63,12 +67,13 @@
                   separator=","
                   tableName="referral_condition">
             <column name="id" type="numeric"/>
-            <column name="question_id" type="numeric"/>
+            <column name="question_section_id" type="numeric"/>
             <column name="and_group" type="numeric"/>
             <column name="type" type="string"/>
             <column name="question_identifier" type="string"/>
             <column name="item_identifier" type="string"/>
             <column name="number" type="numeric"/>
+            <column name="reason" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

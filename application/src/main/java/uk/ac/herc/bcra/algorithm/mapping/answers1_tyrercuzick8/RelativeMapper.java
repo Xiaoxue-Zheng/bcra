@@ -87,17 +87,17 @@ public class RelativeMapper {
 
         AnswerAccess relativeAnswer = 
             response
-            .section(QuestionSectionIdentifier.FAMILY_BREAST_AFFECTED)
+            .section(QuestionSectionIdentifier.FAMILY_AFFECTED)
             .getOnlyGroup()
             .answer(QuestionIdentifier.FAMILY_BREAST_AFFECTED);
 
-        boolean relativeNone = relativeAnswer.selected(QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_NONE);
+        boolean relativeUnknown = relativeAnswer.selected(QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_UNKNOWN);
         int relativeCount = relativeAnswer.selectedCount();
         QuestionItemIdentifier relativeItem = relativeAnswer.getOnlySelectedItem();
 
         boolean relativeOnlyOne = 
             response
-            .section(QuestionSectionIdentifier.FAMILY_BREAST_HOW_MANY)
+            .section(QuestionSectionIdentifier.FAMILY_BREAST)
             .getOnlyGroup()
             .answer(QuestionIdentifier.FAMILY_BREAST_HOW_MANY)
             .selected(QuestionItemIdentifier.FAMILY_BREAST_HOW_MANY_ONE);
@@ -110,9 +110,11 @@ public class RelativeMapper {
         relativeMap.put(QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_HALFSISTER, Relative.HALFSISTER);
         relativeMap.put(QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_AUNT, Relative.AUNT);
         relativeMap.put(QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_NIECE, Relative.NIECE);
+        // Do not map FAMILY_BREAST_AFFECTED_FATHER because participant will be referred
+        // Do not map FAMILY_BREAST_AFFECTED_BROTHER because participant will be referred
 
         return getRelative(
-            relativeNone,
+            relativeUnknown,
             relativeCount,
             relativeItem,
             relativeOnlyOne,
@@ -124,17 +126,17 @@ public class RelativeMapper {
 
         AnswerAccess relativeAnswer = 
             response
-            .section(QuestionSectionIdentifier.FAMILY_OVARIAN_AFFECTED)
+            .section(QuestionSectionIdentifier.FAMILY_AFFECTED)
             .getOnlyGroup()
             .answer(QuestionIdentifier.FAMILY_OVARIAN_AFFECTED);
 
-        boolean relativeNone = relativeAnswer .selected(QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_NONE);
+        boolean relativeUnknown = relativeAnswer .selected(QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_UNKNOWN);
         int relativeCount = relativeAnswer.selectedCount();
         QuestionItemIdentifier relativeItem = relativeAnswer.getOnlySelectedItem();
 
         boolean relativeOnlyOne = 
             response
-            .section(QuestionSectionIdentifier.FAMILY_OVARIAN_HOW_MANY)
+            .section(QuestionSectionIdentifier.FAMILY_OVARIAN)
             .getOnlyGroup()
             .answer(QuestionIdentifier.FAMILY_OVARIAN_HOW_MANY)
             .selected(QuestionItemIdentifier.FAMILY_OVARIAN_HOW_MANY_ONE);
@@ -149,7 +151,7 @@ public class RelativeMapper {
         relativeMap.put(QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_NIECE, Relative.NIECE);        
 
         return getRelative(
-            relativeNone,
+            relativeUnknown,
             relativeCount,
             relativeItem,
             relativeOnlyOne,
@@ -158,21 +160,23 @@ public class RelativeMapper {
     } 
 
     private static Relative getRelative(
-        boolean relativeNone, 
+        boolean relativeUnknown, 
         int relativeCount, 
         QuestionItemIdentifier relativeItem,
         boolean relativeOnlyOne,
         final Map<QuestionItemIdentifier, Relative> relativeMap
     ) {
-        if (!relativeNone) {
+        if (!relativeUnknown) {
             if (relativeCount == 1) {
                 Relative relative = relativeMap.get(relativeItem);
 
-                if ((relative == Relative.MOTHER) || (relative == Relative.SISTER)) {
-                    return relative;
-                }
-                else if (relativeOnlyOne) {
-                    return relative;
+                if (relative != null) {
+                    if ((relative == Relative.MOTHER) || (relative == Relative.SISTER)) {
+                        return relative;
+                    }
+                    else if (relativeOnlyOne) {
+                        return relative;
+                    }
                 }
             }
         }

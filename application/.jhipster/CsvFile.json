@@ -21,7 +21,7 @@
                 "required",
                 "unique"
             ],
-            "fieldValidateRulesMinlength": 5
+            "fieldValidateRulesMinlength": "5"
         },
         {
             "fieldName": "uploadDatetime",
@@ -49,5 +49,6 @@
     "jpaMetamodelFiltering": false,
     "fluentMethods": true,
     "clientRootFolder": "",
-    "applications": "*"
+    "applications": "*",
+    "readOnly": false
 }

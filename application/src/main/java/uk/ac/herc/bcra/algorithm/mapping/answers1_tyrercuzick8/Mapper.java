@@ -24,10 +24,6 @@ public class Mapper {
         // Family History
         RelativeMapper.map(response, algorithm);        
 
-        // Other Fields (male relatives, etc.)
-        GroupAccess maleRelativeGroup = response.section(QuestionSectionIdentifier.MALE_BREAST_CANCER).getOnlyGroup();
-        MaleMapper.map(maleRelativeGroup, algorithm.father, algorithm.brother);
-
         return OutputFile.mapAlgorithmToFile(algorithm);
     }
 }

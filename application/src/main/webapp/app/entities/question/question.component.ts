@@ -1,65 +1,49 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IQuestion } from 'app/shared/model/question.model';
-import { AccountService } from 'app/core';
 import { QuestionService } from './question.service';
+import { QuestionDeleteDialogComponent } from './question-delete-dialog.component';
 
 @Component({
   selector: 'jhi-question',
   templateUrl: './question.component.html'
 })
 export class QuestionComponent implements OnInit, OnDestroy {
-  questions: IQuestion[];
-  currentAccount: any;
-  eventSubscriber: Subscription;
+  questions?: IQuestion[];
+  eventSubscriber?: Subscription;
 
-  constructor(
-    protected questionService: QuestionService,
-    protected jhiAlertService: JhiAlertService,
-    protected eventManager: JhiEventManager,
-    protected accountService: AccountService
-  ) {}
+  constructor(protected questionService: QuestionService, protected eventManager: JhiEventManager, protected modalService: NgbModal) {}
 
-  loadAll() {
-    this.questionService
-      .query()
-      .pipe(
-        filter((res: HttpResponse<IQuestion[]>) => res.ok),
-        map((res: HttpResponse<IQuestion[]>) => res.body)
-      )
-      .subscribe(
-        (res: IQuestion[]) => {
-          this.questions = res;
-        },
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
+  loadAll(): void {
+    this.questionService.query().subscribe((res: HttpResponse<IQuestion[]>) => (this.questions = res.body || []));
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadAll();
-    this.accountService.identity().then(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInQuestions();
   }
 
-  ngOnDestroy() {
-    this.eventManager.destroy(this.eventSubscriber);
+  ngOnDestroy(): void {
+    if (this.eventSubscriber) {
+      this.eventManager.destroy(this.eventSubscriber);
+    }
   }
 
-  trackId(index: number, item: IQuestion) {
-    return item.id;
+  trackId(index: number, item: IQuestion): number {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    return item.id!;
   }
 
-  registerChangeInQuestions() {
-    this.eventSubscriber = this.eventManager.subscribe('questionListModification', response => this.loadAll());
+  registerChangeInQuestions(): void {
+    this.eventSubscriber = this.eventManager.subscribe('questionListModification', () => this.loadAll());
   }
 
-  protected onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
+  delete(question: IQuestion): void {
+    const modalRef = this.modalService.open(QuestionDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.question = question;
   }
 }

@@ -22,7 +22,9 @@
                         <option value="FAMILY_BREAST_AFFECTED_HALFSISTER">FAMILY_BREAST_AFFECTED_HALFSISTER</option>
                         <option value="FAMILY_BREAST_AFFECTED_AUNT">FAMILY_BREAST_AFFECTED_AUNT</option>
                         <option value="FAMILY_BREAST_AFFECTED_NIECE">FAMILY_BREAST_AFFECTED_NIECE</option>
-                        <option value="FAMILY_BREAST_AFFECTED_NONE">FAMILY_BREAST_AFFECTED_NONE</option>
+                        <option value="FAMILY_BREAST_AFFECTED_FATHER">FAMILY_BREAST_AFFECTED_FATHER</option>
+                        <option value="FAMILY_BREAST_AFFECTED_BROTHER">FAMILY_BREAST_AFFECTED_BROTHER</option>
+                        <option value="FAMILY_BREAST_AFFECTED_UNKNOWN">FAMILY_BREAST_AFFECTED_UNKNOWN</option>
                         <option value="FAMILY_BREAST_HOW_MANY_ONE">FAMILY_BREAST_HOW_MANY_ONE</option>
                         <option value="FAMILY_BREAST_HOW_MANY_MORE">FAMILY_BREAST_HOW_MANY_MORE</option>
                         <option value="FAMILY_OVARIAN_AFFECTED_MOTHER">FAMILY_OVARIAN_AFFECTED_MOTHER</option>
@@ -31,7 +33,7 @@
                         <option value="FAMILY_OVARIAN_AFFECTED_HALFSISTER">FAMILY_OVARIAN_AFFECTED_HALFSISTER</option>
                         <option value="FAMILY_OVARIAN_AFFECTED_AUNT">FAMILY_OVARIAN_AFFECTED_AUNT</option>
                         <option value="FAMILY_OVARIAN_AFFECTED_NIECE">FAMILY_OVARIAN_AFFECTED_NIECE</option>
-                        <option value="FAMILY_OVARIAN_AFFECTED_NONE">FAMILY_OVARIAN_AFFECTED_NONE</option>
+                        <option value="FAMILY_OVARIAN_AFFECTED_UNKNOWN">FAMILY_OVARIAN_AFFECTED_UNKNOWN</option>
                         <option value="FAMILY_OVARIAN_HOW_MANY_ONE">FAMILY_OVARIAN_HOW_MANY_ONE</option>
                         <option value="FAMILY_OVARIAN_HOW_MANY_MORE">FAMILY_OVARIAN_HOW_MANY_MORE</option>
                         <option value="FAMILY_AFFECTED_GRANDMOTHER_SIDE_MOTHER">FAMILY_AFFECTED_GRANDMOTHER_SIDE_MOTHER</option>
@@ -59,10 +61,6 @@
                         <option value="SELF_ASHKENAZI_YES">SELF_ASHKENAZI_YES</option>
                         <option value="SELF_ASHKENAZI_NO">SELF_ASHKENAZI_NO</option>
                         <option value="SELF_ASHKENAZI_UNKNOWN">SELF_ASHKENAZI_UNKNOWN</option>
-                        <option value="FATHER_BREAST_CANCER_YES">FATHER_BREAST_CANCER_YES</option>
-                        <option value="FATHER_BREAST_CANCER_NO">FATHER_BREAST_CANCER_NO</option>
-                        <option value="BROTHER_BREAST_CANCER_YES">BROTHER_BREAST_CANCER_YES</option>
-                        <option value="BROTHER_BREAST_CANCER_NO">BROTHER_BREAST_CANCER_NO</option>
                     </select>
                     <div *ngIf="editForm.get('identifier').invalid && (editForm.get('identifier').dirty || editForm.get('identifier').touched)">
                         <small class="form-text text-danger"

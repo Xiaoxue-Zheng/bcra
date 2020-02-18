@@ -1,65 +1,53 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IQuestionSection } from 'app/shared/model/question-section.model';
-import { AccountService } from 'app/core';
 import { QuestionSectionService } from './question-section.service';
+import { QuestionSectionDeleteDialogComponent } from './question-section-delete-dialog.component';
 
 @Component({
   selector: 'jhi-question-section',
   templateUrl: './question-section.component.html'
 })
 export class QuestionSectionComponent implements OnInit, OnDestroy {
-  questionSections: IQuestionSection[];
-  currentAccount: any;
-  eventSubscriber: Subscription;
+  questionSections?: IQuestionSection[];
+  eventSubscriber?: Subscription;
 
   constructor(
     protected questionSectionService: QuestionSectionService,
-    protected jhiAlertService: JhiAlertService,
     protected eventManager: JhiEventManager,
-    protected accountService: AccountService
+    protected modalService: NgbModal
   ) {}
 
-  loadAll() {
-    this.questionSectionService
-      .query()
-      .pipe(
-        filter((res: HttpResponse<IQuestionSection[]>) => res.ok),
-        map((res: HttpResponse<IQuestionSection[]>) => res.body)
-      )
-      .subscribe(
-        (res: IQuestionSection[]) => {
-          this.questionSections = res;
-        },
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
+  loadAll(): void {
+    this.questionSectionService.query().subscribe((res: HttpResponse<IQuestionSection[]>) => (this.questionSections = res.body || []));
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadAll();
-    this.accountService.identity().then(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInQuestionSections();
   }
 
-  ngOnDestroy() {
-    this.eventManager.destroy(this.eventSubscriber);
+  ngOnDestroy(): void {
+    if (this.eventSubscriber) {
+      this.eventManager.destroy(this.eventSubscriber);
+    }
   }
 
-  trackId(index: number, item: IQuestionSection) {
-    return item.id;
+  trackId(index: number, item: IQuestionSection): number {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    return item.id!;
   }
 
-  registerChangeInQuestionSections() {
-    this.eventSubscriber = this.eventManager.subscribe('questionSectionListModification', response => this.loadAll());
+  registerChangeInQuestionSections(): void {
+    this.eventSubscriber = this.eventManager.subscribe('questionSectionListModification', () => this.loadAll());
   }
 
-  protected onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
+  delete(questionSection: IQuestionSection): void {
+    const modalRef = this.modalService.open(QuestionSectionDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.questionSection = questionSection;
   }
 }

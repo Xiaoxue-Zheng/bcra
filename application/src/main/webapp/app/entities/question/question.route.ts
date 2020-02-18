@@ -1,27 +1,32 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-import { UserRouteAccessService } from 'app/core';
-import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { Question } from 'app/shared/model/question.model';
+import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
+import { Observable, of, EMPTY } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+
+import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
+import { IQuestion, Question } from 'app/shared/model/question.model';
 import { QuestionService } from './question.service';
 import { QuestionComponent } from './question.component';
 import { QuestionDetailComponent } from './question-detail.component';
 import { QuestionUpdateComponent } from './question-update.component';
-import { QuestionDeletePopupComponent } from './question-delete-dialog.component';
-import { IQuestion } from 'app/shared/model/question.model';
 
 @Injectable({ providedIn: 'root' })
 export class QuestionResolve implements Resolve<IQuestion> {
-  constructor(private service: QuestionService) {}
+  constructor(private service: QuestionService, private router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IQuestion> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IQuestion> | Observable<never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        filter((response: HttpResponse<Question>) => response.ok),
-        map((question: HttpResponse<Question>) => question.body)
+        flatMap((question: HttpResponse<Question>) => {
+          if (question.body) {
+            return of(question.body);
+          } else {
+            this.router.navigate(['404']);
+            return EMPTY;
+          }
+        })
       );
     }
     return of(new Question());
@@ -73,21 +78,5 @@ export const questionRoute: Routes = [
       pageTitle: 'Questions'
     },
     canActivate: [UserRouteAccessService]
-  }
-];
-
-export const questionPopupRoute: Routes = [
-  {
-    path: ':id/delete',
-    component: QuestionDeletePopupComponent,
-    resolve: {
-      question: QuestionResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'Questions'
-    },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
   }
 ];

@@ -1,29 +1,16 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { BcraSharedModule } from 'app/shared';
-import {
-  QuestionComponent,
-  QuestionDetailComponent,
-  QuestionUpdateComponent,
-  QuestionDeletePopupComponent,
-  QuestionDeleteDialogComponent,
-  questionRoute,
-  questionPopupRoute
-} from './';
-
-const ENTITY_STATES = [...questionRoute, ...questionPopupRoute];
+import { BcraSharedModule } from 'app/shared/shared.module';
+import { QuestionComponent } from './question.component';
+import { QuestionDetailComponent } from './question-detail.component';
+import { QuestionUpdateComponent } from './question-update.component';
+import { QuestionDeleteDialogComponent } from './question-delete-dialog.component';
+import { questionRoute } from './question.route';
 
 @NgModule({
-  imports: [BcraSharedModule, RouterModule.forChild(ENTITY_STATES)],
-  declarations: [
-    QuestionComponent,
-    QuestionDetailComponent,
-    QuestionUpdateComponent,
-    QuestionDeleteDialogComponent,
-    QuestionDeletePopupComponent
-  ],
-  entryComponents: [QuestionComponent, QuestionUpdateComponent, QuestionDeleteDialogComponent, QuestionDeletePopupComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  imports: [BcraSharedModule, RouterModule.forChild(questionRoute)],
+  declarations: [QuestionComponent, QuestionDetailComponent, QuestionUpdateComponent, QuestionDeleteDialogComponent],
+  entryComponents: [QuestionDeleteDialogComponent]
 })
 export class BcraQuestionModule {}

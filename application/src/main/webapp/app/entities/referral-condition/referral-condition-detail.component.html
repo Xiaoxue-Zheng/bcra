@@ -1,34 +1,41 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <div *ngIf="referralCondition">
-            <h2><span>Referral Condition</span> {{referralCondition.id}}</h2>
+            <h2><span>Referral Condition</span> {{ referralCondition.id }}</h2>
+
             <hr>
+
             <jhi-alert-error></jhi-alert-error>
+
             <dl class="row-md jh-entity-details">
                 <dt><span>And Group</span></dt>
                 <dd>
-                    <span>{{referralCondition.andGroup}}</span>
+                    <span>{{ referralCondition.andGroup }}</span>
                 </dd>
                 <dt><span>Type</span></dt>
                 <dd>
-                    <span>{{referralCondition.type}}</span>
+                    <span>{{ referralCondition.type }}</span>
                 </dd>
                 <dt><span>Question Identifier</span></dt>
                 <dd>
-                    <span>{{referralCondition.questionIdentifier}}</span>
+                    <span>{{ referralCondition.questionIdentifier }}</span>
                 </dd>
                 <dt><span>Item Identifier</span></dt>
                 <dd>
-                    <span>{{referralCondition.itemIdentifier}}</span>
+                    <span>{{ referralCondition.itemIdentifier }}</span>
                 </dd>
                 <dt><span>Number</span></dt>
                 <dd>
-                    <span>{{referralCondition.number}}</span>
+                    <span>{{ referralCondition.number }}</span>
                 </dd>
-                <dt><span>Question</span></dt>
+                <dt><span>Reason</span></dt>
                 <dd>
-                    <div *ngIf="referralCondition.questionId">
-                        <a [routerLink]="['/question', referralCondition.questionId, 'view']">{{referralCondition.questionId}}</a>
+                    <span>{{ referralCondition.reason }}</span>
+                </dd>
+                <dt><span>Question Section</span></dt>
+                <dd>
+                    <div *ngIf="referralCondition.questionSectionId">
+                        <a [routerLink]="['/question-section', referralCondition.questionSectionId, 'view']">{{ referralCondition.questionSectionId }}</a>
                     </div>
                 </dd>
             </dl>
@@ -36,13 +43,13 @@
             <button type="submit"
                     (click)="previousState()"
                     class="btn btn-info">
-                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
             </button>
 
             <button type="button"
                     [routerLink]="['/referral-condition', referralCondition.id, 'edit']"
                     class="btn btn-primary">
-                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
             </button>
         </div>
     </div>

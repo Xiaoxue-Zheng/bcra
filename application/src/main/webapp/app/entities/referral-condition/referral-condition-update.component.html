@@ -2,18 +2,21 @@
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
             <h2 id="jhi-referral-condition-heading">Create or edit a Referral Condition</h2>
+
             <div>
                 <jhi-alert-error></jhi-alert-error>
-                <div class="form-group" [hidden]="!editForm.get('id').value">
+
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
                     <label for="id">ID</label>
-                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
-                        readonly />
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
                 </div>
+
                 <div class="form-group">
                     <label class="form-control-label" for="field_andGroup">And Group</label>
                     <input type="number" class="form-control" name="andGroup" id="field_andGroup"
                            formControlName="andGroup"/>
                 </div>
+
                 <div class="form-group">
                     <label class="form-control-label" for="field_type">Type</label>
                     <select class="form-control" name="type" formControlName="type" id="field_type">
@@ -21,13 +24,14 @@
                         <option value="ITEM_SPECIFIC">ITEM_SPECIFIC</option>
                         <option value="VALUE_UNDER">VALUE_UNDER</option>
                     </select>
-                    <div *ngIf="editForm.get('type').invalid && (editForm.get('type').dirty || editForm.get('type').touched)">
+                    <div *ngIf="editForm.get('type')!.invalid && (editForm.get('type')!.dirty || editForm.get('type')!.touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('type').errors.required">
+                               *ngIf="editForm.get('type')?.errors?.required">
                         This field is required.
                         </small>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label class="form-control-label" for="field_questionIdentifier">Question Identifier</label>
                     <select class="form-control" name="questionIdentifier" formControlName="questionIdentifier" id="field_questionIdentifier">
@@ -66,10 +70,9 @@
                         <option value="SELF_BREAST_BIOPSY_DIAGNOSIS_RISK">SELF_BREAST_BIOPSY_DIAGNOSIS_RISK</option>
                         <option value="SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES">SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES</option>
                         <option value="SELF_ASHKENAZI">SELF_ASHKENAZI</option>
-                        <option value="FATHER_BREAST_CANCER">FATHER_BREAST_CANCER</option>
-                        <option value="BROTHER_BREAST_CANCER">BROTHER_BREAST_CANCER</option>
                     </select>
                 </div>
+
                 <div class="form-group">
                     <label class="form-control-label" for="field_itemIdentifier">Item Identifier</label>
                     <select class="form-control" name="itemIdentifier" formControlName="itemIdentifier" id="field_itemIdentifier">
@@ -83,7 +86,9 @@
                         <option value="FAMILY_BREAST_AFFECTED_HALFSISTER">FAMILY_BREAST_AFFECTED_HALFSISTER</option>
                         <option value="FAMILY_BREAST_AFFECTED_AUNT">FAMILY_BREAST_AFFECTED_AUNT</option>
                         <option value="FAMILY_BREAST_AFFECTED_NIECE">FAMILY_BREAST_AFFECTED_NIECE</option>
-                        <option value="FAMILY_BREAST_AFFECTED_NONE">FAMILY_BREAST_AFFECTED_NONE</option>
+                        <option value="FAMILY_BREAST_AFFECTED_FATHER">FAMILY_BREAST_AFFECTED_FATHER</option>
+                        <option value="FAMILY_BREAST_AFFECTED_BROTHER">FAMILY_BREAST_AFFECTED_BROTHER</option>
+                        <option value="FAMILY_BREAST_AFFECTED_UNKNOWN">FAMILY_BREAST_AFFECTED_UNKNOWN</option>
                         <option value="FAMILY_BREAST_HOW_MANY_ONE">FAMILY_BREAST_HOW_MANY_ONE</option>
                         <option value="FAMILY_BREAST_HOW_MANY_MORE">FAMILY_BREAST_HOW_MANY_MORE</option>
                         <option value="FAMILY_OVARIAN_AFFECTED_MOTHER">FAMILY_OVARIAN_AFFECTED_MOTHER</option>
@@ -92,7 +97,7 @@
                         <option value="FAMILY_OVARIAN_AFFECTED_HALFSISTER">FAMILY_OVARIAN_AFFECTED_HALFSISTER</option>
                         <option value="FAMILY_OVARIAN_AFFECTED_AUNT">FAMILY_OVARIAN_AFFECTED_AUNT</option>
                         <option value="FAMILY_OVARIAN_AFFECTED_NIECE">FAMILY_OVARIAN_AFFECTED_NIECE</option>
-                        <option value="FAMILY_OVARIAN_AFFECTED_NONE">FAMILY_OVARIAN_AFFECTED_NONE</option>
+                        <option value="FAMILY_OVARIAN_AFFECTED_UNKNOWN">FAMILY_OVARIAN_AFFECTED_UNKNOWN</option>
                         <option value="FAMILY_OVARIAN_HOW_MANY_ONE">FAMILY_OVARIAN_HOW_MANY_ONE</option>
                         <option value="FAMILY_OVARIAN_HOW_MANY_MORE">FAMILY_OVARIAN_HOW_MANY_MORE</option>
                         <option value="FAMILY_AFFECTED_GRANDMOTHER_SIDE_MOTHER">FAMILY_AFFECTED_GRANDMOTHER_SIDE_MOTHER</option>
@@ -120,12 +125,9 @@
                         <option value="SELF_ASHKENAZI_YES">SELF_ASHKENAZI_YES</option>
                         <option value="SELF_ASHKENAZI_NO">SELF_ASHKENAZI_NO</option>
                         <option value="SELF_ASHKENAZI_UNKNOWN">SELF_ASHKENAZI_UNKNOWN</option>
-                        <option value="FATHER_BREAST_CANCER_YES">FATHER_BREAST_CANCER_YES</option>
-                        <option value="FATHER_BREAST_CANCER_NO">FATHER_BREAST_CANCER_NO</option>
-                        <option value="BROTHER_BREAST_CANCER_YES">BROTHER_BREAST_CANCER_YES</option>
-                        <option value="BROTHER_BREAST_CANCER_NO">BROTHER_BREAST_CANCER_NO</option>
                     </select>
                 </div>
+
                 <div class="form-group">
                     <label class="form-control-label" for="field_number">Number</label>
                     <input type="number" class="form-control" name="number" id="field_number"
@@ -133,19 +135,27 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-control-label" for="field_question">Question</label>
-                    <select class="form-control" id="field_question" name="question" formControlName="questionId">
+                    <label class="form-control-label" for="field_reason">Reason</label>
+                    <input type="text" class="form-control" name="reason" id="field_reason"
+                           formControlName="reason"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_questionSection">Question Section</label>
+                    <select class="form-control" id="field_questionSection" name="questionSection" formControlName="questionSectionId">
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="questionOption.id" *ngFor="let questionOption of questions; trackBy: trackQuestionById">{{questionOption.id}}</option>
+                        <option [ngValue]="questionSectionOption.id" *ngFor="let questionSectionOption of questionsections; trackBy: trackById">{{ questionSectionOption.id }}</option>
                     </select>
                 </div>
             </div>
+
             <div>
-                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
-                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
                 </button>
+
                 <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
-                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span>Save</span>
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
                 </button>
             </div>
         </form>

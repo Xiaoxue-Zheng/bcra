@@ -1,65 +1,53 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IQuestionGroup } from 'app/shared/model/question-group.model';
-import { AccountService } from 'app/core';
 import { QuestionGroupService } from './question-group.service';
+import { QuestionGroupDeleteDialogComponent } from './question-group-delete-dialog.component';
 
 @Component({
   selector: 'jhi-question-group',
   templateUrl: './question-group.component.html'
 })
 export class QuestionGroupComponent implements OnInit, OnDestroy {
-  questionGroups: IQuestionGroup[];
-  currentAccount: any;
-  eventSubscriber: Subscription;
+  questionGroups?: IQuestionGroup[];
+  eventSubscriber?: Subscription;
 
   constructor(
     protected questionGroupService: QuestionGroupService,
-    protected jhiAlertService: JhiAlertService,
     protected eventManager: JhiEventManager,
-    protected accountService: AccountService
+    protected modalService: NgbModal
   ) {}
 
-  loadAll() {
-    this.questionGroupService
-      .query()
-      .pipe(
-        filter((res: HttpResponse<IQuestionGroup[]>) => res.ok),
-        map((res: HttpResponse<IQuestionGroup[]>) => res.body)
-      )
-      .subscribe(
-        (res: IQuestionGroup[]) => {
-          this.questionGroups = res;
-        },
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
+  loadAll(): void {
+    this.questionGroupService.query().subscribe((res: HttpResponse<IQuestionGroup[]>) => (this.questionGroups = res.body || []));
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadAll();
-    this.accountService.identity().then(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInQuestionGroups();
   }
 
-  ngOnDestroy() {
-    this.eventManager.destroy(this.eventSubscriber);
+  ngOnDestroy(): void {
+    if (this.eventSubscriber) {
+      this.eventManager.destroy(this.eventSubscriber);
+    }
   }
 
-  trackId(index: number, item: IQuestionGroup) {
-    return item.id;
+  trackId(index: number, item: IQuestionGroup): number {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    return item.id!;
   }
 
-  registerChangeInQuestionGroups() {
-    this.eventSubscriber = this.eventManager.subscribe('questionGroupListModification', response => this.loadAll());
+  registerChangeInQuestionGroups(): void {
+    this.eventSubscriber = this.eventManager.subscribe('questionGroupListModification', () => this.loadAll());
   }
 
-  protected onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
+  delete(questionGroup: IQuestionGroup): void {
+    const modalRef = this.modalService.open(QuestionGroupDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.questionGroup = questionGroup;
   }
 }

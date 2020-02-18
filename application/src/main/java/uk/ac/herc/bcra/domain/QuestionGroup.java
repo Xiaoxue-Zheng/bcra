@@ -1,4 +1,5 @@
 package uk.ac.herc.bcra.domain;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 

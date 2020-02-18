@@ -26,6 +26,8 @@ public class ReferralConditionDTO implements Serializable {
 
     private Integer number;
 
+    private String reason;
+
     public Long getId() {
         return id;
     }
@@ -74,6 +76,14 @@ public class ReferralConditionDTO implements Serializable {
         this.number = number;
     }
 
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -104,6 +114,7 @@ public class ReferralConditionDTO implements Serializable {
             ", questionIdentifier='" + getQuestionIdentifier() + "'" +
             ", itemIdentifier='" + getItemIdentifier() + "'" +
             ", number=" + getNumber() +
+            ", reason='" + getReason() + "'" +
             "}";
     }
 }

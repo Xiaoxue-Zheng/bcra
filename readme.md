@@ -87,7 +87,15 @@ Build front-end: `npm run build`
 `npm run test:unit`
 
 #### End-to-End Tests
+0. Clear the database (see above) if there have been any model changes.
 1. Launch back-end with `mvnw`(see above)
-2. Import **TestParticipantCsv.csv**
+2. Open the Admin Interface (localhost:8080) and import **TestParticipantCsv.csv**
 3. `npm run test:e2e`
+
+To run end-to-end tests in a headless environment, use:
+
+`npm run test:headless`
+
+
+
 

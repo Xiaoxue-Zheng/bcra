@@ -44,8 +44,6 @@ public class QuestionDTO implements Serializable {
 
     private Set<DisplayConditionDTO> displayConditions = new HashSet<>();
 
-    private Set<ReferralConditionDTO> referralConditions = new HashSet<>();
-
     public Long getId() {
         return id;
     }
@@ -140,15 +138,7 @@ public class QuestionDTO implements Serializable {
 
     public void setDisplayConditions(Set<DisplayConditionDTO> displayConditions) {
         this.displayConditions = displayConditions;
-    }
-
-    public Set<ReferralConditionDTO> getReferralConditions() {
-        return referralConditions;
-    }
-
-    public void setReferralConditions(Set<ReferralConditionDTO> referralConditions) {
-        this.referralConditions = referralConditions;
-    }    
+    }  
 
     @Override
     public boolean equals(Object o) {
@@ -186,7 +176,6 @@ public class QuestionDTO implements Serializable {
             ", hintText='" + getHintText() + "'" +
             ", questionItems=" + getQuestionItems() +
             ", displayConditions=" + getDisplayConditions() +
-            ", referralConditions=" + getReferralConditions() +
             "}";
     }
 }

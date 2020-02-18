@@ -39,6 +39,9 @@ public class ReferralConditionResourceIT {
     private static final Integer DEFAULT_NUMBER = 1;
     private static final Integer UPDATED_NUMBER = 2;
 
+    private static final String DEFAULT_REASON = "AAAAAAAAAA";
+    private static final String UPDATED_REASON = "BBBBBBBBBB";
+
     @Autowired
     private ReferralConditionMapper referralConditionMapper;
 
@@ -59,7 +62,8 @@ public class ReferralConditionResourceIT {
             .type(DEFAULT_TYPE)
             .questionIdentifier(DEFAULT_QUESTION_IDENTIFIER)
             .itemIdentifier(DEFAULT_ITEM_IDENTIFIER)
-            .number(DEFAULT_NUMBER);
+            .number(DEFAULT_NUMBER)
+            .reason(DEFAULT_REASON);
         return referralCondition;
     }
     /**
@@ -74,7 +78,8 @@ public class ReferralConditionResourceIT {
             .type(UPDATED_TYPE)
             .questionIdentifier(UPDATED_QUESTION_IDENTIFIER)
             .itemIdentifier(UPDATED_ITEM_IDENTIFIER)
-            .number(UPDATED_NUMBER);
+            .number(UPDATED_NUMBER)
+            .reason(UPDATED_REASON);
         return referralCondition;
     }
 

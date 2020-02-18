@@ -1,17 +1,20 @@
-/* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec, promise } from 'protractor';
+import { browser, ExpectedConditions as ec /* , promise */ } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
-import { QuestionSectionComponentsPage, QuestionSectionDeleteDialog, QuestionSectionUpdatePage } from './question-section.page-object';
+import {
+  QuestionSectionComponentsPage,
+  /* QuestionSectionDeleteDialog, */
+  QuestionSectionUpdatePage
+} from './question-section.page-object';
 
 const expect = chai.expect;
 
 describe('QuestionSection e2e test', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
-  let questionSectionUpdatePage: QuestionSectionUpdatePage;
   let questionSectionComponentsPage: QuestionSectionComponentsPage;
-  /*let questionSectionDeleteDialog: QuestionSectionDeleteDialog;*/
+  let questionSectionUpdatePage: QuestionSectionUpdatePage;
+  /* let questionSectionDeleteDialog: QuestionSectionDeleteDialog; */
 
   before(async () => {
     await browser.get('/');
@@ -26,6 +29,10 @@ describe('QuestionSection e2e test', () => {
     questionSectionComponentsPage = new QuestionSectionComponentsPage();
     await browser.wait(ec.visibilityOf(questionSectionComponentsPage.title), 5000);
     expect(await questionSectionComponentsPage.getTitle()).to.eq('Question Sections');
+    await browser.wait(
+      ec.or(ec.visibilityOf(questionSectionComponentsPage.entities), ec.visibilityOf(questionSectionComponentsPage.noResult)),
+      1000
+    );
   });
 
   it('should load create QuestionSection page', async () => {
@@ -39,6 +46,7 @@ describe('QuestionSection e2e test', () => {
         const nbButtonsBeforeCreate = await questionSectionComponentsPage.countDeleteButtons();
 
         await questionSectionComponentsPage.clickOnCreateButton();
+
         await promise.all([
             questionSectionUpdatePage.identifierSelectLastOption(),
             questionSectionUpdatePage.setTitleInput('title'),
@@ -46,13 +54,15 @@ describe('QuestionSection e2e test', () => {
             questionSectionUpdatePage.questionnaireSelectLastOption(),
             questionSectionUpdatePage.questionGroupSelectLastOption(),
         ]);
+
         expect(await questionSectionUpdatePage.getTitleInput()).to.eq('title', 'Expected Title value to be equals to title');
         expect(await questionSectionUpdatePage.getOrderInput()).to.eq('5', 'Expected order value to be equals to 5');
+
         await questionSectionUpdatePage.save();
         expect(await questionSectionUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
         expect(await questionSectionComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
-    });*/
+    }); */
 
   /* it('should delete last QuestionSection', async () => {
         const nbButtonsBeforeDelete = await questionSectionComponentsPage.countDeleteButtons();
@@ -64,7 +74,7 @@ describe('QuestionSection e2e test', () => {
         await questionSectionDeleteDialog.clickOnConfirmButton();
 
         expect(await questionSectionComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
-    });*/
+    }); */
 
   after(async () => {
     await navBarPage.autoSignOut();

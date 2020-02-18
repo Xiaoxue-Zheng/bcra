@@ -1,27 +1,32 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-import { UserRouteAccessService } from 'app/core';
-import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { QuestionGroup } from 'app/shared/model/question-group.model';
+import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
+import { Observable, of, EMPTY } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+
+import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
+import { IQuestionGroup, QuestionGroup } from 'app/shared/model/question-group.model';
 import { QuestionGroupService } from './question-group.service';
 import { QuestionGroupComponent } from './question-group.component';
 import { QuestionGroupDetailComponent } from './question-group-detail.component';
 import { QuestionGroupUpdateComponent } from './question-group-update.component';
-import { QuestionGroupDeletePopupComponent } from './question-group-delete-dialog.component';
-import { IQuestionGroup } from 'app/shared/model/question-group.model';
 
 @Injectable({ providedIn: 'root' })
 export class QuestionGroupResolve implements Resolve<IQuestionGroup> {
-  constructor(private service: QuestionGroupService) {}
+  constructor(private service: QuestionGroupService, private router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IQuestionGroup> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IQuestionGroup> | Observable<never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        filter((response: HttpResponse<QuestionGroup>) => response.ok),
-        map((questionGroup: HttpResponse<QuestionGroup>) => questionGroup.body)
+        flatMap((questionGroup: HttpResponse<QuestionGroup>) => {
+          if (questionGroup.body) {
+            return of(questionGroup.body);
+          } else {
+            this.router.navigate(['404']);
+            return EMPTY;
+          }
+        })
       );
     }
     return of(new QuestionGroup());
@@ -73,21 +78,5 @@ export const questionGroupRoute: Routes = [
       pageTitle: 'QuestionGroups'
     },
     canActivate: [UserRouteAccessService]
-  }
-];
-
-export const questionGroupPopupRoute: Routes = [
-  {
-    path: ':id/delete',
-    component: QuestionGroupDeletePopupComponent,
-    resolve: {
-      questionGroup: QuestionGroupResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'QuestionGroups'
-    },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
   }
 ];

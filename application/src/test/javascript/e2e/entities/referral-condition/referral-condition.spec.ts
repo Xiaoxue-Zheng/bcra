@@ -13,8 +13,8 @@ const expect = chai.expect;
 describe('ReferralCondition e2e test', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
-  let referralConditionUpdatePage: ReferralConditionUpdatePage;
   let referralConditionComponentsPage: ReferralConditionComponentsPage;
+  let referralConditionUpdatePage: ReferralConditionUpdatePage;
   let referralConditionDeleteDialog: ReferralConditionDeleteDialog;
 
   before(async () => {
@@ -30,6 +30,10 @@ describe('ReferralCondition e2e test', () => {
     referralConditionComponentsPage = new ReferralConditionComponentsPage();
     await browser.wait(ec.visibilityOf(referralConditionComponentsPage.title), 5000);
     expect(await referralConditionComponentsPage.getTitle()).to.eq('Referral Conditions');
+    await browser.wait(
+      ec.or(ec.visibilityOf(referralConditionComponentsPage.entities), ec.visibilityOf(referralConditionComponentsPage.noResult)),
+      1000
+    );
   });
 
   it('should load create ReferralCondition page', async () => {
@@ -43,16 +47,21 @@ describe('ReferralCondition e2e test', () => {
     const nbButtonsBeforeCreate = await referralConditionComponentsPage.countDeleteButtons();
 
     await referralConditionComponentsPage.clickOnCreateButton();
+
     await promise.all([
       referralConditionUpdatePage.setAndGroupInput('5'),
       referralConditionUpdatePage.typeSelectLastOption(),
       referralConditionUpdatePage.questionIdentifierSelectLastOption(),
       referralConditionUpdatePage.itemIdentifierSelectLastOption(),
       referralConditionUpdatePage.setNumberInput('5'),
-      referralConditionUpdatePage.questionSelectLastOption()
+      referralConditionUpdatePage.setReasonInput('reason'),
+      referralConditionUpdatePage.questionSectionSelectLastOption()
     ]);
+
     expect(await referralConditionUpdatePage.getAndGroupInput()).to.eq('5', 'Expected andGroup value to be equals to 5');
     expect(await referralConditionUpdatePage.getNumberInput()).to.eq('5', 'Expected number value to be equals to 5');
+    expect(await referralConditionUpdatePage.getReasonInput()).to.eq('reason', 'Expected Reason value to be equals to reason');
+
     await referralConditionUpdatePage.save();
     expect(await referralConditionUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 

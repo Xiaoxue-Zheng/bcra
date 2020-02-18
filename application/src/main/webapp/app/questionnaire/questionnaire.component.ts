@@ -31,10 +31,29 @@ export class QuestionnaireComponent implements OnInit {
       )
       .subscribe(
         (res: IQuestionnaire[]) => {
-          this.questionnaires = res;
+          this.questionnaires = this.sortQuestionnaires(res);
         },
         (res: HttpErrorResponse) => this.onError(res.message)
       );
+  }
+
+  sortQuestionnaires(questionnaires) {
+    for (const questionnaire of questionnaires) {
+      questionnaire.questionSections.sort((questionSectionA, questionSectionB) => {
+        return questionSectionA.order - questionSectionB.order;
+      });
+      for (const questionSection of questionnaire.questionSections) {
+        questionSection.questionGroup.questions.sort((questionA, questionB) => {
+          return questionA.order - questionB.order;
+        });
+        for (const question of questionSection.questionGroup.questions) {
+          question.questionItems.sort((questionItemA, questionItemB) => {
+            return questionItemA.order - questionItemB.order;
+          });
+        }
+      }
+    }
+    return questionnaires;
   }
 
   ngOnInit() {

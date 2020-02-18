@@ -3,7 +3,6 @@ package uk.ac.herc.bcra.algorithm.tyrercuzick.version8;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.ac.herc.bcra.algorithm.tyrercuzick.version8.AlgorithmModel;
 import uk.ac.herc.bcra.algorithm.tyrercuzick.version8.AlgorithmModel.BreastDensity;
 import uk.ac.herc.bcra.algorithm.tyrercuzick.version8.AlgorithmModel.BreastDensityMeasure;
 import uk.ac.herc.bcra.algorithm.tyrercuzick.version8.AlgorithmModel.GeneticTest;

@@ -1,23 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { JhiAlertService } from 'ng-jhipster';
+
 import { IReferralCondition, ReferralCondition } from 'app/shared/model/referral-condition.model';
 import { ReferralConditionService } from './referral-condition.service';
-import { IQuestion } from 'app/shared/model/question.model';
-import { QuestionService } from 'app/entities/question';
+import { IQuestionSection } from 'app/shared/model/question-section.model';
+import { QuestionSectionService } from 'app/entities/question-section/question-section.service';
 
 @Component({
   selector: 'jhi-referral-condition-update',
   templateUrl: './referral-condition-update.component.html'
 })
 export class ReferralConditionUpdateComponent implements OnInit {
-  isSaving: boolean;
-
-  questions: IQuestion[];
+  isSaving = false;
+  questionsections: IQuestionSection[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -26,32 +25,26 @@ export class ReferralConditionUpdateComponent implements OnInit {
     questionIdentifier: [],
     itemIdentifier: [],
     number: [],
-    questionId: []
+    reason: [],
+    questionSectionId: []
   });
 
   constructor(
-    protected jhiAlertService: JhiAlertService,
     protected referralConditionService: ReferralConditionService,
-    protected questionService: QuestionService,
+    protected questionSectionService: QuestionSectionService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
 
-  ngOnInit() {
-    this.isSaving = false;
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ referralCondition }) => {
       this.updateForm(referralCondition);
+
+      this.questionSectionService.query().subscribe((res: HttpResponse<IQuestionSection[]>) => (this.questionsections = res.body || []));
     });
-    this.questionService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IQuestion[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IQuestion[]>) => response.body)
-      )
-      .subscribe((res: IQuestion[]) => (this.questions = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
-  updateForm(referralCondition: IReferralCondition) {
+  updateForm(referralCondition: IReferralCondition): void {
     this.editForm.patchValue({
       id: referralCondition.id,
       andGroup: referralCondition.andGroup,
@@ -59,15 +52,16 @@ export class ReferralConditionUpdateComponent implements OnInit {
       questionIdentifier: referralCondition.questionIdentifier,
       itemIdentifier: referralCondition.itemIdentifier,
       number: referralCondition.number,
-      questionId: referralCondition.questionId
+      reason: referralCondition.reason,
+      questionSectionId: referralCondition.questionSectionId
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 
-  save() {
+  save(): void {
     this.isSaving = true;
     const referralCondition = this.createFromForm();
     if (referralCondition.id !== undefined) {
@@ -80,33 +74,31 @@ export class ReferralConditionUpdateComponent implements OnInit {
   private createFromForm(): IReferralCondition {
     return {
       ...new ReferralCondition(),
-      id: this.editForm.get(['id']).value,
-      andGroup: this.editForm.get(['andGroup']).value,
-      type: this.editForm.get(['type']).value,
-      questionIdentifier: this.editForm.get(['questionIdentifier']).value,
-      itemIdentifier: this.editForm.get(['itemIdentifier']).value,
-      number: this.editForm.get(['number']).value,
-      questionId: this.editForm.get(['questionId']).value
+      id: this.editForm.get(['id'])!.value,
+      andGroup: this.editForm.get(['andGroup'])!.value,
+      type: this.editForm.get(['type'])!.value,
+      questionIdentifier: this.editForm.get(['questionIdentifier'])!.value,
+      itemIdentifier: this.editForm.get(['itemIdentifier'])!.value,
+      number: this.editForm.get(['number'])!.value,
+      reason: this.editForm.get(['reason'])!.value,
+      questionSectionId: this.editForm.get(['questionSectionId'])!.value
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IReferralCondition>>) {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IReferralCondition>>): void {
     result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
   }
 
-  protected onSaveSuccess() {
+  protected onSaveSuccess(): void {
     this.isSaving = false;
     this.previousState();
   }
 
-  protected onSaveError() {
+  protected onSaveError(): void {
     this.isSaving = false;
   }
-  protected onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
-  }
 
-  trackQuestionById(index: number, item: IQuestion) {
+  trackById(index: number, item: IQuestionSection): any {
     return item.id;
   }
 }

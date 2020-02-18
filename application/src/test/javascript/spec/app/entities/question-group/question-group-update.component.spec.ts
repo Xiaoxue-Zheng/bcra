@@ -1,8 +1,7 @@
-/* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 
 import { BcraTestModule } from '../../../test.module';
 import { QuestionGroupUpdateComponent } from 'app/entities/question-group/question-group-update.component';

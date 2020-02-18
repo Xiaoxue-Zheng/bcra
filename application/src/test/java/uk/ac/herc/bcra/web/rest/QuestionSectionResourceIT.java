@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class QuestionSectionResourceIT {
 
     private static final QuestionSectionIdentifier DEFAULT_IDENTIFIER = QuestionSectionIdentifier.CONSENT_FORM;
-    private static final QuestionSectionIdentifier UPDATED_IDENTIFIER = QuestionSectionIdentifier.FAMILY_BREAST_AFFECTED;
+    private static final QuestionSectionIdentifier UPDATED_IDENTIFIER = QuestionSectionIdentifier.FAMILY_AFFECTED;
 
     private static final String DEFAULT_TITLE = "AAAAAAAAAA";
     private static final String UPDATED_TITLE = "BBBBBBBBBB";

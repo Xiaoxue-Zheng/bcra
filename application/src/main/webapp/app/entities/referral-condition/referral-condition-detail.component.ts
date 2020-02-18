@@ -8,17 +8,15 @@ import { IReferralCondition } from 'app/shared/model/referral-condition.model';
   templateUrl: './referral-condition-detail.component.html'
 })
 export class ReferralConditionDetailComponent implements OnInit {
-  referralCondition: IReferralCondition;
+  referralCondition: IReferralCondition | null = null;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
-    this.activatedRoute.data.subscribe(({ referralCondition }) => {
-      this.referralCondition = referralCondition;
-    });
+  ngOnInit(): void {
+    this.activatedRoute.data.subscribe(({ referralCondition }) => (this.referralCondition = referralCondition));
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 }

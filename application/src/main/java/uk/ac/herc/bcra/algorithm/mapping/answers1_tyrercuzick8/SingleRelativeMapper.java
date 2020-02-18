@@ -177,7 +177,7 @@ public class SingleRelativeMapper {
     private static Integer breastAge(ResponseAccess response) {
         return 
             response
-            .section(QuestionSectionIdentifier.FAMILY_BREAST_AGE)
+            .section(QuestionSectionIdentifier.FAMILY_BREAST)
             .getOnlyGroup()
             .answer(QuestionIdentifier.FAMILY_BREAST_AGE)
             .getNumber();
@@ -186,7 +186,7 @@ public class SingleRelativeMapper {
     private static Integer ovarianAge(ResponseAccess response) {
         return 
             response
-            .section(QuestionSectionIdentifier.FAMILY_OVARIAN_AGE)
+            .section(QuestionSectionIdentifier.FAMILY_OVARIAN)
             .getOnlyGroup()
             .answer(QuestionIdentifier.FAMILY_OVARIAN_AGE)
             .getNumber();

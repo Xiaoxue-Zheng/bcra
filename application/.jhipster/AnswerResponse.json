@@ -16,18 +16,18 @@
     ],
     "relationships": [
         {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "answerSection",
+            "otherEntityRelationshipName": "answerResponse",
+            "relationshipName": "answerSection"
+        },
+        {
             "relationshipType": "many-to-one",
             "otherEntityName": "questionnaire",
             "otherEntityRelationshipName": "answerResponse",
             "relationshipValidateRules": "required",
             "relationshipName": "questionnaire",
             "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "answerSection",
-            "otherEntityRelationshipName": "answerResponse",
-            "relationshipName": "answerSection"
         }
     ],
     "changelogDate": "20191008133427",
@@ -38,5 +38,6 @@
     "jpaMetamodelFiltering": false,
     "fluentMethods": true,
     "clientRootFolder": "",
-    "applications": "*"
+    "applications": "*",
+    "readOnly": false
 }

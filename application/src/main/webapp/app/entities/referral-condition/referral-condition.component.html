@@ -1,70 +1,76 @@
 <div>
     <h2 id="page-heading">
         <span>Referral Conditions</span>
+
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-referral-condition" [routerLink]="['/referral-condition/new']">
-            <fa-icon [icon]="'plus'"></fa-icon>
-            <span >
+            <fa-icon icon="plus"></fa-icon>
+            <span>
             Create a new Referral Condition
             </span>
         </button>
     </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
     <jhi-alert></jhi-alert>
-    <br/>
-    <div class="alert alert-warning" *ngIf="referralConditions?.length === 0">
+
+    <div class="alert alert-warning" id="no-result" *ngIf="referralConditions?.length === 0">
         <span>No referralConditions found</span>
     </div>
-    <div class="table-responsive" *ngIf="referralConditions?.length > 0">
-        <table class="table table-striped">
+
+    <div class="table-responsive" id="entities" *ngIf="referralConditions?.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
             <thead>
-            <tr>
-            <th><span>ID</span></th>
-            <th><span>And Group</span></th>
-            <th><span>Type</span></th>
-            <th><span>Question Identifier</span></th>
-            <th><span>Item Identifier</span></th>
-            <th><span>Number</span></th>
-            <th><span>Question</span></th>
-            <th></th>
-            </tr>
+                <tr>
+                    <th scope="col" ><span>ID</span></th>
+                    <th scope="col" ><span>And Group</span></th>
+                    <th scope="col" ><span>Type</span></th>
+                    <th scope="col" ><span>Question Identifier</span></th>
+                    <th scope="col" ><span>Item Identifier</span></th>
+                    <th scope="col" ><span>Number</span></th>
+                    <th scope="col" ><span>Reason</span></th>
+                    <th scope="col" ><span>Question Section</span></th>
+                    <th scope="col"></th>
+                </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let referralCondition of referralConditions ;trackBy: trackId">
-                <td><a [routerLink]="['/referral-condition', referralCondition.id, 'view' ]">{{referralCondition.id}}</a></td>
-                <td>{{referralCondition.andGroup}}</td>
-                <td>{{referralCondition.type}}</td>
-                <td>{{referralCondition.questionIdentifier}}</td>
-                <td>{{referralCondition.itemIdentifier}}</td>
-                <td>{{referralCondition.number}}</td>
-                <td>
-                    <div *ngIf="referralCondition.questionId">
-                        <a [routerLink]="['/question', referralCondition.questionId , 'view' ]" >{{referralCondition.questionId}}</a>
-                    </div>
-                </td>
-                <td class="text-right">
-                    <div class="btn-group">
-                        <button type="submit"
-                                [routerLink]="['/referral-condition', referralCondition.id, 'view' ]"
-                                class="btn btn-info btn-sm">
-                            <fa-icon [icon]="'eye'"></fa-icon>
-                            <span class="d-none d-md-inline">View</span>
-                        </button>
-                        <button type="submit"
-                                [routerLink]="['/referral-condition', referralCondition.id, 'edit']"
-                                class="btn btn-primary btn-sm">
-                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
-                            <span class="d-none d-md-inline">Edit</span>
-                        </button>
-                        <button type="submit"
-                                [routerLink]="['/referral-condition', { outlets: { popup: referralCondition.id + '/delete'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
-                                class="btn btn-danger btn-sm">
-                            <fa-icon [icon]="'times'"></fa-icon>
-                            <span class="d-none d-md-inline">Delete</span>
-                        </button>
-                    </div>
-                </td>
-            </tr>
+                <tr *ngFor="let referralCondition of referralConditions ;trackBy: trackId">
+                    <td><a [routerLink]="['/referral-condition', referralCondition.id, 'view']">{{ referralCondition.id }}</a></td>
+                    <td>{{ referralCondition.andGroup }}</td>
+                    <td>{{ referralCondition.type }}</td>
+                    <td>{{ referralCondition.questionIdentifier }}</td>
+                    <td>{{ referralCondition.itemIdentifier }}</td>
+                    <td>{{ referralCondition.number }}</td>
+                    <td>{{ referralCondition.reason }}</td>
+                    <td>
+                        <div *ngIf="referralCondition.questionSectionId">
+                            <a [routerLink]="['/question-section', referralCondition.questionSectionId , 'view']" >{{ referralCondition.questionSectionId }}</a>
+                        </div>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/referral-condition', referralCondition.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/referral-condition', referralCondition.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(referralCondition)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>

@@ -1,4 +1,5 @@
 package uk.ac.herc.bcra.domain;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -48,9 +49,12 @@ public class ReferralCondition implements Serializable {
     @Column(name = "number")
     private Integer number;
 
+    @Column(name = "reason")
+    private String reason;
+
     @ManyToOne
     @JsonIgnoreProperties("referralConditions")
-    private Question question;
+    private QuestionSection questionSection;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -126,17 +130,30 @@ public class ReferralCondition implements Serializable {
         this.number = number;
     }
 
-    public Question getQuestion() {
-        return question;
+    public String getReason() {
+        return reason;
     }
 
-    public ReferralCondition question(Question question) {
-        this.question = question;
+    public ReferralCondition reason(String reason) {
+        this.reason = reason;
         return this;
     }
 
-    public void setQuestion(Question question) {
-        this.question = question;
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public QuestionSection getQuestionSection() {
+        return questionSection;
+    }
+
+    public ReferralCondition questionSection(QuestionSection questionSection) {
+        this.questionSection = questionSection;
+        return this;
+    }
+
+    public void setQuestionSection(QuestionSection questionSection) {
+        this.questionSection = questionSection;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -165,6 +182,7 @@ public class ReferralCondition implements Serializable {
             ", questionIdentifier='" + getQuestionIdentifier() + "'" +
             ", itemIdentifier='" + getItemIdentifier() + "'" +
             ", number=" + getNumber() +
+            ", reason='" + getReason() + "'" +
             "}";
     }
 }

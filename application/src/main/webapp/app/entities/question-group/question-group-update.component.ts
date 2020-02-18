@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+
 import { IQuestionGroup, QuestionGroup } from 'app/shared/model/question-group.model';
 import { QuestionGroupService } from './question-group.service';
 
@@ -11,7 +13,7 @@ import { QuestionGroupService } from './question-group.service';
   templateUrl: './question-group-update.component.html'
 })
 export class QuestionGroupUpdateComponent implements OnInit {
-  isSaving: boolean;
+  isSaving = false;
 
   editForm = this.fb.group({
     id: [],
@@ -20,25 +22,24 @@ export class QuestionGroupUpdateComponent implements OnInit {
 
   constructor(protected questionGroupService: QuestionGroupService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
 
-  ngOnInit() {
-    this.isSaving = false;
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ questionGroup }) => {
       this.updateForm(questionGroup);
     });
   }
 
-  updateForm(questionGroup: IQuestionGroup) {
+  updateForm(questionGroup: IQuestionGroup): void {
     this.editForm.patchValue({
       id: questionGroup.id,
       identifier: questionGroup.identifier
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 
-  save() {
+  save(): void {
     this.isSaving = true;
     const questionGroup = this.createFromForm();
     if (questionGroup.id !== undefined) {
@@ -51,21 +52,21 @@ export class QuestionGroupUpdateComponent implements OnInit {
   private createFromForm(): IQuestionGroup {
     return {
       ...new QuestionGroup(),
-      id: this.editForm.get(['id']).value,
-      identifier: this.editForm.get(['identifier']).value
+      id: this.editForm.get(['id'])!.value,
+      identifier: this.editForm.get(['identifier'])!.value
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IQuestionGroup>>) {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IQuestionGroup>>): void {
     result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
   }
 
-  protected onSaveSuccess() {
+  protected onSaveSuccess(): void {
     this.isSaving = false;
     this.previousState();
   }
 
-  protected onSaveError() {
+  protected onSaveError(): void {
     this.isSaving = false;
   }
 }

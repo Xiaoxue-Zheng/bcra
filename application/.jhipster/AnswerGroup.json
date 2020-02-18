@@ -11,18 +11,18 @@
     ],
     "relationships": [
         {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "answer",
+            "otherEntityRelationshipName": "answerGroup",
+            "relationshipName": "answer"
+        },
+        {
             "relationshipType": "many-to-one",
             "otherEntityName": "answerSection",
             "otherEntityRelationshipName": "answerGroup",
             "relationshipValidateRules": "required",
             "relationshipName": "answerSection",
             "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "answer",
-            "otherEntityRelationshipName": "answerGroup",
-            "relationshipName": "answer"
         }
     ],
     "changelogDate": "20191008133429",
@@ -33,5 +33,6 @@
     "jpaMetamodelFiltering": false,
     "fluentMethods": true,
     "clientRootFolder": "",
-    "applications": "*"
+    "applications": "*",
+    "readOnly": false
 }

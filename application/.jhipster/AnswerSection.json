@@ -3,12 +3,10 @@
     "fields": [],
     "relationships": [
         {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "answerResponse",
+            "relationshipType": "one-to-many",
+            "otherEntityName": "answerGroup",
             "otherEntityRelationshipName": "answerSection",
-            "relationshipValidateRules": "required",
-            "relationshipName": "answerResponse",
-            "otherEntityField": "id"
+            "relationshipName": "answerGroup"
         },
         {
             "relationshipType": "many-to-one",
@@ -19,10 +17,12 @@
             "otherEntityField": "id"
         },
         {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "answerGroup",
+            "relationshipType": "many-to-one",
+            "otherEntityName": "answerResponse",
             "otherEntityRelationshipName": "answerSection",
-            "relationshipName": "answerGroup"
+            "relationshipValidateRules": "required",
+            "relationshipName": "answerResponse",
+            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20191008133428",
@@ -33,5 +33,6 @@
     "jpaMetamodelFiltering": false,
     "fluentMethods": true,
     "clientRootFolder": "",
-    "applications": "*"
+    "applications": "*",
+    "readOnly": false
 }

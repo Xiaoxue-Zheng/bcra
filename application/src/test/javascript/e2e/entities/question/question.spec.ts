@@ -1,17 +1,20 @@
-/* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec, promise } from 'protractor';
+import { browser, ExpectedConditions as ec /* , promise */ } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
-import { QuestionComponentsPage, QuestionDeleteDialog, QuestionUpdatePage } from './question.page-object';
+import {
+  QuestionComponentsPage,
+  /* QuestionDeleteDialog, */
+  QuestionUpdatePage
+} from './question.page-object';
 
 const expect = chai.expect;
 
 describe('Question e2e test', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
-  let questionUpdatePage: QuestionUpdatePage;
   let questionComponentsPage: QuestionComponentsPage;
-  /*let questionDeleteDialog: QuestionDeleteDialog;*/
+  let questionUpdatePage: QuestionUpdatePage;
+  /* let questionDeleteDialog: QuestionDeleteDialog; */
 
   before(async () => {
     await browser.get('/');
@@ -26,6 +29,7 @@ describe('Question e2e test', () => {
     questionComponentsPage = new QuestionComponentsPage();
     await browser.wait(ec.visibilityOf(questionComponentsPage.title), 5000);
     expect(await questionComponentsPage.getTitle()).to.eq('Questions');
+    await browser.wait(ec.or(ec.visibilityOf(questionComponentsPage.entities), ec.visibilityOf(questionComponentsPage.noResult)), 1000);
   });
 
   it('should load create Question page', async () => {
@@ -39,6 +43,7 @@ describe('Question e2e test', () => {
         const nbButtonsBeforeCreate = await questionComponentsPage.countDeleteButtons();
 
         await questionComponentsPage.clickOnCreateButton();
+
         await promise.all([
             questionUpdatePage.identifierSelectLastOption(),
             questionUpdatePage.typeSelectLastOption(),
@@ -51,6 +56,7 @@ describe('Question e2e test', () => {
             questionUpdatePage.setHintTextInput('hintText'),
             questionUpdatePage.questionGroupSelectLastOption(),
         ]);
+
         expect(await questionUpdatePage.getOrderInput()).to.eq('5', 'Expected order value to be equals to 5');
         expect(await questionUpdatePage.getTextInput()).to.eq('text', 'Expected Text value to be equals to text');
         expect(await questionUpdatePage.getVariableNameInput()).to.eq('variableName', 'Expected VariableName value to be equals to variableName');
@@ -58,11 +64,12 @@ describe('Question e2e test', () => {
         expect(await questionUpdatePage.getMaximumInput()).to.eq('5', 'Expected maximum value to be equals to 5');
         expect(await questionUpdatePage.getHintInput()).to.eq('hint', 'Expected Hint value to be equals to hint');
         expect(await questionUpdatePage.getHintTextInput()).to.eq('hintText', 'Expected HintText value to be equals to hintText');
+
         await questionUpdatePage.save();
         expect(await questionUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
         expect(await questionComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
-    });*/
+    }); */
 
   /* it('should delete last Question', async () => {
         const nbButtonsBeforeDelete = await questionComponentsPage.countDeleteButtons();
@@ -74,7 +81,7 @@ describe('Question e2e test', () => {
         await questionDeleteDialog.clickOnConfirmButton();
 
         expect(await questionComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
-    });*/
+    }); */
 
   after(async () => {
     await navBarPage.autoSignOut();

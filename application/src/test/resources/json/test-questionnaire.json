@@ -5,11 +5,12 @@
   "questionSections": [
     {
       "id": 2,
-      "identifier": "FAMILY_BREAST_AFFECTED",
+      "identifier": "FAMILY_AFFECTED",
+      "title": "Family History",
       "order": 2,
       "questionGroup": {
         "id": 2,
-        "identifier": "FAMILY_BREAST_AFFECTED_QUESTIONS",
+        "identifier": "FAMILY_AFFECTED_QUESTIONS",
         "questions": [
           {
             "id": 12,
@@ -73,39 +74,173 @@
               },
               {
                 "id": 11,
-                "identifier": "FAMILY_BREAST_AFFECTED_NONE",
+                "identifier": "FAMILY_BREAST_AFFECTED_FATHER",
                 "order": 7,
-                "label": "None",
+                "label": "Father",
+                "necessary": false,
+                "exclusive": false
+              },
+              {
+                "id": 12,
+                "identifier": "FAMILY_BREAST_AFFECTED_BROTHER",
+                "order": 8,
+                "label": "Brother",
+                "necessary": false,
+                "exclusive": false
+              },
+              {
+                "id": 13,
+                "identifier": "FAMILY_BREAST_AFFECTED_UNKNOWN",
+                "order": 9,
+                "label": "Don't Know",
                 "necessary": false,
                 "exclusive": true
               }
             ],
-            "displayConditions": [],
-            "referralConditions": [
+            "displayConditions": []
+          },
+          {
+            "id": 13,
+            "identifier": "FAMILY_OVARIAN_AFFECTED",
+            "type": "CHECKBOX",
+            "order": 2,
+            "text": "Have any of these relatives been affected by ovarian cancer?",
+            "variableName": "relativeAffectedOvarian",
+            "minimum": 1,
+            "maximum": null,
+            "hint": "",
+            "hintText": "",
+            "questionItems": [
               {
-                "id": 1,
-                "andGroup": 1,
-                "type": "ITEMS_AT_LEAST",
-                "questionIdentifier": "FAMILY_BREAST_AFFECTED",
-                "itemIdentifier": null,
-                "number": 2
+                "id": 16,
+                "identifier": "FAMILY_OVARIAN_AFFECTED_MOTHER",
+                "order": 1,
+                "label": "Mother",
+                "necessary": false,
+                "exclusive": false
+              },
+              {
+                "id": 17,
+                "identifier": "FAMILY_OVARIAN_AFFECTED_GRANDMOTHER",
+                "order": 2,
+                "label": "Grandmother",
+                "necessary": false,
+                "exclusive": false
+              },
+              {
+                "id": 18,
+                "identifier": "FAMILY_OVARIAN_AFFECTED_SISTER",
+                "order": 3,
+                "label": "Sister",
+                "necessary": false,
+                "exclusive": false
+              },
+              {
+                "id": 19,
+                "identifier": "FAMILY_OVARIAN_AFFECTED_HALFSISTER",
+                "order": 4,
+                "label": "Half-Sister",
+                "necessary": false,
+                "exclusive": false
+              },
+              {
+                "id": 20,
+                "identifier": "FAMILY_OVARIAN_AFFECTED_AUNT",
+                "order": 5,
+                "label": "Aunt",
+                "necessary": false,
+                "exclusive": false
+              },
+              {
+                "id": 21,
+                "identifier": "FAMILY_OVARIAN_AFFECTED_NIECE",
+                "order": 6,
+                "label": "Niece",
+                "necessary": false,
+                "exclusive": false
+              },
+              {
+                "id": 22,
+                "identifier": "FAMILY_OVARIAN_AFFECTED_UNKNOWN",
+                "order": 7,
+                "label": "Don't Know",
+                "necessary": false,
+                "exclusive": true
               }
-            ]
+            ],
+            "displayConditions": []
           }
         ]
       },
-      "displayConditions": []
+      "displayConditions": [],
+      "referralConditions": [
+        {
+          "id": 1,
+          "andGroup": 1,
+          "type": "ITEMS_AT_LEAST",
+          "questionIdentifier": "FAMILY_BREAST_AFFECTED",
+          "itemIdentifier": null,
+          "number": 2,
+          "reason": "two of your family members have been affected by breast cancer"
+        },
+        {
+          "id": 2,
+          "andGroup": 2,
+          "type": "ITEM_SPECIFIC",
+          "questionIdentifier": null,
+          "itemIdentifier": "FAMILY_BREAST_AFFECTED_FATHER",
+          "number": null,
+          "reason": "your father has been affected by breast cancer"
+        },
+        {
+          "id": 3,
+          "andGroup": 3,
+          "type": "ITEM_SPECIFIC",
+          "questionIdentifier": null,
+          "itemIdentifier": "FAMILY_BREAST_AFFECTED_BROTHER",
+          "number": null,
+          "reason": "your brother has been affected by breast cancer"
+        },
+        {
+          "id": 4,
+          "andGroup": 4,
+          "type": "ITEMS_AT_LEAST",
+          "questionIdentifier": "FAMILY_OVARIAN_AFFECTED",
+          "itemIdentifier": null,
+          "number": 2,
+          "reason": "two of your family members have been affected by ovarian cancer"
+        },
+        {
+          "id": 5,
+          "andGroup": 5,
+          "type": "ITEMS_AT_LEAST",
+          "questionIdentifier": "FAMILY_BREAST_AFFECTED",
+          "itemIdentifier": null,
+          "number": 1,
+          "reason": "you have family members have affected by both breast and ovarian cancer"
+        },
+        {
+          "id": 6,
+          "andGroup": 6,
+          "type": "ITEMS_AT_LEAST",
+          "questionIdentifier": "FAMILY_OVARIAN_AFFECTED",
+          "itemIdentifier": null,
+          "number": 1,
+          "reason": ""
+        }
+      ]
     },
     {
       "id": 3,
-      "identifier": "FAMILY_BREAST_HOW_MANY",
+      "identifier": "FAMILY_BREAST",
+      "title": "Family History",
       "order": 3,
       "questionGroup": {
         "id": 3,
-        "identifier": "FAMILY_BREAST_HOW_MANY_QUESTIONS",
+        "identifier": "FAMILY_BREAST_QUESTIONS",
         "questions": [
           {
-            "id": 13,
+            "id": 14,
             "identifier": "FAMILY_BREAST_HOW_MANY",
             "type": "RADIO",
             "order": 1,
@@ -117,7 +252,7 @@
             "hintText": "",
             "questionItems": [
               {
-                "id": 12,
+                "id": 14,
                 "identifier": "FAMILY_BREAST_HOW_MANY_ONE",
                 "order": 1,
                 "label": "One",
@@ -125,7 +260,7 @@
                 "exclusive": false
               },
               {
-                "id": 13,
+                "id": 15,
                 "identifier": "FAMILY_BREAST_HOW_MANY_MORE",
                 "order": 2,
                 "label": "More than one",
@@ -133,15 +268,51 @@
                 "exclusive": false
               }
             ],
-            "displayConditions": [],
-            "referralConditions": [
+            "displayConditions": [
               {
-                "id": 2,
-                "andGroup": 1,
-                "type": "ITEM_SPECIFIC",
+                "id": 7,
                 "questionIdentifier": null,
-                "itemIdentifier": "FAMILY_BREAST_HOW_MANY_MORE",
-                "number": null
+                "itemIdentifier": "FAMILY_BREAST_AFFECTED_GRANDMOTHER"
+              },
+              {
+                "id": 8,
+                "questionIdentifier": null,
+                "itemIdentifier": "FAMILY_BREAST_AFFECTED_SISTER"
+              },
+              {
+                "id": 9,
+                "questionIdentifier": null,
+                "itemIdentifier": "FAMILY_BREAST_AFFECTED_HALFSISTER"
+              },
+              {
+                "id": 10,
+                "questionIdentifier": null,
+                "itemIdentifier": "FAMILY_BREAST_AFFECTED_AUNT"
+              },
+              {
+                "id": 11,
+                "questionIdentifier": null,
+                "itemIdentifier": "FAMILY_BREAST_AFFECTED_NIECE"
+              }
+            ]
+          },
+          {
+            "id": 15,
+            "identifier": "FAMILY_BREAST_AGE",
+            "type": "NUMBER_UNKNOWN",
+            "order": 2,
+            "text": "At what age was your {{relativeAffectedBreast}} affected by breast cancer?",
+            "variableName": "",
+            "minimum": 10,
+            "maximum": 130,
+            "hint": "",
+            "hintText": "",
+            "questionItems": [],
+            "displayConditions": [
+              {
+                "id": 12,
+                "questionIdentifier": null,
+                "itemIdentifier": "FAMILY_BREAST_HOW_MANY_ONE"
               }
             ]
           }
@@ -151,265 +322,162 @@
         {
           "id": 1,
           "questionIdentifier": null,
-          "itemIdentifier": "FAMILY_BREAST_AFFECTED_SISTER"
+          "itemIdentifier": "FAMILY_BREAST_AFFECTED_MOTHER"
         },
         {
           "id": 2,
           "questionIdentifier": null,
-          "itemIdentifier": "FAMILY_BREAST_AFFECTED_HALFSISTER"
+          "itemIdentifier": "FAMILY_BREAST_AFFECTED_GRANDMOTHER"
         },
         {
           "id": 3,
           "questionIdentifier": null,
-          "itemIdentifier": "FAMILY_BREAST_AFFECTED_AUNT"
+          "itemIdentifier": "FAMILY_BREAST_AFFECTED_SISTER"
         },
         {
           "id": 4,
           "questionIdentifier": null,
+          "itemIdentifier": "FAMILY_BREAST_AFFECTED_HALFSISTER"
+        },
+        {
+          "id": 5,
+          "questionIdentifier": null,
+          "itemIdentifier": "FAMILY_BREAST_AFFECTED_AUNT"
+        },
+        {
+          "id": 6,
+          "questionIdentifier": null,
           "itemIdentifier": "FAMILY_BREAST_AFFECTED_NIECE"
+        }
+      ],
+      "referralConditions": [
+        {
+          "id": 7,
+          "andGroup": 1,
+          "type": "ITEM_SPECIFIC",
+          "questionIdentifier": null,
+          "itemIdentifier": "FAMILY_BREAST_HOW_MANY_MORE",
+          "number": null,
+          "reason": "you have more than one family member affected by breast cancer"
+        },
+        {
+          "id": 8,
+          "andGroup": 1,
+          "type": "ITEM_SPECIFIC",
+          "questionIdentifier": null,
+          "itemIdentifier": "FAMILY_BREAST_AFFECTED_MOTHER",
+          "number": null,
+          "reason": "your mother was under 60 when she was affected by breast cancer"
+        },
+        {
+          "id": 9,
+          "andGroup": 1,
+          "type": "VALUE_UNDER",
+          "questionIdentifier": "FAMILY_BREAST_AGE",
+          "itemIdentifier": null,
+          "number": 60,
+          "reason": ""
+        },
+        {
+          "id": 10,
+          "andGroup": 2,
+          "type": "ITEM_SPECIFIC",
+          "questionIdentifier": null,
+          "itemIdentifier": "FAMILY_BREAST_AFFECTED_SISTER",
+          "number": null,
+          "reason": "your sister was under 60 when she was affected by breast cancer"
+        },
+        {
+          "id": 11,
+          "andGroup": 2,
+          "type": "VALUE_UNDER",
+          "questionIdentifier": "FAMILY_BREAST_AGE",
+          "itemIdentifier": null,
+          "number": 60,
+          "reason": ""
+        },
+        {
+          "id": 12,
+          "andGroup": 3,
+          "type": "ITEM_SPECIFIC",
+          "questionIdentifier": null,
+          "itemIdentifier": "FAMILY_BREAST_AFFECTED_GRANDMOTHER",
+          "number": null,
+          "reason": "your grandmother was under 40 when she was affected by breast cancer"
+        },
+        {
+          "id": 13,
+          "andGroup": 3,
+          "type": "VALUE_UNDER",
+          "questionIdentifier": "FAMILY_BREAST_AGE",
+          "itemIdentifier": null,
+          "number": 40,
+          "reason": ""
+        },
+        {
+          "id": 14,
+          "andGroup": 4,
+          "type": "ITEM_SPECIFIC",
+          "questionIdentifier": null,
+          "itemIdentifier": "FAMILY_BREAST_AFFECTED_HALFSISTER",
+          "number": null,
+          "reason": "your half-sister was under 40 when she was affected by breast cancer"
+        },
+        {
+          "id": 15,
+          "andGroup": 4,
+          "type": "VALUE_UNDER",
+          "questionIdentifier": "FAMILY_BREAST_AGE",
+          "itemIdentifier": null,
+          "number": 40,
+          "reason": ""
+        },
+        {
+          "id": 16,
+          "andGroup": 5,
+          "type": "ITEM_SPECIFIC",
+          "questionIdentifier": null,
+          "itemIdentifier": "FAMILY_BREAST_AFFECTED_AUNT",
+          "number": null,
+          "reason": "your aunt was under 40 when she was affected by breast cancer"
+        },
+        {
+          "id": 17,
+          "andGroup": 5,
+          "type": "VALUE_UNDER",
+          "questionIdentifier": "FAMILY_BREAST_AGE",
+          "itemIdentifier": null,
+          "number": 40,
+          "reason": ""
+        },
+        {
+          "id": 18,
+          "andGroup": 6,
+          "type": "ITEM_SPECIFIC",
+          "questionIdentifier": null,
+          "itemIdentifier": "FAMILY_BREAST_AFFECTED_NIECE",
+          "number": null,
+          "reason": "your niece was under 40 when she was affected by breast cancer"
+        },
+        {
+          "id": 19,
+          "andGroup": 6,
+          "type": "VALUE_UNDER",
+          "questionIdentifier": "FAMILY_BREAST_AGE",
+          "itemIdentifier": null,
+          "number": 40,
+          "reason": ""
         }
       ]
     },
     {
       "id": 4,
-      "identifier": "FAMILY_BREAST_AGE",
+      "identifier": "FAMILY_OVARIAN",
+      "title": "Family History",
       "order": 4,
       "questionGroup": {
         "id": 4,
-        "identifier": "FAMILY_BREAST_AGE_QUESTIONS",
-        "questions": [
-          {
-            "id": 14,
-            "identifier": "FAMILY_BREAST_AGE",
-            "type": "NUMBER_UNKNOWN",
-            "order": 1,
-            "text": "At what age was your {{relativeAffectedBreast}} affected by breast cancer?",
-            "variableName": "",
-            "minimum": 10,
-            "maximum": 130,
-            "hint": "",
-            "hintText": "",
-            "questionItems": [],
-            "displayConditions": [],
-            "referralConditions": [
-              {
-                "id": 3,
-                "andGroup": 1,
-                "type": "ITEM_SPECIFIC",
-                "questionIdentifier": null,
-                "itemIdentifier": "FAMILY_BREAST_AFFECTED_MOTHER",
-                "number": null
-              },
-              {
-                "id": 4,
-                "andGroup": 1,
-                "type": "VALUE_UNDER",
-                "questionIdentifier": "FAMILY_BREAST_AGE",
-                "itemIdentifier": null,
-                "number": 60
-              },
-              {
-                "id": 5,
-                "andGroup": 2,
-                "type": "ITEM_SPECIFIC",
-                "questionIdentifier": null,
-                "itemIdentifier": "FAMILY_BREAST_AFFECTED_SISTER",
-                "number": null
-              },
-              {
-                "id": 6,
-                "andGroup": 2,
-                "type": "VALUE_UNDER",
-                "questionIdentifier": "FAMILY_BREAST_AGE",
-                "itemIdentifier": null,
-                "number": 60
-              },
-              {
-                "id": 7,
-                "andGroup": 3,
-                "type": "ITEM_SPECIFIC",
-                "questionIdentifier": null,
-                "itemIdentifier": "FAMILY_BREAST_AFFECTED_GRANDMOTHER",
-                "number": null
-              },
-              {
-                "id": 8,
-                "andGroup": 3,
-                "type": "VALUE_UNDER",
-                "questionIdentifier": "FAMILY_BREAST_AGE",
-                "itemIdentifier": null,
-                "number": 40
-              },
-              {
-                "id": 9,
-                "andGroup": 4,
-                "type": "ITEM_SPECIFIC",
-                "questionIdentifier": null,
-                "itemIdentifier": "FAMILY_BREAST_AFFECTED_HALFSISTER",
-                "number": null
-              },
-              {
-                "id": 10,
-                "andGroup": 4,
-                "type": "VALUE_UNDER",
-                "questionIdentifier": "FAMILY_BREAST_AGE",
-                "itemIdentifier": null,
-                "number": 40
-              },
-              {
-                "id": 11,
-                "andGroup": 5,
-                "type": "ITEM_SPECIFIC",
-                "questionIdentifier": null,
-                "itemIdentifier": "FAMILY_BREAST_AFFECTED_AUNT",
-                "number": null
-              },
-              {
-                "id": 12,
-                "andGroup": 5,
-                "type": "VALUE_UNDER",
-                "questionIdentifier": "FAMILY_BREAST_AGE",
-                "itemIdentifier": null,
-                "number": 40
-              },
-              {
-                "id": 13,
-                "andGroup": 6,
-                "type": "ITEM_SPECIFIC",
-                "questionIdentifier": null,
-                "itemIdentifier": "FAMILY_BREAST_AFFECTED_NIECE",
-                "number": null
-              },
-              {
-                "id": 14,
-                "andGroup": 6,
-                "type": "VALUE_UNDER",
-                "questionIdentifier": "FAMILY_BREAST_AGE",
-                "itemIdentifier": null,
-                "number": 40
-              }
-            ]
-          }
-        ]
-      },
-      "displayConditions": []
-    },
-    {
-      "id": 5,
-      "identifier": "FAMILY_OVARIAN_AFFECTED",
-      "order": 5,
-      "questionGroup": {
-        "id": 5,
-        "identifier": "FAMILY_OVARIAN_AFFECTED_QUESTIONS",
-        "questions": [
-          {
-            "id": 15,
-            "identifier": "FAMILY_OVARIAN_AFFECTED",
-            "type": "CHECKBOX",
-            "order": 1,
-            "text": "Have any of these relatives been affected by ovarian cancer?",
-            "variableName": "relativeAffectedOvarian",
-            "minimum": 1,
-            "maximum": null,
-            "hint": "",
-            "hintText": "",
-            "questionItems": [
-              {
-                "id": 16,
-                "identifier": "FAMILY_OVARIAN_AFFECTED_SISTER",
-                "order": 3,
-                "label": "Sister",
-                "necessary": false,
-                "exclusive": false
-              },
-              {
-                "id": 17,
-                "identifier": "FAMILY_OVARIAN_AFFECTED_HALFSISTER",
-                "order": 4,
-                "label": "Half-Sister",
-                "necessary": false,
-                "exclusive": false
-              },
-              {
-                "id": 18,
-                "identifier": "FAMILY_OVARIAN_AFFECTED_AUNT",
-                "order": 5,
-                "label": "Aunt",
-                "necessary": false,
-                "exclusive": false
-              },
-              {
-                "id": 19,
-                "identifier": "FAMILY_OVARIAN_AFFECTED_NIECE",
-                "order": 6,
-                "label": "Niece",
-                "necessary": false,
-                "exclusive": false
-              },
-              {
-                "id": 20,
-                "identifier": "FAMILY_OVARIAN_AFFECTED_NONE",
-                "order": 7,
-                "label": "None",
-                "necessary": false,
-                "exclusive": true
-              },
-              {
-                "id": 14,
-                "identifier": "FAMILY_OVARIAN_AFFECTED_MOTHER",
-                "order": 1,
-                "label": "Mother",
-                "necessary": false,
-                "exclusive": false
-              },
-              {
-                "id": 15,
-                "identifier": "FAMILY_OVARIAN_AFFECTED_GRANDMOTHER",
-                "order": 2,
-                "label": "Grandmother",
-                "necessary": false,
-                "exclusive": false
-              }
-            ],
-            "displayConditions": [],
-            "referralConditions": [
-              {
-                "id": 16,
-                "andGroup": 2,
-                "type": "ITEMS_AT_LEAST",
-                "questionIdentifier": "FAMILY_BREAST_AFFECTED",
-                "itemIdentifier": null,
-                "number": 1
-              },
-              {
-                "id": 17,
-                "andGroup": 2,
-                "type": "ITEMS_AT_LEAST",
-                "questionIdentifier": "FAMILY_OVARIAN_AFFECTED",
-                "itemIdentifier": null,
-                "number": 1
-              },
-              {
-                "id": 15,
-                "andGroup": 1,
-                "type": "ITEMS_AT_LEAST",
-                "questionIdentifier": "FAMILY_OVARIAN_AFFECTED",
-                "itemIdentifier": null,
-                "number": 2
-              }
-            ]
-          }
-        ]
-      },
-      "displayConditions": []
-    },
-    {
-      "id": 6,
-      "identifier": "FAMILY_OVARIAN_HOW_MANY",
-      "order": 6,
-      "questionGroup": {
-        "id": 6,
-        "identifier": "FAMILY_OVARIAN_HOW_MANY_QUESTIONS",
+        "identifier": "FAMILY_OVARIAN_QUESTIONS",
         "questions": [
           {
             "id": 16,
@@ -424,7 +492,7 @@
             "hintText": "",
             "questionItems": [
               {
-                "id": 21,
+                "id": 23,
                 "identifier": "FAMILY_OVARIAN_HOW_MANY_ONE",
                 "order": 1,
                 "label": "One",
@@ -432,7 +500,7 @@
                 "exclusive": false
               },
               {
-                "id": 22,
+                "id": 24,
                 "identifier": "FAMILY_OVARIAN_HOW_MANY_MORE",
                 "order": 2,
                 "label": "More than one",
@@ -440,56 +508,39 @@
                 "exclusive": false
               }
             ],
-            "displayConditions": [],
-            "referralConditions": [
+            "displayConditions": [
               {
-                "id": 18,
-                "andGroup": 1,
-                "type": "ITEM_SPECIFIC",
+                "id": 19,
                 "questionIdentifier": null,
-                "itemIdentifier": "FAMILY_OVARIAN_HOW_MANY_MORE",
-                "number": null
+                "itemIdentifier": "FAMILY_OVARIAN_AFFECTED_GRANDMOTHER"
+              },
+              {
+                "id": 20,
+                "questionIdentifier": null,
+                "itemIdentifier": "FAMILY_OVARIAN_AFFECTED_SISTER"
+              },
+              {
+                "id": 21,
+                "questionIdentifier": null,
+                "itemIdentifier": "FAMILY_OVARIAN_AFFECTED_HALFSISTER"
+              },
+              {
+                "id": 22,
+                "questionIdentifier": null,
+                "itemIdentifier": "FAMILY_OVARIAN_AFFECTED_AUNT"
+              },
+              {
+                "id": 23,
+                "questionIdentifier": null,
+                "itemIdentifier": "FAMILY_OVARIAN_AFFECTED_NIECE"
               }
             ]
-          }
-        ]
-      },
-      "displayConditions": [
-        {
-          "id": 5,
-          "questionIdentifier": null,
-          "itemIdentifier": "FAMILY_OVARIAN_AFFECTED_SISTER"
-        },
-        {
-          "id": 6,
-          "questionIdentifier": null,
-          "itemIdentifier": "FAMILY_OVARIAN_AFFECTED_HALFSISTER"
-        },
-        {
-          "id": 7,
-          "questionIdentifier": null,
-          "itemIdentifier": "FAMILY_OVARIAN_AFFECTED_AUNT"
-        },
-        {
-          "id": 8,
-          "questionIdentifier": null,
-          "itemIdentifier": "FAMILY_OVARIAN_AFFECTED_NIECE"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "identifier": "FAMILY_OVARIAN_AGE",
-      "order": 7,
-      "questionGroup": {
-        "id": 7,
-        "identifier": "FAMILY_OVARIAN_AGE_QUESTIONS",
-        "questions": [
+          },
           {
             "id": 17,
             "identifier": "FAMILY_OVARIAN_AGE",
             "type": "NUMBER_UNKNOWN",
-            "order": 1,
+            "order": 2,
             "text": "At what age was your {{relativeAffectedOvarian}} affected by ovarian cancer?",
             "variableName": "",
             "minimum": 10,
@@ -497,30 +548,67 @@
             "hint": "",
             "hintText": "",
             "questionItems": [],
-            "displayConditions": [],
-            "referralConditions": []
+            "displayConditions": [
+              {
+                "id": 24,
+                "questionIdentifier": null,
+                "itemIdentifier": "FAMILY_OVARIAN_HOW_MANY_ONE"
+              }
+            ]
           }
         ]
       },
       "displayConditions": [
         {
-          "id": 9,
+          "id": 16,
           "questionIdentifier": null,
-          "itemIdentifier": "FAMILY_BREAST_AFFECTED_GRANDMOTHER"
+          "itemIdentifier": "FAMILY_OVARIAN_AFFECTED_HALFSISTER"
         },
         {
-          "id": 10,
+          "id": 17,
+          "questionIdentifier": null,
+          "itemIdentifier": "FAMILY_OVARIAN_AFFECTED_AUNT"
+        },
+        {
+          "id": 18,
+          "questionIdentifier": null,
+          "itemIdentifier": "FAMILY_OVARIAN_AFFECTED_NIECE"
+        },
+        {
+          "id": 13,
+          "questionIdentifier": null,
+          "itemIdentifier": "FAMILY_OVARIAN_AFFECTED_MOTHER"
+        },
+        {
+          "id": 14,
           "questionIdentifier": null,
           "itemIdentifier": "FAMILY_OVARIAN_AFFECTED_GRANDMOTHER"
+        },
+        {
+          "id": 15,
+          "questionIdentifier": null,
+          "itemIdentifier": "FAMILY_OVARIAN_AFFECTED_SISTER"
+        }
+      ],
+      "referralConditions": [
+        {
+          "id": 20,
+          "andGroup": 1,
+          "type": "ITEM_SPECIFIC",
+          "questionIdentifier": null,
+          "itemIdentifier": "FAMILY_OVARIAN_HOW_MANY_MORE",
+          "number": null,
+          "reason": "you have more than one family member affected by ovarian cancer"
         }
       ]
     },
     {
-      "id": 8,
+      "id": 5,
       "identifier": "FAMILY_AFFECTED_GRANDMOTHER",
-      "order": 8,
+      "title": "Family History",
+      "order": 5,
       "questionGroup": {
-        "id": 8,
+        "id": 5,
         "identifier": "FAMILY_AFFECTED_GRANDMOTHER_QUESTIONS",
         "questions": [
           {
@@ -536,7 +624,7 @@
             "hintText": "",
             "questionItems": [
               {
-                "id": 23,
+                "id": 25,
                 "identifier": "FAMILY_AFFECTED_GRANDMOTHER_SIDE_MOTHER",
                 "order": 1,
                 "label": "Mother's Side",
@@ -544,7 +632,7 @@
                 "exclusive": false
               },
               {
-                "id": 24,
+                "id": 26,
                 "identifier": "FAMILY_AFFECTED_GRANDMOTHER_SIDE_FATHER",
                 "order": 2,
                 "label": "Father's Side",
@@ -552,8 +640,7 @@
                 "exclusive": false
               }
             ],
-            "displayConditions": [],
-            "referralConditions": []
+            "displayConditions": []
           },
           {
             "id": 19,
@@ -569,34 +656,35 @@
             "questionItems": [],
             "displayConditions": [
               {
-                "id": 11,
+                "id": 27,
                 "questionIdentifier": null,
                 "itemIdentifier": "FAMILY_AFFECTED_GRANDMOTHER_SIDE_MOTHER"
               }
-            ],
-            "referralConditions": []
+            ]
           }
         ]
       },
       "displayConditions": [
         {
-          "id": 12,
+          "id": 25,
           "questionIdentifier": null,
-          "itemIdentifier": "FAMILY_BREAST_AFFECTED_AUNT"
+          "itemIdentifier": "FAMILY_BREAST_AFFECTED_GRANDMOTHER"
         },
         {
-          "id": 13,
+          "id": 26,
           "questionIdentifier": null,
-          "itemIdentifier": "FAMILY_OVARIAN_AFFECTED_AUNT"
+          "itemIdentifier": "FAMILY_OVARIAN_AFFECTED_GRANDMOTHER"
         }
-      ]
+      ],
+      "referralConditions": []
     },
     {
-      "id": 9,
+      "id": 6,
       "identifier": "FAMILY_AFFECTED_AUNT",
-      "order": 9,
+      "title": "Family History",
+      "order": 6,
       "questionGroup": {
-        "id": 9,
+        "id": 6,
         "identifier": "FAMILY_AFFECTED_AUNT_QUESTIONS",
         "questions": [
           {
@@ -612,7 +700,7 @@
             "hintText": "",
             "questionItems": [
               {
-                "id": 25,
+                "id": 27,
                 "identifier": "FAMILY_AFFECTED_AUNT_SIDE_MOTHER",
                 "order": 1,
                 "label": "Mother's Sister",
@@ -620,7 +708,7 @@
                 "exclusive": false
               },
               {
-                "id": 26,
+                "id": 28,
                 "identifier": "FAMILY_AFFECTED_AUNT_SIDE_FATHER",
                 "order": 2,
                 "label": "Father's Sister",
@@ -628,8 +716,7 @@
                 "exclusive": false
               }
             ],
-            "displayConditions": [],
-            "referralConditions": []
+            "displayConditions": []
           },
           {
             "id": 21,
@@ -645,34 +732,35 @@
             "questionItems": [],
             "displayConditions": [
               {
-                "id": 14,
+                "id": 30,
                 "questionIdentifier": null,
                 "itemIdentifier": "FAMILY_AFFECTED_AUNT_SIDE_MOTHER"
               }
-            ],
-            "referralConditions": []
+            ]
           }
         ]
       },
       "displayConditions": [
         {
-          "id": 16,
+          "id": 28,
           "questionIdentifier": null,
-          "itemIdentifier": "FAMILY_OVARIAN_AFFECTED_NIECE"
+          "itemIdentifier": "FAMILY_BREAST_AFFECTED_AUNT"
         },
         {
-          "id": 15,
+          "id": 29,
           "questionIdentifier": null,
-          "itemIdentifier": "FAMILY_BREAST_AFFECTED_NIECE"
+          "itemIdentifier": "FAMILY_OVARIAN_AFFECTED_AUNT"
         }
-      ]
+      ],
+      "referralConditions": []
     },
     {
-      "id": 10,
+      "id": 7,
       "identifier": "FAMILY_AFFECTED_NIECE",
-      "order": 10,
+      "title": "Family History",
+      "order": 7,
       "questionGroup": {
-        "id": 10,
+        "id": 7,
         "identifier": "FAMILY_AFFECTED_NIECE_QUESTIONS",
         "questions": [
           {
@@ -688,7 +776,7 @@
             "hintText": "",
             "questionItems": [
               {
-                "id": 27,
+                "id": 29,
                 "identifier": "FAMILY_AFFECTED_NIECE_SIDE_SISTER",
                 "order": 1,
                 "label": "Sister's Daughter",
@@ -696,7 +784,7 @@
                 "exclusive": false
               },
               {
-                "id": 28,
+                "id": 30,
                 "identifier": "FAMILY_AFFECTED_NIECE_SIDE_BROTHER",
                 "order": 2,
                 "label": "Brother's Daughter",
@@ -704,8 +792,7 @@
                 "exclusive": false
               }
             ],
-            "displayConditions": [],
-            "referralConditions": []
+            "displayConditions": []
           },
           {
             "id": 23,
@@ -721,34 +808,35 @@
             "questionItems": [],
             "displayConditions": [
               {
-                "id": 17,
+                "id": 33,
                 "questionIdentifier": null,
                 "itemIdentifier": "FAMILY_AFFECTED_NIECE_SIDE_SISTER"
               }
-            ],
-            "referralConditions": []
+            ]
           }
         ]
       },
       "displayConditions": [
         {
-          "id": 18,
+          "id": 32,
           "questionIdentifier": null,
-          "itemIdentifier": "FAMILY_BREAST_AFFECTED_HALFSISTER"
+          "itemIdentifier": "FAMILY_OVARIAN_AFFECTED_NIECE"
         },
         {
-          "id": 19,
+          "id": 31,
           "questionIdentifier": null,
-          "itemIdentifier": "FAMILY_OVARIAN_AFFECTED_HALFSISTER"
+          "itemIdentifier": "FAMILY_BREAST_AFFECTED_NIECE"
         }
-      ]
+      ],
+      "referralConditions": []
     },
     {
-      "id": 11,
+      "id": 8,
       "identifier": "FAMILY_AFFECTED_HALF_SISTER",
-      "order": 11,
+      "title": "Family History",
+      "order": 8,
       "questionGroup": {
-        "id": 11,
+        "id": 8,
         "identifier": "FAMILY_AFFECTED_HALF_SISTER_QUESTIONS",
         "questions": [
           {
@@ -764,24 +852,23 @@
             "hintText": "",
             "questionItems": [
               {
-                "id": 29,
-                "identifier": "FAMILY_AFFECTED_HALFSISTER_SIDE_MOTHER",
-                "order": 1,
-                "label": "Mother's Side",
-                "necessary": false,
-                "exclusive": false
-              },
-              {
-                "id": 30,
+                "id": 32,
                 "identifier": "FAMILY_AFFECTED_HALFSISTER_SIDE_FATHER",
                 "order": 2,
                 "label": "Father's Side",
                 "necessary": false,
                 "exclusive": false
+              },
+              {
+                "id": 31,
+                "identifier": "FAMILY_AFFECTED_HALFSISTER_SIDE_MOTHER",
+                "order": 1,
+                "label": "Mother's Side",
+                "necessary": false,
+                "exclusive": false
               }
             ],
-            "displayConditions": [],
-            "referralConditions": []
+            "displayConditions": []
           },
           {
             "id": 25,
@@ -797,23 +884,35 @@
             "questionItems": [],
             "displayConditions": [
               {
-                "id": 20,
+                "id": 36,
                 "questionIdentifier": null,
                 "itemIdentifier": "FAMILY_AFFECTED_HALFSISTER_SIDE_MOTHER"
               }
-            ],
-            "referralConditions": []
+            ]
           }
         ]
       },
-      "displayConditions": []
+      "displayConditions": [
+        {
+          "id": 34,
+          "questionIdentifier": null,
+          "itemIdentifier": "FAMILY_BREAST_AFFECTED_HALFSISTER"
+        },
+        {
+          "id": 35,
+          "questionIdentifier": null,
+          "itemIdentifier": "FAMILY_OVARIAN_AFFECTED_HALFSISTER"
+        }
+      ],
+      "referralConditions": []
     },
     {
-      "id": 12,
+      "id": 9,
       "identifier": "PERSONAL_HISTORY",
-      "order": 12,
+      "title": "Your History",
+      "order": 9,
       "questionGroup": {
-        "id": 12,
+        "id": 9,
         "identifier": "PERSONAL_HISTORY_QUESTIONS",
         "questions": [
           {
@@ -828,8 +927,7 @@
             "hint": "",
             "hintText": "",
             "questionItems": [],
-            "displayConditions": [],
-            "referralConditions": []
+            "displayConditions": []
           },
           {
             "id": 33,
@@ -841,10 +939,10 @@
             "minimum": null,
             "maximum": null,
             "hint": "What is a biopsy?",
-            "hintText": "Definition of biopsy to go here.",
+            "hintText": "A biopsy is when a small amount of tissue is removed or a larger amount of tissue is removed by cutting pieces from the breast, or a lump is taken from the breast for further examination. A biopsy is the removal of tissue from the breast, not the removal of fluid.",
             "questionItems": [
               {
-                "id": 34,
+                "id": 36,
                 "identifier": "SELF_BREAST_BIOPSY_YES",
                 "order": 1,
                 "label": "Yes",
@@ -852,7 +950,7 @@
                 "exclusive": false
               },
               {
-                "id": 35,
+                "id": 37,
                 "identifier": "SELF_BREAST_BIOPSY_NO",
                 "order": 2,
                 "label": "No",
@@ -860,7 +958,7 @@
                 "exclusive": false
               },
               {
-                "id": 36,
+                "id": 38,
                 "identifier": "SELF_BREAST_BIOPSY_UNKNOWN",
                 "order": 3,
                 "label": "Don't Know",
@@ -868,8 +966,7 @@
                 "exclusive": false
               }
             ],
-            "displayConditions": [],
-            "referralConditions": []
+            "displayConditions": []
           },
           {
             "id": 34,
@@ -884,7 +981,7 @@
             "hintText": "",
             "questionItems": [
               {
-                "id": 37,
+                "id": 39,
                 "identifier": "SELF_BREAST_BIOPSY_DIAGNOSIS_RISK_YES",
                 "order": 1,
                 "label": "Yes",
@@ -892,7 +989,7 @@
                 "exclusive": false
               },
               {
-                "id": 38,
+                "id": 40,
                 "identifier": "SELF_BREAST_BIOPSY_DIAGNOSIS_RISK_NO",
                 "order": 2,
                 "label": "No",
@@ -900,7 +997,7 @@
                 "exclusive": false
               },
               {
-                "id": 39,
+                "id": 41,
                 "identifier": "SELF_BREAST_BIOPSY_DIAGNOSIS_RISK_UNKNOWN",
                 "order": 3,
                 "label": "Don't Know",
@@ -910,12 +1007,11 @@
             ],
             "displayConditions": [
               {
-                "id": 23,
+                "id": 39,
                 "questionIdentifier": null,
-                "itemIdentifier": "SELF_BREAST_BIOPSY_DIAGNOSIS_RISK_YES"
+                "itemIdentifier": "SELF_BREAST_BIOPSY_YES"
               }
-            ],
-            "referralConditions": []
+            ]
           },
           {
             "id": 35,
@@ -930,7 +1026,7 @@
             "hintText": "",
             "questionItems": [
               {
-                "id": 40,
+                "id": 42,
                 "identifier": "SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_ADH",
                 "order": 1,
                 "label": "ADH",
@@ -938,7 +1034,7 @@
                 "exclusive": false
               },
               {
-                "id": 41,
+                "id": 43,
                 "identifier": "SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_LCIS",
                 "order": 2,
                 "label": "LCIS",
@@ -946,7 +1042,7 @@
                 "exclusive": false
               },
               {
-                "id": 42,
+                "id": 44,
                 "identifier": "SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_ALH",
                 "order": 3,
                 "label": "ALH",
@@ -954,7 +1050,7 @@
                 "exclusive": false
               },
               {
-                "id": 43,
+                "id": 45,
                 "identifier": "SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_OTHER",
                 "order": 4,
                 "label": "Other",
@@ -962,7 +1058,7 @@
                 "exclusive": false
               },
               {
-                "id": 44,
+                "id": 46,
                 "identifier": "SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_UNKNOWN",
                 "order": 5,
                 "label": "Don't Know",
@@ -970,8 +1066,13 @@
                 "exclusive": true
               }
             ],
-            "displayConditions": [],
-            "referralConditions": []
+            "displayConditions": [
+              {
+                "id": 40,
+                "questionIdentifier": null,
+                "itemIdentifier": "SELF_BREAST_BIOPSY_DIAGNOSIS_RISK_YES"
+              }
+            ]
           },
           {
             "id": 36,
@@ -983,18 +1084,10 @@
             "minimum": null,
             "maximum": null,
             "hint": "Why is this relevant?",
-            "hintText": "Explaination of the relevence of Ashkenazi heritage.",
+            "hintText": "Ashkenazi Jewish women have a much higher risk of having one of three mutations in the BRCA1 and BRCA2 genes. This is part of the reason why Ashkenazi Jewish women have a much higher-than-average risk of breast cancer. Therefore it is important to capture this information when assessing breast cancer risk.",
             "questionItems": [
               {
-                "id": 45,
-                "identifier": "SELF_ASHKENAZI_YES",
-                "order": 1,
-                "label": "Yes",
-                "necessary": false,
-                "exclusive": false
-              },
-              {
-                "id": 46,
+                "id": 48,
                 "identifier": "SELF_ASHKENAZI_NO",
                 "order": 2,
                 "label": "No",
@@ -1002,22 +1095,23 @@
                 "exclusive": false
               },
               {
-                "id": 47,
+                "id": 49,
                 "identifier": "SELF_ASHKENAZI_UNKNOWN",
                 "order": 3,
                 "label": "Don't Know",
                 "necessary": false,
                 "exclusive": false
-              }
-            ],
-            "displayConditions": [
+              },
               {
-                "id": 24,
-                "questionIdentifier": null,
-                "itemIdentifier": "SELF_BREAST_BIOPSY_YES"
+                "id": 47,
+                "identifier": "SELF_ASHKENAZI_YES",
+                "order": 1,
+                "label": "Yes",
+                "necessary": false,
+                "exclusive": false
               }
             ],
-            "referralConditions": []
+            "displayConditions": []
           },
           {
             "id": 26,
@@ -1031,8 +1125,7 @@
             "hint": "",
             "hintText": "",
             "questionItems": [],
-            "displayConditions": [],
-            "referralConditions": []
+            "displayConditions": []
           },
           {
             "id": 27,
@@ -1044,10 +1137,18 @@
             "minimum": null,
             "maximum": null,
             "hint": "What does premenopausal mean?",
-            "hintText": "Definition of premenopausal to go here.",
+            "hintText": "As this programme is for young women it is most likely that you are premenopausal. You can still be premenopausal without having regular periods for a number of reasons such as:nn1. Contraception such as the pill, implant or Mirena coil.nn2. Being overweight or underweight can stop your periods but this is not the same as the menopause because a return to normal weight is likely to mean that your periods start working again. Menopause means that your ovaries have stopped working altogether.nnIf you have been told that you are menopausal, for example after blood tests confirmed that your ovaries have stopped working or you have had both ovaries removed, please tell us at what age this was in the next question.",
             "questionItems": [
               {
-                "id": 32,
+                "id": 33,
+                "identifier": "SELF_PREMENOPAUSAL_YES",
+                "order": 1,
+                "label": "Yes",
+                "necessary": false,
+                "exclusive": false
+              },
+              {
+                "id": 34,
                 "identifier": "SELF_PREMENOPAUSAL_NO",
                 "order": 2,
                 "label": "No",
@@ -1055,24 +1156,15 @@
                 "exclusive": false
               },
               {
-                "id": 33,
+                "id": 35,
                 "identifier": "SELF_PREMENOPAUSAL_UNKNOWN",
                 "order": 3,
                 "label": "Don't Know",
                 "necessary": false,
                 "exclusive": false
-              },
-              {
-                "id": 31,
-                "identifier": "SELF_PREMENOPAUSAL_YES",
-                "order": 1,
-                "label": "Yes",
-                "necessary": false,
-                "exclusive": false
               }
             ],
-            "displayConditions": [],
-            "referralConditions": []
+            "displayConditions": []
           },
           {
             "id": 28,
@@ -1088,12 +1180,11 @@
             "questionItems": [],
             "displayConditions": [
               {
-                "id": 21,
+                "id": 37,
                 "questionIdentifier": null,
                 "itemIdentifier": "SELF_PREMENOPAUSAL_YES"
               }
-            ],
-            "referralConditions": []
+            ]
           },
           {
             "id": 29,
@@ -1102,13 +1193,12 @@
             "order": 4,
             "text": "How many pregnancies have you had that have continued into the third trimester (more than 28 weeks)?",
             "variableName": "",
-            "minimum": 1,
-            "maximum": 9,
+            "minimum": 0,
+            "maximum": 5,
             "hint": "",
             "hintText": "",
             "questionItems": [],
-            "displayConditions": [],
-            "referralConditions": []
+            "displayConditions": []
           },
           {
             "id": 30,
@@ -1124,12 +1214,11 @@
             "questionItems": [],
             "displayConditions": [
               {
-                "id": 22,
+                "id": 38,
                 "questionIdentifier": "SELF_PREGNANCIES",
                 "itemIdentifier": null
               }
-            ],
-            "referralConditions": []
+            ]
           },
           {
             "id": 31,
@@ -1143,88 +1232,12 @@
             "hint": "",
             "hintText": "",
             "questionItems": [],
-            "displayConditions": [],
-            "referralConditions": []
+            "displayConditions": []
           }
         ]
       },
-      "displayConditions": []
-    },
-    {
-      "id": 13,
-      "identifier": "MALE_BREAST_CANCER",
-      "order": 13,
-      "questionGroup": {
-        "id": 13,
-        "identifier": "MALE_BREAST_CANCER_QUESTIONS",
-        "questions": [
-          {
-            "id": 37,
-            "identifier": "FATHER_BREAST_CANCER",
-            "type": "RADIO",
-            "order": 1,
-            "text": "Has your father had breast cancer?",
-            "variableName": "",
-            "minimum": null,
-            "maximum": null,
-            "hint": "",
-            "hintText": "",
-            "questionItems": [
-              {
-                "id": 48,
-                "identifier": "FATHER_BREAST_CANCER_YES",
-                "order": 1,
-                "label": "Yes",
-                "necessary": false,
-                "exclusive": false
-              },
-              {
-                "id": 49,
-                "identifier": "FATHER_BREAST_CANCER_NO",
-                "order": 2,
-                "label": "No",
-                "necessary": false,
-                "exclusive": false
-              }
-            ],
-            "displayConditions": [],
-            "referralConditions": []
-          },
-          {
-            "id": 38,
-            "identifier": "BROTHER_BREAST_CANCER",
-            "type": "RADIO",
-            "order": 2,
-            "text": "Have any of your brothers ever had breast cancer?",
-            "variableName": "",
-            "minimum": null,
-            "maximum": null,
-            "hint": "",
-            "hintText": "",
-            "questionItems": [
-              {
-                "id": 50,
-                "identifier": "BROTHER_BREAST_CANCER_YES",
-                "order": 1,
-                "label": "Yes",
-                "necessary": false,
-                "exclusive": false
-              },
-              {
-                "id": 51,
-                "identifier": "BROTHER_BREAST_CANCER_NO",
-                "order": 2,
-                "label": "No",
-                "necessary": false,
-                "exclusive": false
-              }
-            ],
-            "displayConditions": [],
-            "referralConditions": []
-          }
-        ]
-      },
-      "displayConditions": []
+      "displayConditions": [],
+      "referralConditions": []
     }
   ]
 }

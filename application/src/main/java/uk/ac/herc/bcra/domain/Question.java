@@ -66,10 +66,6 @@ public class Question implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<DisplayCondition> displayConditions = new HashSet<>();
 
-    @OneToMany(mappedBy = "question")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<ReferralCondition> referralConditions = new HashSet<>();
-
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("questions")
@@ -228,31 +224,6 @@ public class Question implements Serializable {
 
     public void setDisplayConditions(Set<DisplayCondition> displayConditions) {
         this.displayConditions = displayConditions;
-    }
-
-    public Set<ReferralCondition> getReferralConditions() {
-        return referralConditions;
-    }
-
-    public Question referralConditions(Set<ReferralCondition> referralConditions) {
-        this.referralConditions = referralConditions;
-        return this;
-    }
-
-    public Question addReferralCondition(ReferralCondition referralCondition) {
-        this.referralConditions.add(referralCondition);
-        referralCondition.setQuestion(this);
-        return this;
-    }
-
-    public Question removeReferralCondition(ReferralCondition referralCondition) {
-        this.referralConditions.remove(referralCondition);
-        referralCondition.setQuestion(null);
-        return this;
-    }
-
-    public void setReferralConditions(Set<ReferralCondition> referralConditions) {
-        this.referralConditions = referralConditions;
     }
 
     public QuestionGroup getQuestionGroup() {

@@ -8,17 +8,15 @@ import { IQuestionSection } from 'app/shared/model/question-section.model';
   templateUrl: './question-section-detail.component.html'
 })
 export class QuestionSectionDetailComponent implements OnInit {
-  questionSection: IQuestionSection;
+  questionSection: IQuestionSection | null = null;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
-    this.activatedRoute.data.subscribe(({ questionSection }) => {
-      this.questionSection = questionSection;
-    });
+  ngOnInit(): void {
+    this.activatedRoute.data.subscribe(({ questionSection }) => (this.questionSection = questionSection));
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 }

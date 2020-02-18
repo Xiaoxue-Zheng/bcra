@@ -4,7 +4,7 @@
         {
             "fieldName": "identifier",
             "fieldType": "QuestionSectionIdentifier",
-            "fieldValues": "CONSENT_FORM,FAMILY_BREAST_AFFECTED,FAMILY_BREAST_HOW_MANY,FAMILY_BREAST_AGE,FAMILY_OVARIAN_AFFECTED,FAMILY_OVARIAN_HOW_MANY,FAMILY_OVARIAN_AGE,FAMILY_AFFECTED_GRANDMOTHER,FAMILY_AFFECTED_AUNT,FAMILY_AFFECTED_NIECE,FAMILY_AFFECTED_HALF_SISTER,PERSONAL_HISTORY,MALE_BREAST_CANCER",
+            "fieldValues": "CONSENT_FORM,FAMILY_AFFECTED,FAMILY_BREAST,FAMILY_OVARIAN,FAMILY_AFFECTED_GRANDMOTHER,FAMILY_AFFECTED_AUNT,FAMILY_AFFECTED_NIECE,FAMILY_AFFECTED_HALF_SISTER,PERSONAL_HISTORY",
             "fieldValidateRules": [
                 "required",
                 "unique"
@@ -33,6 +33,12 @@
             "relationshipName": "displayCondition"
         },
         {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "referralCondition",
+            "otherEntityRelationshipName": "questionSection",
+            "relationshipName": "referralCondition"
+        },
+        {
             "relationshipType": "many-to-one",
             "otherEntityName": "questionnaire",
             "otherEntityRelationshipName": "questionSection",
@@ -57,5 +63,6 @@
     "jpaMetamodelFiltering": false,
     "fluentMethods": true,
     "clientRootFolder": "",
-    "applications": "*"
+    "applications": "*",
+    "readOnly": false
 }

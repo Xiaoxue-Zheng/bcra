@@ -8,11 +8,11 @@
     -->
     <changeSet id="20191105113559-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="question_id"
+        <addForeignKeyConstraint baseColumnNames="question_section_id"
                                  baseTableName="referral_condition"
-                                 constraintName="fk_referral_condition_question_id"
+                                 constraintName="fk_referral_condition_question_section_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="question"/>
+                                 referencedTableName="question_section"/>
 
     </changeSet>
 </databaseChangeLog>

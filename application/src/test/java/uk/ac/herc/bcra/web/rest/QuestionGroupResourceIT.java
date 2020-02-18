@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class QuestionGroupResourceIT {
 
     private static final QuestionGroupIdentifier DEFAULT_IDENTIFIER = QuestionGroupIdentifier.CONSENT_FORM_QUESTIONS;
-    private static final QuestionGroupIdentifier UPDATED_IDENTIFIER = QuestionGroupIdentifier.FAMILY_BREAST_AFFECTED_QUESTIONS;
+    private static final QuestionGroupIdentifier UPDATED_IDENTIFIER = QuestionGroupIdentifier.FAMILY_AFFECTED_QUESTIONS;
 
     @Autowired
     private QuestionGroupMapper questionGroupMapper;

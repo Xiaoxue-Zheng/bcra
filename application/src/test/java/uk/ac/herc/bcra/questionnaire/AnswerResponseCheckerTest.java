@@ -134,10 +134,10 @@ public class AnswerResponseCheckerTest {
 
         AnswerSection sectionWithGuaranteedItems = null;
 
-        // Section FAMILY_BREAST_AFFECTED has 1 Question with Items
+        // Section FAMILY_AFFECTED has 2 Questions, both with Items
         for (AnswerSection eachSection: answerResponse.getAnswerSections()) {
             if (eachSection.getQuestionSection().getIdentifier() 
-                == QuestionSectionIdentifier.FAMILY_BREAST_AFFECTED) {
+                == QuestionSectionIdentifier.FAMILY_AFFECTED) {
                 sectionWithGuaranteedItems = eachSection;
                 break;
             }

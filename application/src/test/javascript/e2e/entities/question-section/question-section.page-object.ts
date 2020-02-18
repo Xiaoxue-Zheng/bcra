@@ -1,23 +1,25 @@
-import { browser, ExpectedConditions, element, by, ElementFinder } from 'protractor';
+import { element, by, ElementFinder } from 'protractor';
 
 export class QuestionSectionComponentsPage {
   createButton = element(by.id('jh-create-entity'));
   deleteButtons = element.all(by.css('jhi-question-section div table .btn-danger'));
   title = element.all(by.css('jhi-question-section div h2#page-heading span')).first();
+  noResult = element(by.id('no-result'));
+  entities = element(by.id('entities'));
 
-  async clickOnCreateButton(timeout?: number) {
+  async clickOnCreateButton(): Promise<void> {
     await this.createButton.click();
   }
 
-  async clickOnLastDeleteButton(timeout?: number) {
+  async clickOnLastDeleteButton(): Promise<void> {
     await this.deleteButtons.last().click();
   }
 
-  async countDeleteButtons() {
+  async countDeleteButtons(): Promise<number> {
     return this.deleteButtons.count();
   }
 
-  async getTitle() {
+  async getTitle(): Promise<string> {
     return this.title.getText();
   }
 }
@@ -26,55 +28,57 @@ export class QuestionSectionUpdatePage {
   pageTitle = element(by.id('jhi-question-section-heading'));
   saveButton = element(by.id('save-entity'));
   cancelButton = element(by.id('cancel-save'));
+
   identifierSelect = element(by.id('field_identifier'));
   titleInput = element(by.id('field_title'));
   orderInput = element(by.id('field_order'));
+
   questionnaireSelect = element(by.id('field_questionnaire'));
   questionGroupSelect = element(by.id('field_questionGroup'));
 
-  async getPageTitle() {
+  async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
   }
 
-  async setIdentifierSelect(identifier) {
+  async setIdentifierSelect(identifier: string): Promise<void> {
     await this.identifierSelect.sendKeys(identifier);
   }
 
-  async getIdentifierSelect() {
+  async getIdentifierSelect(): Promise<string> {
     return await this.identifierSelect.element(by.css('option:checked')).getText();
   }
 
-  async identifierSelectLastOption(timeout?: number) {
+  async identifierSelectLastOption(): Promise<void> {
     await this.identifierSelect
       .all(by.tagName('option'))
       .last()
       .click();
   }
 
-  async setTitleInput(title) {
+  async setTitleInput(title: string): Promise<void> {
     await this.titleInput.sendKeys(title);
   }
 
-  async getTitleInput() {
+  async getTitleInput(): Promise<string> {
     return await this.titleInput.getAttribute('value');
   }
 
-  async setOrderInput(order) {
+  async setOrderInput(order: string): Promise<void> {
     await this.orderInput.sendKeys(order);
   }
 
-  async getOrderInput() {
+  async getOrderInput(): Promise<string> {
     return await this.orderInput.getAttribute('value');
   }
 
-  async questionnaireSelectLastOption(timeout?: number) {
+  async questionnaireSelectLastOption(): Promise<void> {
     await this.questionnaireSelect
       .all(by.tagName('option'))
       .last()
       .click();
   }
 
-  async questionnaireSelectOption(option) {
+  async questionnaireSelectOption(option: string): Promise<void> {
     await this.questionnaireSelect.sendKeys(option);
   }
 
@@ -82,18 +86,18 @@ export class QuestionSectionUpdatePage {
     return this.questionnaireSelect;
   }
 
-  async getQuestionnaireSelectedOption() {
+  async getQuestionnaireSelectedOption(): Promise<string> {
     return await this.questionnaireSelect.element(by.css('option:checked')).getText();
   }
 
-  async questionGroupSelectLastOption(timeout?: number) {
+  async questionGroupSelectLastOption(): Promise<void> {
     await this.questionGroupSelect
       .all(by.tagName('option'))
       .last()
       .click();
   }
 
-  async questionGroupSelectOption(option) {
+  async questionGroupSelectOption(option: string): Promise<void> {
     await this.questionGroupSelect.sendKeys(option);
   }
 
@@ -101,15 +105,15 @@ export class QuestionSectionUpdatePage {
     return this.questionGroupSelect;
   }
 
-  async getQuestionGroupSelectedOption() {
+  async getQuestionGroupSelectedOption(): Promise<string> {
     return await this.questionGroupSelect.element(by.css('option:checked')).getText();
   }
 
-  async save(timeout?: number) {
+  async save(): Promise<void> {
     await this.saveButton.click();
   }
 
-  async cancel(timeout?: number) {
+  async cancel(): Promise<void> {
     await this.cancelButton.click();
   }
 
@@ -122,11 +126,11 @@ export class QuestionSectionDeleteDialog {
   private dialogTitle = element(by.id('jhi-delete-questionSection-heading'));
   private confirmButton = element(by.id('jhi-confirm-delete-questionSection'));
 
-  async getDialogTitle() {
+  async getDialogTitle(): Promise<string> {
     return this.dialogTitle.getText();
   }
 
-  async clickOnConfirmButton(timeout?: number) {
+  async clickOnConfirmButton(): Promise<void> {
     await this.confirmButton.click();
   }
 }

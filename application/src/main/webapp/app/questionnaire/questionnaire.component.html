@@ -66,19 +66,19 @@
                         </li>
                     </ul>
                     <div style="clear:both"></div>
-
-                    <div class="referral" *ngFor="let referral of question.referralConditions">
-                        <div class="andGroup">AND {{referral.andGroup}}</div>
-                        Refer if
-                        <strong>{{referral.type}}</strong>
-                        (
-                        <strong>{{referral.questionIdentifier}}</strong>
-                        <strong>{{referral.itemIdentifier}}</strong>
-                        <strong *ngIf="referral.number">, {{referral.number}}</strong>
-                        )
-                    </div>
-                    
                 </div>
+            </div>
+
+            <div class="referral" *ngFor="let referral of section.referralConditions">
+                <div class="andGroup">AND {{referral.andGroup}}</div>
+                Refer if
+                <strong>{{referral.type}}</strong>
+                (
+                <strong>{{referral.questionIdentifier}}</strong>
+                <strong>{{referral.itemIdentifier}}</strong>
+                <strong *ngIf="referral.number">, {{referral.number}}</strong>
+                ) 
+                <em *ngIf="referral.reason"> &mdash; {{referral.reason}}</em>
             </div>
         </div>
     </div>

@@ -9,8 +9,8 @@ const expect = chai.expect;
 describe('QuestionGroup e2e test', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
-  let questionGroupUpdatePage: QuestionGroupUpdatePage;
   let questionGroupComponentsPage: QuestionGroupComponentsPage;
+  let questionGroupUpdatePage: QuestionGroupUpdatePage;
   let questionGroupDeleteDialog: QuestionGroupDeleteDialog;
 
   before(async () => {
@@ -26,6 +26,10 @@ describe('QuestionGroup e2e test', () => {
     questionGroupComponentsPage = new QuestionGroupComponentsPage();
     await browser.wait(ec.visibilityOf(questionGroupComponentsPage.title), 5000);
     expect(await questionGroupComponentsPage.getTitle()).to.eq('Question Groups');
+    await browser.wait(
+      ec.or(ec.visibilityOf(questionGroupComponentsPage.entities), ec.visibilityOf(questionGroupComponentsPage.noResult)),
+      1000
+    );
   });
 
   it('should load create QuestionGroup page', async () => {
@@ -39,7 +43,9 @@ describe('QuestionGroup e2e test', () => {
     const nbButtonsBeforeCreate = await questionGroupComponentsPage.countDeleteButtons();
 
     await questionGroupComponentsPage.clickOnCreateButton();
+
     await promise.all([questionGroupUpdatePage.identifierSelectLastOption()]);
+
     await questionGroupUpdatePage.save();
     expect(await questionGroupUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 

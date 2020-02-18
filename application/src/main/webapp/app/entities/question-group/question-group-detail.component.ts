@@ -8,17 +8,15 @@ import { IQuestionGroup } from 'app/shared/model/question-group.model';
   templateUrl: './question-group-detail.component.html'
 })
 export class QuestionGroupDetailComponent implements OnInit {
-  questionGroup: IQuestionGroup;
+  questionGroup: IQuestionGroup | null = null;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
-    this.activatedRoute.data.subscribe(({ questionGroup }) => {
-      this.questionGroup = questionGroup;
-    });
+  ngOnInit(): void {
+    this.activatedRoute.data.subscribe(({ questionGroup }) => (this.questionGroup = questionGroup));
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 }

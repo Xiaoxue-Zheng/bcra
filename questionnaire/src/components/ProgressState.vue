@@ -77,7 +77,7 @@
 </style>
 
 <script>
-const PROGRESS_STAGE_COUNT = 4
+const PROGRESS_STAGE_COUNT = 5
 
 export default {
   props: [

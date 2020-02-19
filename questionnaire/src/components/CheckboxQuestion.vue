@@ -1,7 +1,10 @@
 <template>
   <fieldset>
     <div class="pure-u-1">
-      <label>{{ question.text }}</label>
+      <QuestionText
+        :question="question"
+        :questionVariables="questionVariables"
+      />
       <div class="items checkboxes" :id="question.identifier">
         <div v-for="questionItem in sortQuestionItems(question.questionItems)" v-bind:key="questionItem.id">
           <input
@@ -22,29 +25,72 @@ import ItemQuestionBase from '@/components/ItemQuestionBase.vue'
 export default {
   extends: ItemQuestionBase,
   inheritAttrs: false,
+  props: [
+    'questionVariables'
+  ],
+  data () {
+    return {
+      previousCheckedIds: []
+    }
+  },
   computed: {
     answerItemValue: {
       get () {
-        let checks = []
+        let checkedIds = []
         for (const answerItem of this.answer.answerItems) {
           if (answerItem.selected) {
-            checks.push(answerItem.questionItemId)
+            checkedIds.push(answerItem.questionItemId)
           }
         }
-        return checks
+        this.setPreviousCheckedIds(checkedIds)
+        return checkedIds
       },
-      set (checks) {
-        for (const answerItem of this.answer.answerItems) {
-          answerItem.selected = checks.includes(answerItem.questionItemId)
+      set (checkedIds) {
+        const newlyCheckedId = this.getNewlyCheckedId(checkedIds, this.previousCheckedIds)
+        if (newlyCheckedId) {
+          if (this.isExclusive(newlyCheckedId)) {
+            checkedIds = [newlyCheckedId]
+          } else {
+            checkedIds = this.removeExclusive(checkedIds)
+          }
         }
+        for (const answerItem of this.answer.answerItems) {
+          answerItem.selected = checkedIds.includes(answerItem.questionItemId)
+        }
+        this.setPreviousCheckedIds(checkedIds)
       }
+    },
+    questionText: function () {
+      return this.question.text
     }
   },
   methods: {
+    setPreviousCheckedIds (checkedIds) {
+      this.previousCheckedIds = checkedIds
+    },
     sortQuestionItems (questionItems) {
       let itemClone = questionItems.slice()
       return itemClone.sort((itemA, itemB) => {
         return itemA.order - itemB.order
+      })
+    },
+    getNewlyCheckedId (checkedIds, previousCheckedIds) {
+      const newlyCheckedIds = checkedIds.filter(
+        id => !previousCheckedIds.includes(id)
+      )
+      if (newlyCheckedIds.length === 1) {
+        return newlyCheckedIds[0]
+      }
+      return null
+    },
+    isExclusive (questionItemId) {
+      return this.question.questionItems.find(
+        questionItem => questionItem.id === questionItemId
+      ).exclusive
+    },
+    removeExclusive (questionItemIds) {
+      return questionItemIds.filter(questionItemId => {
+        return !this.isExclusive(questionItemId)
       })
     }
   }

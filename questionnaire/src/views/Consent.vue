@@ -5,9 +5,9 @@
       progressStage="1"
       :questionSection="questionSection"
       :answerSection="answerSection"
-      submitText="I give my consent"
-      :submitForm="submitConsent"
-      :submitError="submitError"
+      buttonText="I give my consent"
+      :buttonAction="submitConsent"
+      :buttonError="submitError"
     >
       <p class="introduction">
         In order to participate in this study, we need your consent.
@@ -30,7 +30,6 @@ export default {
   },
   data () {
     return {
-      progress: 5,
       questionSection: null,
       answerResponse: null,
       answerSection: null,
@@ -52,7 +51,7 @@ export default {
       this.submitError = false
       const submitResult = await AnswerResponseService.submitConsent(this.answerResponse)
       if (submitResult.data === 'SUBMITTED') {
-        this.$router.push('/questionnaire')
+        this.$router.push('/questionnaire/family')
       } else {
         this.submitError = true
       }

@@ -1,7 +1,10 @@
 <template>
   <fieldset>
     <div class="pure-u-1">
-      <label>{{ question.text }}</label>
+      <QuestionText
+        :question="question"
+        :questionVariables="questionVariables"
+      />
       <div :id="question.identifier">
         <div class="input-group-select">
           <input
@@ -47,6 +50,9 @@ const POUNDS_PER_STONE = 14
 export default {
   extends: QuestionBase,
   inheritAttrs: false,
+  props: [
+    'questionVariables'
+  ],
   data () {
     return {
       bigNumber: 0,

@@ -1,7 +1,10 @@
 <template>
   <fieldset>
     <div class="pure-u-1">
-      <label>{{ question.text }}</label>
+      <QuestionText
+        :question="question"
+        :questionVariables="questionVariables"
+      />
       <div class="select-box">
         <select :id="question.identifier" v-model="answer.number" class="select-css">
             <option value="null">Don't know</option>
@@ -22,6 +25,9 @@ import DropdownQuestionBase from '@/components/DropdownQuestionBase.vue'
 export default {
   extends: DropdownQuestionBase,
   inheritAttrs: false,
+  props: [
+    'questionVariables'
+  ],
   methods: {
     getSelectText (number, maximum) {
       if (number === 0) {

@@ -26,6 +26,12 @@ public class QuestionSectionDTO implements Serializable {
     @NotNull
     private Integer order;
 
+    @NotNull
+    private String url;
+
+    @NotNull
+    private Integer progress;
+
     private QuestionGroupDTO questionGroup;
 
     private Set<DisplayConditionDTO> displayConditions = new HashSet<>();
@@ -62,6 +68,22 @@ public class QuestionSectionDTO implements Serializable {
 
     public void setOrder(Integer order) {
         this.order = order;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public Integer getProgress() {
+        return progress;
+    }
+
+    public void setProgress(Integer progress) {
+        this.progress = progress;
     }
 
     public QuestionGroupDTO getQuestionGroup() {
@@ -116,6 +138,8 @@ public class QuestionSectionDTO implements Serializable {
             ", identifier='" + getIdentifier() + "'" +
             ", title='" + getTitle() + "'" +
             ", order=" + getOrder() +
+            ", url='" + getUrl() + "'" +
+            ", progress=" + getProgress() +
             ", questionGroup=" + getQuestionGroup() +
             ", displayConditions=" + getDisplayConditions() +
             ", referralConditions=" + getReferralConditions() +

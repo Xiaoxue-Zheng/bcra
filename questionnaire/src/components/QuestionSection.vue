@@ -8,10 +8,11 @@
           :is="getComponentType(question)"
           :question="question"
           :answer="getAnswer(question)"
+          :questionVariables="questionVariables"
         ></component>
       </div>
-      <PrimaryButton :clickEvent="submitClick">{{ submitText }}</PrimaryButton>
-      <div v-if="submitError">There was an error. Please try again or contact the study team.</div>
+      <PrimaryButton :clickEvent="buttonClick">{{ buttonText }}</PrimaryButton>
+      <div v-if="buttonError">There was an error. Please try again or contact the study team.</div>
       <div v-if="invalid">Please complete all of the questions above to continue.</div>
     </form>
   </div>
@@ -44,9 +45,10 @@ export default {
     'progressStage',
     'questionSection',
     'answerSection',
-    'submitText',
-    'submitForm',
-    'submitError'
+    'buttonText',
+    'buttonAction',
+    'buttonError',
+    'questionVariables'
   ],
   data () {
     return {
@@ -78,10 +80,10 @@ export default {
       let answers = this.$props.answerSection.answerGroups[0].answers
       return answers.find(answer => answer.questionId === question.id)
     },
-    submitClick () {
+    buttonClick () {
       this.invalid = false
       if (this.valid()) {
-        this.submitForm()
+        this.buttonAction()
       } else {
         this.invalid = true
       }

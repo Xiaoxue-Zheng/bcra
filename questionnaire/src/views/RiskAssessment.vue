@@ -1,12 +1,13 @@
 <template>
   <div>
     <QuestionSection
-      progressStage="2"
+      :progressStage="progressStage"
       :questionSection="questionSection"
       :answerSection="answerSection"
-      submitText="Save and continue"
-      :submitForm="submitQuestionnaire"
-      :submitError="submitError"
+      buttonText="Save and continue"
+      :buttonAction="saveQuestionnaire"
+      :buttonError="saveError"
+      :questionVariables="questionVariables"
     >
     </QuestionSection>
   </div>
@@ -16,6 +17,9 @@
 import QuestionSection from '@/components/QuestionSection.vue'
 import { QuestionnaireService } from '@/api/questionnaire.service'
 import { AnswerResponseService } from '@/api/answer-response.service'
+import { QuestionSectionService } from '@/services/question-section.service.js'
+import { QuestionVariableService } from '@/services/question-variable.service.js'
+import router from '../router/'
 
 export default {
   name: 'riskAssessment',
@@ -24,31 +28,60 @@ export default {
   },
   data () {
     return {
-      progress: 5,
-      questionSection: null,
+      questionnaire: null,
       answerResponse: null,
+      questionSection: null,
       answerSection: null,
-      submitError: false
+      progressStage: null,
+      saveError: false,
+      questionVariables: {}
     }
   },
   async created () {
-    const questionnaire = await QuestionnaireService.getRiskAssessment()
-    this.questionSection = questionnaire.questionSections.find(
-      questionSection => (questionSection.identifier === 'PERSONAL_HISTORY')
-    )
+    this.questionnaire = await QuestionnaireService.getRiskAssessment()
     this.answerResponse = await AnswerResponseService.getRiskAssessment()
-    this.answerSection = this.answerResponse.answerSections.find(
-      answerSection => (answerSection.questionSectionId === this.questionSection.id)
-    )
+    this.initialiseSection()
+  },
+  watch: {
+    $route (to, from) {
+      this.initialiseSection()
+    }
   },
   methods: {
-    async submitQuestionnaire () {
-      this.submitError = false
-      const submitResult = await AnswerResponseService.submitRiskAssessment(this.answerResponse)
-      if (submitResult.data === 'SUBMITTED') {
-        this.$router.push('/')
+    initialiseSection () {
+      this.questionSection = this.getCurrentSection()
+      this.progressStage = this.questionSection.progress
+      this.answerSection = this.answerResponse.answerSections.find(
+        answerSection => (answerSection.questionSectionId === this.questionSection.id)
+      )
+      this.questionVariables = QuestionVariableService.getQuestionVariables(this.questionnaire, this.answerResponse)
+    },
+    getCurrentSection (questionnaire) {
+      const routerLocation = router.history.current.params.section
+      return this.questionnaire.questionSections.find(
+        questionSection => (questionSection.url === routerLocation)
+      )
+    },
+    async saveQuestionnaire () {
+      this.saveError = false
+      const submitResult = await AnswerResponseService.saveRiskAssessment(this.answerResponse)
+      if (submitResult.data === 'SAVED') {
+        this.$router.push(
+          '/questionnaire/' +
+          this.getNextSectionRoute()
+        )
       } else {
-        this.submitError = true
+        this.saveError = true
+      }
+    },
+    getNextSectionRoute () {
+      const nextSection = QuestionSectionService.getNextSection(
+        this.questionSection, this.questionnaire, this.answerResponse
+      )
+      if (!nextSection) {
+        return 'submit'
+      } else {
+        return nextSection.url
       }
     }
   }

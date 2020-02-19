@@ -17,6 +17,8 @@ entity QuestionSection {
 	identifier QuestionSectionIdentifier required unique
     title String required
     order Integer required
+    url String required
+    progress Integer required
 }
 
 relationship OneToMany {

@@ -27,18 +27,6 @@ describe('Sign In', () => {
     beforeEach(function(){
         Cypress.Cookies.preserveOnce('JSESSIONID')
     })
-  
-    // it('just test getting some values from the DB', () => {
-    //   var x = cy.task('query', {
-    //     sql: `
-    //       select * from participant
-    //     `,
-    //     values: []
-    //   }).then(response => {
-    //       cy.log(response)
-    //       console.log(response)
-    //   })
-    // })
 
     it('opens the Your History questionnaire after the Consent Form is submitted', () => {
       cy.server()
@@ -53,13 +41,21 @@ describe('Sign In', () => {
       }
       cy.get('[type="submit"]').click()
 
-      cy.url().should('equal', Cypress.config().baseUrl + 'questionnaire')
+      cy.visit('/questionnaire/history')
+
+      cy.url().should('equal', Cypress.config().baseUrl + 'questionnaire/history')
       cy.contains('Your History').should('be.visible')
 
       cy.get('.progress').contains('1').should('have.class', 'complete')
-      cy.get('.progress').contains('2').should('have.class', 'current')
-      cy.get('.progress').contains('2').should('not.have.class', 'complete')
-      cy.get('.progress').contains('3').should('not.have.class', 'complete')
+      cy.get('.progress').contains('1').should('not.have.class', 'current')
+      cy.get('.progress').contains('2').should('have.class', 'complete')
+      cy.get('.progress').contains('2').should('not.have.class', 'current')
+      cy.get('.progress').contains('3').should('have.class', 'complete')
+      cy.get('.progress').contains('3').should('not.have.class', 'current')
+      cy.get('.progress').contains('4').should('have.class', 'complete')
+      cy.get('.progress').contains('4').should('not.have.class', 'current')
+      cy.get('.progress').contains('5').should('not.have.class', 'complete')
+      cy.get('.progress').contains('5').should('have.class', 'current')
 
       // Check number of questions
 
@@ -67,7 +63,7 @@ describe('Sign In', () => {
     })
 
     it('submits all null answers if there is no change', () => {
-      cy.visit('/questionnaire')
+      cy.visit('/questionnaire/history')
 
       cy.get('[type="submit"]').click()
 
@@ -99,7 +95,7 @@ describe('Sign In', () => {
     const SELF_ASHKENAZI_ITEM = ['SELF_ASHKENAZI_UNKNOWN']
     
     it('submits correct answer values (metric)', () => {
-      cy.visit('/questionnaire')
+      cy.visit('/questionnaire/history')
 
       cy.setNumberDontKnowAnswer('SELF_FIRST_PERIOD', SELF_FIRST_PERIOD_NUMBER)
       cy.setRadioAnswerItem(SELF_PREMENOPAUSAL_ITEM)
@@ -114,7 +110,7 @@ describe('Sign In', () => {
       cy.setRadioAnswerItem(SELF_ASHKENAZI_ITEM)
       
       cy.get('[type="submit"]').click()
-      cy.url().should('equal', Cypress.config().baseUrl)
+      cy.url().should('equal', Cypress.config().baseUrl + 'questionnaire/submit')
 
       cy.getQuestionnaireAnswers(NHS_NUMBER).then(response => {
         const answers = response.rows
@@ -138,7 +134,7 @@ describe('Sign In', () => {
     })
 
     it('displays saved answers', () => {
-      cy.visit('/questionnaire')
+      cy.visit('/questionnaire/history')
       cy.checkNumberDontKnowAnswer('SELF_FIRST_PERIOD', SELF_FIRST_PERIOD_NUMBER)
       cy.checkRadioAnswerItem(SELF_PREMENOPAUSAL_ITEM)
       cy.checkNumberAnswer('SELF_MENOPAUSAL_AGE', SELF_MENOPAUSAL_AGE_NUMBER)
@@ -162,12 +158,12 @@ describe('Sign In', () => {
 
 
     it('submits correct answer values in imperial units', () => {
-      cy.visit('/questionnaire')
+      cy.visit('/questionnaire/history')
       cy.setNumberHeightWeight('SELF_HEIGHT','INCHES', SELF_HEIGHT_FEET, SELF_HEIGHT_INCHES)
       cy.setNumberHeightWeight('SELF_WEIGHT','POUNDS', SELF_WEIGHT_STONES, SELF_HEIGHT_POUNDS)
 
       cy.get('[type="submit"]').click()
-      cy.url().should('equal', Cypress.config().baseUrl)
+      cy.url().should('equal', Cypress.config().baseUrl + 'questionnaire/submit')
 
       cy.getQuestionnaireAnswers(NHS_NUMBER).then(response => {
         const answers = response.rows
@@ -177,13 +173,13 @@ describe('Sign In', () => {
     })
     
     it('displays saved imperial values', () => {
-      cy.visit('/questionnaire')
+      cy.visit('/questionnaire/history')
       cy.checkNumberHeightWeight('SELF_HEIGHT','INCHES', SELF_HEIGHT_FEET, SELF_HEIGHT_INCHES)
       cy.checkNumberHeightWeight('SELF_WEIGHT','POUNDS', SELF_WEIGHT_STONES, SELF_HEIGHT_POUNDS)
     })
 
     it('submits all null answers if don\'t know is selected', () => {
-      cy.visit('/questionnaire')
+      cy.visit('/questionnaire/history')
 
       cy.setNumberDontKnowAnswer('SELF_FIRST_PERIOD', 'dontknow')
       cy.setNumberAnswer('SELF_MENOPAUSAL_AGE', '')
@@ -193,7 +189,7 @@ describe('Sign In', () => {
       cy.setNumberHeightWeight('SELF_WEIGHT','KILOS', '')
       
       cy.get('[type="submit"]').click()
-      cy.url().should('equal', Cypress.config().baseUrl)
+      cy.url().should('equal', Cypress.config().baseUrl + 'questionnaire/submit')
 
       cy.getQuestionnaireAnswers(NHS_NUMBER).then(response => {
         const answers = response.rows

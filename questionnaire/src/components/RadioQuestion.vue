@@ -1,7 +1,10 @@
 <template>
   <fieldset>
     <div class="pure-u-1">
-      <label>{{ question.text }}</label>
+      <QuestionText
+        :question="question"
+        :questionVariables="questionVariables"
+      />
       <div class="items radios">
         <div v-for="questionItem in sortQuestionItems(question.questionItems)" v-bind:key="questionItem.id">
           <input
@@ -23,6 +26,9 @@ import ItemQuestionBase from '@/components/ItemQuestionBase.vue'
 export default {
   extends: ItemQuestionBase,
   inheritAttrs: false,
+  props: [
+    'questionVariables'
+  ],
   computed: {
     answerItemValue: {
       get () {

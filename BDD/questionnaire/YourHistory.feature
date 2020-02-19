@@ -4,6 +4,8 @@ Scenario: A Participant opens the Your History questionnaire
 	Given the Participant has opened the Questionnaire application
     And the Participant has signed in
     And the Participant has completed Consent
+    And the Participant has completed Family History
+    And the Participant has not been referred
     When the Participant is forwarded to the Your History questionnaire
 	Then the page has the title 'Your History'
     And there is an indicator of the Participant's Progress
@@ -62,5 +64,5 @@ Scenario: A Participant submits a Your History questionnaire
 	Given the Participant has the Your History questionnaire open
     And the Participant has not answered some, all or none of the questions
     When the Participant clicks the form submission button
-	Then the form is submitted
-    And the next stage of the Questionnaire is displayed
+	Then the questionnaire is submitted
+    And the post-submission page is displayed

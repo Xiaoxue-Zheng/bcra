@@ -1,28 +1,35 @@
 <template>
-    <fieldset>
-        <label>{{ question.text }}</label>
-        <div class="input-group">
-            <div class="input-group-area">
-                <input
-                    :id="question.identifier"
-                    type="number"
-                    class="pure-input-1"
-                    v-model="answer.number"
-                    :min="question.minimum"
-                    :max="question.maximum"
-                    step="1"
-                /></div>
-                <div class="input-group-unit">Years</div>
-        </div>
-        <QuestionHint :hint="question.hint" :text="question.hintText"></QuestionHint>
-    </fieldset>
+  <fieldset>
+    <QuestionText
+      :question="question"
+      :questionVariables="questionVariables"
+    />
+    <div class="input-group">
+      <div class="input-group-area">
+        <input
+          :id="question.identifier"
+          type="number"
+          class="pure-input-1"
+          v-model="answer.number"
+          :min="question.minimum"
+          :max="question.maximum"
+          step="1"
+        />
+      </div>
+      <div class="input-group-unit">Years</div>
+    </div>
+    <QuestionHint :hint="question.hint" :text="question.hintText"></QuestionHint>
+  </fieldset>
 </template>
 <script>
 import QuestionBase from '@/components/QuestionBase.vue'
 
 export default {
   extends: QuestionBase,
-  inheritAttrs: false
+  inheritAttrs: false,
+  props: [
+    'questionVariables'
+  ]
 }
 </script>
 <style scoped>

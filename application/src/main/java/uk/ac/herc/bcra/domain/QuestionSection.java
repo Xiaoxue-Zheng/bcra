@@ -41,6 +41,14 @@ public class QuestionSection implements Serializable {
     @Column(name = "jhi_order", nullable = false)
     private Integer order;
 
+    @NotNull
+    @Column(name = "url", nullable = false)
+    private String url;
+
+    @NotNull
+    @Column(name = "progress", nullable = false)
+    private Integer progress;
+
     @OneToMany(mappedBy = "questionSection")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<DisplayCondition> displayConditions = new HashSet<>();
@@ -107,6 +115,32 @@ public class QuestionSection implements Serializable {
         this.order = order;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public QuestionSection url(String url) {
+        this.url = url;
+        return this;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public Integer getProgress() {
+        return progress;
+    }
+
+    public QuestionSection progress(Integer progress) {
+        this.progress = progress;
+        return this;
+    }
+
+    public void setProgress(Integer progress) {
+        this.progress = progress;
+    }
+
     public Set<DisplayCondition> getDisplayConditions() {
         return displayConditions;
     }
@@ -132,7 +166,6 @@ public class QuestionSection implements Serializable {
         this.displayConditions = displayConditions;
     }
 
-    
     public Set<ReferralCondition> getReferralConditions() {
         return referralConditions;
     }
@@ -208,6 +241,8 @@ public class QuestionSection implements Serializable {
             ", identifier='" + getIdentifier() + "'" +
             ", title='" + getTitle() + "'" +
             ", order=" + getOrder() +
+            ", url='" + getUrl() + "'" +
+            ", progress=" + getProgress() +
             "}";
     }
 }

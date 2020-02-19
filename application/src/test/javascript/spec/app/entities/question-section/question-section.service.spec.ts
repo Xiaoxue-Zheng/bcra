@@ -21,7 +21,7 @@ describe('Service Tests', () => {
       service = injector.get(QuestionSectionService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new QuestionSection(0, QuestionSectionIdentifier.CONSENT_FORM, 'AAAAAAA', 0);
+      elemDefault = new QuestionSection(0, QuestionSectionIdentifier.CONSENT_FORM, 'AAAAAAA', 0, 'AAAAAAA', 0);
     });
 
     describe('Service methods', () => {
@@ -57,7 +57,9 @@ describe('Service Tests', () => {
           {
             identifier: 'BBBBBB',
             title: 'BBBBBB',
-            order: 1
+            order: 1,
+            url: 'BBBBBB',
+            progress: 1
           },
           elemDefault
         );
@@ -76,7 +78,9 @@ describe('Service Tests', () => {
           {
             identifier: 'BBBBBB',
             title: 'BBBBBB',
-            order: 1
+            order: 1,
+            url: 'BBBBBB',
+            progress: 1
           },
           elemDefault
         );

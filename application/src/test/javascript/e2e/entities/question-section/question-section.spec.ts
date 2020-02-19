@@ -51,12 +51,16 @@ describe('QuestionSection e2e test', () => {
             questionSectionUpdatePage.identifierSelectLastOption(),
             questionSectionUpdatePage.setTitleInput('title'),
             questionSectionUpdatePage.setOrderInput('5'),
+            questionSectionUpdatePage.setUrlInput('url'),
+            questionSectionUpdatePage.setProgressInput('5'),
             questionSectionUpdatePage.questionnaireSelectLastOption(),
             questionSectionUpdatePage.questionGroupSelectLastOption(),
         ]);
 
         expect(await questionSectionUpdatePage.getTitleInput()).to.eq('title', 'Expected Title value to be equals to title');
         expect(await questionSectionUpdatePage.getOrderInput()).to.eq('5', 'Expected order value to be equals to 5');
+        expect(await questionSectionUpdatePage.getUrlInput()).to.eq('url', 'Expected Url value to be equals to url');
+        expect(await questionSectionUpdatePage.getProgressInput()).to.eq('5', 'Expected progress value to be equals to 5');
 
         await questionSectionUpdatePage.save();
         expect(await questionSectionUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;

@@ -57,7 +57,7 @@ const router = new Router({
       component: () => import('../views/Consent.vue')
     },
     {
-      path: '/questionnaire',
+      path: '/questionnaire/:section',
       name: 'riskAssessment',
       component: () => import('../views/RiskAssessment.vue')
     }

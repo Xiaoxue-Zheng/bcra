@@ -1,7 +1,10 @@
 <template>
   <fieldset>
     <div class="pure-u-1">
-      <label>{{ question.text }}</label>
+      <QuestionText
+        :question="question"
+        :questionVariables="questionVariables"
+      />
       <div>
         <div class="input-group">
           <div class="input-group-area">
@@ -35,7 +38,10 @@ import RadioQuestion from '@/components/RadioQuestion.vue'
 
 export default {
   extends: RadioQuestion,
-  inheritAttrs: false
+  inheritAttrs: false,
+  props: [
+    'questionVariables'
+  ]
 }
 </script>
 <style scoped>

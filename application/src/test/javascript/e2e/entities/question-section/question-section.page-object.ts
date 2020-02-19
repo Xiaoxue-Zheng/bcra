@@ -32,6 +32,8 @@ export class QuestionSectionUpdatePage {
   identifierSelect = element(by.id('field_identifier'));
   titleInput = element(by.id('field_title'));
   orderInput = element(by.id('field_order'));
+  urlInput = element(by.id('field_url'));
+  progressInput = element(by.id('field_progress'));
 
   questionnaireSelect = element(by.id('field_questionnaire'));
   questionGroupSelect = element(by.id('field_questionGroup'));
@@ -69,6 +71,22 @@ export class QuestionSectionUpdatePage {
 
   async getOrderInput(): Promise<string> {
     return await this.orderInput.getAttribute('value');
+  }
+
+  async setUrlInput(url: string): Promise<void> {
+    await this.urlInput.sendKeys(url);
+  }
+
+  async getUrlInput(): Promise<string> {
+    return await this.urlInput.getAttribute('value');
+  }
+
+  async setProgressInput(progress: string): Promise<void> {
+    await this.progressInput.sendKeys(progress);
+  }
+
+  async getProgressInput(): Promise<string> {
+    return await this.progressInput.getAttribute('value');
   }
 
   async questionnaireSelectLastOption(): Promise<void> {

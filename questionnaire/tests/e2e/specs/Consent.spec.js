@@ -42,6 +42,13 @@ describe('Sign In', () => {
       cy.get('.progress').contains('1').should('have.class', 'current')
       cy.get('.progress').contains('1').should('not.have.class', 'complete')
       cy.get('.progress').contains('2').should('not.have.class', 'complete')
+      cy.get('.progress').contains('2').should('not.have.class', 'current')
+      cy.get('.progress').contains('3').should('not.have.class', 'complete')
+      cy.get('.progress').contains('3').should('not.have.class', 'current')
+      cy.get('.progress').contains('4').should('not.have.class', 'complete')
+      cy.get('.progress').contains('4').should('not.have.class', 'current')
+      cy.get('.progress').contains('5').should('not.have.class', 'complete')
+      cy.get('.progress').contains('5').should('not.have.class', 'current')
 
       cy.get('form').find('fieldset').should('have.length', CONSENT_QUESTION_INPUTS.length)
 
@@ -85,8 +92,8 @@ describe('Sign In', () => {
         cy.get('[type="submit"]').click()
         cy.wait('@submitConsent').its('status').should('equal', 200)
 
-        cy.url().should('equal', Cypress.config().baseUrl + 'questionnaire')
-        cy.contains('Your History').should('be.visible')
+        cy.url().should('equal', Cypress.config().baseUrl + 'questionnaire/family')
+        cy.contains('Family History').should('be.visible')
       })
 
       it('submits the consent form with a non-required question unchecked', () => {
@@ -108,8 +115,8 @@ describe('Sign In', () => {
         cy.get('[type="submit"]').click()
         cy.wait('@submitConsent').its('status').should('equal', 200)
 
-        cy.url().should('equal', Cypress.config().baseUrl + 'questionnaire')
-        cy.contains('Your History').should('be.visible')
+        cy.url().should('equal', Cypress.config().baseUrl + 'questionnaire/family')
+        cy.contains('Family History').should('be.visible')
       })
   })
   

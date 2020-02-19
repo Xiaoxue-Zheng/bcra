@@ -79,6 +79,8 @@ class QuestionSectionGatlingTest extends Simulation {
                 , "identifier":"CONSENT_FORM"
                 , "title":"SAMPLE_TEXT"
                 , "order":"0"
+                , "url":"SAMPLE_TEXT"
+                , "progress":"0"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_questionSection_url"))).exitHereIfFailed

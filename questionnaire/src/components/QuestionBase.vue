@@ -1,4 +1,5 @@
 <script>
+import QuestionText from '@/components/QuestionText.vue'
 import QuestionHint from '@/components/QuestionHint.vue'
 export default {
   props: [
@@ -6,7 +7,8 @@ export default {
     'answer'
   ],
   components: {
-    'QuestionHint': QuestionHint
+    'QuestionHint': QuestionHint,
+    'QuestionText': QuestionText
   }
 }
 </script>

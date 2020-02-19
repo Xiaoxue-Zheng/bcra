@@ -32,6 +32,12 @@ public class QuestionSectionResourceIT {
     private static final Integer DEFAULT_ORDER = 1;
     private static final Integer UPDATED_ORDER = 2;
 
+    private static final String DEFAULT_URL = "AAAAAAAAAA";
+    private static final String UPDATED_URL = "BBBBBBBBBB";
+
+    private static final Integer DEFAULT_PROGRESS = 1;
+    private static final Integer UPDATED_PROGRESS = 2;
+
     @Autowired
     private QuestionSectionMapper questionSectionMapper;
 
@@ -50,7 +56,9 @@ public class QuestionSectionResourceIT {
         QuestionSection questionSection = new QuestionSection()
             .identifier(DEFAULT_IDENTIFIER)
             .title(DEFAULT_TITLE)
-            .order(DEFAULT_ORDER);
+            .order(DEFAULT_ORDER)
+            .url(DEFAULT_URL)
+            .progress(DEFAULT_PROGRESS);
         // Add required entity
         Questionnaire questionnaire;
         if (TestUtil.findAll(em, Questionnaire.class).isEmpty()) {
@@ -83,7 +91,9 @@ public class QuestionSectionResourceIT {
         QuestionSection questionSection = new QuestionSection()
             .identifier(UPDATED_IDENTIFIER)
             .title(UPDATED_TITLE)
-            .order(UPDATED_ORDER);
+            .order(UPDATED_ORDER)
+            .url(UPDATED_URL)
+            .progress(UPDATED_PROGRESS);
         // Add required entity
         Questionnaire questionnaire;
         if (TestUtil.findAll(em, Questionnaire.class).isEmpty()) {

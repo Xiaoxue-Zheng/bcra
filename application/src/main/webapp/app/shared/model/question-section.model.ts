@@ -7,6 +7,8 @@ export interface IQuestionSection {
   identifier?: QuestionSectionIdentifier;
   title?: string;
   order?: number;
+  url?: string;
+  progress?: number;
   displayConditions?: IDisplayCondition[];
   referralConditions?: IReferralCondition[];
   questionnaireId?: number;
@@ -19,6 +21,8 @@ export class QuestionSection implements IQuestionSection {
     public identifier?: QuestionSectionIdentifier,
     public title?: string,
     public order?: number,
+    public url?: string,
+    public progress?: number,
     public displayConditions?: IDisplayCondition[],
     public referralConditions?: IReferralCondition[],
     public questionnaireId?: number,

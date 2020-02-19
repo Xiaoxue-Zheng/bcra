@@ -9,7 +9,7 @@ describe('SignIn.vue', () => {
   })
 
    it('clears any errors', () => {
-      const signIn = shallowMount(SignIn, {})
+      const signIn = shallowMount(SignIn, {stubs: ['router-link', 'router-view']})
       signIn.vm.displayFailureMessage = true
       signIn.vm.displayErrorMessage = true
 
@@ -21,7 +21,7 @@ describe('SignIn.vue', () => {
     })
 
     it('displays the failure message when unauthorised', () => {
-      const signIn = shallowMount(SignIn, {})
+      const signIn = shallowMount(SignIn, {stubs: ['router-link', 'router-view']})
       signIn.vm.clearErrors()
 
       expect(typeof signIn.vm.setMessage).toBe('function')
@@ -32,7 +32,7 @@ describe('SignIn.vue', () => {
     })
 
     it('displays an error message when there is an error', () => {
-      const signIn = shallowMount(SignIn, {})
+      const signIn = shallowMount(SignIn, {stubs: ['router-link', 'router-view']})
       signIn.vm.clearErrors()
 
       expect(typeof signIn.vm.setMessage).toBe('function')

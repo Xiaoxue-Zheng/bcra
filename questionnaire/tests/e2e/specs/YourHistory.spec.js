@@ -5,7 +5,7 @@ describe('Sign In', () => {
     const EMAIL_ADDRESS = 'consent-test@example.com'
     const PASSWORD = 'testpassword'
     const PASSWORD_HASH = '$2a$10$xfxxf5eZbLo0S70V55c8FO6R.741QpR4Lkh84749m/B7kP6/XIFc2'
-    
+
     const CONSENT_QUESTION_INPUTS = [
       '#CONSENT_INFO_SHEET_YES',
       '#CONSENT_WITHDRAWAL',
@@ -28,13 +28,14 @@ describe('Sign In', () => {
         Cypress.Cookies.preserveOnce('JSESSIONID')
     })
 
+
     it('opens the Your History questionnaire after the Consent Form is submitted', () => {
       cy.server()
       cy.visit('/signin')
       cy.get('input').first().clear().type(EMAIL_ADDRESS)
       cy.get('input').last().clear().type(PASSWORD)
       cy.get('button').click()
-      
+
       cy.url().should('equal', Cypress.config().baseUrl + 'consent')
       for (let inputs of CONSENT_QUESTION_INPUTS){
         cy.get(inputs).check({force: true})
@@ -93,7 +94,7 @@ describe('Sign In', () => {
       'SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_ADH','SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_ALH'
     ]
     const SELF_ASHKENAZI_ITEM = ['SELF_ASHKENAZI_UNKNOWN']
-    
+
     it('submits correct answer values (metric)', () => {
       cy.visit('/questionnaire/history')
 
@@ -108,7 +109,7 @@ describe('Sign In', () => {
       cy.setRadioAnswerItem(SELF_BREAST_BIOPSY_DIAGNOSIS_RISK_ITEM)
       cy.setCheckboxAnswerItems('SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES',SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_ITEMS)
       cy.setRadioAnswerItem(SELF_ASHKENAZI_ITEM)
-      
+
       cy.get('[type="submit"]').click()
       cy.url().should('equal', Cypress.config().baseUrl + 'questionnaire/submit')
 
@@ -130,7 +131,7 @@ describe('Sign In', () => {
         cy.checkAnswerItemValues(answerItems, 'SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES', SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_ITEMS)
         cy.checkAnswerItemValues(answerItems, 'SELF_ASHKENAZI', SELF_ASHKENAZI_ITEM)
       })
-      
+
     })
 
     it('displays saved answers', () => {
@@ -171,12 +172,38 @@ describe('Sign In', () => {
         cy.checkNumberAnswerValue(answers, 'SELF_WEIGHT', SELF_HEIGHT_POUNDS_TOTAL, 'POUNDS')
       })
     })
-    
+
     it('displays saved imperial values', () => {
       cy.visit('/questionnaire/history')
       cy.checkNumberHeightWeight('SELF_HEIGHT','INCHES', SELF_HEIGHT_FEET, SELF_HEIGHT_INCHES)
       cy.checkNumberHeightWeight('SELF_WEIGHT','POUNDS', SELF_WEIGHT_STONES, SELF_HEIGHT_POUNDS)
     })
+
+  it('only displays a question hint for a question if there is one', () => {
+    cy.visit('/questionnaire/history')
+    cy.get('label').contains('Approximately how old were you when you had your first period?').then(($ret) => {
+      expect($ret.find('a.info-link').length).to.equal(0)
+    })
+  })
+
+  it('displays a modal dialog when a question hint is clicked on, closes down when closed', () => {
+    cy.visit('/questionnaire/history')
+
+    cy.get('#MODAL_SELF_PREMENOPAUSAL').then(($ret) => {
+      const link = $ret.find('a.info-link')[0]
+      const theDialog = $ret.find('div.modal-background')[0]
+      cy.wrap(theDialog).should('not.be.visible').then(() => {
+        link.click()
+        cy.wrap(theDialog).should('be.visible').then(() => {
+          const closeDialog = $ret.find('footer').find('a')[0]
+          closeDialog.click()
+          cy.wrap(theDialog).should('not.be.visible')
+        })
+      })
+    })
+  })
+
+
 
     it('submits all null answers if don\'t know is selected', () => {
       cy.visit('/questionnaire/history')
@@ -187,7 +214,7 @@ describe('Sign In', () => {
       cy.setNumberAnswer('SELF_PREGNANCY_FIRST_AGE', '')
       cy.setNumberHeightWeight('SELF_HEIGHT','CENTIMETERS', '')
       cy.setNumberHeightWeight('SELF_WEIGHT','KILOS', '')
-      
+
       cy.get('[type="submit"]').click()
       cy.url().should('equal', Cypress.config().baseUrl + 'questionnaire/submit')
 
@@ -199,7 +226,7 @@ describe('Sign In', () => {
         cy.checkNumberAnswerValue(answers, 'SELF_PREGNANCY_FIRST_AGE', null)
         cy.checkNumberAnswerValue(answers, 'SELF_HEIGHT', null, 'CENTIMETERS')
         cy.checkNumberAnswerValue(answers, 'SELF_WEIGHT', null, 'KILOS')
+
       })
     })
   })
-  

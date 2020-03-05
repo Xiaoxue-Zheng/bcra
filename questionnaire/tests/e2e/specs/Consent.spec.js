@@ -18,7 +18,7 @@ describe('Sign In', () => {
         '#CONSENT_BY_LETTER',
         '#CONSENT_FUTURE_RESEARCH_YES'
     ]
-  
+
     before(function () {
       cy.registerParticipant(NHS_NUMBER, EMAIL_ADDRESS, PASSWORD_HASH)
       cy.resetConsent(NHS_NUMBER)
@@ -27,18 +27,18 @@ describe('Sign In', () => {
     beforeEach(function(){
         Cypress.Cookies.preserveOnce('JSESSIONID')
     })
-  
+
     it('opens the consent form after first sign in', () => {
       cy.server()
       cy.visit('/signin')
       cy.get('input').first().clear().type(EMAIL_ADDRESS)
       cy.get('input').last().clear().type(PASSWORD)
       cy.get('button').click()
-      
+
       cy.url().should('equal', Cypress.config().baseUrl + 'consent')
 
       cy.contains('Consent').should('be.visible')
-      
+
       cy.get('.progress').contains('1').should('have.class', 'current')
       cy.get('.progress').contains('1').should('not.have.class', 'complete')
       cy.get('.progress').contains('2').should('not.have.class', 'complete')
@@ -55,11 +55,11 @@ describe('Sign In', () => {
       cy.contains('I give my consent').should('be.visible')
     })
 
-    it('will not submit with a required yes/np question unchecked', () => {
+    it('will not submit with a required yes/no question unchecked', () => {
         for (let inputs of CONSENT_QUESTION_INPUTS){
             cy.get(inputs).check({force: true})
         }
-        
+
         cy.get('#CONSENT_INFO_SHEET_NO').check({force: true})
 
         cy.get('[type="submit"]').click()
@@ -70,7 +70,7 @@ describe('Sign In', () => {
         for (let inputs of CONSENT_QUESTION_INPUTS){
             cy.get(inputs).check({force: true})
         }
-        
+
         cy.get('#CONSENT_INFORM_GP').uncheck({force: true})
 
         cy.get('[type="submit"]').click()
@@ -88,7 +88,7 @@ describe('Sign In', () => {
         for (let inputs of CONSENT_QUESTION_INPUTS){
             cy.get(inputs).check({force: true})
         }
-    
+
         cy.get('[type="submit"]').click()
         cy.wait('@submitConsent').its('status').should('equal', 200)
 
@@ -111,7 +111,7 @@ describe('Sign In', () => {
         }
 
         cy.get('#CONSENT_FUTURE_RESEARCH_NO').check({force: true})
-    
+
         cy.get('[type="submit"]').click()
         cy.wait('@submitConsent').its('status').should('equal', 200)
 
@@ -119,4 +119,3 @@ describe('Sign In', () => {
         cy.contains('Family History').should('be.visible')
       })
   })
-  

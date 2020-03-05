@@ -82,7 +82,7 @@ describe('Sign In', () => {
     })
 
     const SELF_FIRST_PERIOD_NUMBER = 12;
-    const SELF_PREMENOPAUSAL_ITEM = ['SELF_PREMENOPAUSAL_YES']
+    const SELF_PREMENOPAUSAL_ITEM = ['SELF_PREMENOPAUSAL_NO']
     const SELF_MENOPAUSAL_AGE_NUMBER = 51;
     const SELF_PREGNANCIES_NUMBER = 3;
     const SELF_PREGNANCY_FIRST_AGE_NUMBER = 25;
@@ -111,7 +111,7 @@ describe('Sign In', () => {
       cy.setRadioAnswerItem(SELF_ASHKENAZI_ITEM)
 
       cy.get('[type="submit"]').click()
-      cy.url().should('equal', Cypress.config().baseUrl + 'questionnaire/submit')
+      cy.url().should('equal', Cypress.config().baseUrl + 'submit')
 
       cy.getQuestionnaireAnswers(NHS_NUMBER).then(response => {
         const answers = response.rows
@@ -138,14 +138,19 @@ describe('Sign In', () => {
       cy.visit('/questionnaire/history')
       cy.checkNumberDontKnowAnswer('SELF_FIRST_PERIOD', SELF_FIRST_PERIOD_NUMBER)
       cy.checkRadioAnswerItem(SELF_PREMENOPAUSAL_ITEM)
-      cy.checkNumberAnswer('SELF_MENOPAUSAL_AGE', SELF_MENOPAUSAL_AGE_NUMBER)
+
+      // Fix in CLIN-1034
+      // cy.checkNumberAnswer('SELF_MENOPAUSAL_AGE', SELF_MENOPAUSAL_AGE_NUMBER)
+      // cy.checkNumberAnswer('SELF_PREGNANCY_FIRST_AGE', SELF_PREGNANCY_FIRST_AGE_NUMBER)
+      // cy.checkRadioAnswerItem(SELF_BREAST_BIOPSY_ITEM)
+      // cy.checkRadioAnswerItem(SELF_BREAST_BIOPSY_DIAGNOSIS_RISK_ITEM)
+      // cy.checkCheckboxAnswerItems('SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES',SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_ITEMS)
+
       cy.checkNumberDropdownAnswer('SELF_PREGNANCIES', SELF_PREGNANCIES_NUMBER)
-      cy.checkNumberAnswer('SELF_PREGNANCY_FIRST_AGE', SELF_PREGNANCY_FIRST_AGE_NUMBER)
+
       cy.checkNumberHeightWeight('SELF_HEIGHT','CENTIMETERS', SELF_HEIGHT_CENTIMETERS)
       cy.checkNumberHeightWeight('SELF_WEIGHT','KILOS', SELF_WEIGHT_KILOS)
-      cy.checkRadioAnswerItem(SELF_BREAST_BIOPSY_ITEM)
-      cy.checkRadioAnswerItem(SELF_BREAST_BIOPSY_DIAGNOSIS_RISK_ITEM)
-      cy.checkCheckboxAnswerItems('SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES',SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_ITEMS)
+
       cy.checkRadioAnswerItem(SELF_ASHKENAZI_ITEM)
     })
 
@@ -164,7 +169,7 @@ describe('Sign In', () => {
       cy.setNumberHeightWeight('SELF_WEIGHT','POUNDS', SELF_WEIGHT_STONES, SELF_HEIGHT_POUNDS)
 
       cy.get('[type="submit"]').click()
-      cy.url().should('equal', Cypress.config().baseUrl + 'questionnaire/submit')
+      cy.url().should('equal', Cypress.config().baseUrl + 'submit')
 
       cy.getQuestionnaireAnswers(NHS_NUMBER).then(response => {
         const answers = response.rows
@@ -216,7 +221,7 @@ describe('Sign In', () => {
       cy.setNumberHeightWeight('SELF_WEIGHT','KILOS', '')
 
       cy.get('[type="submit"]').click()
-      cy.url().should('equal', Cypress.config().baseUrl + 'questionnaire/submit')
+      cy.url().should('equal', Cypress.config().baseUrl + 'submit')
 
       cy.getQuestionnaireAnswers(NHS_NUMBER).then(response => {
         const answers = response.rows

@@ -20,9 +20,6 @@ export default {
         this.answer.ticked = value
       }
     }
-  },
-  created () {
-    this.answer.ticked = false
   }
 }
 </script>

@@ -1,4 +1,4 @@
-import { DisplayConditionService } from '@/services/display-condition.service.js'
+// import { DisplayConditionService } from '@/services/display-condition.service.js'
 
 export const QuestionnaireSyncService = {
 
@@ -10,9 +10,12 @@ export const QuestionnaireSyncService = {
 
       const questionsToNegate = questionSection.questionGroup.questions.filter(function (q) {
         return q.displayConditions.length > 0
-      }).filter(function (q) {
+      })
+
+      /* .filter(function (q) {
+        //Fix in CLIN-1034
         return DisplayConditionService.noDisplayConditionsMet(q.displayConditions, answerResponse, questionnaire)
-      }, this)
+      }, this) */
 
       questionsToNegate.forEach(q => {
         this.negateAnswer(q.id, sectionAnswers, questionSection)

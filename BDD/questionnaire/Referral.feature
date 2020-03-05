@@ -65,3 +65,20 @@ Scenario: A Participant submits a risk assessment questionnaire and is referred
 	Then their risk assessment questionnaire is submitted with a 'referred' status
 	And the Participant will receive a referral letter (mechanism t.b.d.)
 	And the Participant will not be proceeded to genetic test or mammogram
+
+Scenario: A Participant who changes their answers should not be referred
+	Given a Participant has completed part of the Family History section of the questionnaire
+	And the Participant has provided answers that result in a referral
+	And the Participant has been forwarded to the referral page
+	And the Participant has gone back and changed their answers
+	And the new answers do not result in referral
+	When the Participant saves and proceeds to the next section of the Questionnaire
+	Then the Participant should not be forwarded to the referral page
+
+Scenario: A Participant who refreshes the referral submission page should see their referral reason
+	Given a Participant has completed part of the Family History section of the questionnaire
+	And the Participant has provided answers that result in a referral
+	And the Participant has been forwarded to the referral page
+	And the Participant can see the reason why they were referred
+	When the Participant refreshes the referral page
+	Then the Participant can see the same reasons why they were referred

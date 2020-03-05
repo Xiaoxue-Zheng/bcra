@@ -1,57 +1,37 @@
+import { AnswerHelperService } from '@/services/answer-helper.service.js'
+
 export const DisplayConditionService = {
 
-  noDisplayConditionsMet (displayConditions, answerResponse, questionnaire) {
-    for (const condition of displayConditions) {
-      if (this.displayConditionMet(condition, answerResponse, questionnaire)) {
+  //Fix in CLIN-1034: We need to have a service that answers questions for both:
+  //  - the display of whole sections
+  //  - the dispaly of individual questions
+  //Also, the method name 'noDisplayConditionsMet' is really confusing. The service will be renamed to 'ConditionalDisplayService'.
+  //Its public methods will be more like verbs, e.g. displaySection (returning true or false) and displayQuestion
+  noDisplayConditionsMet (section) {
+    for (const condition of section.displayConditions) {
+      if (this.displayConditionMet(condition)) {
         return false
       }
     }
-    return (displayConditions.length > 0)
+    return (section.displayConditions.length > 0)
   },
 
-  displayConditionMet (condition, answerResponse, questionnaire) {
+  displayConditionMet (condition) {
     if (condition.itemIdentifier) {
-      return this.answerItemIsSelected(
-        condition.itemIdentifier,
-        answerResponse,
-        questionnaire
-      )
+      return this.answerItemIsSelected(condition.itemIdentifier)
     } else if (condition.questionIdentifier) {
-      return this.questionIsNotNullOrZero(
-        condition.questionIdentifier,
-        answerResponse,
-        questionnaire
-      )
+      return this.questionIsNotNullOrZero(condition.questionIdentifier)
     }
     return true
   },
 
-  answerItemIsSelected (itemIdentifier, answerResponse, questionnaire) {
-    for (const answerSection of answerResponse.answerSections) {
-      const questionSection = this.findEntityById(
-        questionnaire.questionSections,
-        answerSection.questionSectionId
-      )
-      for (const answer of answerSection.answerGroups[0].answers) {
-        const question = this.findEntityById(
-          questionSection.questionGroup.questions,
-          answer.questionId
-        )
-        for (const answerItem of answer.answerItems) {
-          const questionItem = this.findEntityById(
-            question.questionItems,
-            answerItem.questionItemId
-          )
-          if (questionItem.identifier === itemIdentifier) {
-            return answerItem.selected
-          }
-        }
-      }
-    }
+  answerItemIsSelected (itemIdentifier) {
+    return AnswerHelperService.getAnswerItem(itemIdentifier).selected
   },
 
-  questionIsNotNullOrZero (questionIdentifier, answerResponse, questionnaire) {
-    return true // implement in BCRA-32
+  answerIsNotNullOrZero (questionIdentifier) {
+    const number = AnswerHelperService.getAnswer(questionIdentifier)
+    return ((number === null) || (number === 0))
   },
 
   findEntityById (entities, id) {

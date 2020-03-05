@@ -60,6 +60,11 @@ const router = new Router({
       path: '/questionnaire/:section',
       name: 'riskAssessment',
       component: () => import('../views/RiskAssessment.vue')
+    },
+    {
+      path: '/submit',
+      name: 'submit',
+      component: () => import('../views/Submit.vue')
     }
   ],
   scrollBehavior (to, from, savedPosition) {

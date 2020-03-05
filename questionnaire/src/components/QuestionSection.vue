@@ -69,9 +69,10 @@ export default {
 
       return questions.sort((questionA, questionB) => {
         return questionA.order - questionB.order
-      }).filter(function (q) {
+      })/*.filter(function (q) {
+        //Fix in CLIN-1034
         return !DisplayConditionService.noDisplayConditionsMet(q.displayConditions, this.answerResponse, this.questionnaire)
-      }, this)
+      }, this)*/
     }
   },
   methods: {

@@ -4,7 +4,7 @@
 
 ## The Database Model
 ### Overview of Relationships
-![](https://www.dropbox.com/s/l2sz19w3sefpvc9/model.png?raw=1)
+![](https://www.dropbox.com/s/i2ne2b5d5uhcv0b/model.png?raw=1)
 
 ### How to update the Database Model with JHipster
 Unfortunately this is **extremely laborious** - the major downside of using JHipster.

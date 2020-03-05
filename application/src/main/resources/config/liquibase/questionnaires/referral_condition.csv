@@ -1,21 +1,21 @@
 id,question_section_id,and_group,type,question_identifier,item_identifier,number,reason
-1,2,1,ITEMS_AT_LEAST,FAMILY_BREAST_AFFECTED,null,2,two of your family members have been affected by breast cancer
+1,2,1,ITEMS_AT_LEAST,FAMILY_BREAST_AFFECTED,null,2,two or more of your family members have been affected by breast cancer
 2,2,2,ITEM_SPECIFIC,null,FAMILY_BREAST_AFFECTED_FATHER,null,your father has been affected by breast cancer
 3,2,3,ITEM_SPECIFIC,null,FAMILY_BREAST_AFFECTED_BROTHER,null,your brother has been affected by breast cancer
-4,2,4,ITEMS_AT_LEAST,FAMILY_OVARIAN_AFFECTED,null,2,two of your family members have been affected by ovarian cancer
+4,2,4,ITEMS_AT_LEAST,FAMILY_OVARIAN_AFFECTED,null,2,two or more of your family members have been affected by ovarian cancer
 5,2,5,ITEMS_AT_LEAST,FAMILY_BREAST_AFFECTED,null,1,you have family members have affected by both breast and ovarian cancer
-6,2,6,ITEMS_AT_LEAST,FAMILY_OVARIAN_AFFECTED,null,1,
+6,2,5,ITEMS_AT_LEAST,FAMILY_OVARIAN_AFFECTED,null,1,
 7,3,1,ITEM_SPECIFIC,null,FAMILY_BREAST_HOW_MANY_MORE,null,you have more than one family member affected by breast cancer
-8,3,1,ITEM_SPECIFIC,null,FAMILY_BREAST_AFFECTED_MOTHER,null,your mother was under 60 when she was affected by breast cancer
-9,3,1,VALUE_UNDER,FAMILY_BREAST_AGE,null,60,
-10,3,2,ITEM_SPECIFIC,null,FAMILY_BREAST_AFFECTED_SISTER,null,your sister was under 60 when she was affected by breast cancer
-11,3,2,VALUE_UNDER,FAMILY_BREAST_AGE,null,60,
-12,3,3,ITEM_SPECIFIC,null,FAMILY_BREAST_AFFECTED_GRANDMOTHER,null,your grandmother was under 40 when she was affected by breast cancer
-13,3,3,VALUE_UNDER,FAMILY_BREAST_AGE,null,40,
-14,3,4,ITEM_SPECIFIC,null,FAMILY_BREAST_AFFECTED_HALFSISTER,null,your half-sister was under 40 when she was affected by breast cancer
-15,3,4,VALUE_UNDER,FAMILY_BREAST_AGE,null,40,
-16,3,5,ITEM_SPECIFIC,null,FAMILY_BREAST_AFFECTED_AUNT,null,your aunt was under 40 when she was affected by breast cancer
-17,3,5,VALUE_UNDER,FAMILY_BREAST_AGE,null,40,
-18,3,6,ITEM_SPECIFIC,null,FAMILY_BREAST_AFFECTED_NIECE,null,your niece was under 40 when she was affected by breast cancer
-19,3,6,VALUE_UNDER,FAMILY_BREAST_AGE,null,40,
+8,3,2,ITEM_SPECIFIC,null,FAMILY_BREAST_AFFECTED_MOTHER,null,your mother was under 60 when she was affected by breast cancer
+9,3,2,VALUE_UNDER,FAMILY_BREAST_AGE,null,60,
+10,3,3,ITEM_SPECIFIC,null,FAMILY_BREAST_AFFECTED_SISTER,null,your sister was under 60 when she was affected by breast cancer
+11,3,3,VALUE_UNDER,FAMILY_BREAST_AGE,null,60,
+12,3,4,ITEM_SPECIFIC,null,FAMILY_BREAST_AFFECTED_GRANDMOTHER,null,your grandmother was under 40 when she was affected by breast cancer
+13,3,4,VALUE_UNDER,FAMILY_BREAST_AGE,null,40,
+14,3,5,ITEM_SPECIFIC,null,FAMILY_BREAST_AFFECTED_HALFSISTER,null,your half-sister was under 40 when she was affected by breast cancer
+15,3,5,VALUE_UNDER,FAMILY_BREAST_AGE,null,40,
+16,3,6,ITEM_SPECIFIC,null,FAMILY_BREAST_AFFECTED_AUNT,null,your aunt was under 40 when she was affected by breast cancer
+17,3,6,VALUE_UNDER,FAMILY_BREAST_AGE,null,40,
+18,3,7,ITEM_SPECIFIC,null,FAMILY_BREAST_AFFECTED_NIECE,null,your niece was under 40 when she was affected by breast cancer
+19,3,7,VALUE_UNDER,FAMILY_BREAST_AGE,null,40,
 20,4,1,ITEM_SPECIFIC,null,FAMILY_OVARIAN_HOW_MANY_MORE,null,you have more than one family member affected by ovarian cancer

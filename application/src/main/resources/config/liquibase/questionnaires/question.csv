@@ -20,7 +20,7 @@ id,identifier,type,jhi_order,minimum,maximum,question_group_id,variable_name,tex
 20,FAMILY_AFFECTED_AUNT_SIDE,RADIO,1,,,6,,Was your affected aunt your:,,
 21,FAMILY_AFFECTED_AUNT_MOTHERS_AGE,NUMBER_UNKNOWN,2,10,130,6,,"How old is your mother (or if your mother is not alive\, how old was she when she died)?",,
 22,FAMILY_AFFECTED_NIECE_SIDE,RADIO,1,,,7,,Was your affected niece your:,,
-23,FAMILY_AFFECTED_NIECE_SISTERS_AGE,NUMBER_UNKNOWN,2,10,130,7,,"How old is your mother (or if your mother is not alive\, how old was she when she died)?",,
+23,FAMILY_AFFECTED_NIECE_SISTERS_AGE,NUMBER_UNKNOWN,2,10,130,7,,"How old is this sister (or if this sister is not alive\, how old was she when she died)?",,
 24,FAMILY_AFFECTED_HALFSISTER_SIDE,RADIO,1,,,8,,Was your affected half-sister on your:,,
 25,FAMILY_AFFECTED_HALFSISTER_MOTHERS_AGE,NUMBER_UNKNOWN,2,10,130,8,,"How old is your mother (or if your mother is not alive\, how old was she when she died)?",,
 26,SELF_FIRST_PERIOD,NUMBER_UNKNOWN,1,5,30,9,,Approximately how old were you when you had your first period?,,

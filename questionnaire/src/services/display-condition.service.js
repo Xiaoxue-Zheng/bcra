@@ -1,12 +1,12 @@
 export const DisplayConditionService = {
 
-  noDisplayConditionsMet (section, answerResponse, questionnaire) {
-    for (const condition of section.displayConditions) {
+  noDisplayConditionsMet (displayConditions, answerResponse, questionnaire) {
+    for (const condition of displayConditions) {
       if (this.displayConditionMet(condition, answerResponse, questionnaire)) {
         return false
       }
     }
-    return (section.displayConditions.length > 0)
+    return (displayConditions.length > 0)
   },
 
   displayConditionMet (condition, answerResponse, questionnaire) {

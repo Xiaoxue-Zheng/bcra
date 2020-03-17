@@ -8,6 +8,8 @@
       :buttonAction="saveQuestionnaire"
       :buttonError="saveError"
       :questionVariables="questionVariables"
+      :questionnaire="questionnaire"
+      :answerResponse="answerResponse"
     >
     </QuestionSection>
   </div>

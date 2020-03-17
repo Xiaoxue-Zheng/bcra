@@ -6,7 +6,7 @@ export const QuestionSectionService = {
     do {
       section = QuestionSectionService.getNextConsecutiveSection(section, questionnaire)
     }
-    while (section && DisplayConditionService.noDisplayConditionsMet(section, answerResponse, questionnaire))
+    while (section && DisplayConditionService.noDisplayConditionsMet(section.displayConditions, answerResponse, questionnaire))
 
     return section
   },

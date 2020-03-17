@@ -28,6 +28,8 @@ import NumberQuestion from '@/components/NumberQuestion.vue'
 import NumberUnknownQuestion from '@/components/NumberUnknownQuestion.vue'
 import HeightWeightQuestion from '@/components/HeightWeightQuestion.vue'
 import DropdownNumberQuestion from '@/components/DropdownNumberQuestion.vue'
+import { DisplayConditionService } from '@/services/display-condition.service.js'
+import { QuestionnaireSyncService } from '@/services/questionnaire-sync.service.js'
 
 export default {
   components: {
@@ -48,7 +50,9 @@ export default {
     'buttonText',
     'buttonAction',
     'buttonError',
-    'questionVariables'
+    'questionVariables',
+    'questionnaire',
+    'answerResponse'
   ],
   data () {
     return {
@@ -56,11 +60,18 @@ export default {
     }
   },
   computed: {
-    questions: (state) => {
+    questions: function (state) {
       let questions = state.questionSection.questionGroup.questions
+
+      if (this.questionnaire && this.answerResponse) {
+        QuestionnaireSyncService.negateAnswersNotDisplayedInSection(this.questionSection.id, this.answerResponse, this.questionnaire)
+      }
+
       return questions.sort((questionA, questionB) => {
         return questionA.order - questionB.order
-      })
+      }).filter(function (q) {
+        return !DisplayConditionService.noDisplayConditionsMet(q.displayConditions, this.answerResponse, this.questionnaire)
+      }, this)
     }
   },
   methods: {

@@ -1,5 +1,9 @@
 Feature: Your History
 
+Notes:
+    A questionnaire comprises one or more questions, each of which has a 'displayConditions' array, which can contain zero to many entries.
+    There are two types of displayConditions, those denoted by displayIdentifier, and those denoted by itemIdentfier. These are covered in the scenarios within this feature.
+
 Scenario: A Participant opens the Your History questionnaire
 	Given the Participant has opened the Questionnaire application
     And the Participant has signed in
@@ -11,6 +15,30 @@ Scenario: A Participant opens the Your History questionnaire
     And there is an indicator of the Participant's Progress
     And there is a list of questions about the Participant's history
     And there is a button to submit the form
+
+Scenario: Display of Your History questions with one or more displayConditions
+    Given the Participant is viewing a list of questions about the Participant's history (as in the scenario entitled 'A Participant opens the Your History questionnaire')
+    When  there is a question with one or more displayConditions (see ../application/CheckQuestionnaires.feature to identify such questions)
+    And  one or more of its displayConditiions have been met
+    Then the question will be displayed so that it can be answered
+
+Scenario: Display of Your History questions with no displayConditions
+    Given the Participant is viewing a list of questions about the Participant's history (as in the scenario entitled 'A Participant opens the Your History questionnaire')
+    When  there is a question with no displayConditions (see ../application/CheckQuestionnaires.feature to identify such questions)
+    Then the question will be displayed by default, so that it can be answered
+
+Scenario: Meeting the displayCondiiton of a question with a non-null 'questionIdentifier'
+    Given the Participant is viewing a list of questions about the Participant's history (as in the scenario entitled 'A Participant opens the Your History questionnaire')
+    When there is a question with a non-null 'questionIdentifier' displayCondition in the questionnaire
+    And the answer to the question on which it is conditioned is greater than zero
+    Then this displayCondition has been met
+
+Scenario: Meeting the displayCondition of a question with a non-null 'itemIdentifier'
+    Given the Participant is viewing a list of questions about the Participant's history (as in the scenario entitled 'A Participant opens the Your History questionnaire')
+    When there is a question with a non-null 'itemIdentifier' displayCondition in the questionnaire
+    And the response to the 'itemIdentifier' (which will be unique to a particular question)as been selected by the Participant
+    Then this dpsylayCondition has been met
+
 
 Scenario: A Participant fills in a Number-Dont-Know question with a Number
 	Given the Participant has the Your History questionnaire open

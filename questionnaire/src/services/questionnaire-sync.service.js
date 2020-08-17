@@ -56,10 +56,5 @@ export const QuestionnaireSyncService = {
 
   getQuestionType (question) {
     return question.type
-  },
-
-
-
-
-
+  }
 }

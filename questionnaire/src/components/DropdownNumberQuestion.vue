@@ -6,7 +6,7 @@
         :questionVariables="questionVariables"
       />
       <div class="select-box">
-        <select :id="question.identifier" v-model="answer.number" class="select-css">
+        <select :id="question.identifier" v-model="answerItemValue" class="select-css">
             <option value="null">Don't know</option>
             <option
               v-for="index in parseInt((question.maximum + 1) - question.minimum)"
@@ -28,6 +28,16 @@ export default {
   props: [
     'questionVariables'
   ],
+  computed: {
+    answerItemValue: {
+      get () {
+        return this.answer.number
+      },
+      set (questionItemId) {
+        this.answer.number = questionItemId
+      }
+    }
+  },
   methods: {
     getSelectText (number, maximum) {
       if (number === 0) {

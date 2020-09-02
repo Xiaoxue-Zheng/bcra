@@ -216,7 +216,6 @@ describe('Sign In', () => {
       cy.setNumberDontKnowAnswer('SELF_FIRST_PERIOD', 'dontknow')
       cy.setNumberAnswer('SELF_MENOPAUSAL_AGE', '')
       cy.setNumberDropdownAnswer('SELF_PREGNANCIES', 'Don\'t know')
-      cy.setNumberAnswer('SELF_PREGNANCY_FIRST_AGE', '')
       cy.setNumberHeightWeight('SELF_HEIGHT','CENTIMETERS', '')
       cy.setNumberHeightWeight('SELF_WEIGHT','KILOS', '')
 
@@ -228,7 +227,6 @@ describe('Sign In', () => {
         cy.checkNumberAnswerValue(answers, 'SELF_FIRST_PERIOD', null)
         cy.checkNumberAnswerValue(answers, 'SELF_MENOPAUSAL_AGE', null)
         cy.checkNumberAnswerValue(answers, 'SELF_PREGNANCIES', null)
-        cy.checkNumberAnswerValue(answers, 'SELF_PREGNANCY_FIRST_AGE', null)
         cy.checkNumberAnswerValue(answers, 'SELF_HEIGHT', null, 'CENTIMETERS')
         cy.checkNumberAnswerValue(answers, 'SELF_WEIGHT', null, 'KILOS')
 

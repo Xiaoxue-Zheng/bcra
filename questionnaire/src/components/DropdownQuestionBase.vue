@@ -1,11 +1,10 @@
-<template>
-    <div></div>
-</template>
 <script>
 import QuestionBase from '@/components/QuestionBase.vue'
 export default {
   extends: QuestionBase,
-  inheritAttrs: false
+  inheritAttrs: false,
+  props: [
+  ]
 }
 </script>
 <style>

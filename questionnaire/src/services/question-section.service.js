@@ -10,24 +10,23 @@ export const QuestionSectionService = {
       section = QuestionSectionService.getNextConsecutiveSection(section, questionnaire)
 
       if (section) {
-        skip = DisplayConditionService.noDisplayConditionsMet(section)
+        skip = DisplayConditionService.isDisplayed(section) === false
       }
 
       if (skip) {
         this.clearSectionAnswers(section.id)
       }
     }
-    while (section && DisplayConditionService.noDisplayConditionsMet(section))
+    while (section && DisplayConditionService.isDisplayed(section) === false)
 
     return section
   },
 
-  //TODO in CLIN-1034: This is very similar to 'negateAnswersNotDisplayedInSection'. Make sure that both sets of logic sit together as nicely as possible.
   clearUntakenSectionAnswers (currentSection, questionnaire) {
     for (const questionSection of questionnaire.questionSections) {
       if (
         (questionSection.order > currentSection.order) &&
-        DisplayConditionService.noDisplayConditionsMet(questionSection)
+        DisplayConditionService.isDisplayed(questionSection) === false
       ) {
         this.clearSectionAnswers(questionSection.id)
       }

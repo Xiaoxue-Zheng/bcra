@@ -2,25 +2,25 @@ import { AnswerHelperService } from '@/services/answer-helper.service.js'
 
 export const DisplayConditionService = {
 
-  //Fix in CLIN-1034: We need to have a service that answers questions for both:
-  //  - the display of whole sections
-  //  - the dispaly of individual questions
-  //Also, the method name 'noDisplayConditionsMet' is really confusing. The service will be renamed to 'ConditionalDisplayService'.
-  //Its public methods will be more like verbs, e.g. displaySection (returning true or false) and displayQuestion
-  noDisplayConditionsMet (section) {
-    for (const condition of section.displayConditions) {
+  isDisplayed (sectionOrQuestion) {
+    if (sectionOrQuestion.displayConditions.length === 0) {
+      return true
+    }
+
+    for (const condition of sectionOrQuestion.displayConditions) {
       if (this.displayConditionMet(condition)) {
-        return false
+        return true
       }
     }
-    return (section.displayConditions.length > 0)
+
+    return false
   },
 
   displayConditionMet (condition) {
     if (condition.itemIdentifier) {
       return this.answerItemIsSelected(condition.itemIdentifier)
     } else if (condition.questionIdentifier) {
-      return this.questionIsNotNullOrZero(condition.questionIdentifier)
+      return this.answerIsNotNullOrZero(condition.questionIdentifier)
     }
     return true
   },
@@ -30,8 +30,10 @@ export const DisplayConditionService = {
   },
 
   answerIsNotNullOrZero (questionIdentifier) {
-    const number = AnswerHelperService.getAnswer(questionIdentifier)
-    return ((number === null) || (number === 0))
+    const answer = AnswerHelperService.getAnswer(questionIdentifier)
+    let numberIsNotNull = answer !== null && answer.number !== null
+    let numberGreaterThanZero = numberIsNotNull ? answer.number > 0 : false
+    return numberGreaterThanZero
   },
 
   findEntityById (entities, id) {

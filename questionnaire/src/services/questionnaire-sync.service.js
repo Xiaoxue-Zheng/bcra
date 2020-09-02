@@ -1,4 +1,4 @@
-// import { DisplayConditionService } from '@/services/display-condition.service.js'
+import { DisplayConditionService } from '@/services/display-condition.service.js'
 
 export const QuestionnaireSyncService = {
 
@@ -8,17 +8,14 @@ export const QuestionnaireSyncService = {
     if (questionSection) {
       var sectionAnswers = answerResponse.answerSections.find(answerSection => (answerSection.questionSectionId === sectionId)).answerGroups[0].answers
 
-      const questionsToNegate = questionSection.questionGroup.questions.filter(function (q) {
-        return q.displayConditions.length > 0
-      })
+      const questionsToNegate = questionSection.questionGroup.questions.filter(function (question) {
+        return question.displayConditions.length > 0
+      }).filter(function (question) {
+        return !DisplayConditionService.isDisplayed(question)
+      }, this)
 
-      /* .filter(function (q) {
-        //Fix in CLIN-1034
-        return DisplayConditionService.noDisplayConditionsMet(q.displayConditions, answerResponse, questionnaire)
-      }, this) */
-
-      questionsToNegate.forEach(q => {
-        this.negateAnswer(q.id, sectionAnswers, questionSection)
+      questionsToNegate.forEach(question => {
+        this.negateAnswer(question.id, sectionAnswers, questionSection)
       })
     }
   },
@@ -40,6 +37,7 @@ export const QuestionnaireSyncService = {
         })
         break
       case 'NUMBER':
+      case 'NUMBER_UNKNOWN':
         answer.number = null
         break
     }

@@ -22,6 +22,16 @@ export const QuestionSectionService = {
     return section
   },
 
+  getSectionInfoComponent (sectionIdentifier) {
+    if (sectionIdentifier === 'FAMILY_AFFECTED_CONTEXT') {
+      return 'QuestionSectionFamilyHistoryInfo'
+    } else if (sectionIdentifier === 'PERSONAL_HISTORY_CONTEXT') {
+      return 'QuestionSectionYourHistoryInfo'
+    } else {
+      return null
+    }
+  },
+
   clearUntakenSectionAnswers (currentSection, questionnaire) {
     for (const questionSection of questionnaire.questionSections) {
       if (

@@ -29,7 +29,7 @@ describe('Sign In', () => {
     })
 
 
-    it('opens the Your History questionnaire after the Consent Form is submitted', () => {
+    it('opens the Family History section after the Consent Form is submitted', () => {
       cy.server()
       cy.visit('/signin')
       cy.get('input').first().clear().type(EMAIL_ADDRESS)
@@ -42,25 +42,23 @@ describe('Sign In', () => {
       }
       cy.get('[type="submit"]').click()
 
-      cy.visit('/questionnaire/history')
-
-      cy.url().should('equal', Cypress.config().baseUrl + 'questionnaire/history')
-      cy.contains('Your History').should('be.visible')
+      cy.url().should('equal', Cypress.config().baseUrl + 'questionnaire/familyhistorycontext')
+      cy.contains('Family History').should('be.visible')
 
       cy.get('.progress').contains('1').should('have.class', 'complete')
       cy.get('.progress').contains('1').should('not.have.class', 'current')
-      cy.get('.progress').contains('2').should('have.class', 'complete')
-      cy.get('.progress').contains('2').should('not.have.class', 'current')
-      cy.get('.progress').contains('3').should('have.class', 'complete')
+      cy.get('.progress').contains('2').should('not.have.class', 'complete')
+      cy.get('.progress').contains('2').should('have.class', 'current')
+      cy.get('.progress').contains('3').should('not.have.class', 'complete')
       cy.get('.progress').contains('3').should('not.have.class', 'current')
-      cy.get('.progress').contains('4').should('have.class', 'complete')
+      cy.get('.progress').contains('4').should('not.have.class', 'complete')
       cy.get('.progress').contains('4').should('not.have.class', 'current')
       cy.get('.progress').contains('5').should('not.have.class', 'complete')
-      cy.get('.progress').contains('5').should('have.class', 'current')
+      cy.get('.progress').contains('5').should('not.have.class', 'current')
 
       // Check number of questions
 
-      cy.contains('Save and continue').should('be.visible')
+      cy.contains('Continue').should('be.visible')
     })
 
     it('submits all null answers if there is no change', () => {

@@ -1,5 +1,5 @@
 <template>
-  <div v-if='questionSection && answerSection' class="content">
+  <div class="content">
     <h1>{{ questionSection.title }}<ProgressState :progressStage="progressStage"></ProgressState></h1>
     <slot></slot>
     <form class="pure-form">
@@ -52,7 +52,8 @@ export default {
     'buttonError',
     'questionVariables',
     'questionnaire',
-    'answerResponse'
+    'answerResponse',
+    'info'
   ],
   data () {
     return {

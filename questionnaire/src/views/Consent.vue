@@ -51,7 +51,7 @@ export default {
       this.submitError = false
       const submitResult = await AnswerResponseService.submitConsent(this.answerResponse)
       if (submitResult.data === 'SUBMITTED') {
-        this.$router.push('/questionnaire/family')
+        this.$router.push('/questionnaire/familyhistorycontext')
       } else {
         this.submitError = true
       }

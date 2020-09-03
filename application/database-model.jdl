@@ -39,7 +39,9 @@ enum QuestionSectionIdentifier {
     FAMILY_AFFECTED_AUNT,
     FAMILY_AFFECTED_NIECE,
     FAMILY_AFFECTED_HALF_SISTER,
-    PERSONAL_HISTORY
+    PERSONAL_HISTORY,
+    FAMILY_AFFECTED_CONTEXT,
+    PERSONAL_HISTORY_CONTEXT
 }
 
 entity QuestionGroup {
@@ -59,7 +61,9 @@ enum QuestionGroupIdentifier {
     FAMILY_AFFECTED_AUNT_QUESTIONS,
     FAMILY_AFFECTED_NIECE_QUESTIONS,
     FAMILY_AFFECTED_HALF_SISTER_QUESTIONS,
-    PERSONAL_HISTORY_QUESTIONS
+    PERSONAL_HISTORY_QUESTIONS,
+    FAMILY_AFFECTED_CONTEXT_PLACEHOLDER,
+    PERSONAL_HISTORY_CONTEXT_PLACEHOLDER
 }
 
 entity Question {
@@ -135,7 +139,7 @@ enum QuestionType {
 
 entity QuestionItem {
     identifier QuestionItemIdentifier required unique
-    order Integer required    
+    order Integer required
     label String required
     necessary Boolean
     exclusive Boolean

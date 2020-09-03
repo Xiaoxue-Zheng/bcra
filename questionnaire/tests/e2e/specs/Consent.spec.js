@@ -92,7 +92,7 @@ describe('Sign In', () => {
         cy.get('[type="submit"]').click()
         cy.wait('@submitConsent').its('status').should('equal', 200)
 
-        cy.url().should('equal', Cypress.config().baseUrl + 'questionnaire/family')
+        cy.url().should('equal', Cypress.config().baseUrl + 'questionnaire/familyhistorycontext')
         cy.contains('Family History').should('be.visible')
       })
 
@@ -115,7 +115,7 @@ describe('Sign In', () => {
         cy.get('[type="submit"]').click()
         cy.wait('@submitConsent').its('status').should('equal', 200)
 
-        cy.url().should('equal', Cypress.config().baseUrl + 'questionnaire/family')
+        cy.url().should('equal', Cypress.config().baseUrl + 'questionnaire/familyhistorycontext')
         cy.contains('Family History').should('be.visible')
       })
   })

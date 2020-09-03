@@ -7,7 +7,7 @@
         <strong>{{ condition.reason }}</strong>
     </div>
     <PrimaryButton :clickEvent="submit">Submit Questionnaire</PrimaryButton>
-    <div v-if="submitError">There was an error. Please try again or contact the study team.</div>    
+    <div v-if="submitError">There was an error. Please try again or contact the study team.</div>
 </div>
 </template>
 

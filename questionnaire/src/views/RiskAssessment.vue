@@ -4,20 +4,26 @@
       :progressStage="progressStage"
       :questionSection="questionSection"
       :answerSection="answerSection"
-      buttonText="Save and continue"
-      :buttonAction="saveButtonClicked"
+      :buttonText="buttonText"
+      :buttonAction="buttonAction"
       :buttonError="saveError"
       :questionVariables="questionVariables"
       :questionnaire="questionnaire"
       :answerResponse="answerResponse"
     >
+      <component
+      :is="componentType">
+      </component>
     </QuestionSection>
+
   </div>
 </template>
 
 <script>
 import router from '../router/'
 import QuestionSection from '@/components/QuestionSection.vue'
+import QuestionSectionFamilyHistoryInfo from '@/components/QuestionSectionFamilyHistoryInfo.vue'
+import QuestionSectionYourHistoryInfo from '@/components/QuestionSectionYourHistoryInfo.vue'
 import { QuestionnaireService } from '@/api/questionnaire.service'
 import { AnswerResponseService } from '@/api/answer-response.service'
 import { QuestionSectionService } from '@/services/question-section.service.js'
@@ -28,7 +34,9 @@ import { AnswerHelperService } from '@/services/answer-helper.service.js'
 export default {
   name: 'riskAssessment',
   components: {
-    'QuestionSection': QuestionSection
+    'QuestionSection': QuestionSection,
+    'QuestionSectionFamilyHistoryInfo': QuestionSectionFamilyHistoryInfo,
+    'QuestionSectionYourHistoryInfo': QuestionSectionYourHistoryInfo
   },
   data () {
     return {
@@ -38,6 +46,9 @@ export default {
       answerSection: null,
       progressStage: null,
       saveError: false,
+      buttonText: null,
+      buttonAction: null,
+      componentType: null,
       questionVariables: {},
       referralConditions: {}
     }
@@ -60,7 +71,23 @@ export default {
       this.answerSection = this.answerResponse.answerSections.find(
         answerSection => (answerSection.questionSectionId === this.questionSection.id)
       )
+
+      this.initialiseQuestionSectionProperties(this.questionSection.identifier)
+
       this.questionVariables = QuestionVariableService.getQuestionVariables(this.questionnaire)
+    },
+    initialiseQuestionSectionProperties (questionSectionIdentifier) {
+      let componentType = QuestionSectionService.getSectionInfoComponent(questionSectionIdentifier)
+
+      if (componentType !== null) {
+        this.componentType = componentType
+        this.buttonAction = this.continueButtonClicked
+        this.buttonText = 'Continue'
+      } else {
+        this.componentType = null
+        this.buttonAction = this.saveButtonClicked
+        this.buttonText = 'Save and continue'
+      }
     },
     getCurrentSection () {
       const routeLocation = router.history.current.params.section
@@ -71,6 +98,9 @@ export default {
     saveButtonClicked () {
       QuestionSectionService.clearUntakenSectionAnswers(this.questionSection, this.questionnaire)
       this.saveQuestionnaire()
+    },
+    continueButtonClicked () {
+      this.proceedToNextRoute()
     },
     async saveQuestionnaire () {
       this.saveError = false

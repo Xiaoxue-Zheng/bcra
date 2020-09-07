@@ -197,9 +197,11 @@ describe('Sign In', () => {
       const theDialog = $ret.find('div.modal-background')[0]
       cy.wrap(theDialog).should('not.be.visible').then(() => {
         link.click()
+        cy.wait(100)
         cy.wrap(theDialog).should('be.visible').then(() => {
           const closeDialog = $ret.find('footer').find('a')[0]
           closeDialog.click()
+          cy.wait(100)
           cy.wrap(theDialog).should('not.be.visible')
         })
       })

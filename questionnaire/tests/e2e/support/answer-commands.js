@@ -4,6 +4,7 @@ Cypress.Commands.add('setNumberDontKnowAnswer', (identifier, value) => {
     cy.get(elementId).check({force: true});
   }
   else {
+    cy.get(elementId).parent().parent().find('[type="number"]').clear()
     cy.get(elementId).parent().parent().find('[type="number"]').type(value)
   }
 })
@@ -37,7 +38,7 @@ Cypress.Commands.add('setCheckboxAnswerItems', (identifier, itemIdentifiers) => 
       cy.wrap(input).check({force: true})
     } else {
       cy.wrap(input).uncheck({force: true})
-    }   
+    }
   })
 })
 
@@ -48,7 +49,7 @@ Cypress.Commands.add('checkCheckboxAnswerItems', (identifier, itemIdentifiers) =
       cy.wrap(input).should('be.checked')
     } else {
       cy.wrap(input).should('not.be.checked')
-    }   
+    }
   })
 })
 
@@ -56,10 +57,42 @@ Cypress.Commands.add('setNumberAnswer', (identifier, value) => {
   const elementId = '#' + identifier;
   if (value === '') {
     cy.get(elementId).clear()
-    
+
   } else {
     cy.get(elementId).type(value)
   }
+})
+
+Cypress.Commands.add('checkNotReferred', () => {
+  cy.url().should('not.equal', Cypress.config().baseUrl + 'submit')
+})
+
+Cypress.Commands.add('submitAndAssertSuccessfulNavAwayFromPath', (currentPath) => {
+  cy.get('[type="submit"]').click()
+  cy.location('pathname', { timeout: 10000 }).should('not.include', currentPath)
+})
+
+Cypress.Commands.add('backAndAssertSuccessfulNavToPath', (currentPath) => {
+  cy.go('back')
+  cy.location('pathname', { timeout: 10000 }).should('include', currentPath)
+})
+
+Cypress.Commands.add('checkReferredWithCorrectReason', (reason) => {
+  cy.url().should('equal', Cypress.config().baseUrl + 'submit')
+  cy.contains(reason).should('be.visible')
+})
+
+Cypress.Commands.add('navigateToFamilyBreastSection', (precondition, currentPath) => {
+
+  let FAMILY_BREAST_AFFECTED_ITEMS = [precondition]
+  cy.setCheckboxAnswerItems('FAMILY_BREAST_AFFECTED', FAMILY_BREAST_AFFECTED_ITEMS)
+  cy.submitAndAssertSuccessfulNavAwayFromPath(currentPath)
+})
+
+Cypress.Commands.add('navigateToFamilyOvarianSection', (precondition, currentPath) => {
+  let FAMILY_OVARIAN_AFFECTED_ITEMS = [precondition]
+  cy.setCheckboxAnswerItems('FAMILY_OVARIAN_AFFECTED', FAMILY_OVARIAN_AFFECTED_ITEMS)
+  cy.submitAndAssertSuccessfulNavAwayFromPath(currentPath)
 })
 
 Cypress.Commands.add('checkNumberAnswer', (identifier, value) => {

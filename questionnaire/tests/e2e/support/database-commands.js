@@ -17,7 +17,9 @@ Cypress.Commands.add('resetConsent', (nhsNumber) => {
 
 Cypress.Commands.add('resetQuestionnaire', (nhsNumber) => {
   cy.resetQuestionnaireAnswers(nhsNumber)
+  cy.wait(500)
   cy.resetQuestionnaireAnswerItems(nhsNumber)
+  cy.wait(500)
 })
 
 Cypress.Commands.add('getQuestionnaireAnswers', (nhsNumber) => {
@@ -45,7 +47,7 @@ Cypress.Commands.add('getQuestionnaireAnswerItems', (nhsNumber) => {
       FROM answer_item, question, question_item, answer, answer_group, answer_section, answer_response, procedure, participant, identifiable_data
       WHERE answer_item.question_item_id = question_item.id
       AND question_item.question_id = question.id
-      AND answer_item.answer_id = answer.id 
+      AND answer_item.answer_id = answer.id
       AND answer.answer_group_id = answer_group.id
       AND answer_group.answer_section_id = answer_section.id
       AND answer_section.answer_response_id = answer_response.id

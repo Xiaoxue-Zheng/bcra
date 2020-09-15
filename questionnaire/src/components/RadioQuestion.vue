@@ -1,6 +1,6 @@
 <template>
   <fieldset>
-    <div class="pure-u-1">
+    <div class="pure-u-1" :id="question.identifier">
       <QuestionText
         :question="question"
         :questionVariables="questionVariables"

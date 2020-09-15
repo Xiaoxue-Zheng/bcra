@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="content" :id="questionSection.identifier">
     <h1>{{ questionSection.title }}<ProgressState :progressStage="progressStage"></ProgressState></h1>
     <slot></slot>
     <form class="pure-form">

@@ -16,6 +16,7 @@
 // Import commands.js using ES2015 syntax:
 import './database-commands'
 import './answer-commands'
+import './navigation-commands'
 import './signin'
 import 'cypress-promise/register'
 

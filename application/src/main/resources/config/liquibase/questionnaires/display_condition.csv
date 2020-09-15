@@ -39,3 +39,5 @@ id,question_identifier,item_identifier,question_section_id,question_id
 38,SELF_PREGNANCIES,null,null,30
 39,null,SELF_BREAST_BIOPSY_YES,null,34
 40,null,SELF_BREAST_BIOPSY_DIAGNOSIS_RISK_YES,null,35
+41,null,FAMILY_BREAST_AFFECTED_MOTHER,null,15
+42,null,FAMILY_OVARIAN_AFFECTED_MOTHER,null,17

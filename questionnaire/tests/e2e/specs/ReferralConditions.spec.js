@@ -2,22 +2,16 @@ describe('Referral Conditions Tests', () => {
   const getStore = () => cy.window().its('app.$store')
 
   const NHS_NUMBER = '7616551351'
-  const EMAIL_ADDRESS = 'consent-test@example.com'
-  const PASSWORD_HASH = '$2a$10$xfxxf5eZbLo0S70V55c8FO6R.741QpR4Lkh84749m/B7kP6/XIFc2'
 
   let path = 'questionnaire/family'
 
   before(function () {
-    cy.registerParticipant(NHS_NUMBER, EMAIL_ADDRESS, PASSWORD_HASH)
-    cy.signInAndConsent()
+    cy.registerDefaultParticipant()
+    cy.signInAndConsentDefaultParticipant()
   })
 
   beforeEach(function () {
-    cy.resetQuestionnaire(NHS_NUMBER)
-    // questionnaire setting asynchronous and not yet handled through callback or await mechanism (it's a little complicated). Until then, I am imposing a
-    // 'wait' in order to allow the query to finish. I'll figure out a better way, but this will do for now. Doesn't seem to be a problem in other tests
-    // probably just due to timing of them, so adding the wait here instead of inside the resetQuestionnaire method
-    cy.wait(300)
+    cy.resetQuestionnaireForDefaultParticipant()
     Cypress.Cookies.preserveOnce('JSESSIONID')
     path = 'questionnaire/family'
   })
@@ -110,7 +104,6 @@ describe('Referral Conditions Tests', () => {
     cy.visit(path)
     cy.navigateToFamilyBreastSection('FAMILY_BREAST_AFFECTED_MOTHER')
     path = 'questionnaire/breast'
-    cy.setRadioAnswerItem('FAMILY_BREAST_HOW_MANY_ONE')
 
     cy.setNumberDontKnowAnswer('FAMILY_BREAST_AGE', 60)
 

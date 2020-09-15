@@ -1,6 +1,6 @@
 <template>
   <fieldset>
-    <div class="pure-u-1">
+    <div class="pure-u-1" :id="question.identifier">
       <QuestionText
         :question="question"
         :questionVariables="questionVariables"
@@ -21,12 +21,12 @@
         <div class="items radios">
           <input
             type="radio"
-            :id="question.identifier"
-            :name="question.identifier"
+            :id="questionIdentifier()"
+            :name="questionIdentifier()"
             :value="null"
             v-model="answer.number"
           />
-          <label :for="question.identifier">Don't know</label>
+          <label :for="questionIdentifier()">Don't know</label>
         </div>
       </div>
     </div>
@@ -41,7 +41,13 @@ export default {
   inheritAttrs: false,
   props: [
     'questionVariables'
-  ]
+  ],
+  methods: {
+    questionIdentifier () {
+      return this.question.identifier + '_dk'
+    }
+  }
+
 }
 </script>
 <style scoped>

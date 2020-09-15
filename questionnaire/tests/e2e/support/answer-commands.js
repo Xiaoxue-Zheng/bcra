@@ -1,7 +1,7 @@
 Cypress.Commands.add('setNumberDontKnowAnswer', (identifier, value) => {
-  const elementId = '#' + identifier;
+  const elementId = '#' + identifier
   if (value === 'dontknow') {
-    cy.get(elementId).check({force: true});
+    cy.get(elementId).check({force: true})
   }
   else {
     cy.get(elementId).parent().parent().find('[type="number"]').clear()
@@ -10,7 +10,7 @@ Cypress.Commands.add('setNumberDontKnowAnswer', (identifier, value) => {
 })
 
 Cypress.Commands.add('checkNumberDontKnowAnswer', (identifier, value) => {
-  const elementId = '#' + identifier;
+  const elementId = '#' + identifier
   if (value === 'dontknow') {
     cy.get(elementId).parent().parent().find('[type="number"]').should('have.value', '')
     cy.get(elementId).should('be.selected')
@@ -22,17 +22,22 @@ Cypress.Commands.add('checkNumberDontKnowAnswer', (identifier, value) => {
 })
 
 Cypress.Commands.add('setRadioAnswerItem', itemIdentifier => {
-  const elementId = '#' + itemIdentifier;
+  const elementId = '#' + itemIdentifier
   cy.get(elementId).check({force: true})
 })
 
-Cypress.Commands.add('checkRadioAnswerItem', itemIdentifier => {
-  const elementId = '#' + itemIdentifier;
+Cypress.Commands.add('checkRadioAnswerItemIsChecked', itemIdentifier => {
+  const elementId = '#' + itemIdentifier
   cy.get(elementId).should('be.checked')
 })
 
+Cypress.Commands.add('checkRadioAnswerItemIsNotChecked', itemIdentifier => {
+  const elementId = '#' + itemIdentifier
+  cy.get(elementId).should('not.be.checked')
+})
+
 Cypress.Commands.add('setCheckboxAnswerItems', (identifier, itemIdentifiers) => {
-  const elementId = '#' + identifier;
+  const elementId = '#' + identifier
   cy.get(elementId).find('input').each((input, value, collection) => {
     if (itemIdentifiers.includes(input[0].id)) {
       cy.wrap(input).check({force: true})
@@ -43,7 +48,7 @@ Cypress.Commands.add('setCheckboxAnswerItems', (identifier, itemIdentifiers) => 
 })
 
 Cypress.Commands.add('checkCheckboxAnswerItems', (identifier, itemIdentifiers) => {
-  const elementId = '#' + identifier;
+  const elementId = '#' + identifier
   cy.get(elementId).find('input').each((input, value, collection) => {
     if (itemIdentifiers.includes(input[0].id)) {
       cy.wrap(input).should('be.checked')
@@ -54,7 +59,7 @@ Cypress.Commands.add('checkCheckboxAnswerItems', (identifier, itemIdentifiers) =
 })
 
 Cypress.Commands.add('setNumberAnswer', (identifier, value) => {
-  const elementId = '#' + identifier;
+  const elementId = '#' + identifier
   if (value === '') {
     cy.get(elementId).clear()
 
@@ -67,66 +72,51 @@ Cypress.Commands.add('checkNotReferred', () => {
   cy.url().should('not.equal', Cypress.config().baseUrl + 'submit')
 })
 
-Cypress.Commands.add('submitAndAssertSuccessfulNavAwayFromPath', (currentPath) => {
-  cy.get('[type="submit"]').click()
-  cy.location('pathname', { timeout: 10000 }).should('not.include', currentPath)
-})
-
-Cypress.Commands.add('backAndAssertSuccessfulNavToPath', (currentPath) => {
-  cy.go('back')
-  cy.location('pathname', { timeout: 10000 }).should('include', currentPath)
-})
-
 Cypress.Commands.add('checkReferredWithCorrectReason', (reason) => {
   cy.url().should('equal', Cypress.config().baseUrl + 'submit')
   cy.contains(reason).should('be.visible')
 })
 
-Cypress.Commands.add('navigateToFamilyBreastSection', (precondition, currentPath) => {
-
-  let FAMILY_BREAST_AFFECTED_ITEMS = [precondition]
-  cy.setCheckboxAnswerItems('FAMILY_BREAST_AFFECTED', FAMILY_BREAST_AFFECTED_ITEMS)
-  cy.submitAndAssertSuccessfulNavAwayFromPath(currentPath)
-})
-
-Cypress.Commands.add('navigateToFamilyOvarianSection', (precondition, currentPath) => {
-  let FAMILY_OVARIAN_AFFECTED_ITEMS = [precondition]
-  cy.setCheckboxAnswerItems('FAMILY_OVARIAN_AFFECTED', FAMILY_OVARIAN_AFFECTED_ITEMS)
-  cy.submitAndAssertSuccessfulNavAwayFromPath(currentPath)
-})
-
 Cypress.Commands.add('checkNumberAnswer', (identifier, value) => {
-  const elementId = '#' + identifier;
+  const elementId = '#' + identifier
   cy.get(elementId).should('have.value', value.toString())
 })
 
 Cypress.Commands.add('setNumberDropdownAnswer', (identifier, value) => {
-  const elementId = '#' + identifier;
+  const elementId = '#' + identifier
   cy.get(elementId).select(value.toString())
-})
-
-Cypress.Commands.add('checkNumberDropdownAnswer', (identifier, value) => {
-  const elementId = '#' + identifier;
   cy.get(elementId).should('have.value', value.toString())
 })
 
+Cypress.Commands.add('checkElementVisibility', (expectedVisibility, identifier) => {
+  const elementId = '#' + identifier
+  let visibilityClause = expectedVisibility ? 'be.visible' : 'not.be.visible'
+  cy.get(elementId).should(visibilityClause)
+})
+
+Cypress.Commands.add('checkNumberDropdownAnswer', (identifier, value) => {
+  const elementId = '#' + identifier
+  let expectedValue = (value === null) ? null : value.toString()
+  cy.get(elementId).should('have.value', expectedValue)
+})
+
 Cypress.Commands.add('setNumberHeightWeight', (identifier, units, bigValue, smallValue) => {
-  const elementId = '#' + identifier;
+  const elementId = '#' + identifier
   cy.get(elementId).find('select').select(units.toString())
   if (bigValue === '') {
     cy.get(elementId).find('input').first().clear()
   } else {
-    cy.get(elementId).find('input').first().type(bigValue);
+    cy.get(elementId).find('input').first().type(bigValue)
   }
   if (smallValue === '') {
     cy.get(elementId).find('input').last().clear()
   } else if (smallValue) {
-    cy.get(elementId).find('input').last().type(smallValue);
+    cy.get(elementId).find('input').last().type(smallValue)
   }
 })
 
 Cypress.Commands.add('checkNumberHeightWeight', (identifier, units, bigValue, smallValue) => {
-  const elementId = '#' + identifier;
+  const elementId = '#' + identifier
   cy.get(elementId).find('select').should('have.value', units)
   cy.get(elementId).find('input').first().should('have.value', bigValue.toString())
 

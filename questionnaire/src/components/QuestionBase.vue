@@ -4,7 +4,8 @@ import QuestionHint from '@/components/QuestionHint.vue'
 export default {
   props: [
     'question',
-    'answer'
+    'answer',
+    'readOnly'
   ],
   components: {
     'QuestionHint': QuestionHint,

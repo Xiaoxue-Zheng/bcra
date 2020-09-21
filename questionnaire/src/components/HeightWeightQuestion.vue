@@ -11,10 +11,12 @@
             required
             type="text"
             v-model="bigValue"
+            :disabled="readOnly"
           />
           <select
             class="select-css"
             v-model="units"
+            :disabled="readOnly"
           >
             <option v-if="question.type==='NUMBER_HEIGHT'" value="CENTIMETERS">Centimetres</option>
             <option v-if="question.type==='NUMBER_HEIGHT'" value="INCHES">Feet</option>
@@ -34,6 +36,7 @@
               min="0"
               :max="(question.type==='NUMBER_HEIGHT') ? 11 : 13"
               step="1"
+              :disabled="readOnly"
             /></div>
           <div v-if="question.type==='NUMBER_HEIGHT'" class="input-group-unit">Inches</div>
           <div v-if="question.type==='NUMBER_WEIGHT'" class="input-group-unit">Pounds</div>

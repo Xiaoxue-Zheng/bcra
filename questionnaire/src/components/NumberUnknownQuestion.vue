@@ -15,6 +15,7 @@
               :min="question.minimum"
               :max="question.maximum"
               step="1"
+              :disabled="readOnly"
             /></div>
             <div class="input-group-unit">Years</div>
         </div>
@@ -25,6 +26,7 @@
             :name="questionIdentifier()"
             :value="null"
             v-model="answer.number"
+            :disabled="readOnly"
           />
           <label :for="questionIdentifier()">Don't know</label>
         </div>

@@ -10,9 +10,10 @@
       :questionVariables="questionVariables"
       :questionnaire="questionnaire"
       :answerResponse="answerResponse"
+      :readOnly="readOnly"
     >
       <component
-      :is="componentType">
+      :is="infoComponent">
       </component>
     </QuestionSection>
 
@@ -48,9 +49,10 @@ export default {
       saveError: false,
       buttonText: null,
       buttonAction: null,
-      componentType: null,
+      infoComponent: null,
       questionVariables: {},
-      referralConditions: {}
+      referralConditions: {},
+      readOnly: null
     }
   },
   async created () {
@@ -66,6 +68,7 @@ export default {
   },
   methods: {
     initialiseSection () {
+      this.readOnly = false
       this.questionSection = this.getCurrentSection()
       this.progressStage = this.questionSection.progress
       this.answerSection = this.answerResponse.answerSections.find(
@@ -77,16 +80,23 @@ export default {
       this.questionVariables = QuestionVariableService.getQuestionVariables(this.questionnaire)
     },
     initialiseQuestionSectionProperties (questionSectionIdentifier) {
-      let componentType = QuestionSectionService.getSectionInfoComponent(questionSectionIdentifier)
-
-      if (componentType !== null) {
-        this.componentType = componentType
-        this.buttonAction = this.continueButtonClicked
-        this.buttonText = 'Continue'
+      this.infoComponent = QuestionSectionService.getSectionInfoComponent(questionSectionIdentifier)
+      this.configureButtonPropertiesForQuestionSection()
+    },
+    configureButtonPropertiesForQuestionSection () {
+      let buttonText = null
+      if (this.infoComponent !== null) {
+        buttonText = this.readOnly === true ? 'Continue review' : 'Continue'
       } else {
-        this.componentType = null
-        this.buttonAction = this.saveButtonClicked
-        this.buttonText = 'Save and continue'
+        buttonText = this.readOnly === true ? 'Continue review' : 'Save and continue'
+      }
+
+      this.buttonText = buttonText
+
+      if (this.readOnly === true) {
+        this.buttonAction = this.continue
+      } else {
+        this.buttonAction = this.saveAndContinue
       }
     },
     getCurrentSection () {
@@ -95,11 +105,11 @@ export default {
         questionSection => (questionSection.url === routeLocation)
       )
     },
-    saveButtonClicked () {
+    saveAndContinue () {
       QuestionSectionService.clearUntakenSectionAnswers(this.questionSection, this.questionnaire)
       this.saveQuestionnaire()
     },
-    continueButtonClicked () {
+    continue () {
       this.proceedToNextRoute()
     },
     async saveQuestionnaire () {

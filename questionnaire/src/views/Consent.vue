@@ -8,6 +8,7 @@
       buttonText="I give my consent"
       :buttonAction="submitConsent"
       :buttonError="submitError"
+      :readOnly="false"
     >
       <p class="introduction">
         In order to participate in this study, we need your consent.

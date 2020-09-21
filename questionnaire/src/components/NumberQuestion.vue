@@ -14,6 +14,7 @@
           :min="question.minimum"
           :max="question.maximum"
           step="1"
+          :disabled="readOnly"
         />
       </div>
       <div class="input-group-unit">Years</div>

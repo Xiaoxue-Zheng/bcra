@@ -1,7 +1,7 @@
 <template>
   <fieldset>
     <div class="pure-u-1">
-      <input type="checkbox" :id="question.identifier" v-model="answerValue"/>
+      <input type="checkbox" :id="question.identifier" v-model="answerValue" :disabled="readOnly"/>
       <label :for="question.identifier">{{ question.text }}</label>
     </div>
 </fieldset>

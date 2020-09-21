@@ -1,6 +1,6 @@
 <template>
   <div class="content" :id="questionSection.identifier">
-    <h1>{{ questionSection.title }}<ProgressState :progressStage="progressStage"></ProgressState></h1>
+    <h1>{{getTitle()}}<ProgressState :progressStage="progressStage"></ProgressState></h1>
     <slot></slot>
     <form class="pure-form">
       <div v-for="question in questions" v-bind:key='question.id'>
@@ -9,9 +9,10 @@
           :question="question"
           :answer="getAnswer(question)"
           :questionVariables="questionVariables"
+          :readOnly="readOnly"
         ></component>
       </div>
-      <PrimaryButton :clickEvent="buttonClick">{{ buttonText }}</PrimaryButton>
+      <PrimaryButton :readOnly="readOnly" :clickEvent="buttonClick">{{ buttonText }}</PrimaryButton>
       <div v-if="buttonError">There was an error. Please try again or contact the study team.</div>
       <div v-if="invalid">Please complete all of the questions above to continue.</div>
     </form>
@@ -53,7 +54,8 @@ export default {
     'questionVariables',
     'questionnaire',
     'answerResponse',
-    'info'
+    'info',
+    'readOnly'
   ],
   data () {
     return {
@@ -125,6 +127,10 @@ export default {
         return !necessaryAnswerItem.selected
       }
       return false
+    },
+    getTitle () {
+      let readOnlyWarning = this.readOnly === true ? ' (READ-ONLY)' : ''
+      return this.questionSection.title + readOnlyWarning
     }
   }
 }

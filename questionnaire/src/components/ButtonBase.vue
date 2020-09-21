@@ -2,7 +2,8 @@
 export default {
   props: [
     'to',
-    'clickEvent'
+    'clickEvent',
+    'readOnly'
   ]
 }
 </script>

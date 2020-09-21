@@ -6,7 +6,7 @@
         :questionVariables="questionVariables"
       />
       <div class="select-box">
-        <select :id="question.identifier" v-model="answerItemValue" class="select-css">
+        <select :disabled="readOnly" :id="question.identifier" v-model="answerItemValue" class="select-css">
             <option value="null">Don't know</option>
             <option
               v-for="index in parseInt((question.maximum + 1) - question.minimum)"

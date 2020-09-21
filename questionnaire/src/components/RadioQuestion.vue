@@ -13,6 +13,7 @@
             :name="question.identifier"
             :value="questionItem.id"
             v-model="answerItemValue"
+            :disabled="readOnly"
           />
           <label :for="questionItem.identifier">{{ questionItem.label }}</label>
         </div>

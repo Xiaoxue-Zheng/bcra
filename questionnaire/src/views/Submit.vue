@@ -4,7 +4,7 @@
     <p>You are about to submit, and you can never go back.<p>
     <p v-if="referralConditions.length > 0">You will be referred because...</p>
     <div v-for="condition in referralConditions" v-bind:key='condition.id'>
-        <strong>{{ condition.reason }}</strong>
+        <strong>{{ formatConditionText(condition.reason) }}</strong>
     </div>
     <PrimaryButton :clickEvent="submit">Submit Questionnaire</PrimaryButton>
     <div v-if="submitError">There was an error. Please try again or contact the study team.</div>
@@ -45,6 +45,9 @@ export default {
   methods: {
     submit () {
       console.log('submit!')
+    },
+    formatConditionText(text) {
+      return '- ' + text.substring(0,1).toUpperCase() + text.substring(1) + '.'
     }
   }
 }

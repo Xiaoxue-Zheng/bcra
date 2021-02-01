@@ -29,7 +29,7 @@ describe('Referral Conditions Tests', () => {
     cy.setCheckboxAnswerItems('FAMILY_BREAST_AFFECTED', FAMILY_BREAST_AFFECTED_ITEMS)
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
 
-    cy.checkReferredWithCorrectReason('two or more of your family members have been affected by breast cancer')
+    cy.checkReferredWithCorrectReason('Two or more of your family members have been affected by breast cancer')
   })
 
   it('works with rule: ITEM_SPECIFIC ( FAMILY_BREAST_AFFECTED_FATHER )', () => {
@@ -43,7 +43,7 @@ describe('Referral Conditions Tests', () => {
     cy.setCheckboxAnswerItems('FAMILY_BREAST_AFFECTED', FAMILY_BREAST_AFFECTED_ITEMS)
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
 
-    cy.checkReferredWithCorrectReason('your father has been affected by breast cancer')
+    cy.checkReferredWithCorrectReason('Your father has been affected by breast cancer')
   })
 
   it('checks: ITEM_SPECIFIC ( FAMILY_BREAST_AFFECTED_BROTHER )', () => {
@@ -57,7 +57,7 @@ describe('Referral Conditions Tests', () => {
     cy.setCheckboxAnswerItems('FAMILY_BREAST_AFFECTED', FAMILY_BREAST_AFFECTED_ITEMS)
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
 
-    cy.checkReferredWithCorrectReason('your brother has been affected by breast cancer')
+    cy.checkReferredWithCorrectReason('Your brother has been affected by breast cancer')
   })
 
   it('checks: ITEMS_AT_LEAST ( FAMILY_OVARIAN_AFFECTED , 2 )', () => {
@@ -71,7 +71,7 @@ describe('Referral Conditions Tests', () => {
     cy.setCheckboxAnswerItems('FAMILY_OVARIAN_AFFECTED', FAMILY_OVARIAN_AFFECTED_ITEMS)
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
 
-    cy.checkReferredWithCorrectReason('two or more of your family members have been affected by ovarian cancer')
+    cy.checkReferredWithCorrectReason('Two or more of your family members have been affected by ovarian cancer')
   })
 
   it('works with rule: ITEMS_AT_LEAST ( FAMILY_BREAST_AFFECTED , 1 ) AND ITEMS_AT_LEAST ( FAMILY_OVARIAN_AFFECTED , 1 )', () => {
@@ -87,7 +87,7 @@ describe('Referral Conditions Tests', () => {
     cy.setCheckboxAnswerItems('FAMILY_OVARIAN_AFFECTED', FAMILY_OVARIAN_AFFECTED_ITEMS)
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
 
-    cy.checkReferredWithCorrectReason('you have family members have affected by both breast and ovarian cancer')
+    cy.checkReferredWithCorrectReason('You have family members have affected by both breast and ovarian cancer')
   })
 
   it('works with rule: ITEM_SPECIFIC ( FAMILY_BREAST_HOW_MANY_MORE )', () => {
@@ -97,7 +97,7 @@ describe('Referral Conditions Tests', () => {
     cy.setRadioAnswerItem('FAMILY_BREAST_HOW_MANY_MORE')
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
 
-    cy.checkReferredWithCorrectReason('you have more than one family member affected by breast cancer')
+    cy.checkReferredWithCorrectReason('You have more than one family member affected by breast cancer')
   })
 
   it('works with rule:  ITEM_SPECIFIC ( FAMILY_BREAST_AFFECTED_MOTHER ) AND VALUE_UNDER ( FAMILY_BREAST_AGE , 60 )', () => {
@@ -114,7 +114,7 @@ describe('Referral Conditions Tests', () => {
     cy.setNumberDontKnowAnswer('FAMILY_BREAST_AGE', 59)
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
 
-    cy.checkReferredWithCorrectReason('your mother was under 60 when she was affected by breast cancer')
+    cy.checkReferredWithCorrectReason('Your mother was under 60 when she was affected by breast cancer')
   })
 
   it('works with rule: ITEM_SPECIFIC ( FAMILY_BREAST_AFFECTED_SISTER ) AND VALUE_UNDER ( FAMILY_BREAST_AGE , 60 )', () => {
@@ -133,7 +133,7 @@ describe('Referral Conditions Tests', () => {
     cy.setNumberDontKnowAnswer('FAMILY_BREAST_AGE', 59)
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
 
-    cy.checkReferredWithCorrectReason('your sister was under 60 when she was affected by breast cancer')
+    cy.checkReferredWithCorrectReason('Your sister was under 60 when she was affected by breast cancer')
   })
 
   it('works with rule: ITEM_SPECIFIC ( FAMILY_BREAST_AFFECTED_GRANDMOTHER ) AND VALUE_UNDER ( FAMILY_BREAST_AGE , 40 )', () => {
@@ -152,7 +152,7 @@ describe('Referral Conditions Tests', () => {
     cy.setNumberDontKnowAnswer('FAMILY_BREAST_AGE', 39)
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
 
-    cy.checkReferredWithCorrectReason('your grandmother was under 40 when she was affected by breast cancer')
+    cy.checkReferredWithCorrectReason('Your grandmother was under 40 when she was affected by breast cancer')
   })
 
   it('works with rule: ITEM_SPECIFIC ( FAMILY_BREAST_AFFECTED_HALFSISTER ) AND VALUE_UNDER ( FAMILY_BREAST_AGE , 40 )', () => {
@@ -171,7 +171,7 @@ describe('Referral Conditions Tests', () => {
     cy.setNumberDontKnowAnswer('FAMILY_BREAST_AGE', 39)
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
 
-    cy.checkReferredWithCorrectReason('your half-sister was under 40 when she was affected by breast cancer')
+    cy.checkReferredWithCorrectReason('Your half-sister was under 40 when she was affected by breast cancer')
   })
 
   it('works with rule: ITEM_SPECIFIC ( FAMILY_BREAST_AFFECTED_AUNT ) AND VALUE_UNDER ( FAMILY_BREAST_AGE , 40 )', () => {
@@ -190,7 +190,7 @@ describe('Referral Conditions Tests', () => {
     cy.setNumberDontKnowAnswer('FAMILY_BREAST_AGE', 39)
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
 
-    cy.checkReferredWithCorrectReason('your aunt was under 40 when she was affected by breast cancer')
+    cy.checkReferredWithCorrectReason('Your aunt was under 40 when she was affected by breast cancer')
   })
 
   it('works with rule: ITEM_SPECIFIC ( FAMILY_BREAST_AFFECTED_NIECE ) AND VALUE_UNDER ( FAMILY_BREAST_AGE , 40 )', () => {
@@ -209,7 +209,7 @@ describe('Referral Conditions Tests', () => {
     cy.setNumberDontKnowAnswer('FAMILY_BREAST_AGE', 39)
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
 
-    cy.checkReferredWithCorrectReason('your niece was under 40 when she was affected by breast cancer')
+    cy.checkReferredWithCorrectReason('Your niece was under 40 when she was affected by breast cancer')
   })
 
   it('works with rule:  ITEM_SPECIFIC ( FAMILY_OVARIAN_HOW_MANY_MORE )', () => {
@@ -226,6 +226,6 @@ describe('Referral Conditions Tests', () => {
     cy.setRadioAnswerItem('FAMILY_OVARIAN_HOW_MANY_MORE')
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
 
-    cy.checkReferredWithCorrectReason('you have more than one family member affected by ovarian cancer')
+    cy.checkReferredWithCorrectReason('You have more than one family member affected by ovarian cancer')
   })
 })

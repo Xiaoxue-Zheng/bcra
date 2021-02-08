@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity RiskAssessmentResult.
+    -->
+    <changeSet id="20210219085250-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="risk_id"
+                                 baseTableName="risk_factor"
+                                 constraintName="fk_risk_factor_risk_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="risk"/>
+
+
+    </changeSet>
+</databaseChangeLog>

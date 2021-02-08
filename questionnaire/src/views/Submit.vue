@@ -16,6 +16,7 @@ import ProgressState from '@/components/ProgressState.vue'
 import PrimaryButton from '@/components/PrimaryButton.vue'
 import { AnswerHelperService } from '@/services/answer-helper.service.js'
 import { ReferralConditionService } from '@/services/referral-condition.service.js'
+import { AnswerResponseService } from '@/api/answer-response.service.js'
 
 export default {
   name: 'submit',
@@ -44,7 +45,7 @@ export default {
   },
   methods: {
     submit () {
-      console.log('submit!')
+      AnswerResponseService.submitRiskAssessment(this.answerResponse)
     },
     formatConditionText (text) {
       return '- ' + text.substring(0, 1).toUpperCase() + text.substring(1) + '.'

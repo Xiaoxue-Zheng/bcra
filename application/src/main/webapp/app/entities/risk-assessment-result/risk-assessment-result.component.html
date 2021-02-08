@@ -1,0 +1,79 @@
+<div>
+    <h2 id="page-heading">
+        <span>Risk Assessment Results</span>
+
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-risk-assessment-result" [routerLink]="['/risk-assessment-result/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span>
+            Create a new Risk Assessment Result
+            </span>
+        </button>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="riskAssessmentResults?.length === 0">
+        <span>No riskAssessmentResults found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="riskAssessmentResults?.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr>
+                    <th scope="col" ><span>ID</span></th>
+                    <th scope="col" ><span>Filename</span></th>
+                    <th scope="col" ><span>Participant</span></th>
+                    <th scope="col" ><span>Individual Risk</span></th>
+                    <th scope="col" ><span>Population Risk</span></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let riskAssessmentResult of riskAssessmentResults ;trackBy: trackId">
+                    <td><a [routerLink]="['/risk-assessment-result', riskAssessmentResult.id, 'view']">{{ riskAssessmentResult.id }}</a></td>
+                    <td>{{ riskAssessmentResult.filename }}</td>
+                    <td>
+                        <div *ngIf="riskAssessmentResult.participant">
+                            <a [routerLink]="['/participant', riskAssessmentResult.participant?.id, 'view']" >{{ riskAssessmentResult.participant?.id }}</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="riskAssessmentResult.individualRisk">
+                            <a [routerLink]="['/risk', riskAssessmentResult.individualRisk?.id, 'view']" >{{ riskAssessmentResult.individualRisk?.id }}</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="riskAssessmentResult.populationRisk">
+                            <a [routerLink]="['/risk', riskAssessmentResult.populationRisk?.id, 'view']" >{{ riskAssessmentResult.populationRisk?.id }}</a>
+                        </div>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/risk-assessment-result', riskAssessmentResult.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/risk-assessment-result', riskAssessmentResult.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(riskAssessmentResult)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

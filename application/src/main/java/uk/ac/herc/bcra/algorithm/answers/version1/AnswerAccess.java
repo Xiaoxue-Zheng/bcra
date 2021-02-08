@@ -63,7 +63,8 @@ public class AnswerAccess {
 
     public QuestionItemIdentifier getOnlySelectedItem() {
         if (selectedItems.size() != 1) {
-            throw new AlgorithmException("Answer does not have one selected item: " + answer);
+            return null;
+            //throw new AlgorithmException("Answer does not have one selected item: " + answer);
         }
         return selectedItems.get(0).getQuestionItem().getIdentifier();
     }
@@ -100,13 +101,16 @@ public class AnswerAccess {
             throw new AlgorithmException("Answer is not a height: " + answer);
         }
 
-        Float height = answer.getNumber().floatValue();
-        if (answer.getUnits() == AnswerUnits.CENTIMETERS) {
-            return height / CENTIMETERS_PER_METER;
+        if (answer.getNumber() != null) {
+            Float height = answer.getNumber().floatValue();
+            if (answer.getUnits() == AnswerUnits.CENTIMETERS) {
+                return height / CENTIMETERS_PER_METER;
+            }
+            else if (answer.getUnits() == AnswerUnits.INCHES) {
+                return height / INCHES_PER_METER;
+            }
         }
-        else if (answer.getUnits() == AnswerUnits.INCHES) {
-            return height / INCHES_PER_METER;
-        }
-        throw new AlgorithmException("Height answer has invalid units: " + answer);
+        return null;
+        //throw new AlgorithmException("Height answer has invalid units: " + answer);
     }
 }

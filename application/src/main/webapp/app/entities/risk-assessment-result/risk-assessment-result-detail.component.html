@@ -1,0 +1,48 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="riskAssessmentResult">
+            <h2><span>Risk Assessment Result</span> {{ riskAssessmentResult.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span>Filename</span></dt>
+                <dd>
+                    <span>{{ riskAssessmentResult.filename }}</span>
+                </dd>
+                <dt><span>Participant</span></dt>
+                <dd>
+                    <div *ngIf="riskAssessmentResult.participant">
+                        <a [routerLink]="['/participant', riskAssessmentResult.participant?.id, 'view']">{{ riskAssessmentResult.participant?.id }}</a>
+                    </div>
+                </dd>
+                <dt><span>Individual Risk</span></dt>
+                <dd>
+                    <div *ngIf="riskAssessmentResult.individualRisk">
+                        <a [routerLink]="['/risk', riskAssessmentResult.individualRisk?.id, 'view']">{{ riskAssessmentResult.individualRisk?.id }}</a>
+                    </div>
+                </dd>
+                <dt><span>Population Risk</span></dt>
+                <dd>
+                    <div *ngIf="riskAssessmentResult.populationRisk">
+                        <a [routerLink]="['/risk', riskAssessmentResult.populationRisk?.id, 'view']">{{ riskAssessmentResult.populationRisk?.id }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/risk-assessment-result', riskAssessmentResult.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

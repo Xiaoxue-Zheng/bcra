@@ -1,0 +1,90 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-risk-heading">Create or edit a Risk</h2>
+
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_lifetimeRisk">Lifetime Risk</label>
+                    <input type="number" class="form-control" name="lifetimeRisk" id="field_lifetimeRisk"
+                           formControlName="lifetimeRisk"/>
+                    <div *ngIf="editForm.get('lifetimeRisk')!.invalid && (editForm.get('lifetimeRisk')!.dirty || editForm.get('lifetimeRisk')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('lifetimeRisk')?.errors?.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('lifetimeRisk')?.errors?.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_probNotBcra">Prob Not Bcra</label>
+                    <input type="number" class="form-control" name="probNotBcra" id="field_probNotBcra"
+                           formControlName="probNotBcra"/>
+                    <div *ngIf="editForm.get('probNotBcra')!.invalid && (editForm.get('probNotBcra')!.dirty || editForm.get('probNotBcra')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('probNotBcra')?.errors?.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('probNotBcra')?.errors?.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_probBcra1">Prob Bcra 1</label>
+                    <input type="number" class="form-control" name="probBcra1" id="field_probBcra1"
+                           formControlName="probBcra1"/>
+                    <div *ngIf="editForm.get('probBcra1')!.invalid && (editForm.get('probBcra1')!.dirty || editForm.get('probBcra1')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('probBcra1')?.errors?.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('probBcra1')?.errors?.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_probBcra2">Prob Bcra 2</label>
+                    <input type="number" class="form-control" name="probBcra2" id="field_probBcra2"
+                           formControlName="probBcra2"/>
+                    <div *ngIf="editForm.get('probBcra2')!.invalid && (editForm.get('probBcra2')!.dirty || editForm.get('probBcra2')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('probBcra2')?.errors?.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('probBcra2')?.errors?.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

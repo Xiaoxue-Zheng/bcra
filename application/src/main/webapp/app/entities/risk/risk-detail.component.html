@@ -1,0 +1,42 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="risk">
+            <h2><span>Risk</span> {{ risk.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span>Lifetime Risk</span></dt>
+                <dd>
+                    <span>{{ risk.lifetimeRisk }}</span>
+                </dd>
+                <dt><span>Prob Not Bcra</span></dt>
+                <dd>
+                    <span>{{ risk.probNotBcra }}</span>
+                </dd>
+                <dt><span>Prob Bcra 1</span></dt>
+                <dd>
+                    <span>{{ risk.probBcra1 }}</span>
+                </dd>
+                <dt><span>Prob Bcra 2</span></dt>
+                <dd>
+                    <span>{{ risk.probBcra2 }}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/risk', risk.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

@@ -9,6 +9,10 @@ import uk.ac.herc.bcra.algorithm.tyrercuzick.version8.OutputFile;
 import uk.ac.herc.bcra.domain.AnswerResponse;
 import uk.ac.herc.bcra.domain.enumeration.QuestionSectionIdentifier;
 
+import org.springframework.stereotype.Service;
+
+
+@Service
 public class Mapper {
 
     public String map(String participantIdentifier, LocalDate dateOfBirth, AnswerResponse answerResponse) {

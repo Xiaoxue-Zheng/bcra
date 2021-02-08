@@ -567,7 +567,7 @@ public class AnswerResponseResourceIT {
         assertThat(testAnswerResponse.getStatus()).isNotEqualTo(UPDATED_STATUS);
 
         // Check State and Updated Answer
-        assertThat(testAnswerResponse.getState()).isEqualTo(ResponseState.SUBMITTED);
+        assertThat(testAnswerResponse.getState()).isEqualTo(ResponseState.VALIDATED);
         assertThat(
             testAnswerResponse
             .getAnswerSections().iterator().next()

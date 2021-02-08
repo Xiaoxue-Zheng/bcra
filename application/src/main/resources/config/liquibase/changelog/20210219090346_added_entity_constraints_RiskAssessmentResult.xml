@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity RiskAssessmentResult.
+    -->
+    <changeSet id="20210219090346-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="participant_id"
+                                 baseTableName="risk_assessment_result"
+                                 constraintName="fk_risk_assessment_result_participant_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="participant"/>
+
+        <addForeignKeyConstraint baseColumnNames="individual_risk_id"
+                                 baseTableName="risk_assessment_result"
+                                 constraintName="fk_risk_assessment_result_individual_risk_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="risk"/>
+
+        <addForeignKeyConstraint baseColumnNames="population_risk_id"
+                                 baseTableName="risk_assessment_result"
+                                 constraintName="fk_risk_assessment_result_population_risk_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="risk"/>
+
+    </changeSet>
+</databaseChangeLog>

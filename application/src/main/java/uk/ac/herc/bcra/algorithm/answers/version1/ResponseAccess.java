@@ -20,6 +20,7 @@ public class ResponseAccess {
                 section.getQuestionSection().getIdentifier(),
                 new SectionAccess(section)
             );
+
         }
     }
 

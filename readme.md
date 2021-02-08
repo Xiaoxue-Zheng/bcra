@@ -63,6 +63,25 @@ Launch front-end: `npm start`
 
 ### Add New Entity to Model
 `jhipster entity Question`
+
+### Tyrercuzick process
+
+When a risk assessment is completed, it is ran through our tyrercuzick process. This requires a directory structure to be set up.
+
+Before the application is started, be sure that you have the following directory structure:
+
+/home/tyrercuzick/input/
+/home/tyrercuzick/output/
+
+As well as this, make sure to place the tyrercuzick.exe application (which is found in the ./application directory) in the following directory:
+
+/home/tyrercuzick/tyrercuzick.exe
+
+If you are on an iOS system, then use the following directory structure for the tyrer cuzick files:
+
+/usr/local/share/tyrercuzick/input/
+/usr/local/share/tyrercuzick/output/
+/usr/local/share/tyrercuzick/tyrercuzick.exe
  
 ## Questionnaire
 

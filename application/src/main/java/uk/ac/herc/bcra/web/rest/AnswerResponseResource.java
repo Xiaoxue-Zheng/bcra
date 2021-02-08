@@ -118,7 +118,7 @@ public class AnswerResponseResource {
             principal.getName(),
             answerResponseDTO,
             QuestionnaireType.RISK_ASSESSMENT,
-            ResponseState.SUBMITTED
+            ResponseState.VALIDATED
         )) {
             return ResponseEntity.ok().body("SUBMITTED");
         } else {

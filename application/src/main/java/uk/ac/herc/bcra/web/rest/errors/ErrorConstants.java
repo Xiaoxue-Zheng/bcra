@@ -14,6 +14,8 @@ public final class ErrorConstants {
     public static final URI EMAIL_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "/email-already-used");
     public static final URI LOGIN_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "/login-already-used");
     public static final URI EMAIL_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/email-not-found");
+    public static final URI INVALID_CONSENT_RESPONSE = URI.create(PROBLEM_BASE_URL + "/invalid-consent-response");
+    public static final URI INVALID_OR_ACTIVED_STUDY_CODE = URI.create(PROBLEM_BASE_URL + "/invalid-or-activated-study-code");
 
     private ErrorConstants() {
     }

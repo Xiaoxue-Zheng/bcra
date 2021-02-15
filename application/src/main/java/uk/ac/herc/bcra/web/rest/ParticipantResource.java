@@ -1,10 +1,13 @@
 package uk.ac.herc.bcra.web.rest;
 
 import uk.ac.herc.bcra.service.ParticipantService;
+import uk.ac.herc.bcra.service.StudyIdService;
 import uk.ac.herc.bcra.web.rest.errors.InvalidPasswordException;
+import uk.ac.herc.bcra.web.rest.errors.InvalidOrActivatedStudyCodeException;
 import uk.ac.herc.bcra.service.dto.ParticipantDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantExistsDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantActivationDTO;
+import uk.ac.herc.bcra.service.dto.ParticipantDetailsDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantCriteria;
 import uk.ac.herc.bcra.service.ParticipantQueryService;
 
@@ -27,6 +30,8 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.security.Principal;
+
 
 /**
  * REST controller for managing {@link uk.ac.herc.bcra.domain.Participant}.
@@ -46,9 +51,15 @@ public class ParticipantResource {
 
     private final ParticipantQueryService participantQueryService;
 
-    public ParticipantResource(ParticipantService participantService, ParticipantQueryService participantQueryService) {
+    private final StudyIdService studyIdService;
+
+    public ParticipantResource(ParticipantService participantService, 
+        ParticipantQueryService participantQueryService, 
+        StudyIdService studyIdService) {
+
         this.participantService = participantService;
         this.participantQueryService = participantQueryService;
+        this.studyIdService = studyIdService;
     }
 
     /**
@@ -118,6 +129,16 @@ public class ParticipantResource {
         if (!AccountResource.checkPasswordLength(participantActivationDTO.getPassword())) {
             throw new InvalidPasswordException();
         }
+
+        if (!studyIdService.isStudyCodeAvailable(participantActivationDTO.getStudyCode())) {
+            throw new InvalidOrActivatedStudyCodeException();
+        }
+
         participantService.activate(participantActivationDTO);
+    }
+
+    @PostMapping("/participants/details")
+    public void updateParticipantDetails(@Valid @RequestBody ParticipantDetailsDTO participantDetailsDTO, Principal principal) {
+        participantService.updateParticipantDetails(principal, participantDetailsDTO);
     }
 }

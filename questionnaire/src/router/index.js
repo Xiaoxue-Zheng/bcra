@@ -65,6 +65,11 @@ const router = new Router({
       path: '/submit',
       name: 'submit',
       component: () => import('../views/Submit.vue')
+    },
+    {
+      path: '/participant-details',
+      name: 'participantDetails',
+      component: () => import('../views/ParticipantDetails.vue')
     }
   ],
   scrollBehavior (to, from, savedPosition) {

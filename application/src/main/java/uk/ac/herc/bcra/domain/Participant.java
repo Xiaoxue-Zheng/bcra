@@ -35,8 +35,7 @@ public class Participant implements Serializable {
     @JoinColumn(unique = true)
     private User user;
 
-    @OneToOne(optional = false)    @NotNull
-
+    @OneToOne(optional = true)
     @JoinColumn(unique = true)
     private IdentifiableData identifiableData;
 

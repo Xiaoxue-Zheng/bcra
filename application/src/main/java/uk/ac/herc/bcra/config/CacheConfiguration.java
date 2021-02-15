@@ -78,6 +78,7 @@ public class CacheConfiguration {
             createCache(cm, uk.ac.herc.bcra.domain.CsvContent.class.getName());
             createCache(cm, uk.ac.herc.bcra.domain.Procedure.class.getName());
             createCache(cm, uk.ac.herc.bcra.domain.QuestionSection.class.getName() + ".referralConditions");
+            createCache(cm, uk.ac.herc.bcra.domain.StudyId.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

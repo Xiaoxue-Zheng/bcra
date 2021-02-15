@@ -3,12 +3,16 @@ package uk.ac.herc.bcra.service.impl;
 import uk.ac.herc.bcra.service.AnswerResponseService;
 import uk.ac.herc.bcra.domain.AnswerResponse;
 import uk.ac.herc.bcra.domain.Participant;
+import uk.ac.herc.bcra.domain.StudyId;
 import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 import uk.ac.herc.bcra.domain.enumeration.ResponseState;
 import uk.ac.herc.bcra.repository.AnswerResponseRepository;
 import uk.ac.herc.bcra.repository.ParticipantRepository;
+import uk.ac.herc.bcra.repository.StudyIdRepository;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
 import uk.ac.herc.bcra.service.mapper.AnswerResponseMapper;
+
+import org.ehcache.core.statistics.CacheOperationOutcomes.ReplaceOutcome;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,14 +39,18 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
 
     private final ParticipantRepository participantRepository;
 
+    private final StudyIdRepository studyIdRepository;
+
     public AnswerResponseServiceImpl(
         AnswerResponseRepository answerResponseRepository,
         AnswerResponseMapper answerResponseMapper,
-        ParticipantRepository participantRepository
+        ParticipantRepository participantRepository,
+        StudyIdRepository studyIdRepository
     ) {
         this.answerResponseRepository = answerResponseRepository;
         this.answerResponseMapper = answerResponseMapper;
         this.participantRepository = participantRepository;
+        this.studyIdRepository = studyIdRepository;
     }
 
     /**
@@ -57,6 +65,13 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
         AnswerResponse answerResponse = answerResponseMapper.toEntity(answerResponseDTO);
         answerResponse = answerResponseRepository.save(answerResponse);
         return answerResponseMapper.toDto(answerResponse);
+    }
+
+    @Override
+    public AnswerResponse saveDto(AnswerResponseDTO answerResponseDTO) {
+        log.debug("Request to save AnswerResponse : {}" , answerResponseDTO);
+        AnswerResponse answerResponse = answerResponseMapper.toEntity(answerResponseDTO);
+        return answerResponseRepository.save(answerResponse);
     }
 
     @Override
@@ -141,6 +156,14 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
         return Optional.empty();
     }
 
+    @Override
+    public Optional<AnswerResponseDTO> getConsentAnswerResponses() {
+        log.debug("Request to get Consent Questionnaire AnswerResponse");
+        return answerResponseRepository
+            .findOneByQuestionnaireType(QuestionnaireType.CONSENT_FORM)
+            .map(answerResponseMapper::toDto);
+    }
+
     /**
      * Delete the answerResponse by id.
      *
@@ -150,5 +173,29 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
     public void delete(Long id) {
         log.debug("Request to delete AnswerResponse : {}", id);
         answerResponseRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean isQuestionnaireComplete(String login, QuestionnaireType type) {
+        Optional<StudyId> studyIdOptional = studyIdRepository.findOneByCode(login);
+        if (studyIdOptional.isPresent()) {
+            StudyId studyId = studyIdOptional.get();
+            AnswerResponse answerResponse = null;
+
+            if (type == QuestionnaireType.CONSENT_FORM) {
+                answerResponse = studyId.getConsentResponse();
+            } else if (type == QuestionnaireType.RISK_ASSESSMENT) {
+                answerResponse = studyId.getRiskAssessmentResponse();
+            }
+
+            if (answerResponse.getState() == ResponseState.IN_PROGRESS ||
+                answerResponse.getState() == ResponseState.NOT_STARTED) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

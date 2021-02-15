@@ -40,6 +40,7 @@
 <script>
 import Password from 'vue-password-strength-meter'
 import { SecurityService } from '@/api/security.service'
+import { SignUpHelperService } from '@/services/sign-up-helper.service'
 
 const MINIMUM_PASSWORD_SCORE = 4
 
@@ -63,17 +64,16 @@ export default {
   methods: {
     async createAccount () {
       this.displayErrorMessage = false
-      const participantActivationDTO = {
-        nhsNumber: this.$store.getters['security/getActivationField']('nhsNumber'),
-        dateOfBirth: this.$store.getters['security/getActivationField']('dateOfBirth'),
-        emailAddress: this.emailAddress,
-        password: this.password
+      var signUpInformation = {
+        'emailAddress': this.emailAddress,
+        'password': this.password,
+        'studyCode': SignUpHelperService.getStudyCode(),
+        'consentResponse': SignUpHelperService.getConsentResponse()
       }
-      SecurityService.createAccount(participantActivationDTO).then(() => {
+
+      SecurityService.createAccount(signUpInformation).then(() => {
         this.autoLogin()
-      }).catch(() => {
-        this.displayErrorMessage = true
-      })
+      });
     },
     setScore (score) {
       this.passwordScore = score
@@ -97,7 +97,8 @@ export default {
       }
       const loginOutcome = await this.$store.dispatch('security/login', parameters)
       if (loginOutcome === 'SUCCESS') {
-        this.$router.push('/consent')
+        SignUpHelperService.clearSignUpInfo();
+        this.$router.push('/participant-details')
       } else {
         this.displayErrorMessage = true
       }

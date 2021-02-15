@@ -1,0 +1,67 @@
+<div>
+    <h2 id="page-heading">
+        <span>Study Ids</span>
+
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-study-id" [routerLink]="['/study-id/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span>
+            Create a new Study Id
+            </span>
+        </button>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="studyIds?.length === 0">
+        <span>No studyIds found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="studyIds?.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr>
+                    <th scope="col" ><span>ID</span></th>
+                    <th scope="col" ><span>Code</span></th>
+                    <th scope="col" ><span>Participant</span></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let studyId of studyIds ;trackBy: trackId">
+                    <td><a [routerLink]="['/study-id', studyId.id, 'view']">{{ studyId.id }}</a></td>
+                    <td>{{ studyId.code }}</td>
+                    <td>
+                        <div *ngIf="studyId.participant">
+                            <a [routerLink]="['/participant', studyId.participant?.id, 'view']" >{{ studyId.participant?.id }}</a>
+                        </div>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/study-id', studyId.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/study-id', studyId.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(studyId)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

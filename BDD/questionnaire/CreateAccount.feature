@@ -1,10 +1,10 @@
 Feature: Create Account
 
 Scenario: A Participant is on the Create Account page
-	Given the Participant has completed the Register page
+	Given the Participant has completed the Consent page
 	When the Participant is forwarded to the Create Account page
 	Then the Participant can see a Create Account form
-	And there is a field to enter their NHS Number
+	And there is a field to enter their email address
 	And there is a field to enter their password
 	And there is an indicator of the strength of their password
 	And there is a field to repeat their password
@@ -33,6 +33,6 @@ Scenario: A Participant creates their account
 	When the Participant clicks the Create Account button
 	Then the Participants account is created
 	And the Participant is automatically signed in
-	And the user is redirected to the Consent page
+	And the user is redirected to the Participant Details page
 	And the Sign In menu option has changed to Sign Out
 	And the Register menu option is not visible

@@ -31,7 +31,7 @@ Scenario: A Participant Signs In
 	And the Participant has entered a correct email address
 	And the Participant has entered a correct password
 	When the Participant clicks the Sign In button
-	Then the user is redirected to the Consent page
+	Then the user is redirected to the Risk Assessment page
 	And the Sign In menu option has changed to Sign Out
 	And the Register menu option is not visible
 

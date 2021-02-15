@@ -2,30 +2,18 @@
   <div class="register content">
     <h1>Register</h1>
     <p class="introduction">
-      If you have already registered, you can <router-link to="/SignIn">sign in here</router-link>. Otherwise please complete the following.
+      If you have already registered, you can <router-link to="/SignIn">sign in here</router-link>. Otherwise please enter your unique study identifier in the form below.
     </p>
     <div class="pure-g">
       <div class="pure-u-1">
         <form @submit.prevent="register" class="pure-form pure-form-stacked">
           <fieldset>
-            <label>Your NHS number</label>
+            <label>Unique study ID</label>
             <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-1-3">
-              <input required v-model="nhsNumber" type="text" class="pure-input-1"/>
-            </div>
-            <Accordion class="blue">
-              <template v-slot:title>How do I find my NHS number?</template>
-              <template v-slot:text>Your NHS Number is displayed on the letter inviting you to take part in this trial. If you cannot find your NHS Number, your GP practice will be able to help you.</template>
-            </Accordion>
-          </fieldset>
-          <fieldset>
-            <label>Your date of birth</label>
-            <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-1-3">
-              <input required v-model="dateOfBirth" type="date"/>
+              <input required v-model="studyCode" type="text" class="pure-input-1"/>
             </div>
           </fieldset>
-          <div class="error-message" v-if="notFound">Your NHS number and date of birth were not found. Please double check them or contact the study team.</div>
-          <div class="error-message" v-if="alreadyRegistered">You already have an account. Please sign in instead.</div>
-          <div class="error-message" v-if="error">There was a problem!</div>
+          <div class="error-message" v-if="failure">This study code is either in use or otherwise not available. Please double check code or contact the study team.</div>
           <button class="pure-button pure-button-primary" type="submit">Next</button>
         </form>
       </div>
@@ -34,11 +22,9 @@
 </template>
 
 <script>
-import { SecurityService } from '@/api/security.service'
-
+import { StudyService } from '@/api/study.service.js'
+import { SignUpHelperService } from '@/services/sign-up-helper.service.js'
 import { createHelpers } from 'vuex-map-fields'
-
-import Accordion from '@/components/Accordion.vue'
 
 const { mapFields } = createHelpers({
   getterType: 'security/getActivationField',
@@ -48,33 +34,28 @@ const { mapFields } = createHelpers({
 export default {
   data () {
     return {
-      notFound: false,
-      alreadyRegistered: false,
-      error: false
+      studyCode: null,
+      failure: false
     }
   },
   components: {
-    Accordion
   },
   computed: {
     ...mapFields([
-      'nhsNumber',
       'dateOfBirth'
     ])
   },
   methods: {
     async register () {
       this.clearMessages()
-      SecurityService.checkParticipant(this.nhsNumber, this.dateOfBirth).then((response) => {
-        if (response.data === 'READY') {
-          this.$router.push('/account')
-        } else if (response.data === 'ALREADY_REGISTERED') {
-          this.alreadyRegistered = true
+
+      StudyService.isStudyCodeAvailable(this.studyCode).then((isAvailable) => {
+        if (isAvailable) {
+          SignUpHelperService.setStudyCode(this.studyCode)
+          this.$router.push('/consent')
         } else {
-          this.notFound = true
+          this.failure = true
         }
-      }).catch(() => {
-        this.error = true
       })
     },
 

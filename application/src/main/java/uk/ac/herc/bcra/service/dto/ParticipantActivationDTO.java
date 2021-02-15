@@ -1,7 +1,5 @@
 package uk.ac.herc.bcra.service.dto;
 
-import java.time.LocalDate;
-
 import javax.validation.constraints.NotNull;
 
 public class ParticipantActivationDTO {
@@ -13,10 +11,10 @@ public class ParticipantActivationDTO {
     private String password;
 
     @NotNull
-    private LocalDate dateOfBirth;
+    private AnswerResponseDTO consentResponse;
 
     @NotNull
-    private String nhsNumber;
+    private String studyCode;
 
 
     public ParticipantActivationDTO() {
@@ -39,28 +37,27 @@ public class ParticipantActivationDTO {
         this.password = password;
     }
 
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
+    public AnswerResponseDTO getConsentRepsonse() {
+        return consentResponse;
     }
 
-    public void setDateOfBirth(LocalDate dateofBirth) {
-        this.dateOfBirth = dateofBirth;
+    public void setConsentResponse(AnswerResponseDTO consentResponse) {
+        this.consentResponse = consentResponse;
     }
 
-    public String getNhsNumber() {
-        return nhsNumber;
+    public String getStudyCode() {
+        return studyCode;
     }
 
-    public void setNhsNumber(String nhsNumber) {
-        this.nhsNumber = nhsNumber;
+    public void setStudyCode(String studyCode) {
+        this.studyCode = studyCode;
     }
 
     @Override
     public String toString() {
         return "ParticipantActivationDTO ["
-            + " dateOfBirth=" + dateOfBirth
+            + " studyCode=" + studyCode
             + ", emailAddress=" + emailAddress
-            + ", nhsNumber=" + nhsNumber
             + ", password=" + password
             + "]";
     }

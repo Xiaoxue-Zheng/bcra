@@ -2,7 +2,7 @@ Feature: Consent Form
 
 Scenario: A Participant opens the Consent Form
 	Given the Participant has opened the Questionnaire application
-    And the Participant has signed in
+    And the Participant has previously entered a valid study code
     When the Participant is forwarded to the Consent Form
 	Then the page has the title 'Consent'
     And there is an indicator of the Participant's Progress
@@ -34,4 +34,4 @@ Scenario: A Participant submits an complete Consent Form
     And the Participant has affirmed all necessary questions
     When the Participant clicks the form submission button
 	Then the form is submitted
-    And the participant is forwarded to the first stage of the Questionnaire
+    And the participant is forwarded to the Register page

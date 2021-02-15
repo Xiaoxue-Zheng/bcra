@@ -4,12 +4,14 @@ import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.service.dto.ParticipantActivationDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantExistsDTO;
+import uk.ac.herc.bcra.service.dto.ParticipantDetailsDTO;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.security.Principal;
 
 /**
  * Service Interface for managing {@link uk.ac.herc.bcra.domain.Participant}.
@@ -53,4 +55,6 @@ public interface ParticipantService {
     ParticipantExistsDTO exists(String nhsNumber, LocalDate dateOfBirth);
 
     void activate(ParticipantActivationDTO participantActivationDTO);
+
+    void updateParticipantDetails(Principal principal, ParticipantDetailsDTO participantDetailsDTO);
 }

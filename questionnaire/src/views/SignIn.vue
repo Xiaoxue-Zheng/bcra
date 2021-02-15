@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import { SignUpHelperService } from '@/services/sign-up-helper.service.js'
+
 export default {
   name: 'signin',
   data () {
@@ -47,7 +49,7 @@ export default {
       const { username, password } = this
       const loginOutcome = await this.$store.dispatch('security/login', { username, password })
       if (loginOutcome === 'SUCCESS') {
-        this.$router.push('/consent')
+        this.navigateToIncompleteSection();
       } else {
         this.setMessage(loginOutcome)
       }
@@ -62,6 +64,21 @@ export default {
       } else {
         this.displayErrorMessage = true
       }
+    },
+    async navigateToIncompleteSection() {
+      SignUpHelperService.hasCompletedConsent().then(completeConsent => {
+        if (completeConsent) {
+          this.$router.push('/consent')
+        } else {
+          SignUpHelperService.hasCompletedRiskAssessment().then(completeRiskAssessment => {
+            if (completeRiskAssessment) {
+              this.$router.push('/')
+            } else {
+              this.$router.push('/questionnaire/familyhistorycontext')
+            }
+          })
+        }
+      });
     }
   }
 }

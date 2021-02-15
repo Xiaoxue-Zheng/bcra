@@ -46,8 +46,8 @@ export default {
     submit () {
       console.log('submit!')
     },
-    formatConditionText(text) {
-      return '- ' + text.substring(0,1).toUpperCase() + text.substring(1) + '.'
+    formatConditionText (text) {
+      return '- ' + text.substring(0, 1).toUpperCase() + text.substring(1) + '.'
     }
   }
 }

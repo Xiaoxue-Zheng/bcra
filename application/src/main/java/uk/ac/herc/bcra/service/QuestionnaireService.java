@@ -33,6 +33,7 @@ public interface QuestionnaireService {
      * @return the entity.
      */
     Optional<QuestionnaireDTO> findOne(Long id);
+    Optional<QuestionnaireDTO> getConsentQuestionnaire();
     Optional<QuestionnaireDTO> findOne(String login, QuestionnaireType questionnaireType);
 
     /**

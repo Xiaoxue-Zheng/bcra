@@ -4,8 +4,10 @@ import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.AnswerResponse;
 import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.domain.Questionnaire;
+import uk.ac.herc.bcra.domain.StudyId;
 import uk.ac.herc.bcra.repository.AnswerResponseRepository;
 import uk.ac.herc.bcra.service.AnswerResponseService;
+import uk.ac.herc.bcra.service.StudyIdService;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
 import uk.ac.herc.bcra.service.mapper.AnswerResponseMapper;
 import uk.ac.herc.bcra.web.rest.errors.ExceptionTranslator;
@@ -19,11 +21,14 @@ import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.security.Principal;
 import java.util.List;
@@ -33,6 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 import uk.ac.herc.bcra.domain.enumeration.ResponseState;
 /**
  * Integration tests for the {@link AnswerResponseResource} REST controller.
@@ -55,6 +61,9 @@ public class AnswerResponseResourceIT {
 
     @Autowired
     private AnswerResponseService answerResponseService;
+
+    @Autowired
+    private StudyIdService studyIdService;
     
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -77,7 +86,7 @@ public class AnswerResponseResourceIT {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         final AnswerResponseResource answerResponseResource = new AnswerResponseResource(
-            answerResponseService
+            answerResponseService, studyIdService
         );
         this.restAnswerResponseMockMvc = MockMvcBuilders
             .standaloneSetup(answerResponseResource)
@@ -107,6 +116,25 @@ public class AnswerResponseResourceIT {
         } else {
             questionnaire = TestUtil.findAll(em, Questionnaire.class).get(0);
         }
+        answerResponse.setQuestionnaire(questionnaire);
+        em.persist(answerResponse);
+        em.flush();
+
+        answerResponse.addAnswerSection(
+            AnswerSectionResourceIT.createEntity(em)
+        );
+        return answerResponse;
+    }
+
+    public static AnswerResponse createEntity(EntityManager em, QuestionnaireType type) {
+        AnswerResponse answerResponse = new AnswerResponse()
+            .state(DEFAULT_STATE)
+            .status(DEFAULT_STATUS);
+        // Add required entity
+        Questionnaire questionnaire = QuestionnaireResourceIT.createEntity(em, type);
+        em.persist(questionnaire);
+        em.flush();
+
         answerResponse.setQuestionnaire(questionnaire);
         em.persist(answerResponse);
         em.flush();
@@ -149,7 +177,7 @@ public class AnswerResponseResourceIT {
 
     @Test
     @Transactional
-    public void getConsentAnswerResponse() throws Exception {
+    public void getConsentAnswerResponseEmptyResult() throws Exception {
         
         Participant participant;
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
@@ -160,8 +188,8 @@ public class AnswerResponseResourceIT {
             participant = TestUtil.findAll(em, Participant.class).get(0);
         }
 
-        restAnswerResponseMockMvc.perform(
-                get("/api/answer-responses/consent")
+        MvcResult result = restAnswerResponseMockMvc.perform(
+                get("/api/answer-responses/consent/TST_1")
                 .principal(new Principal() {
                     @Override
                     public String getName() {
@@ -170,20 +198,51 @@ public class AnswerResponseResourceIT {
                 })
             )
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.questionnaireId").value(
-                participant
-                    .getProcedure()
-                    .getConsentResponse()
-                    .getQuestionnaire()
-                    .getId()
-                    .intValue()
-            ));
+            .andReturn();
+        
+        String content = result.getResponse().getContentAsString();
+        assertThat(content).isEqualTo("");
     }
 
     @Test
     @Transactional
-    public void getRiskAssessmentAnswerResponse() throws Exception {
+    public void getConsentAnswerResponseValidResult() throws Exception {
+        Participant participant;
+        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
+            participant = ParticipantResourceIT.createUpdatedEntity(em);
+            em.persist(participant);
+            em.flush();
+        } else {
+            participant = TestUtil.findAll(em, Participant.class).get(0);
+        }
+
+        StudyId studyId = StudyIdResourceIT.createEntity(em, participant);
+
+        MvcResult result = restAnswerResponseMockMvc.perform(
+                get("/api/answer-responses/consent/" + studyId.getCode())
+                .principal(new Principal() {
+                    @Override
+                    public String getName() {
+                        return participant.getUser().getLogin();
+                    }
+                })
+            )
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andReturn();
+        
+        String content = result.getResponse().getContentAsString();
+        ObjectMapper mapper = new ObjectMapper();
+        AnswerResponseDTO response = mapper.readValue(content, AnswerResponseDTO.class);
+        assertThat(response.getQuestionnaireId()).isNotNull();
+        assertThat(response.getAnswerSections()).isNotNull();
+        assertThat(response.getId()).isNotNull();
+        assertThat(response.getAnswerSections().size() > 0).isEqualTo(true);
+    }
+
+    @Test
+    @Transactional
+    public void getRiskAssessmentAnswerResponseEmptyResult() throws Exception {
         
         Participant participant;
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
@@ -194,8 +253,8 @@ public class AnswerResponseResourceIT {
             participant = TestUtil.findAll(em, Participant.class).get(0);
         }
 
-        restAnswerResponseMockMvc.perform(
-                get("/api/answer-responses/risk-assessment")
+        MvcResult result = restAnswerResponseMockMvc.perform(
+                get("/api/answer-responses/risk-assessment/TST_1")
                 .principal(new Principal() {
                     @Override
                     public String getName() {
@@ -204,15 +263,45 @@ public class AnswerResponseResourceIT {
                 })
             )
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.questionnaireId").value(
-                participant
-                    .getProcedure()
-                    .getRiskAssessmentResponse()
-                    .getQuestionnaire()
-                    .getId()
-                    .intValue()
-            ));
+            .andReturn();
+        
+        String content = result.getResponse().getContentAsString();
+        assertThat(content).isEqualTo("");
+    }
+
+    @Test
+    @Transactional
+    public void getRiskAssessmentAnswerResponseValidResult() throws Exception {
+        Participant participant;
+        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
+            participant = ParticipantResourceIT.createUpdatedEntity(em);
+            em.persist(participant);
+            em.flush();
+        } else {
+            participant = TestUtil.findAll(em, Participant.class).get(0);
+        }
+
+        StudyId studyId = StudyIdResourceIT.createEntity(em, participant);
+
+        MvcResult result = restAnswerResponseMockMvc.perform(
+                get("/api/answer-responses/risk-assessment/" + studyId.getCode())
+                .principal(new Principal() {
+                    @Override
+                    public String getName() {
+                        return participant.getUser().getLogin();
+                    }
+                })
+            )
+            .andExpect(status().isOk())
+            .andReturn();
+        
+        String content = result.getResponse().getContentAsString();
+        ObjectMapper mapper = new ObjectMapper();
+        AnswerResponseDTO response = mapper.readValue(content, AnswerResponseDTO.class);
+        assertThat(response.getQuestionnaireId()).isNotNull();
+        assertThat(response.getAnswerSections()).isNotNull();
+        assertThat(response.getId()).isNotNull();
+        assertThat(response.getAnswerSections().size() > 0).isEqualTo(true);
     }
 
     @Test

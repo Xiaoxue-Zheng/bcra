@@ -49,6 +49,11 @@ public class ProcedureServiceImpl implements ProcedureService {
         return procedureMapper.toDto(procedure);
     }
 
+    @Override
+    public Procedure save(Procedure procedure) {
+        return procedureRepository.save(procedure);
+    }
+
     /**
      * Get all the procedures.
      *

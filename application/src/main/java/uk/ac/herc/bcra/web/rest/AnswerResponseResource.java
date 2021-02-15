@@ -3,8 +3,8 @@ package uk.ac.herc.bcra.web.rest;
 import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 import uk.ac.herc.bcra.domain.enumeration.ResponseState;
 import uk.ac.herc.bcra.service.AnswerResponseService;
+import uk.ac.herc.bcra.service.StudyIdService;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
-import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URISyntaxException;
 import java.security.Principal;
-import java.util.Optional;
 
 /**
  * REST controller for managing {@link uk.ac.herc.bcra.domain.AnswerResponse}.
@@ -31,22 +30,21 @@ public class AnswerResponseResource {
 
     private final AnswerResponseService answerResponseService;
 
+    private final StudyIdService studyIdService;
+
     public AnswerResponseResource(
-        AnswerResponseService answerResponseService
+        AnswerResponseService answerResponseService,
+        StudyIdService studyIdService
     ) {
         this.answerResponseService = answerResponseService;
+        this.studyIdService = studyIdService;
     }
 
-    @GetMapping("/answer-responses/consent")
-    public ResponseEntity<AnswerResponseDTO> getConsent(Principal principal) {
+    @GetMapping("/answer-responses/consent/{studyCode}")
+    public AnswerResponseDTO getConsentAnswerResponseFromStudyCode(@PathVariable String studyCode) {
         log.debug("REST request to get Consent AnswerResponse");
-        Optional<AnswerResponseDTO> answerResponseDTO = 
-            answerResponseService
-                .findOne(
-                    principal.getName(),
-                    QuestionnaireType.CONSENT_FORM
-            );
-        return ResponseUtil.wrapOrNotFound(answerResponseDTO);
+        AnswerResponseDTO answerResponseDTO = studyIdService.getConsentResponseFromStudyCode(studyCode);
+        return answerResponseDTO;
     }
 
     @PutMapping("/answer-responses/consent/save")
@@ -85,15 +83,11 @@ public class AnswerResponseResource {
         }
     }
 
-    @GetMapping("/answer-responses/risk-assessment")
-    public ResponseEntity<AnswerResponseDTO> getRiskAssessment(Principal principal) {
+    @GetMapping("/answer-responses/risk-assessment/{studyCode}")
+    public AnswerResponseDTO getRiskAssessmentResponseFromStudyCode(@PathVariable String studyCode) {
         log.debug("REST request to get Risk Assessment AnswerResponse");
-        Optional<AnswerResponseDTO> answerResponseDTO = 
-            answerResponseService.findOne(
-                principal.getName(),
-                QuestionnaireType.RISK_ASSESSMENT
-            );
-        return ResponseUtil.wrapOrNotFound(answerResponseDTO);
+        AnswerResponseDTO answerResponseDTO = studyIdService.getRiskAssessmentResponseFromStudyCode(studyCode);
+        return answerResponseDTO;
     }
 
     @PutMapping("/answer-responses/risk-assessment/save")
@@ -130,5 +124,17 @@ public class AnswerResponseResource {
         } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("FAILED");
         }
+    }
+
+    @GetMapping("/answer-responses/consent/complete")
+    public boolean hasCompletedConsentQuestionnaire(Principal principal) {
+        log.debug("REST request to determine if consent questionnaire is complete");
+        return answerResponseService.isQuestionnaireComplete(principal.getName(), QuestionnaireType.CONSENT_FORM);
+    }
+
+    @GetMapping("/answer-responses/risk-assessment/complete")
+    public boolean hasCompletedRiskAssessmentQuestionnaire(Principal principal) {
+        log.debug("REST request to determine if consent questionnaire is complete");
+        return answerResponseService.isQuestionnaireComplete(principal.getName(), QuestionnaireType.RISK_ASSESSMENT);
     }
 }

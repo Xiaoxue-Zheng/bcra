@@ -47,7 +47,7 @@ export const SecurityService = {
     })
   },
 
-  createAccount (participantActivationDTO) {
-    return ApiService.post('participants/activate', participantActivationDTO)
+  createAccount (signUpInformation) {
+    return ApiService.post('participants/activate', signUpInformation)
   }
 }

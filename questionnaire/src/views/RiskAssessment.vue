@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="questionSection != null && answerSection != null">
     <QuestionSection
       :progressStage="progressStage"
       :questionSection="questionSection"
@@ -31,6 +31,7 @@ import { QuestionSectionService } from '@/services/question-section.service.js'
 import { QuestionVariableService } from '@/services/question-variable.service.js'
 import { ReferralConditionService } from '@/services/referral-condition.service.js'
 import { AnswerHelperService } from '@/services/answer-helper.service.js'
+import { StudyService } from '@/api/study.service'
 
 export default {
   name: 'riskAssessment',
@@ -43,6 +44,7 @@ export default {
     return {
       questionnaire: null,
       answerResponse: null,
+      studyCode: null,
       questionSection: null,
       answerSection: null,
       progressStage: null,
@@ -56,8 +58,9 @@ export default {
     }
   },
   async created () {
+    this.studyCode = await StudyService.getStudyCode()
     this.questionnaire = await QuestionnaireService.getRiskAssessment()
-    this.answerResponse = await AnswerResponseService.getRiskAssessment()
+    this.answerResponse = await AnswerResponseService.getRiskAssessment(this.studyCode)
     AnswerHelperService.initialise(this.questionnaire, this.answerResponse)
     this.initialiseSection()
   },

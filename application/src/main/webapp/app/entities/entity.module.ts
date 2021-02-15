@@ -71,6 +71,10 @@ import { RouterModule } from '@angular/router';
       {
         path: 'procedure',
         loadChildren: () => import('./procedure/procedure.module').then(m => m.BcraProcedureModule)
+      },
+      {
+        path: 'study-id',
+        loadChildren: () => import('./study-id/study-id.module').then(m => m.BcraStudyIdModule)
       }
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ])

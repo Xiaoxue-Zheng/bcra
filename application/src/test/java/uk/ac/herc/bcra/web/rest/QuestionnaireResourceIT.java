@@ -96,6 +96,7 @@ public class QuestionnaireResourceIT {
         Questionnaire questionnaire = new Questionnaire()
             .type(DEFAULT_TYPE)
             .version(DEFAULT_VERSION);
+        em.persist(questionnaire);
         return questionnaire;
     }
     /**
@@ -108,6 +109,15 @@ public class QuestionnaireResourceIT {
         Questionnaire questionnaire = new Questionnaire()
             .type(UPDATED_TYPE)
             .version(UPDATED_VERSION);
+        em.persist(questionnaire);
+        return questionnaire;
+    }
+
+    public static Questionnaire createEntity(EntityManager em, QuestionnaireType type) {
+        Questionnaire questionnaire = new Questionnaire()
+            .type(type)
+            .version(UPDATED_VERSION);
+        em.persist(questionnaire);
         return questionnaire;
     }
 
@@ -134,29 +144,12 @@ public class QuestionnaireResourceIT {
     @Test
     @Transactional
     public void getConsentQuestionnaire() throws Exception {
-        // Initialize the database
-        Participant participant;
-        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = ParticipantResourceIT.createUpdatedEntity(em);
-            em.persist(participant);
-            em.flush();
-        } else {
-            participant = TestUtil.findAll(em, Participant.class).get(0);
-        }
-
         // Get the questionnaire
         restQuestionnaireMockMvc.perform(
-            get("/api/questionnaires/consent", questionnaire.getId())
-            .principal(new Principal() {
-                @Override
-                public String getName() {
-                    return participant.getUser().getLogin();
-                }
-            })
+            get("/api/questionnaires/consent")
         )
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(participant.getProcedure().getConsentResponse().getQuestionnaire().getId().intValue()))
             .andExpect(jsonPath("$.type").value(QuestionnaireType.CONSENT_FORM.toString()))
             .andExpect(jsonPath("$.version").value(DEFAULT_VERSION));
     }
@@ -176,7 +169,7 @@ public class QuestionnaireResourceIT {
 
         // Get the questionnaire
         restQuestionnaireMockMvc.perform(
-            get("/api/questionnaires/risk-assessment", questionnaire.getId())
+            get("/api/questionnaires/risk-assessment")
             .principal(new Principal() {
                 @Override
                 public String getName() {
@@ -187,8 +180,7 @@ public class QuestionnaireResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(participant.getProcedure().getRiskAssessmentResponse().getQuestionnaire().getId().intValue()))
-            .andExpect(jsonPath("$.type").value(QuestionnaireType.RISK_ASSESSMENT.toString()))
-            .andExpect(jsonPath("$.version").value(DEFAULT_VERSION));
+            .andExpect(jsonPath("$.type").value(QuestionnaireType.RISK_ASSESSMENT.toString()));
     }
 
     @Test

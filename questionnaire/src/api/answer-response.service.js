@@ -1,8 +1,8 @@
 import ApiService from './api.service'
 
 export const AnswerResponseService = {
-  async getConsent () {
-    const response = await ApiService.get('answer-responses/consent')
+  async getConsent (studyCode) {
+    const response = await ApiService.get('answer-responses/consent/' + studyCode)
     return response.data
   },
   saveConsent (answerResponse) {
@@ -11,8 +11,8 @@ export const AnswerResponseService = {
   submitConsent (answerResponse) {
     return ApiService.put('answer-responses/consent/submit', answerResponse)
   },
-  async getRiskAssessment () {
-    const response = await ApiService.get('answer-responses/risk-assessment')
+  async getRiskAssessment (studyCode) {
+    const response = await ApiService.get('answer-responses/risk-assessment/' + studyCode)
     return response.data
   },
   saveRiskAssessment (answerResponse) {

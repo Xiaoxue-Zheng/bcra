@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <!-- <pre v-if="answerSection">{{ answerSection.answerGroups[0].answers[0].answerItems }}</pre> -->
+  <div v-if="questionSection != null && answerSection != null">
     <QuestionSection
       progressStage="1"
       :questionSection="questionSection"
@@ -23,6 +22,7 @@
 import QuestionSection from '@/components/QuestionSection.vue'
 import { QuestionnaireService } from '@/api/questionnaire.service'
 import { AnswerResponseService } from '@/api/answer-response.service'
+import { SignUpHelperService } from '@/services/sign-up-helper.service'
 
 export default {
   name: 'consent',
@@ -38,24 +38,21 @@ export default {
     }
   },
   async created () {
+    const studyCode = SignUpHelperService.getStudyCode()
     const questionnaire = await QuestionnaireService.getConsent()
+
     this.questionSection = questionnaire.questionSections.find(
       questionSection => (questionSection.identifier === 'CONSENT_FORM')
     )
-    this.answerResponse = await AnswerResponseService.getConsent()
+    this.answerResponse = await AnswerResponseService.getConsent(studyCode)
     this.answerSection = this.answerResponse.answerSections.find(
       answerSection => (answerSection.questionSectionId === this.questionSection.id)
     )
   },
   methods: {
     async submitConsent () {
-      this.submitError = false
-      const submitResult = await AnswerResponseService.submitConsent(this.answerResponse)
-      if (submitResult.data === 'SUBMITTED') {
-        this.$router.push('/questionnaire/familyhistorycontext')
-      } else {
-        this.submitError = true
-      }
+      SignUpHelperService.saveConsentResponse(this.answerResponse)
+      this.$router.push('/account')
     }
   }
 }

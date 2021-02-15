@@ -89,6 +89,15 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 
     @Override
     @Transactional(readOnly = true)
+    public Optional<QuestionnaireDTO> getConsentQuestionnaire() {
+        log.debug("Request to get Consent Questionnaire");
+        return questionnaireRepository
+            .findFirstByType(QuestionnaireType.CONSENT_FORM)
+            .map(questionnaireMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Optional<QuestionnaireDTO> findOne(String login, QuestionnaireType questionnaireType) {
         log.debug("Request to get Questionnaire");
         Optional<Participant> participantOptional = participantRepository.findOneByUserLogin(login);

@@ -1,6 +1,7 @@
 package uk.ac.herc.bcra.service;
 
 import uk.ac.herc.bcra.service.dto.ProcedureDTO;
+import uk.ac.herc.bcra.domain.Procedure;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,7 @@ public interface ProcedureService {
      * @return the persisted entity.
      */
     ProcedureDTO save(ProcedureDTO procedureDTO);
+    Procedure save(Procedure procedure);
 
     /**
      * Get all the procedures.

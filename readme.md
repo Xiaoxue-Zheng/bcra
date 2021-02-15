@@ -103,6 +103,6 @@ To run end-to-end tests in a headless environment, use:
 
 `npm run test:headless`
 
-
-
-
+#### Test StudyId
+A default study ID is created to test the new sign up functionality. 
+This id is 'TST_1', and has a consent and risk assessment questionnaire automatically assigned.

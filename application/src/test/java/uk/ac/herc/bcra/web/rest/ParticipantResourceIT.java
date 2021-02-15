@@ -12,6 +12,7 @@ import uk.ac.herc.bcra.service.dto.ParticipantDTO;
 import uk.ac.herc.bcra.service.mapper.ParticipantMapper;
 import uk.ac.herc.bcra.web.rest.errors.ExceptionTranslator;
 import uk.ac.herc.bcra.service.ParticipantQueryService;
+import uk.ac.herc.bcra.service.StudyIdService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,6 +63,9 @@ public class ParticipantResourceIT {
     private ParticipantQueryService participantQueryService;
 
     @Autowired
+    private StudyIdService studyIdService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -83,7 +87,7 @@ public class ParticipantResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ParticipantResource participantResource = new ParticipantResource(participantService, participantQueryService);
+        final ParticipantResource participantResource = new ParticipantResource(participantService, participantQueryService, studyIdService);
         this.restParticipantMockMvc = MockMvcBuilders.standaloneSetup(participantResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

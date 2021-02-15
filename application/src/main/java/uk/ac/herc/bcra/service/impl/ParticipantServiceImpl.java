@@ -2,14 +2,22 @@ package uk.ac.herc.bcra.service.impl;
 
 import uk.ac.herc.bcra.service.IdentifiableDataService;
 import uk.ac.herc.bcra.service.ParticipantService;
+import uk.ac.herc.bcra.service.AnswerResponseService;
+import uk.ac.herc.bcra.service.StudyIdService;
+import uk.ac.herc.bcra.service.ProcedureService;
+import uk.ac.herc.bcra.domain.AnswerResponse;
 import uk.ac.herc.bcra.domain.IdentifiableData;
 import uk.ac.herc.bcra.domain.Participant;
+import uk.ac.herc.bcra.domain.Procedure;
+import uk.ac.herc.bcra.domain.StudyId;
 import uk.ac.herc.bcra.domain.User;
+import uk.ac.herc.bcra.domain.enumeration.ResponseState;
 import uk.ac.herc.bcra.repository.IdentifiableDataRepository;
 import uk.ac.herc.bcra.repository.ParticipantRepository;
 import uk.ac.herc.bcra.repository.UserRepository;
 import uk.ac.herc.bcra.service.dto.ParticipantActivationDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantDTO;
+import uk.ac.herc.bcra.service.dto.ParticipantDetailsDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantExistsDTO;
 import uk.ac.herc.bcra.service.mapper.ParticipantMapper;
 import uk.ac.herc.bcra.web.rest.errors.EmailAlreadyUsedException;
@@ -23,6 +31,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -48,13 +57,23 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final AnswerResponseService answerResponseService;
+
+    private final StudyIdService studyIdService;
+
+    
+    private final ProcedureService procedureService;
+
     public ParticipantServiceImpl(
         ParticipantRepository participantRepository,
         ParticipantMapper participantMapper,
         IdentifiableDataService identifiableDataService,
         IdentifiableDataRepository identifiableDataRepository,
         UserRepository userRepository,
-        PasswordEncoder passwordEncoder
+        PasswordEncoder passwordEncoder,
+        AnswerResponseService answerResponseService,
+        StudyIdService studyIdService,
+        ProcedureService procedureService
     ) {
         this.participantRepository = participantRepository;
         this.participantMapper = participantMapper;
@@ -62,6 +81,9 @@ public class ParticipantServiceImpl implements ParticipantService {
         this.identifiableDataRepository = identifiableDataRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.answerResponseService = answerResponseService;
+        this.studyIdService = studyIdService;
+        this.procedureService = procedureService;
     }
 
     /**
@@ -152,53 +174,67 @@ public class ParticipantServiceImpl implements ParticipantService {
     
     @Override
     public void activate(ParticipantActivationDTO participantActivationDTO) {
-
+        String email = participantActivationDTO.getEmailAddress();
         if (
             identifiableDataService.findOne(
-                participantActivationDTO.getEmailAddress()
+                email
             ).isPresent()
         ) {
             throw new EmailAlreadyUsedException();
         }
 
-        Optional<Participant> participantOptional =
-            findOne(
-                participantActivationDTO.getNhsNumber(),
-                participantActivationDTO.getDateOfBirth()
-            );
-
-        if (!participantOptional.isPresent()) {
-            throw new RuntimeException(
-                "Participant does not exist. "
-                + " nhsNumber: " + participantActivationDTO.getNhsNumber()
-                + " dateofBirth: " + participantActivationDTO.getDateOfBirth()
-            );
-        }
-
-        Participant participant = participantOptional.get();
-        IdentifiableData identifiableData = participant.getIdentifiableData();
-        User user = participant.getUser();
-
-        if (
-            (identifiableData.getEmail() != null) ||
-            (user.getPassword() != null)
-        ) {
-            throw new RuntimeException(
-                "Participant already activated. "
-                + " nhsNumber: " + participantActivationDTO.getNhsNumber()
-                + " dateofBirth: " + participantActivationDTO.getDateOfBirth()
-            );
-        }
-
-        identifiableData.setEmail(participantActivationDTO.getEmailAddress());
-        identifiableDataRepository.save(identifiableData);
-
-        participant.setRegisterDatetime(Instant.now());
-        participantRepository.save(participant);
-
+        User user = new User();
+        user.setEmail(email);
         String rawPassword = participantActivationDTO.getPassword();
         String encryptedPassword = passwordEncoder.encode(rawPassword);
         user.setPassword(encryptedPassword);
+        String studyCode = participantActivationDTO.getStudyCode();
+        user.setLogin(studyCode);
+        user.setActivated(true);
         userRepository.save(user);
+
+        AnswerResponse consentResponse = answerResponseService.saveDto(participantActivationDTO.getConsentRepsonse());
+        consentResponse.setState(ResponseState.SUBMITTED);
+
+        Optional<StudyId> studyIdOptional = studyIdService.getStudyIdByCode(studyCode);
+        StudyId studyId = studyIdOptional.get();
+
+        Procedure procedure = new Procedure();
+        procedure.setConsentResponse(consentResponse);
+        procedure.setRiskAssessmentResponse(studyId.getRiskAssessmentResponse());
+        procedureService.save(procedure);
+
+        Participant newParticipant = new Participant();
+        newParticipant.setUser(user);
+        newParticipant.setRegisterDatetime(Instant.now());
+        newParticipant.setProcedure(procedure);
+        participantRepository.save(newParticipant);
+
+        studyId.setParticipant(newParticipant);
+        studyIdService.save(studyId);
+    }
+
+    @Override
+    public void updateParticipantDetails(Principal principal, ParticipantDetailsDTO participantDetailsDTO) {
+        Optional<Participant> participantOptional = participantRepository.findOneByUserLogin(principal.getName());
+        Participant participant = participantOptional.get();
+
+        IdentifiableData identifiableData = new IdentifiableData();
+        identifiableData.setFirstname(participantDetailsDTO.getForename());
+        identifiableData.setSurname(participantDetailsDTO.getSurname());
+        identifiableData.setDateOfBirth(participantDetailsDTO.getDateOfBirth());
+        identifiableData.setNhsNumber(participantDetailsDTO.getNhsNumber());
+        identifiableData.setPracticeName(participantDetailsDTO.getPracticeName());
+        identifiableData.setAddress1(participantDetailsDTO.getAddressLine1());
+        identifiableData.setAddress2(participantDetailsDTO.getAddressLine2());
+        identifiableData.setAddress3(participantDetailsDTO.getAddressLine3());
+        identifiableData.setAddress4(participantDetailsDTO.getAddressLine4());
+        identifiableData.setAddress5(participantDetailsDTO.getAddressLine5());
+        identifiableData.setPostcode(participantDetailsDTO.getPostCode());
+        identifiableData.setEmail(participant.getUser().getEmail());
+        identifiableDataRepository.save(identifiableData);
+
+        participant.setIdentifiableData(identifiableData);
+        participantRepository.save(participant);
     }
 }

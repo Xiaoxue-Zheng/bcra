@@ -34,19 +34,14 @@ public class QuestionnaireResource {
     }
 
     @GetMapping("/questionnaires/consent")
-    public ResponseEntity<QuestionnaireDTO> getRiskAssessment(Principal principal) {
+    public ResponseEntity<QuestionnaireDTO> getConsent() {
         log.debug("REST request to get Consent Questionnaire");
-        Optional<QuestionnaireDTO> questionnaireDTO = 
-            questionnaireService
-                .findOne(
-                    principal.getName(),
-                    QuestionnaireType.CONSENT_FORM
-            );
+        Optional<QuestionnaireDTO> questionnaireDTO = questionnaireService.getConsentQuestionnaire();
         return ResponseUtil.wrapOrNotFound(questionnaireDTO);
     }
 
     @GetMapping("/questionnaires/risk-assessment")
-    public ResponseEntity<QuestionnaireDTO> getConsent(Principal principal) {
+    public ResponseEntity<QuestionnaireDTO> getRiskAssessment(Principal principal) {
         log.debug("REST request to get Risk Assessment Questionnaire");
         Optional<QuestionnaireDTO> questionnaireDTO = 
             questionnaireService

@@ -20,9 +20,7 @@ export class StudyIdUpdateComponent implements OnInit {
   participants: IParticipant[] = [];
 
   editForm = this.fb.group({
-    id: [],
-    code: [null, [Validators.required]],
-    participant: []
+    code: [null, [Validators.required]]
   });
 
   constructor(
@@ -32,63 +30,30 @@ export class StudyIdUpdateComponent implements OnInit {
     private fb: FormBuilder
   ) {}
 
-  ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ studyId }) => {
-      this.updateForm(studyId);
-
-      this.participantService
-        .query({ 'studyIdId.specified': 'false' })
-        .pipe(
-          map((res: HttpResponse<IParticipant[]>) => {
-            return res.body || [];
-          })
-        )
-        .subscribe((resBody: IParticipant[]) => {
-          if (!studyId.participant || !studyId.participant.id) {
-            this.participants = resBody;
-          } else {
-            this.participantService
-              .find(studyId.participant.id)
-              .pipe(
-                map((subRes: HttpResponse<IParticipant>) => {
-                  return subRes.body ? [subRes.body].concat(resBody) : resBody;
-                })
-              )
-              .subscribe((concatRes: IParticipant[]) => (this.participants = concatRes));
-          }
-        });
-    });
-  }
-
-  updateForm(studyId: IStudyId): void {
-    this.editForm.patchValue({
-      id: studyId.id,
-      code: studyId.code,
-      participant: studyId.participant
-    });
-  }
+  ngOnInit(): void {}
 
   previousState(): void {
     window.history.back();
   }
 
   save(): void {
-    this.isSaving = true;
-    const studyId = this.createFromForm();
-    if (studyId.id !== undefined) {
-      this.subscribeToSaveResponse(this.studyIdService.update(studyId));
-    } else {
-      this.subscribeToSaveResponse(this.studyIdService.create(studyId));
-    }
+    const studyCodes = this.parseStudyCodes();
+    this.studyIdService.create(studyCodes).subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
   }
 
-  private createFromForm(): IStudyId {
-    return {
-      ...new StudyId(),
-      id: this.editForm.get(['id'])!.value,
-      code: this.editForm.get(['code'])!.value,
-      participant: this.editForm.get(['participant'])!.value
-    };
+  parseStudyCodes() {
+    this.isSaving = true;
+    const studyCodesRaw = this.editForm.get('code').value;
+    const studyCodes = studyCodesRaw
+      .toString()
+      .replaceAll('\n', ',')
+      .replaceAll('\r', ',')
+      .replaceAll(' ', ',')
+      .split(',');
+
+    return studyCodes.filter(studyCode => {
+      return studyCode.length > 1;
+    });
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IStudyId>>): void {

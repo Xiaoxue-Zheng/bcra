@@ -1,4 +1,6 @@
 package uk.ac.herc.bcra.web.rest;
+
+import uk.ac.herc.bcra.domain.StudyId;
 import uk.ac.herc.bcra.service.StudyIdService;
 
 import org.slf4j.Logger;
@@ -7,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 /**
  * REST controller for managing {@link uk.ac.herc.bcra.domain.StudyId}.
@@ -22,6 +25,18 @@ public class StudyIdResource {
 
     public StudyIdResource(StudyIdService studyIdService) {
         this.studyIdService = studyIdService;
+    }
+
+    @GetMapping("/study-ids")
+    public List<StudyId> getStudyIds() {
+        log.debug("REST request to get all study ids");
+        return studyIdService.getStudyIds();
+    }
+
+    @PostMapping("/study-ids")
+    public void createStudyIdsFromCodes(@RequestBody List<String> studyCodes) {
+        log.debug("REST request to create new study ids");
+        studyIdService.createStudyIdsFromCodes(studyCodes);
     }
 
     @GetMapping("/study-ids/{code}")

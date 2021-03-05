@@ -39,7 +39,7 @@ export const studyIdRoute: Routes = [
     component: StudyIdComponent,
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'StudyIds'
+      pageTitle: 'Study IDs'
     },
     canActivate: [UserRouteAccessService]
   },
@@ -51,7 +51,7 @@ export const studyIdRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'StudyIds'
+      pageTitle: 'Study IDs'
     },
     canActivate: [UserRouteAccessService]
   },
@@ -63,7 +63,7 @@ export const studyIdRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'StudyIds'
+      pageTitle: 'Study IDs'
     },
     canActivate: [UserRouteAccessService]
   },
@@ -75,7 +75,7 @@ export const studyIdRoute: Routes = [
     },
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'StudyIds'
+      pageTitle: 'Study IDs'
     },
     canActivate: [UserRouteAccessService]
   }

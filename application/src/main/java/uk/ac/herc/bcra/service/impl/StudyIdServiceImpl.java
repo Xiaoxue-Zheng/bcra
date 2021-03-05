@@ -3,8 +3,11 @@ package uk.ac.herc.bcra.service.impl;
 import uk.ac.herc.bcra.service.StudyIdService;
 import uk.ac.herc.bcra.service.mapper.AnswerResponseMapper;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
+import uk.ac.herc.bcra.domain.AnswerResponse;
 import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.domain.StudyId;
+import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
+import uk.ac.herc.bcra.questionnaire.AnswerResponseGenerator;
 import uk.ac.herc.bcra.repository.ParticipantRepository;
 import uk.ac.herc.bcra.repository.StudyIdRepository;
 import org.slf4j.Logger;
@@ -13,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,11 +28,50 @@ public class StudyIdServiceImpl implements StudyIdService {
     private final StudyIdRepository studyIdRepository;
     private final AnswerResponseMapper answerResponseMapper;
     private final ParticipantRepository participantRepository;
+    private final AnswerResponseGenerator answerResponseGenerator;
 
-    public StudyIdServiceImpl(StudyIdRepository studyIdRepository, AnswerResponseMapper answerResponseMapper, ParticipantRepository participantRepository) {
+    public StudyIdServiceImpl(StudyIdRepository studyIdRepository, 
+        AnswerResponseMapper answerResponseMapper, 
+        ParticipantRepository participantRepository,
+        AnswerResponseGenerator answerResponseGenerator) {
+            
         this.studyIdRepository = studyIdRepository;
         this.answerResponseMapper = answerResponseMapper;
         this.participantRepository = participantRepository;
+        this.answerResponseGenerator = answerResponseGenerator;
+    }
+
+    @Override
+    public List<StudyId> getStudyIds() {
+        log.debug("Request to get all study ids");
+        return studyIdRepository.findAll();
+    }
+
+    @Override
+    public void createStudyIdsFromCodes(List<String> studyCodes) {
+        log.debug("Creating multiple study ids from study code");
+        for (String studyCode : studyCodes) {
+            createStudyIdFromCode(studyCode);
+        }
+    }
+
+    @Override
+    public void createStudyIdFromCode(String studyCode) {
+        log.debug("Creating study id with code: {}", studyCode);
+        
+        AnswerResponse consentForm = answerResponseGenerator.generateAnswerResponseToQuestionnaire(
+            QuestionnaireType.CONSENT_FORM
+        );
+
+        AnswerResponse riskAssessment = answerResponseGenerator.generateAnswerResponseToQuestionnaire(
+            QuestionnaireType.RISK_ASSESSMENT
+        );
+
+        StudyId studyId = new StudyId();
+        studyId.setCode(studyCode);
+        studyId.setConsentResponse(consentForm);
+        studyId.setRiskAssessmentResponse(riskAssessment);
+        save(studyId);
     }
 
     @Override

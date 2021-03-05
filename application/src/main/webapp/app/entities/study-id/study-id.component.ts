@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -7,6 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IStudyId } from 'app/shared/model/study-id.model';
 import { StudyIdService } from './study-id.service';
 import { StudyIdDeleteDialogComponent } from './study-id-delete-dialog.component';
+import { filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-study-id',
@@ -19,7 +20,18 @@ export class StudyIdComponent implements OnInit, OnDestroy {
   constructor(protected studyIdService: StudyIdService, protected eventManager: JhiEventManager, protected modalService: NgbModal) {}
 
   loadAll(): void {
-    this.studyIdService.query().subscribe((res: HttpResponse<IStudyId[]>) => (this.studyIds = res.body || []));
+    this.studyIdService
+      .query()
+      .pipe(
+        filter((res: HttpResponse<IStudyId[]>) => res.ok),
+        map((res: HttpResponse<IStudyId[]>) => res.body)
+      )
+      .subscribe(
+        (res: IStudyId[]) => {
+          this.studyIds = res;
+        },
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
   }
 
   ngOnInit(): void {
@@ -31,6 +43,10 @@ export class StudyIdComponent implements OnInit, OnDestroy {
     if (this.eventSubscriber) {
       this.eventManager.destroy(this.eventSubscriber);
     }
+  }
+
+  onError(message) {
+    console.log(message);
   }
 
   trackId(index: number, item: IStudyId): number {

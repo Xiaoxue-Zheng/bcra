@@ -35,29 +35,6 @@ describe('Questionnaire e2e test', () => {
     await questionnaireUpdatePage.cancel();
   });
 
-  it('should create and save Questionnaires', async () => {
-    const nbButtonsBeforeCreate = await questionnaireComponentsPage.countDeleteButtons();
-
-    await questionnaireComponentsPage.clickOnCreateButton();
-    await promise.all([questionnaireUpdatePage.typeSelectLastOption(), questionnaireUpdatePage.setVersionInput('5')]);
-    expect(await questionnaireUpdatePage.getVersionInput()).to.eq('5', 'Expected version value to be equals to 5');
-    await questionnaireUpdatePage.save();
-    expect(await questionnaireUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
-
-    expect(await questionnaireComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
-  });
-
-  it('should delete last Questionnaire', async () => {
-    const nbButtonsBeforeDelete = await questionnaireComponentsPage.countDeleteButtons();
-    await questionnaireComponentsPage.clickOnLastDeleteButton();
-
-    questionnaireDeleteDialog = new QuestionnaireDeleteDialog();
-    expect(await questionnaireDeleteDialog.getDialogTitle()).to.eq('Are you sure you want to delete this Questionnaire?');
-    await questionnaireDeleteDialog.clickOnConfirmButton();
-
-    expect(await questionnaireComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
-  });
-
   after(async () => {
     await navBarPage.autoSignOut();
   });

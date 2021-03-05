@@ -75,18 +75,6 @@ import { RouterModule } from '@angular/router';
       {
         path: 'study-id',
         loadChildren: () => import('./study-id/study-id.module').then(m => m.BcraStudyIdModule)
-      },
-      {
-        path: 'risk-factor',
-        loadChildren: () => import('./risk-factor/risk-factor.module').then(m => m.BcraRiskFactorModule)
-      },
-      {
-        path: 'risk',
-        loadChildren: () => import('./risk/risk.module').then(m => m.BcraRiskModule)
-      },
-      {
-        path: 'risk-assessment-result',
-        loadChildren: () => import('./risk-assessment-result/risk-assessment-result.module').then(m => m.BcraRiskAssessmentResultModule)
       }
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ])

@@ -1,22 +1,18 @@
-import { element, by, ElementFinder } from 'protractor';
+import { $$, element, by, ElementFinder } from 'protractor';
 
 export class StudyIdComponentsPage {
   createButton = element(by.id('jh-create-entity'));
-  deleteButtons = element.all(by.css('jhi-study-id div table .btn-danger'));
   title = element.all(by.css('jhi-study-id div h2#page-heading span')).first();
   noResult = element(by.id('no-result'));
   entities = element(by.id('entities'));
+  studyIds = $$('tr');
 
   async clickOnCreateButton(): Promise<void> {
     await this.createButton.click();
   }
 
-  async clickOnLastDeleteButton(): Promise<void> {
-    await this.deleteButtons.last().click();
-  }
-
-  async countDeleteButtons(): Promise<number> {
-    return this.deleteButtons.count();
+  async countStudyIds(): Promise<number> {
+    return await this.studyIds.count();
   }
 
   async getTitle(): Promise<string> {

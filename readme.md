@@ -1,5 +1,20 @@
 # BCRA - Breast Cancer Risk Assesment in Young Women
 
+## Build Prerequisites
+NB: It is recommended to use nvm for installing (and switching between) node versions
+
+Below is a list of software we use in the running of the BCRA application.
+The versions listed by each of them is recommended for successful building.
+- node.js (10.16.3)
+- PostGreSQL (13.1.0)
+
+## Quality Assurance / Current Project Status
+NB: This section is to be updated with every change that is made.
+
+- Integration tests for the server application are incomplete and may fail due to race conditions as the database is not cleared in the background between tests. This is to be addressed as part of CLIN-1147.
+- Unit tests for the questionnaire front end seem to be incomplete, or inadequately cover the whole solution. This is to be addressed as part of CLIN-1173.
+- End-to-end tests for the questionnaire front end seem to be failing due to a CryptoJs failure. This is to be addressed as part of CLIN-1173.
+
 ## Database
 
 ### Configure Postgres for Local Development
@@ -57,6 +72,13 @@ Launch front-end: `npm start`
 
 ### Run Front-End Tests
 `npm test`
+
+### Run Front-End E2E Tests
+Navigate to the /application in two console windows.
+
+In one window run `npm test`
+
+In the other window run `npm run e2e`
 
 ### Build for Production
 `mvnw -Pprod,war clean verify`

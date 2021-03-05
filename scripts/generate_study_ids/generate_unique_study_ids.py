@@ -43,9 +43,10 @@ print('Please enter a character code to identify a general practice')
 practice_code = raw_input('>> ')
 
 uq_ids = [get_new_code(practice_code, None)]
-for i in range(UQ_IDS_PER_GP - 1):
+while len(uq_ids) < UQ_IDS_PER_GP:
 	uq_id = get_new_code(practice_code, uq_ids[-1])
-	uq_ids.append(uq_id)
+	if (uq_id not in uq_ids):
+		uq_ids.append(uq_id)
 
 filename = practice_code + '_STUDY_IDS.csv'
 save_as_csv(filename, uq_ids)

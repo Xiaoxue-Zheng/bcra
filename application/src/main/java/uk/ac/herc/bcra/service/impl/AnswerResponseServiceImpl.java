@@ -12,7 +12,6 @@ import uk.ac.herc.bcra.repository.StudyIdRepository;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
 import uk.ac.herc.bcra.service.mapper.AnswerResponseMapper;
 
-import org.ehcache.core.statistics.CacheOperationOutcomes.ReplaceOutcome;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

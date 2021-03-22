@@ -3,6 +3,7 @@ package uk.ac.herc.bcra.web.rest;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
@@ -153,6 +154,6 @@ public final class TestUtil {
         TypedQuery<T> allQuery = em.createQuery(all);
         return allQuery.getResultList();
     }
-
+    
     private TestUtil() {}
 }

@@ -16,6 +16,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import javax.transaction.Transactional;
+
 /**
  * Integration tests for the {@link ClientForwardController} REST controller.
  */
@@ -33,6 +35,7 @@ public class ClientForwardControllerIT {
     }
 
     @Test
+    @Transactional
     public void getBackendEndpoint() throws Exception {
         restMockMvc.perform(get("/test"))
             .andExpect(status().isOk())
@@ -41,6 +44,7 @@ public class ClientForwardControllerIT {
     }
 
     @Test
+    @Transactional
     public void getClientEndpoint() throws Exception {
         ResultActions perform = restMockMvc.perform(get("/non-existant-mapping"));
         perform
@@ -49,6 +53,7 @@ public class ClientForwardControllerIT {
     }
 
     @Test
+    @Transactional
     public void getNestedClientEndpoint() throws Exception {
         restMockMvc.perform(get("/admin/user-management"))
             .andExpect(status().isOk())

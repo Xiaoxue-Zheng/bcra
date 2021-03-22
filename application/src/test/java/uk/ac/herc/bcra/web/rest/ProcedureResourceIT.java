@@ -2,8 +2,8 @@ package uk.ac.herc.bcra.web.rest;
 
 import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.Procedure;
+import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 import uk.ac.herc.bcra.domain.AnswerResponse;
-import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.repository.ProcedureRepository;
 import uk.ac.herc.bcra.service.ProcedureService;
 import uk.ac.herc.bcra.service.dto.ProcedureDTO;
@@ -87,26 +87,17 @@ public class ProcedureResourceIT {
     public static Procedure createEntity(EntityManager em) {
         Procedure procedure = new Procedure();
         // Add required entity
-        AnswerResponse consentResponse = AnswerResponseResourceIT.createEntity(em);
+        AnswerResponse consentResponse = AnswerResponseResourceIT.createEntity(em, QuestionnaireType.CONSENT_FORM);
         em.persist(consentResponse);
         em.flush();
 
-        AnswerResponse riskAssessmentResponse = AnswerResponseResourceIT.createEntity(em);
+        AnswerResponse riskAssessmentResponse = AnswerResponseResourceIT.createEntity(em, QuestionnaireType.RISK_ASSESSMENT);
         em.persist(riskAssessmentResponse);
         em.flush();
         procedure.setConsentResponse(consentResponse);
         // Add required entity
         procedure.setRiskAssessmentResponse(riskAssessmentResponse);
-        // Add required entity
-        Participant participant;
-        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = ParticipantResourceIT.createEntity(em);
-            em.persist(participant);
-            em.flush();
-        } else {
-            participant = TestUtil.findAll(em, Participant.class).get(0);
-        }
-        procedure.setParticipant(participant);
+
         return procedure;
     }
     /**
@@ -118,17 +109,28 @@ public class ProcedureResourceIT {
     public static Procedure createUpdatedEntity(EntityManager em) {
         Procedure procedure = new Procedure();
         // Add required entity
-        AnswerResponse answerResponse;
+        AnswerResponse consentResponse = null;
+        AnswerResponse riskAssessmentResponse = null;
         if (TestUtil.findAll(em, AnswerResponse.class).isEmpty()) {
-            answerResponse = AnswerResponseResourceIT.createUpdatedEntity(em);
-            em.persist(answerResponse);
+            consentResponse = AnswerResponseResourceIT.createEntity(em);
+            em.persist(consentResponse);
+            
+            riskAssessmentResponse = AnswerResponseResourceIT.createUpdatedEntity(em);
+            em.persist(riskAssessmentResponse);
+
             em.flush();
         } else {
-            answerResponse = TestUtil.findAll(em, AnswerResponse.class).get(0);
+            for (AnswerResponse ar : TestUtil.findAll(em, AnswerResponse.class)) {
+                if (ar.getQuestionnaire().getType() == QuestionnaireType.CONSENT_FORM) {
+                    consentResponse = ar;
+                } else {
+                    riskAssessmentResponse = ar;
+                }
+            }
         }
-        procedure.setConsentResponse(answerResponse);
-        // Add required entity
-        procedure.setRiskAssessmentResponse(answerResponse);
+
+        procedure.setConsentResponse(consentResponse);
+        procedure.setRiskAssessmentResponse(riskAssessmentResponse);
         return procedure;
     }
 
@@ -158,6 +160,8 @@ public class ProcedureResourceIT {
     @Test
     @Transactional
     public void createProcedureWithExistingId() throws Exception {
+        createProcedure(); 
+
         int databaseSizeBeforeCreate = procedureRepository.findAll().size();
 
         // Create the Procedure with an existing ID

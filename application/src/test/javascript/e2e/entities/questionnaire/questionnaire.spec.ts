@@ -2,7 +2,7 @@
 import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
-import { QuestionnaireComponentsPage, QuestionnaireDeleteDialog, QuestionnaireUpdatePage } from './questionnaire.page-object';
+import { QuestionnaireComponentsPage, QuestionnaireUpdatePage } from './questionnaire.page-object';
 
 const expect = chai.expect;
 
@@ -11,7 +11,6 @@ describe('Questionnaire e2e test', () => {
   let signInPage: SignInPage;
   let questionnaireUpdatePage: QuestionnaireUpdatePage;
   let questionnaireComponentsPage: QuestionnaireComponentsPage;
-  let questionnaireDeleteDialog: QuestionnaireDeleteDialog;
 
   before(async () => {
     await browser.get('/');

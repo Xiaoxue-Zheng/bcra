@@ -100,6 +100,7 @@ public class AccountResourceIT {
     }
 
     @Test
+    @Transactional
     public void testNonAuthenticatedUser() throws Exception {
         restUserMockMvc.perform(get("/api/authenticate")
             .accept(MediaType.APPLICATION_JSON))
@@ -108,6 +109,7 @@ public class AccountResourceIT {
     }
 
     @Test
+    @Transactional
     public void testAuthenticatedUser() throws Exception {
         restUserMockMvc.perform(get("/api/authenticate")
             .with(request -> {
@@ -120,6 +122,7 @@ public class AccountResourceIT {
     }
 
     @Test
+    @Transactional
     public void testGetExistingAccount() throws Exception {
         Set<Authority> authorities = new HashSet<>();
         Authority authority = new Authority();
@@ -150,6 +153,7 @@ public class AccountResourceIT {
     }
 
     @Test
+    @Transactional
     public void testGetUnknownAccount() throws Exception {
         when(mockUserService.getUserWithAuthorities()).thenReturn(Optional.empty());
 
@@ -800,6 +804,7 @@ public class AccountResourceIT {
     }
 
     @Test
+    @Transactional
     public void testRequestPasswordResetWrongEmail() throws Exception {
         restMvc.perform(
             post("/api/account/reset-password/init")

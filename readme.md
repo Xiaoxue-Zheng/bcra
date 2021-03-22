@@ -11,9 +11,9 @@ The versions listed by each of them is recommended for successful building.
 ## Quality Assurance / Current Project Status
 NB: This section is to be updated with every change that is made.
 
-- Integration tests for the server application are incomplete and may fail due to race conditions as the database is not cleared in the background between tests. This is to be addressed as part of CLIN-1147.
 - Unit tests for the questionnaire front end seem to be incomplete, or inadequately cover the whole solution. This is to be addressed as part of CLIN-1173.
 - End-to-end tests for the questionnaire front end seem to be failing due to a CryptoJs failure. This is to be addressed as part of CLIN-1173.
+- Currently, we are awaiting an executable that is compatible with Mac and Linux operating systems. Because of this, two integration tests will fail on these platforms. These are runTyrerCuzickExecutable and readTyrerCuzickOutput. Before running the integration tests on these platforms, be sure to comment out these tests.
 
 ## Database
 
@@ -88,6 +88,8 @@ In the other window run `npm run e2e`
 
 ### Tyrercuzick process
 
+#### Set-up
+
 When a risk assessment is completed, it is ran through our tyrercuzick process. This requires a directory structure to be set up.
 
 Before the application is started, be sure that you have the following directory structure:
@@ -104,6 +106,26 @@ If you are on an iOS system, then use the following directory structure for the 
 /usr/local/share/tyrercuzick/input/
 /usr/local/share/tyrercuzick/output/
 /usr/local/share/tyrercuzick/tyrercuzick.exe
+
+#### Manual testing
+
+The tyrercuzick process can be manually tested from the admin dashboard of the web application. To carry this out, follow these steps:
+
+1. Run the backend application.
+2. Run the questionnaire application.
+3. Log into the backend application.
+4. Select entities > Study IDs from the navigation bar.
+5. Select "create new study ids".
+6. Enter a comma separated list of study ids (take note of these).
+    - i.e. TST_01, TST_02, TST_03, etc.
+7. Head to the questionnaire application.
+8. Register with one of the created study ids.
+9. Complete all questionnaires.
+10. Log back into the backend application.
+11. Select Tyrer Cuzick Test from the navigation bar.
+12. Select the "Trigger TC Process" button.
+13. Open the database using the psql console.
+14. Check the risk_assessment_response table for the new record.
  
 ## Questionnaire
 

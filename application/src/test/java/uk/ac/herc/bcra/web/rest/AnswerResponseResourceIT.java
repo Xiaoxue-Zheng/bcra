@@ -308,8 +308,6 @@ public class AnswerResponseResourceIT {
     @Transactional
     public void saveConsentAnswerResponse() throws Exception {
 
-        int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
-
         // Initialize the database
         Participant participant;
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
@@ -319,6 +317,8 @@ public class AnswerResponseResourceIT {
         } else {
             participant = TestUtil.findAll(em, Participant.class).get(0);
         }
+
+        int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
 
         // Update the answerResponse
         AnswerResponse updatedAnswerResponse = 
@@ -376,8 +376,6 @@ public class AnswerResponseResourceIT {
     @Transactional
     public void submitConsentAnswerResponse() throws Exception {
 
-        int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
-
         // Initialize the database
         Participant participant;
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
@@ -387,6 +385,8 @@ public class AnswerResponseResourceIT {
         } else {
             participant = TestUtil.findAll(em, Participant.class).get(0);
         }
+
+        int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
 
         // Update the answerResponse
         AnswerResponse updatedAnswerResponse = 
@@ -444,8 +444,6 @@ public class AnswerResponseResourceIT {
     @Transactional
     public void saveRiskAssessmentAnswerResponse() throws Exception {
 
-        int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
-
         // Initialize the database
         Participant participant;
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
@@ -455,6 +453,8 @@ public class AnswerResponseResourceIT {
         } else {
             participant = TestUtil.findAll(em, Participant.class).get(0);
         }
+
+        int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
 
         // Update the answerResponse
         AnswerResponse updatedAnswerResponse = 
@@ -513,8 +513,6 @@ public class AnswerResponseResourceIT {
     @Transactional
     public void submitRiskAssessmentAnswerResponse() throws Exception {
 
-        int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
-
         // Initialize the database
         Participant participant;
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
@@ -524,6 +522,8 @@ public class AnswerResponseResourceIT {
         } else {
             participant = TestUtil.findAll(em, Participant.class).get(0);
         }
+
+        int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
 
         // Update the answerResponse
         AnswerResponse updatedAnswerResponse = 

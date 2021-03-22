@@ -81,6 +81,7 @@ public class AuditResourceIT {
     }
 
     @Test
+    @Transactional
     public void getAllAudits() throws Exception {
         // Initialize the database
         auditEventRepository.save(auditEvent);
@@ -93,6 +94,7 @@ public class AuditResourceIT {
     }
 
     @Test
+    @Transactional
     public void getAudit() throws Exception {
         // Initialize the database
         auditEventRepository.save(auditEvent);
@@ -105,6 +107,7 @@ public class AuditResourceIT {
     }
 
     @Test
+    @Transactional
     public void getAuditsByDate() throws Exception {
         // Initialize the database
         auditEventRepository.save(auditEvent);
@@ -121,6 +124,7 @@ public class AuditResourceIT {
     }
 
     @Test
+    @Transactional
     public void getNonExistingAuditsByDate() throws Exception {
         // Initialize the database
         auditEventRepository.save(auditEvent);
@@ -137,6 +141,7 @@ public class AuditResourceIT {
     }
 
     @Test
+    @Transactional
     public void getNonExistingAudit() throws Exception {
         // Get the audit
         restAuditMockMvc.perform(get("/management/audits/{id}", Long.MAX_VALUE))

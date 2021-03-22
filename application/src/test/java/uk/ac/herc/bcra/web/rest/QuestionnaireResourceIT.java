@@ -160,7 +160,7 @@ public class QuestionnaireResourceIT {
         // Initialize the database
         Participant participant;
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = ParticipantResourceIT.createUpdatedEntity(em);
+            participant = ParticipantResourceIT.createEntity(em);
             em.persist(participant);
             em.flush();
         } else {

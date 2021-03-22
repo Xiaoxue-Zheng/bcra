@@ -517,6 +517,7 @@ public class UserResourceIT {
     }
 
     @Test
+    @Transactional
     public void testUserDTOtoUser() {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(DEFAULT_ID);
@@ -548,6 +549,7 @@ public class UserResourceIT {
     }
 
     @Test
+    @Transactional
     public void testUserToUserDTO() {
         user.setId(DEFAULT_ID);
         user.setCreatedBy(DEFAULT_LOGIN);
@@ -579,6 +581,7 @@ public class UserResourceIT {
     }
 
     @Test
+    @Transactional
     public void testAuthorityEquals() {
         Authority authorityA = new Authority();
         assertThat(authorityA).isEqualTo(authorityA);

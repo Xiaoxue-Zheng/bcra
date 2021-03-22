@@ -153,7 +153,7 @@ public class ParticipantResourceIT {
         // Add required entity
         Procedure procedure;
         if (TestUtil.findAll(em, Procedure.class).isEmpty()) {
-            procedure = ProcedureResourceIT.createUpdatedEntity(em);
+            procedure = ProcedureResourceIT.createEntity(em);
             em.persist(procedure);
             em.flush();
         } else {

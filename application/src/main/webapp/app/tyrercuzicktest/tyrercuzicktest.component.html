@@ -1,0 +1,13 @@
+<div>
+    <h1>Tyrer Cuzick Test</h1>
+    <div>
+        Select the button below to trigger the Tyrer Cuzick background process. <br>
+        Note: Be aware that this process could take a while to complete. Multiple clicks of the button may cause long loading times.<br>
+    </div>
+
+    <br>
+
+    <button type="submit" class="btn btn-primary" [disabled]="isProcessing" (click)="startTCProcess()">
+        <fa-icon icon="wrench"></fa-icon>&nbsp;<span>Trigger TC Process</span>
+    </button>
+</div>

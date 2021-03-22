@@ -81,8 +81,7 @@ public class TyrerCuzickService {
         }
     }
 
-    //@Scheduled(cron = "0 0 0 * * *")
-    @Scheduled(cron = "0 */1 * * * ?")
+    @Scheduled(cron = "0 0 0 * * *")
     public void writeValidatedAnswerResponsesToFile() {
         log.info("Processing validated answer responses");
 
@@ -119,8 +118,7 @@ public class TyrerCuzickService {
         }
     }
 
-    //@Scheduled(cron = "0 5 0 * * *")
-    @Scheduled(cron = "0 */1 * * * ?")
+    @Scheduled(cron = "0 5 0 * * *")
     public void runTyrerCuzickExecutable() {
         log.info("Running tyrercuzick executable");
 
@@ -145,8 +143,7 @@ public class TyrerCuzickService {
         }
     }
 
-    //@Scheduled(cron = "0 10 0 * * *")
-    @Scheduled(cron = "0 */1 * * * ?")
+    @Scheduled(cron = "0 10 0 * * *")
     public void readTyrerCuzickOutput() {
         log.info("Processing tyrercuzick output");
 

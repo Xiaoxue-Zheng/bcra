@@ -19,6 +19,7 @@ import { BcraCsvFileModule } from './csvfile/csvfile.module';
 import { BcraParticipantModule } from './participant/participant.module';
 import { BcraAccountModule } from './account/account.module';
 import { BcraEntityModule } from './entities/entity.module';
+import { BcraTyrerCuzickTestModule } from './tyrercuzicktest/tyrercuzicktest.module';
 
 import moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
@@ -40,6 +41,7 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
     BcraCsvFileModule,
     BcraParticipantModule,
     BcraAccountModule,
+    BcraTyrerCuzickTestModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
     BcraEntityModule,
     BcraAppRoutingModule

@@ -33,6 +33,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 import org.springframework.core.io.ClassPathResource;
 
@@ -125,6 +126,7 @@ public class ParticipantCsvUploadResourceIT {
     }
 
     @Test
+    @Transactional
     public void test1FileUploadWorks() throws Exception {
         MockMultipartFile csvFile = new MockMultipartFile(
             RESOURCE_PARAMETER_NAME,
@@ -148,6 +150,7 @@ public class ParticipantCsvUploadResourceIT {
     }
 
     @Test
+    @Transactional
     public void test2DuplicateFileIgnored() throws Exception {
         MockMultipartFile csvFile = new MockMultipartFile(
             RESOURCE_PARAMETER_NAME,
@@ -155,6 +158,14 @@ public class ParticipantCsvUploadResourceIT {
             MediaType.MULTIPART_FORM_DATA.getType(),
             validTestCsvUploadContent
         );
+
+        mockMvc.perform(
+            MockMvcRequestBuilders
+            .multipart("/api/participant-csv")
+            .file(csvFile)
+        )
+        .andExpect(status().is(200))
+        .andExpect(jsonPath("$").value("CREATED"));
 
         int databaseSizeBeforeCreate = csvFileRepository.findAll().size();
 
@@ -171,7 +182,23 @@ public class ParticipantCsvUploadResourceIT {
     }
 
     @Test
+    @Transactional
     public void test3ValidCsvFileIsProcessed() throws Exception {
+        MockMultipartFile csvFile = new MockMultipartFile(
+            RESOURCE_PARAMETER_NAME,
+            VALID_TEST_UPLOAD_FILENAME,
+            MediaType.MULTIPART_FORM_DATA.getType(),
+            validTestCsvUploadContent
+        );
+
+        mockMvc.perform(
+                MockMvcRequestBuilders
+                .multipart("/api/participant-csv")
+                .file(csvFile)
+            )
+            .andExpect(status().is(200))
+            .andExpect(jsonPath("$").value("CREATED"));
+        
         int initialParticipantCount = participantRepository.findAll().size();
         int initialUserCount = userRepository.findAll().size();
         int initialIdentifiableDataCount = identifiableDataRepository.findAll().size();
@@ -200,6 +227,7 @@ public class ParticipantCsvUploadResourceIT {
     }
 
     @Test
+    @Transactional
     public void test4InvalidCsvFileIsNotProcessed() throws Exception {
         MockMultipartFile csvFile = new MockMultipartFile(
             RESOURCE_PARAMETER_NAME,

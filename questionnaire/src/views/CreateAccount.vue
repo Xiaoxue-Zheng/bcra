@@ -16,10 +16,8 @@
           <fieldset>
             <label>Create a password</label>
             <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-2-5">
-              <password v-model="password" @score="setScore" @feedback="showFeedback" class="pure-input-1"/>
+              <password v-model="password" @score="setScore" class="pure-input-1"/>
             </div>
-            <div class="error-message" v-for="suggestion in passwordSuggestions" v-bind:key="suggestion">{{ suggestion }}</div>
-            <div class="error-message">{{ passwordWarning }}</div>
           </fieldset>
           <fieldset>
             <label>Repeat your password</label>
@@ -28,9 +26,9 @@
             </div>
           </fieldset>
           <div class="error-message" v-if="password != repeatPassword">Your passwords don't match!</div>
-          <div class="error-message" v-if="passwordScore < MINIMUM_PASSWORD_SCORE">Please pick a stronger password.</div>
+          <div class="error-message" v-if="passwordScore < MINIMUM_PASSWORD_SCORE && password != 0">Please pick a stronger password.</div>
           <div class="error-message" v-if="displayErrorMessage">Something went wrong. Please try again.</div>
-          <button class="pure-button pure-button-primary" type="submit">Create account</button>
+          <button class="pure-button pure-button-primary" type="submit" :disabled="password != repeatPassword || passwordScore < MINIMUM_PASSWORD_SCORE">Create account</button>
         </form>
       </div>
     </div>
@@ -63,24 +61,22 @@ export default {
   },
   methods: {
     async createAccount () {
-      this.displayErrorMessage = false
-      var signUpInformation = {
-        'emailAddress': this.emailAddress,
-        'password': this.password,
-        'studyCode': SignUpHelperService.getStudyCode(),
-        'consentResponse': SignUpHelperService.getConsentResponse()
-      }
+      if (this.formValid()) {
+        this.displayErrorMessage = false
+        var signUpInformation = {
+          'emailAddress': this.emailAddress,
+          'password': this.password,
+          'studyCode': SignUpHelperService.getStudyCode(),
+          'consentResponse': SignUpHelperService.getConsentResponse()
+        }
 
-      SecurityService.createAccount(signUpInformation).then(() => {
-        this.autoLogin()
-      });
+        SecurityService.createAccount(signUpInformation).then(() => {
+          this.autoLogin()
+        });
+      }
     },
     setScore (score) {
       this.passwordScore = score
-    },
-    showFeedback (feedback) {
-      this.passwordSuggestions = feedback.suggestions
-      this.passwordWarning = feedback.warning
     },
     formValid () {
       if (this.password === this.repeatPassword) {

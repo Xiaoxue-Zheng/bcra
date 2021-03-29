@@ -9,6 +9,7 @@ import uk.ac.herc.bcra.service.dto.ParticipantExistsDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantActivationDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantDetailsDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantCriteria;
+import uk.ac.herc.bcra.domain.IdentifiableData;
 import uk.ac.herc.bcra.service.ParticipantQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -140,5 +141,11 @@ public class ParticipantResource {
     @PostMapping("/participants/details")
     public void updateParticipantDetails(@Valid @RequestBody ParticipantDetailsDTO participantDetailsDTO, Principal principal) {
         participantService.updateParticipantDetails(principal, participantDetailsDTO);
+    }
+
+    @GetMapping("/participants/details")
+    public boolean hasCompletedParticipantDetails(Principal principal) {
+        IdentifiableData details = participantService.getParticipantDetails(principal);
+        return details != null;
     }
 }

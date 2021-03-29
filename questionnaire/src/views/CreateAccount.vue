@@ -51,8 +51,6 @@ export default {
       password: '',
       repeatPassword: '',
       passwordScore: 0,
-      passwordWarning: '',
-      passwordSuggestions: [],
       displayErrorMessage: false,
       MINIMUM_PASSWORD_SCORE: MINIMUM_PASSWORD_SCORE
     }
@@ -72,15 +70,16 @@ export default {
 
         SecurityService.createAccount(signUpInformation).then(() => {
           this.autoLogin()
-        });
+        })
       }
     },
     setScore (score) {
+      console.log(score)
       this.passwordScore = score
     },
     formValid () {
       if (this.password === this.repeatPassword) {
-        if (this.passwordScore > MINIMUM_PASSWORD_SCORE) {
+        if (this.passwordScore >= MINIMUM_PASSWORD_SCORE) {
           return true
         }
       }
@@ -93,7 +92,7 @@ export default {
       }
       const loginOutcome = await this.$store.dispatch('security/login', parameters)
       if (loginOutcome === 'SUCCESS') {
-        SignUpHelperService.clearSignUpInfo();
+        SignUpHelperService.clearSignUpInfo()
         this.$router.push('/participant-details')
       } else {
         this.displayErrorMessage = true

@@ -46,6 +46,7 @@ export default {
   methods: {
     submit () {
       AnswerResponseService.submitRiskAssessment(this.answerResponse)
+      this.$router.push('/wip')
     },
     formatConditionText (text) {
       return '- ' + text.substring(0, 1).toUpperCase() + text.substring(1) + '.'

@@ -49,7 +49,7 @@ export default {
       const { username, password } = this
       const loginOutcome = await this.$store.dispatch('security/login', { username, password })
       if (loginOutcome === 'SUCCESS') {
-        this.navigateToIncompleteSection();
+        this.navigateToIncompleteSection()
       } else {
         this.setMessage(loginOutcome)
       }
@@ -65,20 +65,23 @@ export default {
         this.displayErrorMessage = true
       }
     },
-    async navigateToIncompleteSection() {
-      SignUpHelperService.hasCompletedConsent().then(completeConsent => {
-        if (completeConsent) {
-          this.$router.push('/consent')
+    async navigateToIncompleteSection () {
+      let completeConsent = await SignUpHelperService.hasCompletedConsent()
+      if (!completeConsent) {
+        this.$router.push('/consent')
+      } else {
+        let completeParticipantDetails = await SignUpHelperService.hasCompletedParticipantDetails()
+        if (!completeParticipantDetails) {
+          this.$router.push('/participant-details')
         } else {
-          SignUpHelperService.hasCompletedRiskAssessment().then(completeRiskAssessment => {
-            if (completeRiskAssessment) {
-              this.$router.push('/')
-            } else {
-              this.$router.push('/questionnaire/familyhistorycontext')
-            }
-          })
+          let completeRiskAssessment = await SignUpHelperService.hasCompletedRiskAssessment()
+          if (!completeRiskAssessment) {
+            this.$router.push('/questionnaire/familyhistorycontext')
+          } else {
+            this.$router.push('/')
+          }
         }
-      });
+      }
     }
   }
 }

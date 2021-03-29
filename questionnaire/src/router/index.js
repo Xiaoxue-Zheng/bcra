@@ -70,6 +70,11 @@ const router = new Router({
       path: '/participant-details',
       name: 'participantDetails',
       component: () => import('../views/ParticipantDetails.vue')
+    },
+    {
+      path: '/wip',
+      name: 'workInProgress',
+      component: () => import('../views/WorkInProgress.vue')
     }
   ],
   scrollBehavior (to, from, savedPosition) {

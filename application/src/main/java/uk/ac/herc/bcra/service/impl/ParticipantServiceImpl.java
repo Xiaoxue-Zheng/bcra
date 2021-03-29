@@ -237,4 +237,12 @@ public class ParticipantServiceImpl implements ParticipantService {
         participant.setIdentifiableData(identifiableData);
         participantRepository.save(participant);
     }
+
+    @Override
+    public IdentifiableData getParticipantDetails(Principal principal) {
+        Optional<Participant> participantOptional = participantRepository.findOneByUserLogin(principal.getName());
+        Participant participant = participantOptional.get();
+
+        return participant.getIdentifiableData();
+    }
 }

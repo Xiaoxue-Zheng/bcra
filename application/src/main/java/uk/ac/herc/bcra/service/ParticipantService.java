@@ -1,5 +1,6 @@
 package uk.ac.herc.bcra.service;
 
+import uk.ac.herc.bcra.domain.IdentifiableData;
 import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.service.dto.ParticipantActivationDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantDTO;
@@ -57,4 +58,6 @@ public interface ParticipantService {
     void activate(ParticipantActivationDTO participantActivationDTO);
 
     void updateParticipantDetails(Principal principal, ParticipantDetailsDTO participantDetailsDTO);
+
+    IdentifiableData getParticipantDetails(Principal principal);
 }

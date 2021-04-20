@@ -23,6 +23,7 @@ eureka:
   instance:
     prefer-ip-address: true
   client:
+    enabled: false
     service-url:
       defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 
@@ -74,7 +75,7 @@ spring:
     enabled: false
     locator:
       discovery:
-        enabled: true
+        enabled: false
 
 # ===================================================================
 # To enable TLS in production, generate a certificate using:

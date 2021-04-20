@@ -81,8 +81,9 @@ module.exports = (options) => ({
             template: './src/main/webapp/index.html',
             chunks: ['polyfills', 'main', 'global'],
             chunksSortMode: 'manual',
-            inject: 'body'
+            inject: 'body',
+            base: '/bcra/'
         }),
-        new BaseHrefWebpackPlugin({ baseHref: '/' })
+        new BaseHrefWebpackPlugin({ baseHref: '/bcra/' })
     ]
 });

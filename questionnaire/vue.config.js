@@ -2,7 +2,7 @@ if (process.env.NODE_ENV === 'production') {
   // const { WebpackWarPlugin } = require('webpack-war-plugin');
 
   module.exports = {
-    publicPath: '/questionnaire',
+    publicPath: process.env.BASE_URL,
     productionSourceMap: false,
     // configureWebpack: {
     //   plugins: [

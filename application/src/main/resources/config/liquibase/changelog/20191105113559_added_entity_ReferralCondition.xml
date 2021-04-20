@@ -61,7 +61,7 @@
           This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
           Spring Boot configuration key.
     -->
-    <changeSet id="20191105113559-1-data" author="jhipster" context="faker">
+    <changeSet id="20191105113559-1-data" author="jhipster">
         <loadData
                   file="config/liquibase/questionnaires/referral_condition.csv"
                   separator=","

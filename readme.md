@@ -144,7 +144,7 @@ Launch front-end: `npm run serve`
 
 ### Build for Production
 
-Build front-end: `npm run build`
+Build front-end: `npm run build -Pprod`
 
 <del>This will place a **.war** file in the **dist** folder.</del>
 
@@ -165,3 +165,25 @@ To run end-to-end tests in a headless environment, use: `npm run test:headless`
 #### Test StudyId
 A default study ID is created to test the new sign up functionality. 
 This id is 'TST_1', and has a consent and risk assessment questionnaire automatically assigned.
+
+## Deploying on server
+The following instructions guide you through the process of uploading both the backend and front-end to a server.
+
+Build and package the server backend and admin console:
+`cd <PROJECT_DIR>/application`
+`mvnw -Pprod,war clean verify`
+
+Build and package the front end: 
+`cd <PROJECT_DIR>/questionnaire`
+`npm run build -Pprod`
+`mv dist hryws`
+Zip in Windows: `tar.exe -a -c -f hryws.zip hryws`
+Zip in Mac and Linux: `zip hryws.zip hryws` 
+
+Copy the generated files to the server of choice.
+
+Place both the zip files into the tomcat webapps folder.
+(Manually unzip the hryws.zip file)
+
+Restart tomcat:
+`service tomcat restart`

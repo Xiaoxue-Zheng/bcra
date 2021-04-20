@@ -6,6 +6,8 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { BaseHrefWebpackPlugin } = require('base-href-webpack-plugin');
 const path = require('path');
 const sass = require('sass');
 
@@ -140,7 +142,15 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         new WebpackNotifierPlugin({
             title: 'JHipster',
             contentImage: path.join(__dirname, 'logo-jhipster.png')
-        })
+        }),
+        new HtmlWebpackPlugin({
+            template: './src/main/webapp/index.html',
+            chunks: ['polyfills', 'main', 'global'],
+            chunksSortMode: 'manual',
+            inject: 'body',
+            base: '/'
+        }),
+        new BaseHrefWebpackPlugin({ baseHref: '/' })
     ].filter(Boolean),
     mode: 'development'
 });

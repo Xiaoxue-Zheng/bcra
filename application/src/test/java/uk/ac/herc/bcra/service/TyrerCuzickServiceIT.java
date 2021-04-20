@@ -17,23 +17,13 @@ import uk.ac.herc.bcra.domain.AnswerSection;
 import uk.ac.herc.bcra.domain.IdentifiableData;
 import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.domain.Procedure;
-import uk.ac.herc.bcra.domain.Question;
-import uk.ac.herc.bcra.domain.QuestionGroup;
-import uk.ac.herc.bcra.domain.QuestionItem;
-import uk.ac.herc.bcra.domain.QuestionSection;
-import uk.ac.herc.bcra.domain.Questionnaire;
 import uk.ac.herc.bcra.domain.User;
-import uk.ac.herc.bcra.domain.enumeration.QuestionGroupIdentifier;
-import uk.ac.herc.bcra.domain.enumeration.QuestionIdentifier;
-import uk.ac.herc.bcra.domain.enumeration.QuestionItemIdentifier;
-import uk.ac.herc.bcra.domain.enumeration.QuestionSectionIdentifier;
-import uk.ac.herc.bcra.domain.enumeration.QuestionType;
 import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 import uk.ac.herc.bcra.domain.enumeration.ResponseState;
 import uk.ac.herc.bcra.questionnaire.AnswerResponseGenerator;
 import uk.ac.herc.bcra.repository.ParticipantRepository;
 import uk.ac.herc.bcra.repository.RiskAssessmentResultRepository;
-import uk.ac.herc.bcra.web.rest.TestUtil;
+import uk.ac.herc.bcra.service.util.TyrerCuzickPathUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -41,21 +31,16 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 @SpringBootTest(classes = BcraApp.class)
 public class TyrerCuzickServiceIT {
 
     private static String USER_IDENTIFIER = "TST_123";
     private static String TEST_DIRECTORY;
-    private static String RESOURCES_DIRECTORY;
 
     @Autowired
     private EntityManager em;
@@ -73,7 +58,7 @@ public class TyrerCuzickServiceIT {
     private AnswerResponseGenerator answerResponseGenerator;
 
     @BeforeEach
-    public void setup() {
+    public void setup() throws Exception {
         clearDatabase();
         configureTyrerCuzickService();
         createEntities();
@@ -103,8 +88,6 @@ public class TyrerCuzickServiceIT {
 
         em.persist(id);
 
-        readQuestionnaireDataFromCsv();
-
         AnswerResponse cr = answerResponseGenerator.generateAnswerResponseToQuestionnaire(QuestionnaireType.CONSENT_FORM);
         AnswerResponse rar = answerResponseGenerator.generateAnswerResponseToQuestionnaire(QuestionnaireType.RISK_ASSESSMENT);
         rar.setState(ResponseState.VALIDATED);
@@ -132,122 +115,6 @@ public class TyrerCuzickServiceIT {
         em.flush();
     }
 
-    private void readQuestionnaireDataFromCsv() {
-        String currentDir = System.getProperty("user.dir");
-        currentDir = currentDir.replace('\\', '/');
-        RESOURCES_DIRECTORY = currentDir + "/src/test/resources/";
-
-        readQuestionGroupsFromCsv();
-        readQuestionnairesFromCsv();
-        readQuestionsFromCsv();
-        readQuestionItemsFromCsv();
-        readQuestionSectionsFromCsv();
-    }
-
-    private void readQuestionGroupsFromCsv() {
-        List<String> groupsData = readLinesFromCsv(RESOURCES_DIRECTORY + "csv/question_group.csv");
-
-        for (String groupData : groupsData.subList(1, groupsData.size())) {
-            String[] data = groupData.split(";");
-            QuestionGroup g = new QuestionGroup();
-            g.setIdentifier(QuestionGroupIdentifier.valueOf(data[1]));
-            
-            em.persist(g);
-        }
-        em.flush();
-    }
-
-    private void readQuestionnairesFromCsv() {
-        List<String> questionnairesData = readLinesFromCsv(RESOURCES_DIRECTORY + "csv/questionnaire.csv");
-
-        for (String questionnaireData : questionnairesData.subList(1, questionnairesData.size())) {
-            String[] data = questionnaireData.split(";");
-            Questionnaire q = new Questionnaire();
-            q.setType(QuestionnaireType.valueOf(data[1]));
-            q.setVersion(parseIntFromString(data[2]));
-            
-            em.persist(q);
-        }
-        em.flush();
-    }
-
-    private void readQuestionsFromCsv() {
-        List<QuestionGroup> questionGroups = TestUtil.findAll(em, QuestionGroup.class);
-
-        List<String> questionsData = readLinesFromCsv(RESOURCES_DIRECTORY + "csv/question.csv");
-        for (String questionData : questionsData.subList(1, questionsData.size())) {
-            String[] data = questionData.split(";", -1);
-            Question q = new Question();
-            q.setIdentifier(QuestionIdentifier.valueOf(data[1]));
-            q.setType(QuestionType.valueOf(data[2]));
-            q.setOrder(parseIntFromString(data[3]));
-            q.setMinimum(parseIntFromString(data[4]));
-            q.setMaximum(parseIntFromString(data[5]));
-            q.setQuestionGroup(questionGroups.get(Integer.parseInt(data[6])-1));
-            q.setVariableName(data[7]);
-            q.setText(data[8]);
-            q.setHint(data[9]);
-            q.setHintText(data[10]);
-            q.getQuestionGroup().addQuestion(q);
-            
-            em.persist(q);
-        }
-
-        em.flush();
-    }
-
-    private void readQuestionItemsFromCsv() {
-        List<Question> questions = TestUtil.findAll(em, Question.class);
-
-        List<String> questionItemsData = readLinesFromCsv(RESOURCES_DIRECTORY + "csv/question_item.csv");
-        for (String questionItemData : questionItemsData.subList(1, questionItemsData.size())) {
-            String[] data = questionItemData.split(";", -1);
-            QuestionItem qi = new QuestionItem();
-            qi.setIdentifier(QuestionItemIdentifier.valueOf(data[1]));
-            qi.setQuestion(questions.get(Integer.parseInt(data[2])-1));
-            qi.setOrder(parseIntFromString(data[3]));
-            qi.setLabel(data[4]);
-            qi.setNecessary(Boolean.parseBoolean(data[5]));
-            qi.setExclusive(Boolean.parseBoolean(data[6]));
-            qi.getQuestion().addQuestionItem(qi);
-            
-            em.persist(qi);
-        }
-
-        em.flush();
-    }
-
-    private void readQuestionSectionsFromCsv() {
-        List<QuestionGroup> questionGroups = TestUtil.findAll(em, QuestionGroup.class);
-        List<Questionnaire> questionnaires = TestUtil.findAll(em, Questionnaire.class);
-
-        List<String> questionSectionsData = readLinesFromCsv(RESOURCES_DIRECTORY + "csv/question_section.csv");
-        for (String questionSectionData : questionSectionsData.subList(1, questionSectionsData.size())) {
-            String[] data = questionSectionData.split(";");
-            QuestionSection qs = new QuestionSection();
-            qs.setIdentifier(QuestionSectionIdentifier.valueOf(data[1]));
-            qs.setTitle(data[2]);
-            qs.setOrder(parseIntFromString(data[3]));
-            qs.setQuestionnaire(questionnaires.get(Integer.parseInt(data[4])-1));
-            qs.setQuestionGroup(questionGroups.get(Integer.parseInt(data[5])-1));
-            qs.setUrl(data[6]);
-            qs.setProgress(parseIntFromString(data[7]));
-            qs.getQuestionnaire().addQuestionSection(qs);
-            
-            em.persist(qs);
-        }
-
-        em.flush();
-    }
-
-    private Integer parseIntFromString(String str) {
-        if (str.length() == 0) {
-            return 0;
-        } else {
-            return Integer.parseInt(str);
-        }
-    }
-
     private void answerQuestionnaire(AnswerResponse res) {
         for (AnswerSection as : res.getAnswerSections()) {
             for (AnswerGroup ag : as.getAnswerGroups()) {
@@ -262,29 +129,11 @@ public class TyrerCuzickServiceIT {
         }
     }
 
-    private List<String> readLinesFromCsv(String csvPath) {
-        List<String> lines = new ArrayList<String>();
-
-        try{
-            File myObj = new File(csvPath);
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                String line = myReader.nextLine();
-                lines.add(line);
-            }
-            myReader.close();
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        }
-
-        return lines;
-    }
-
-    private void configureTyrerCuzickService() {
+    private void configureTyrerCuzickService() throws Exception {
         String currentDir = System.getProperty("user.dir");
         currentDir = currentDir.replace('\\', '/');
         TEST_DIRECTORY = currentDir + "/src/test/java/uk/ac/herc/bcra/service/tc_test_files/";
-        TyrerCuzickService.TC_EXECUTABLE_FILE_LOCATION = TEST_DIRECTORY + "tyrercuzick.exe";
+        TyrerCuzickService.TC_EXECUTABLE_FILE_LOCATION = TEST_DIRECTORY + TyrerCuzickPathUtil.getTyrerCuzickExe();
         TyrerCuzickService.TC_INPUT_FILE_LOCATION = TEST_DIRECTORY + "/input/";
         TyrerCuzickService.TC_OUTPUT_FILE_LOCATION = TEST_DIRECTORY + "/output/";
     }

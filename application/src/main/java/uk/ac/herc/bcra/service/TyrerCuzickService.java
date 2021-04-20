@@ -73,7 +73,8 @@ public class TyrerCuzickService {
     private void setUpPathVariables() {
         try {
             String tyrerCuzickRoot = TyrerCuzickPathUtil.getTyrerCuzickPath();
-            TC_EXECUTABLE_FILE_LOCATION = tyrerCuzickRoot + "tyrercuzick.exe";
+            String tyrerCuzickExe = TyrerCuzickPathUtil.getTyrerCuzickExe();
+            TC_EXECUTABLE_FILE_LOCATION = tyrerCuzickRoot + tyrerCuzickExe;
             TC_INPUT_FILE_LOCATION = tyrerCuzickRoot + "input/";
             TC_OUTPUT_FILE_LOCATION = tyrerCuzickRoot + "output/";
         } catch(Exception ex) {

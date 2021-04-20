@@ -8,6 +8,8 @@ const TerserPlugin = require('terser-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { BaseHrefWebpackPlugin } = require('base-href-webpack-plugin');
 
 const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
@@ -150,7 +152,15 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         new WorkboxPlugin.GenerateSW({
           clientsClaim: true,
           skipWaiting: true,
-        })
+        }),
+        new HtmlWebpackPlugin({
+            template: './src/main/webapp/index.html',
+            chunks: ['polyfills', 'main', 'global'],
+            chunksSortMode: 'manual',
+            inject: 'body',
+            base: '/bcra/'
+        }),
+        new BaseHrefWebpackPlugin({ baseHref: '/bcra/' })
     ],
     mode: 'production'
 });

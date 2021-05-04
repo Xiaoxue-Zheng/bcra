@@ -51,14 +51,14 @@ export default {
       if (loginOutcome === 'SUCCESS') {
         this.navigateToIncompleteSection()
       } else {
-        this.setMessage(loginOutcome)
+        this.setErrorMessage(loginOutcome)
       }
     },
     clearErrors: function () {
       this.displayFailureMessage = false
       this.displayErrorMessage = false
     },
-    setMessage (loginOutcome) {
+    setErrorMessage (loginOutcome) {
       if (loginOutcome === 'UNAUTHORIZED') {
         this.displayFailureMessage = true
       } else {

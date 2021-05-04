@@ -1,14 +1,28 @@
 describe('Risk Assessment - testing conditional display of sections', () => {
   let path = null
 
+  const UNREGISTERED_STUDY_CODE = "CYPRESS_TST_2"
+  const UNREGISTERED_EMAIL_ADDRESS = "test2@test.com"
+  const STRONG_PASSWORD = "hard2Crack!!"
+
   before(function () {
-    cy.registerDefaultParticipant()
-    cy.signInAndConsentDefaultParticipant()
+    cy.createStudyIdFromCode(UNREGISTERED_STUDY_CODE)
+    cy.completeRegisterPage(UNREGISTERED_STUDY_CODE)
+    cy.completeConsentPage()
+    cy.completeCreateAccountPage(UNREGISTERED_EMAIL_ADDRESS, STRONG_PASSWORD)
+    cy.completeParticipantDetailsPage()
+
+    cy.saveLocalStorage()
+  })
+
+  after(function() {
+    cy.deleteParticipants([UNREGISTERED_STUDY_CODE])
+    cy.clearTables(['study_id', 'answer_item', 'answer', 'answer_group', 'answer_section', 'answer_response'])
   })
 
   beforeEach(function () {
-    cy.resetQuestionnaireForDefaultParticipant()
     Cypress.Cookies.preserveOnce('JSESSIONID')
+    cy.restoreLocalStorage()
     path = 'questionnaire/family'
     cy.visitFamilyAffectedPrimarySection(true)
   })

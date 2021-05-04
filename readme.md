@@ -11,9 +11,8 @@ The versions listed by each of them is recommended for successful building.
 ## Quality Assurance / Current Project Status
 NB: This section is to be updated with every change that is made.
 
-- Unit tests for the questionnaire front end seem to be incomplete, or inadequately cover the whole solution. This is to be addressed as part of CLIN-1173.
-- End-to-end tests for the questionnaire front end seem to be failing due to a CryptoJs failure. This is to be addressed as part of CLIN-1173.
 - Currently, we are awaiting an executable that is compatible with Mac and Linux operating systems. Because of this, two integration tests will fail on these platforms. These are runTyrerCuzickExecutable and readTyrerCuzickOutput. Before running the integration tests on these platforms, be sure to comment out these tests.
+- Some tests make use of cy.url() to test that the page has not navigated away. Whilst this works fine, it is not the prettiest of solutions and so CLIN-1228 has been created to remedy this.
 
 ## Database
 
@@ -157,14 +156,11 @@ Build front-end: `npm run build`
 `npm run test:unit`
 
 #### End-to-End Tests
-0. Clear the database (see above) if there have been any model changes.
-1. Launch back-end with `mvnw`(see above)
-2. Open the Admin Interface (localhost:8080) and import **TestParticipantCsv.csv**
-3. `npm run test:e2e`
+1. Clear the database (see above) if there have been any model changes.
+2. Launch back-end with `mvnw` from the /application directory
+3. Run `npm run test:e2e` from the /questionnaire directory
 
-To run end-to-end tests in a headless environment, use:
-
-`npm run test:headless`
+To run end-to-end tests in a headless environment, use: `npm run test:headless`
 
 #### Test StudyId
 A default study ID is created to test the new sign up functionality. 

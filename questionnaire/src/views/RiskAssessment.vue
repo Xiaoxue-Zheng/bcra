@@ -104,6 +104,7 @@ export default {
     },
     getCurrentSection () {
       const routeLocation = router.history.current.params.section
+
       return this.questionnaire.questionSections.find(
         questionSection => (questionSection.url === routeLocation)
       )

@@ -92,7 +92,7 @@ export default {
   },
   computed: {
     ...mapFields([
-      
+
     ])
   },
   methods: {
@@ -114,16 +114,18 @@ export default {
       }
 
       ParticipantDetailsService.updateParticipantDetails(participantDetailsDto).then((response) => {
-        if (response.status == 200) {
+        if (response.status === 200) {
           this.$router.push('/questionnaire/familyhistorycontext')
         } else {
           this.failure = true
         }
+      }).catch((error) => {
+        this.failure = true
       })
     },
 
     clearMessages () {
-      this.error = false
+      this.failure = false
     }
   }
 }

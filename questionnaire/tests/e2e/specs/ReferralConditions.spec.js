@@ -2,28 +2,48 @@ describe('Referral Conditions Tests', () => {
   const getStore = () => cy.window().its('app.$store')
 
   const NHS_NUMBER = '7616551351'
+  const UNREGISTERED_STUDY_CODE = "CYPRESS_TST_2"
+  const UNREGISTERED_EMAIL_ADDRESS = "test2@test.com"
+  const STRONG_PASSWORD = "hard2Crack!!"
 
   let path = 'questionnaire/family'
 
   before(function () {
-    cy.registerDefaultParticipant()
-    cy.signInAndConsentDefaultParticipant()
+    cy.createStudyIdFromCode(UNREGISTERED_STUDY_CODE)
+    cy.completeRegisterPage(UNREGISTERED_STUDY_CODE)
+    cy.completeConsentPage()
+    cy.completeCreateAccountPage(UNREGISTERED_EMAIL_ADDRESS, STRONG_PASSWORD)
+    cy.completeParticipantDetailsPage()
+
+    cy.saveLocalStorage()
+  })
+
+  after(function() {
+    cy.deleteParticipants([UNREGISTERED_STUDY_CODE])
+    cy.clearTables(['study_id', 'answer_item', 'answer', 'answer_group', 'answer_section', 'answer_response'])
   })
 
   beforeEach(function () {
-    cy.resetQuestionnaireForDefaultParticipant()
     Cypress.Cookies.preserveOnce('JSESSIONID')
+    cy.restoreLocalStorage()
     path = 'questionnaire/family'
   })
 
-  it('works with rule: ITEMS_AT_LEAST ( FAMILY_BREAST_AFFECTED , 2 )', () => {
+  function resetPage() {
     cy.visit(path)
+    cy.resetCheckboxAnswerItems('FAMILY_BREAST_AFFECTED')
+    cy.resetCheckboxAnswerItems('FAMILY_OVARIAN_AFFECTED')
+  }
+
+  it('works with rule: ITEMS_AT_LEAST ( FAMILY_BREAST_AFFECTED , 2 )', () => {
+    resetPage()
+
     let FAMILY_BREAST_AFFECTED_ITEMS = ['FAMILY_BREAST_AFFECTED_AUNT']
     cy.setCheckboxAnswerItems('FAMILY_BREAST_AFFECTED', FAMILY_BREAST_AFFECTED_ITEMS)
 
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
     cy.checkNotReferred()
-
+    
     cy.backAndAssertSuccessfulNavToPath(path)
     FAMILY_BREAST_AFFECTED_ITEMS = ['FAMILY_BREAST_AFFECTED_AUNT', 'FAMILY_BREAST_AFFECTED_NIECE']
     cy.setCheckboxAnswerItems('FAMILY_BREAST_AFFECTED', FAMILY_BREAST_AFFECTED_ITEMS)
@@ -33,7 +53,7 @@ describe('Referral Conditions Tests', () => {
   })
 
   it('works with rule: ITEM_SPECIFIC ( FAMILY_BREAST_AFFECTED_FATHER )', () => {
-    cy.visit(path)
+    resetPage()
 
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
     cy.checkNotReferred()
@@ -47,7 +67,7 @@ describe('Referral Conditions Tests', () => {
   })
 
   it('checks: ITEM_SPECIFIC ( FAMILY_BREAST_AFFECTED_BROTHER )', () => {
-    cy.visit(path)
+    resetPage()
 
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
     cy.checkNotReferred()
@@ -61,11 +81,13 @@ describe('Referral Conditions Tests', () => {
   })
 
   it('checks: ITEMS_AT_LEAST ( FAMILY_OVARIAN_AFFECTED , 2 )', () => {
-    cy.visit(path)
+    resetPage()
+
     let FAMILY_OVARIAN_AFFECTED_ITEMS = ['FAMILY_OVARIAN_AFFECTED_AUNT']
     cy.setCheckboxAnswerItems('FAMILY_OVARIAN_AFFECTED', FAMILY_OVARIAN_AFFECTED_ITEMS)
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
     cy.checkNotReferred()
+
     cy.backAndAssertSuccessfulNavToPath(path)
     FAMILY_OVARIAN_AFFECTED_ITEMS = ['FAMILY_OVARIAN_AFFECTED_AUNT', 'FAMILY_OVARIAN_AFFECTED_NIECE']
     cy.setCheckboxAnswerItems('FAMILY_OVARIAN_AFFECTED', FAMILY_OVARIAN_AFFECTED_ITEMS)
@@ -78,7 +100,7 @@ describe('Referral Conditions Tests', () => {
     let FAMILY_BREAST_AFFECTED_ITEMS = ['FAMILY_BREAST_AFFECTED_NIECE']
     let FAMILY_OVARIAN_AFFECTED_ITEMS = ['FAMILY_OVARIAN_AFFECTED_NIECE']
 
-    cy.visit(path)
+    resetPage()
     cy.setCheckboxAnswerItems('FAMILY_BREAST_AFFECTED', FAMILY_BREAST_AFFECTED_ITEMS)
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
     cy.checkNotReferred()
@@ -91,7 +113,8 @@ describe('Referral Conditions Tests', () => {
   })
 
   it('works with rule: ITEM_SPECIFIC ( FAMILY_BREAST_HOW_MANY_MORE )', () => {
-    cy.visit(path)
+    resetPage()
+
     cy.navigateToFamilyBreastSection('FAMILY_BREAST_AFFECTED_GRANDMOTHER')
     path = 'questionnaire/breast'
     cy.setRadioAnswerItem('FAMILY_BREAST_HOW_MANY_MORE')
@@ -101,7 +124,8 @@ describe('Referral Conditions Tests', () => {
   })
 
   it('works with rule:  ITEM_SPECIFIC ( FAMILY_BREAST_AFFECTED_MOTHER ) AND VALUE_UNDER ( FAMILY_BREAST_AGE , 60 )', () => {
-    cy.visit(path)
+    resetPage()
+
     cy.navigateToFamilyBreastSection('FAMILY_BREAST_AFFECTED_MOTHER')
     path = 'questionnaire/breast'
 
@@ -118,7 +142,8 @@ describe('Referral Conditions Tests', () => {
   })
 
   it('works with rule: ITEM_SPECIFIC ( FAMILY_BREAST_AFFECTED_SISTER ) AND VALUE_UNDER ( FAMILY_BREAST_AGE , 60 )', () => {
-    cy.visit(path)
+    resetPage()
+
     cy.navigateToFamilyBreastSection('FAMILY_BREAST_AFFECTED_SISTER')
     path = 'questionnaire/breast'
 
@@ -137,7 +162,8 @@ describe('Referral Conditions Tests', () => {
   })
 
   it('works with rule: ITEM_SPECIFIC ( FAMILY_BREAST_AFFECTED_GRANDMOTHER ) AND VALUE_UNDER ( FAMILY_BREAST_AGE , 40 )', () => {
-    cy.visit(path)
+    resetPage()
+
     cy.navigateToFamilyBreastSection('FAMILY_BREAST_AFFECTED_GRANDMOTHER', path)
     path = 'questionnaire/breast'
 
@@ -156,7 +182,8 @@ describe('Referral Conditions Tests', () => {
   })
 
   it('works with rule: ITEM_SPECIFIC ( FAMILY_BREAST_AFFECTED_HALFSISTER ) AND VALUE_UNDER ( FAMILY_BREAST_AGE , 40 )', () => {
-    cy.visit(path)
+    resetPage()
+
     cy.navigateToFamilyBreastSection('FAMILY_BREAST_AFFECTED_HALFSISTER', path)
     path = 'questionnaire/breast'
 
@@ -175,7 +202,8 @@ describe('Referral Conditions Tests', () => {
   })
 
   it('works with rule: ITEM_SPECIFIC ( FAMILY_BREAST_AFFECTED_AUNT ) AND VALUE_UNDER ( FAMILY_BREAST_AGE , 40 )', () => {
-    cy.visit(path)
+    resetPage()
+
     cy.navigateToFamilyBreastSection('FAMILY_BREAST_AFFECTED_AUNT', path)
     path = 'questionnaire/breast'
 
@@ -194,7 +222,8 @@ describe('Referral Conditions Tests', () => {
   })
 
   it('works with rule: ITEM_SPECIFIC ( FAMILY_BREAST_AFFECTED_NIECE ) AND VALUE_UNDER ( FAMILY_BREAST_AGE , 40 )', () => {
-    cy.visit(path)
+    resetPage()
+
     cy.navigateToFamilyBreastSection('FAMILY_BREAST_AFFECTED_NIECE', path)
     path = 'questionnaire/breast'
 
@@ -213,7 +242,8 @@ describe('Referral Conditions Tests', () => {
   })
 
   it('works with rule:  ITEM_SPECIFIC ( FAMILY_OVARIAN_HOW_MANY_MORE )', () => {
-    cy.visit(path)
+    resetPage()
+
     cy.navigateToFamilyOvarianSection('FAMILY_OVARIAN_AFFECTED_NIECE', path)
     path = 'questionnaire/ovarian'
 

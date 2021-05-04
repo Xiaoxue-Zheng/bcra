@@ -50,7 +50,7 @@ export default {
     )
   },
   methods: {
-    async submitConsent () {
+    submitConsent () {
       SignUpHelperService.saveConsentResponse(this.answerResponse)
       this.$router.push('/account')
     }

@@ -1,121 +1,72 @@
-describe('Sign In', () => {
+describe('Consent', () => {
     const getStore = () => cy.window().its('app.$store')
+    const UNREGISTERED_STUDY_CODE = "CYPRESS_TST_2"
+    const INFO_SHEET_RADIO_GROUP = "CONSENT_INFO_SHEET"
+    const FUTURE_RESEARCH_RADIO_GROUP = "CONSENT_FUTURE_RESEARCH"
 
-    const NHS_NUMBER = '7616551351'
-    const EMAIL_ADDRESS = 'consent-test@example.com'
-    const PASSWORD = 'testpassword'
-    const PASSWORD_HASH = '$2a$10$xfxxf5eZbLo0S70V55c8FO6R.741QpR4Lkh84749m/B7kP6/XIFc2'
+    function clickConsentButton() {
+        cy.get('.pure-button').first().click()
+    }
 
-    const CONSENT_QUESTION_INPUTS = [
-        '#CONSENT_INFO_SHEET_YES',
-        '#CONSENT_WITHDRAWAL',
-        '#CONSENT_DATA_TRUST',
-        '#CONSENT_DATA_RESEARCH',
-        '#CONSENT_DATA_UOM',
-        '#CONSENT_DATA_COMMERCIAL',
-        '#CONSENT_INFORM_GP',
-        '#CONSENT_TAKE_PART',
-        '#CONSENT_BY_LETTER',
-        '#CONSENT_FUTURE_RESEARCH_YES'
-    ]
+    function clickConsentOption(groupId, option) {
+        if (option.toLowerCase() == 'yes')
+            cy.get('#' + groupId + ' > .items > :nth-child(1) > label').click()
+        else
+            cy.get('#' + groupId + ' > .items > :nth-child(2) > label').click()
+    }
+
+    function clickConsentCheckbox(checkboxId) {
+        cy.get(':nth-child(' + checkboxId + ') > fieldset > .pure-u-1 > label').click()
+    }
+
+    function clickAllConsentCheckboxes() {
+        for (let i = 2; i < 10; i++) {
+            clickConsentCheckbox(i)
+        }
+    }
 
     before(function () {
-      cy.registerParticipant(NHS_NUMBER, EMAIL_ADDRESS, PASSWORD_HASH)
-      cy.resetConsent(NHS_NUMBER)
+        cy.createStudyIdFromCode(UNREGISTERED_STUDY_CODE)
+        cy.completeRegisterPage(UNREGISTERED_STUDY_CODE)
     })
 
-    beforeEach(function(){
-        Cypress.Cookies.preserveOnce('JSESSIONID')
+    after(function() {
+        cy.deleteParticipants([UNREGISTERED_STUDY_CODE])
+        cy.clearTables(['study_id', 'answer_item', 'answer', 'answer_group', 'answer_section', 'answer_response'])
+    })
+    
+    it('should open the consent page', () => {
+        cy.url().should('include', 'questionnaire/consent')
+        cy.contains('h1', 'Consent')
     })
 
-    it('opens the consent form after first sign in', () => {
-      cy.server()
-      cy.visit('/signin')
-      cy.get('input').first().clear().type(EMAIL_ADDRESS)
-      cy.get('input').last().clear().type(PASSWORD)
-      cy.get('button').click()
-
-      cy.url().should('equal', Cypress.config().baseUrl + 'consent')
-
-      cy.contains('Consent').should('be.visible')
-
-      cy.get('.progress').contains('1').should('have.class', 'current')
-      cy.get('.progress').contains('1').should('not.have.class', 'complete')
-      cy.get('.progress').contains('2').should('not.have.class', 'complete')
-      cy.get('.progress').contains('2').should('not.have.class', 'current')
-      cy.get('.progress').contains('3').should('not.have.class', 'complete')
-      cy.get('.progress').contains('3').should('not.have.class', 'current')
-      cy.get('.progress').contains('4').should('not.have.class', 'complete')
-      cy.get('.progress').contains('4').should('not.have.class', 'current')
-      cy.get('.progress').contains('5').should('not.have.class', 'complete')
-      cy.get('.progress').contains('5').should('not.have.class', 'current')
-
-      cy.get('form').find('fieldset').should('have.length', CONSENT_QUESTION_INPUTS.length)
-
-      cy.contains('I give my consent').should('be.visible')
+    it('should not allow the user to continue when no questions have been answered', () => {
+        clickConsentButton()
+        cy.contains('Please complete all of the questions above to continue.')
     })
 
-    it('will not submit with a required yes/no question unchecked', () => {
-        for (let inputs of CONSENT_QUESTION_INPUTS){
-            cy.get(inputs).check({force: true})
-        }
-
-        cy.get('#CONSENT_INFO_SHEET_NO').check({force: true})
-
-        cy.get('[type="submit"]').click()
-        cy.contains('Please complete all of the questions above to continue.').should('be.visible')
+    it('should not allow the user to continue when some questions have been answered', () => {
+        clickAllConsentCheckboxes()
+        clickConsentButton()
+        cy.contains('Please complete all of the questions above to continue.')
     })
 
-    it('will not submit with a required tickbox question unchecked', () => {
-        for (let inputs of CONSENT_QUESTION_INPUTS){
-            cy.get(inputs).check({force: true})
-        }
+    it('should not allow the user to continue when all questions have been answered but consent has not been given', () => {
+        clickConsentOption(INFO_SHEET_RADIO_GROUP, 'no')
+        clickAllConsentCheckboxes()
+        clickConsentOption(FUTURE_RESEARCH_RADIO_GROUP, 'no')
 
-        cy.get('#CONSENT_INFORM_GP').uncheck({force: true})
-
-        cy.get('[type="submit"]').click()
-        cy.contains('Please complete all of the questions above to continue.').should('be.visible')
+        clickConsentButton()
+        cy.contains('Please complete all of the questions above to continue.')
     })
 
-    it('submits the consent form with all fields checked', () => {
-        cy.server()
-        cy.route({
-            method: 'PUT',
-            url: '/api/answer-responses/consent/submit'
-        })
-        .as('submitConsent')
+    it('should navigate the user to the register page when all questions have been answered and consent has been given', () => {
+        clickConsentOption(INFO_SHEET_RADIO_GROUP, 'yes')
+        clickAllConsentCheckboxes()
+        clickConsentOption(FUTURE_RESEARCH_RADIO_GROUP, 'yes')
 
-        for (let inputs of CONSENT_QUESTION_INPUTS){
-            cy.get(inputs).check({force: true})
-        }
-
-        cy.get('[type="submit"]').click()
-        cy.wait('@submitConsent').its('status').should('equal', 200)
-
-        cy.url().should('equal', Cypress.config().baseUrl + 'questionnaire/familyhistorycontext')
-        cy.contains('Family History').should('be.visible')
-      })
-
-      it('submits the consent form with a non-required question unchecked', () => {
-        cy.visit('/consent')
-
-        cy.server()
-        cy.route({
-            method: 'PUT',
-            url: '/api/answer-responses/consent/submit'
-        })
-        .as('submitConsent')
-
-        for (let inputs of CONSENT_QUESTION_INPUTS){
-            cy.get(inputs).check({force: true})
-        }
-
-        cy.get('#CONSENT_FUTURE_RESEARCH_NO').check({force: true})
-
-        cy.get('[type="submit"]').click()
-        cy.wait('@submitConsent').its('status').should('equal', 200)
-
-        cy.url().should('equal', Cypress.config().baseUrl + 'questionnaire/familyhistorycontext')
-        cy.contains('Family History').should('be.visible')
-      })
-  })
+        clickConsentButton()
+        cy.url().should('include', 'account')
+    })
+})
+  

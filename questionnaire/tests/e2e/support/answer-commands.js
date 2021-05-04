@@ -36,6 +36,13 @@ Cypress.Commands.add('checkRadioAnswerItemIsNotChecked', itemIdentifier => {
   cy.get(elementId).should('not.be.checked')
 })
 
+Cypress.Commands.add('resetCheckboxAnswerItems', (identifier) => {
+  const elementId = '#' + identifier
+  cy.get(elementId).find('input').each((input, value, collection) => {
+    cy.wrap(input).uncheck({force: true})
+  })
+})
+
 Cypress.Commands.add('setCheckboxAnswerItems', (identifier, itemIdentifiers) => {
   const elementId = '#' + identifier
   cy.get(elementId).find('input').each((input, value, collection) => {

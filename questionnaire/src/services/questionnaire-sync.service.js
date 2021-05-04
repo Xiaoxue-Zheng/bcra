@@ -51,10 +51,6 @@ export const QuestionnaireSyncService = {
     return sectionAnswers.find(answer => (answer.questionId === id))
   },
 
-  getAnswersWithDependenciesInSameSection (sectionId, answers, questions) {
-
-  },
-
   getQuestionType (question) {
     return question.type
   }

@@ -17,7 +17,10 @@
 import './database-commands'
 import './answer-commands'
 import './navigation-commands'
-import './signin'
+import './study-generation-commands'
+import './register-participant-commands'
+import './page-completion-shortcuts'
+import './local-storage-persistence-commands'
 import 'cypress-promise/register'
 
 // Alternatively you can use CommonJS syntax:

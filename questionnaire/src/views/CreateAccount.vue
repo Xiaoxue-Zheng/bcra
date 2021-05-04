@@ -28,7 +28,7 @@
           <div class="error-message" v-if="password != repeatPassword">Your passwords don't match!</div>
           <div class="error-message" v-if="passwordScore < MINIMUM_PASSWORD_SCORE && password != 0">Please pick a stronger password.</div>
           <div class="error-message" v-if="displayErrorMessage">Something went wrong. Please try again.</div>
-          <button class="pure-button pure-button-primary" type="submit" :disabled="password != repeatPassword || passwordScore < MINIMUM_PASSWORD_SCORE">Create account</button>
+          <button class="pure-button pure-button-primary" type="submit" :disabled="!emailAddress || password != repeatPassword || passwordScore < MINIMUM_PASSWORD_SCORE">Create account</button>
         </form>
       </div>
     </div>
@@ -70,11 +70,12 @@ export default {
 
         SecurityService.createAccount(signUpInformation).then(() => {
           this.autoLogin()
+        }).catch(() => {
+          this.displayErrorMessage = true
         })
       }
     },
     setScore (score) {
-      console.log(score)
       this.passwordScore = score
     },
     formValid () {

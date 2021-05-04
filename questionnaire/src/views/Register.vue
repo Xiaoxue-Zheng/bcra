@@ -62,7 +62,7 @@ export default {
     clearMessages () {
       this.notFound = false
       this.alreadyRegistered = false
-      this.error = false
+      this.failure = false
     }
   }
 }

@@ -2,7 +2,7 @@ export const StorageService = {
   get (key) {
     var value = window.localStorage.getItem(key)
     if (value) return JSON.parse(value)
-    else return null;
+    else return null
   },
 
   set (key, value) {

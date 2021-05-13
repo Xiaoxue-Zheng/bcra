@@ -63,4 +63,33 @@ public class TyrerCuzickPathUtilIT {
             TyrerCuzickPathUtil.getTyrerCuzickExe();
         });
     }
+
+    @Test
+    public void testTyrerCuzickExtractSqlForWindows() throws Exception {
+        OSValidator.OPERATING_SYSTEM = "windows";
+        String path = TyrerCuzickPathUtil.getTyrerCuzickExtractSql();
+        assertThat(path).isEqualTo("/home/tyrercuzick/extract/risk_assessment_extract.sql");
+    }
+
+    @Test
+    public void testTyrerCuzickExtractSqlForMac() throws Exception {
+        OSValidator.OPERATING_SYSTEM = "mac";
+        String path = TyrerCuzickPathUtil.getTyrerCuzickExtractSql();
+        assertThat(path).isEqualTo("/usr/local/share/tyrercuzick/extract/risk_assessment_extract_ios.sql");
+    }
+
+    @Test
+    public void testTyrerCuzickExtractSqlForUnix() throws Exception {
+        OSValidator.OPERATING_SYSTEM = "linux";
+        String path = TyrerCuzickPathUtil.getTyrerCuzickExtractSql();
+        assertThat(path).isEqualTo("/home/tyrercuzick/extract/risk_assessment_extract.sql");
+    }
+
+    @Test
+    public void testTyrerCuzickExtractSqlForUnsupportedOS() throws Exception {
+        assertThrows(Exception.class, () -> {
+            OSValidator.OPERATING_SYSTEM = "unsupported operating system";
+            TyrerCuzickPathUtil.getTyrerCuzickExtractSql();
+        });
+    }
 }

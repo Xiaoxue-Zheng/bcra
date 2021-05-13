@@ -1,13 +1,46 @@
 <div>
-    <h1>Tyrer Cuzick Test</h1>
+    <h1>Tyrer Cuzick QA Tests</h1>
+
+    <hr>
+
     <div>
-        Select the button below to trigger the Tyrer Cuzick background process. <br>
-        Note: Be aware that this process could take a while to complete. Multiple clicks of the button may cause long loading times.<br>
+        <h2>Tyrer Cuzick Process</h2>
+
+        <div>
+            Select the button below to trigger the Tyrer Cuzick background process. <br>
+            Note: Be aware that this process could take a while to complete. Multiple clicks of the button may cause long loading times.
+        </div>
+
+        <br>
+
+        <button type="submit" class="btn btn-primary" [disabled]="isRunningTCProcess" (click)="startTCProcess()">
+            <fa-icon icon="wrench"></fa-icon>&nbsp;<span>Trigger TC Process</span>
+        </button>
+
+        <div *ngIf="isTCProcessError" class="tcError">
+            There was an error whilst running the TC process.
+            Please see server error logs for more information.
+        </div>
     </div>
 
-    <br>
+    <hr>
 
-    <button type="submit" class="btn btn-primary" [disabled]="isProcessing" (click)="startTCProcess()">
-        <fa-icon icon="wrench"></fa-icon>&nbsp;<span>Trigger TC Process</span>
-    </button>
+    <div>
+        <h2>Tyrer Cuzick Extract</h2>
+
+        <div>
+            Select the button below to trigger the Tyrer Cuzick extraction process.
+        </div>
+
+        <br>
+
+        <button type="submit" class="btn btn-primary" [disabled]="isRunningTCExtract" (click)="startTCExtract()">
+            <fa-icon icon="wrench"></fa-icon>&nbsp;<span>Trigger TC Extract</span>
+        </button>
+
+        <div *ngIf="isTCExtractError" class="tcError">
+            There was an error whilst running the TC extract.
+            Please ensure you have set up the extract directory as directed in the project readme.
+        </div>
+    </div>
 </div>

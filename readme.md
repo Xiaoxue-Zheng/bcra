@@ -20,9 +20,13 @@ NB: This section is to be updated with every change that is made.
 Install postgres on your machine, check it is running, and create the database and user with the following commands:
 ```
 psql -U postgres
-create database bcra;
 create user bcra with encrypted password 'bcra123';
+
+create database bcra;
 grant all privileges on database bcra to bcra;
+
+create database bcratest;
+grant all privileges on database bcratest to bcra;
 ```
 
 ### Clearing the Database
@@ -31,6 +35,10 @@ psql -U postgres
 drop database bcra;
 create database bcra;
 grant all privileges on database bcra to bcra;
+
+drop database bcratest;
+create database bcratest;
+grant all privileges on database bcratest to bcra;
 \q
 ```
 
@@ -108,6 +116,8 @@ If you are on an iOS system, then use the following directory structure for the 
 
 #### Manual testing
 
+##### Testing the TC process
+
 The tyrercuzick process can be manually tested from the admin dashboard of the web application. To carry this out, follow these steps:
 
 1. Run the backend application.
@@ -125,6 +135,26 @@ The tyrercuzick process can be manually tested from the admin dashboard of the w
 12. Select the "Trigger TC Process" button.
 13. Open the database using the psql console.
 14. Check the risk_assessment_response table for the new record.
+
+##### Running a TC extract
+
+We can run an extract of our TC data from the admin dashboard of the web application. This is carried out from the same page as the TC process test.
+
+This requires some setup that will be done in the setup phase of the server. If this is the first time you have ran the software on your local machine, you will have to do this.
+
+To set up:
+1. Enter the tyrercuzick directory.
+2. Create the subdirectory /extract/
+3. From the <PROJECT_DIR>/scripts/sql directory, copy the risk_assessment_extract.sql file
+4. Place this file in the newly created /extract/ directory.
+
+To run this process:
+1. Run the backend application.
+2. Run the questionnaire application.
+3. Log into the backend application.
+4. Head to the Tyrer Cuzick Test page from the navigation bar.
+5. Select the "Trigger TC Extract Test" button.
+6. This should create an extract file in the tyrercuzick directory under a subdirectory titled /extract/.
  
 ## Questionnaire
 

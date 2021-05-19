@@ -31,6 +31,9 @@ public class ParticipantDetailsDTO {
     @NotNull
     private String practiceName;
 
+    private String homePhoneNumber;
+
+    private String mobilePhoneNumber;
 
     public ParticipantDetailsDTO() {
         // Empty constructor needed for Jackson.
@@ -122,6 +125,22 @@ public class ParticipantDetailsDTO {
 
     public void setPracticeName(String practiceName) {
         this.practiceName = practiceName;
+    }
+
+    public String getHomePhoneNumber() {
+        return homePhoneNumber;
+    }
+
+    public void setHomePhoneNumber(String homePhoneNumber) {
+        this.homePhoneNumber = homePhoneNumber;
+    }
+
+    public String getMobilePhoneNumber() {
+        return mobilePhoneNumber;
+    }
+
+    public void setMobilePhoneNumber(String mobilePhoneNumber) {
+        this.mobilePhoneNumber = mobilePhoneNumber;
     }
 
     @Override

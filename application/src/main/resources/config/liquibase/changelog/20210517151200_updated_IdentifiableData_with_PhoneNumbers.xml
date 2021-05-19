@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet id="20210517151200-1" author="Henry Tranter">
+        <addColumn tableName="identifiable_data">
+            <column name="home_phone_number" type="varchar(255)"></column>
+            <column name="mobile_phone_number" type="varchar(255)"></column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

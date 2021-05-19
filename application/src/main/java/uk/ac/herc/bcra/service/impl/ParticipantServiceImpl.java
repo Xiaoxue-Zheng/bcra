@@ -231,6 +231,8 @@ public class ParticipantServiceImpl implements ParticipantService {
         identifiableData.setAddress4(participantDetailsDTO.getAddressLine4());
         identifiableData.setAddress5(participantDetailsDTO.getAddressLine5());
         identifiableData.setPostcode(participantDetailsDTO.getPostCode());
+        identifiableData.setHomePhoneNumber(participantDetailsDTO.getHomePhoneNumber());
+        identifiableData.setMobilePhoneNumber(participantDetailsDTO.getMobilePhoneNumber());
         identifiableData.setEmail(participant.getUser().getEmail());
         identifiableDataRepository.save(identifiableData);
 

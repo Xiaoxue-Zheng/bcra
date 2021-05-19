@@ -263,3 +263,36 @@ function assignIdentifiableDataToParticipant(identifiableData, participant) {
         values: [identifiableData.id, participant.id]
     })
 }
+
+Cypress.Commands.add('removeIdentifiableDataForParticipant', (studyCode) => {
+    return getUserByStudyCode(studyCode).then((user) => {
+        return getParticipantByLogin(studyCode).then((participant) => {
+            return unassignParticipantFromIdentifiableData(participant).then((identifiableDataId) => {
+                return deleteIdentifiableDataById(identifiableDataId)
+            })
+        })
+    }) 
+})
+
+function unassignParticipantFromIdentifiableData(participant) {
+    return cy.task('query', {
+        sql: `
+            UPDATE participant
+            SET identifiable_data_id = null
+            WHERE id = $1
+        `,
+        values: [participant.id]
+    }).then(() => {
+        return participant.identifiable_data_id
+    })
+}
+
+function deleteIdentifiableDataById(identifiableDataId) {
+    return cy.task('query', {
+        sql: `
+            DELETE FROM identifiable_data
+            WHERE id = $1
+        `,
+        values: [identifiableDataId]
+    })
+}

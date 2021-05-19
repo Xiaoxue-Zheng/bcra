@@ -34,6 +34,20 @@
           </fieldset>
 
           <fieldset>
+            <label>Home phone number</label>
+            <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-1-3">
+              <input v-model="homePhoneNumber" type="text" class="pure-input-1"/>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <label>Mobile phone number</label>
+            <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-1-3">
+              <input v-model="mobilePhoneNumber" type="text" class="pure-input-1"/>
+            </div>
+          </fieldset>
+
+          <fieldset>
             <label>Date of birth</label>
             <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-1-3">
               <input required v-model="dateOfBirth" type="date"/>
@@ -82,6 +96,8 @@ export default {
       addressLine4: null,
       addressLine5: null,
       postCode: null,
+      homePhoneNumber: null,
+      mobilePhoneNumber: null,
       dateOfBirth: null,
       nhsNumber: null,
       practiceName: null,
@@ -107,6 +123,8 @@ export default {
         addressLine4: this.addressLine4,
         addressLine5: this.addressLine5,
         postCode: this.postCode,
+        homePhoneNumber: this.homePhoneNumber,
+        mobilePhoneNumber: this.mobilePhoneNumber,
         dateOfBirth: this.dateOfBirth,
         nhsNumber: this.nhsNumber,
         practiceName: this.practiceName

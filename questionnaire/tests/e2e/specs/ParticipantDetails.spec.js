@@ -30,6 +30,8 @@ describe('PartiicipantDetails', () => {
     })
 
     beforeEach(function() {
+        cy.visit('participant-details')
+        cy.removeIdentifiableDataForParticipant(UNREGISTERED_STUDY_CODE)
         clearFields()
     })
 
@@ -49,20 +51,47 @@ describe('PartiicipantDetails', () => {
         return cy.get('input').eq(7)
     }
 
-    function getDateOfBirthField() {
+    function getHomePhoneNumberField() {
         return cy.get('input').eq(8)
     }
 
-    function getNhsNumberField() {
+    function getMobilePhoneNumberField() {
         return cy.get('input').eq(9)
     }
 
-    function getGPNameField() {
+    function getDateOfBirthField() {
         return cy.get('input').eq(10)
     }
 
+    function getNhsNumberField() {
+        return cy.get('input').eq(11)
+    }
+
+    function getGPNameField() {
+        return cy.get('input').eq(12)
+    }
+
+    function fillMandatoryFields() {
+        getFirstNameField().type("Barry")
+        getSurnameField().type("Smith")
+        getAddressField(0).type("Address line 1")
+        getPostCodeField().type("AA1 1AA")
+        getDateOfBirthField().type("1990-01-01")
+        getNhsNumberField().type(IN_USE_NHS_NUMBER)
+        getGPNameField().type("GP name")
+    }
+
+    function fillNonMandatoryFields() {
+        getAddressField(1).type("Address line 2")
+        getAddressField(2).type("Address line 3")
+        getAddressField(3).type("Address line 4")
+        getAddressField(4).type("Address line 5")
+        getHomePhoneNumberField("0123912390")
+        getMobilePhoneNumberField("0123912390")
+    }
+
     function clearFields() {
-        for (let i = 0; i < 11; i++) {
+        for (let i = 0; i < 13; i++) {
             cy.get('input').eq(i).clear()
         }
     }
@@ -91,11 +120,10 @@ describe('PartiicipantDetails', () => {
         cy.url().should('include', 'participant-details')
     })
 
-    it('should remain on the current page when only some required details have been entered', () => {
+    it('should remain on the current page when mandatory details have not been entered', () => {
         authenticateSelf()
 
-        getFirstNameField().type("Barry")
-        getSurnameField().type("Smith")
+        fillNonMandatoryFields()
 
         cy.get('.pure-button').contains('Save details').click()
         cy.url().should('include', 'participant-details')
@@ -104,32 +132,32 @@ describe('PartiicipantDetails', () => {
     it('should remain on the current page when all details have been entered but the NHS number is in use', () => {
         authenticateSelf()
 
-        getFirstNameField().type("Barry")
-        getSurnameField().type("Smith")
-        for (let i = 0; i < 5; i++) {
-            getAddressField(i).type("Address line " + (i+1))
-        }
-        getPostCodeField().type("AA1 1AA")
-        getDateOfBirthField().type("1990-01-01")
+        fillMandatoryFields()
+        getNhsNumberField().clear()
         getNhsNumberField().type(IN_USE_NHS_NUMBER)
-        getGPNameField().type("GP name")
 
         cy.get('.pure-button').contains('Save details').click()
         cy.url().should('include', 'participant-details')
     })
 
-    it('should navigate to the risk assessment questionnaire if all details have been entered', () => {
+    it('should navigate to the risk assessment questionnaire if all mandatory details have been entered even if non-mandatory fields have not been filled out', () => {
         authenticateSelf()
 
-        getFirstNameField().type("Barry")
-        getSurnameField().type("Smith")
-        for (let i = 0; i < 5; i++) {
-            getAddressField(i).type("Address line " + (i+1))
-        }
-        getPostCodeField().type("AA1 1AA")
-        getDateOfBirthField().type("1990-01-01")
+        fillMandatoryFields()
+        getNhsNumberField().clear()
         getNhsNumberField().type(UNUSED_NHS_NUMBER)
-        getGPNameField().type("GP name")
+
+        cy.get('.pure-button').contains('Save details').click()
+        cy.url().should('include', 'questionnaire/familyhistorycontext')
+    })
+
+    it('should navigate to the risk assessment questionnaire if all mandatory and non-mandatory details have been entered', () => {
+        authenticateSelf()
+
+        fillMandatoryFields()
+        fillNonMandatoryFields()
+        getNhsNumberField().clear()
+        getNhsNumberField().type(UNUSED_NHS_NUMBER)
 
         cy.get('.pure-button').contains('Save details').click()
         cy.url().should('include', 'questionnaire/familyhistorycontext')

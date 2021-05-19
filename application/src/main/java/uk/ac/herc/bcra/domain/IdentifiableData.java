@@ -69,6 +69,12 @@ public class IdentifiableData implements Serializable {
     @Column(name = "practice_name", nullable = false)
     private String practiceName;
 
+    @Column(name = "home_phone_number")
+    private String homePhoneNumber;
+
+    @Column(name = "mobile_phone_number")
+    private String mobilePhoneNumber;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -233,6 +239,33 @@ public class IdentifiableData implements Serializable {
     public void setPracticeName(String practiceName) {
         this.practiceName = practiceName;
     }
+
+    public String getHomePhoneNumber() {
+        return homePhoneNumber;
+    }
+
+    public IdentifiableData homePhoneNumber(String homePhoneNumber) {
+        this.homePhoneNumber = homePhoneNumber;
+        return this;
+    }
+
+    public void setHomePhoneNumber(String homePhoneNumber) {
+        this.homePhoneNumber = homePhoneNumber;
+    }
+
+    public String getMobilePhoneNumber() {
+        return mobilePhoneNumber;
+    }
+
+    public IdentifiableData mobilePhoneNumber(String mobilePhoneNumber) {
+        this.mobilePhoneNumber = mobilePhoneNumber;
+        return this;
+    }
+
+    public void setMobilePhoneNumber(String mobilePhoneNumber) {
+        this.mobilePhoneNumber = mobilePhoneNumber;
+    }
+    
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -266,6 +299,8 @@ public class IdentifiableData implements Serializable {
             ", address4='" + getAddress4() + "'" +
             ", address5='" + getAddress5() + "'" +
             ", postcode='" + getPostcode() + "'" +
+            ", homePhoneNumber='" + getHomePhoneNumber() + "'" + 
+            ", mobilePhoneNumber='" + getMobilePhoneNumber() + "'" +
             ", practiceName='" + getPracticeName() + "'" +
             "}";
     }

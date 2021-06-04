@@ -15,22 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import uk.ac.herc.bcra.BcraApp;
-import uk.ac.herc.bcra.domain.Answer;
-import uk.ac.herc.bcra.domain.AnswerGroup;
-import uk.ac.herc.bcra.domain.AnswerItem;
-import uk.ac.herc.bcra.domain.AnswerResponse;
-import uk.ac.herc.bcra.domain.AnswerSection;
-import uk.ac.herc.bcra.domain.IdentifiableData;
 import uk.ac.herc.bcra.domain.Participant;
-import uk.ac.herc.bcra.domain.Procedure;
 import uk.ac.herc.bcra.domain.Risk;
 import uk.ac.herc.bcra.domain.RiskAssessmentResult;
 import uk.ac.herc.bcra.domain.RiskFactor;
-import uk.ac.herc.bcra.domain.User;
-import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
-import uk.ac.herc.bcra.domain.enumeration.ResponseState;
-import uk.ac.herc.bcra.questionnaire.AnswerResponseGenerator;
-import uk.ac.herc.bcra.repository.ParticipantRepository;
 import uk.ac.herc.bcra.repository.RiskAssessmentResultRepository;
 import uk.ac.herc.bcra.repository.RiskFactorRepository;
 import uk.ac.herc.bcra.repository.RiskRepository;
@@ -68,10 +56,7 @@ public class TyrerCuzickExtractServiceIT {
     private RiskFactorRepository riskFactorRepository;
 
     @Autowired
-    private ParticipantRepository participantRepository;
-
-    @Autowired
-    private AnswerResponseGenerator answerResponseGenerator;
+    private StudyUtil studyUtil;
 
     @BeforeEach
     public void setup() throws Exception {
@@ -83,67 +68,10 @@ public class TyrerCuzickExtractServiceIT {
         em.flush();
     }
 
-    // TODO: This would be of more use in a common utility class. See ticket CFHH-1252.
-    private Participant createParticipant(String identifier, String nhsNumber) {
-        User u = new User();
-        u.setLogin(identifier);
-        u.setPassword("PASSWORDPASSWORDPASSWORDPASSWORDPASSWORDPASSWORDPASSWORDPASS");
-        u.setActivated(true);
-
-        em.persist(u);
-
-        IdentifiableData id = new IdentifiableData();
-        id.setNhsNumber(nhsNumber);
-        id.setDateOfBirth(LocalDate.now());
-        id.setFirstname("FIRSTNAME");
-        id.setSurname("SURNAME");
-        id.setAddress1("ADDRESS_1");
-        id.setPostcode("POSTCODE");
-        id.setPracticeName("PRACTICE_NAME");
-
-        em.persist(id);
-
-        AnswerResponse cr = answerResponseGenerator.generateAnswerResponseToQuestionnaire(QuestionnaireType.CONSENT_FORM);
-        AnswerResponse rar = answerResponseGenerator.generateAnswerResponseToQuestionnaire(QuestionnaireType.RISK_ASSESSMENT);
-        rar.setState(ResponseState.VALIDATED);
-        answerQuestionnaire(rar);
-
-        em.persist(cr);
-        em.persist(rar);
-
-        Procedure pr = new Procedure();
-        pr.setConsentResponse(cr);
-        pr.setRiskAssessmentResponse(rar);
-
-        em.persist(pr);
-
-        Participant p = new Participant();
-        p.setUser(u);
-        p.setIdentifiableData(id);
-        p.setProcedure(pr);
-        pr.setParticipant(p);
-
-        participantRepository.save(p);
-        em.persist(p);
-        em.persist(pr);
-
-        em.flush();
-
+    private Participant createParticipant(String userIdentifier, String nhsNumber) {
+        Participant p = studyUtil.createParticipant(em, userIdentifier, nhsNumber, LocalDate.now());
+        studyUtil.answerQuestionnaireWithAnything(em, p.getProcedure().getRiskAssessmentResponse());
         return p;
-    }
-
-    private void answerQuestionnaire(AnswerResponse res) {
-        for (AnswerSection as : res.getAnswerSections()) {
-            for (AnswerGroup ag : as.getAnswerGroups()) {
-                for (Answer a : ag.getAnswers()) {
-                    a.setTicked(true);
-                    a.setNumber(3);
-                    for (AnswerItem ai : a.getAnswerItems()) {
-                        ai.setSelected(true);
-                    }
-                }
-            }
-        }
     }
 
     private RiskAssessmentResult createRiskAssessmentResultForParticipant(Participant participant) {

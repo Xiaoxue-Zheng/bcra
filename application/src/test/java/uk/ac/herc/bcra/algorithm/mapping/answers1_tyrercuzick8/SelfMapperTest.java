@@ -10,6 +10,7 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 
 import uk.ac.herc.bcra.algorithm.answers.version1.GroupAccess;
+import uk.ac.herc.bcra.algorithm.tyrercuzick.version8.AlgorithmModel.HyperplasiaHistory;
 import uk.ac.herc.bcra.algorithm.tyrercuzick.version8.AlgorithmModel.MenopausalStatus;
 import uk.ac.herc.bcra.algorithm.tyrercuzick.version8.AlgorithmModel.Self;
 import uk.ac.herc.bcra.domain.AnswerGroup;
@@ -46,7 +47,7 @@ public class SelfMapperTest {
         assertThat(self.heightMeters).isCloseTo(FIFTY_FIVE_INCHES_IN_METERS, within(0.001f));
         assertThat(self.weightKilos).isEqualTo(SIXTY_SIX_POUNDS_IN_KILOS);
 
-        assertThat(self.hyperplasiaHistory).isTrue();
+        assertThat(self.hyperplasiaHistory).isEqualTo(HyperplasiaHistory.HAS_HISTORY);
         assertThat(self.atypicalHyperplasia).isFalse();
         assertThat(self.lcisHistory).isTrue();
 
@@ -132,7 +133,8 @@ public class SelfMapperTest {
             ImmutableMap.of(
                 QuestionItemIdentifier.SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_ADH, true,
                 QuestionItemIdentifier.SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_ALH, false,
-                QuestionItemIdentifier.SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_LCIS, true
+                QuestionItemIdentifier.SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_LCIS, true,
+                QuestionItemIdentifier.SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_UNKNOWN, false
             );
 
         MapperTestHelper.addAnswerAndItems(

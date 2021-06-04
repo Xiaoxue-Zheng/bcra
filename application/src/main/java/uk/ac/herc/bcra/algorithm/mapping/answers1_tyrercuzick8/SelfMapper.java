@@ -3,10 +3,12 @@ package uk.ac.herc.bcra.algorithm.mapping.answers1_tyrercuzick8;
 import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 
+import uk.ac.herc.bcra.algorithm.tyrercuzick.version8.AlgorithmModel.HyperplasiaHistory;
 import uk.ac.herc.bcra.algorithm.tyrercuzick.version8.AlgorithmModel.MenopausalStatus;
 import uk.ac.herc.bcra.algorithm.tyrercuzick.version8.AlgorithmModel.Self;
 import uk.ac.herc.bcra.domain.enumeration.QuestionIdentifier;
 import uk.ac.herc.bcra.domain.enumeration.QuestionItemIdentifier;
+import uk.ac.herc.bcra.algorithm.answers.version1.AnswerAccess;
 import uk.ac.herc.bcra.algorithm.answers.version1.GroupAccess;
 
 public class SelfMapper {
@@ -60,10 +62,7 @@ public class SelfMapper {
         // Ignore - only diagnosis matters (below)
 
         // SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES
-        self.hyperplasiaHistory = 
-            group
-            .answer(QuestionIdentifier.SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES)
-            .selected(QuestionItemIdentifier.SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_ADH);
+        self.hyperplasiaHistory = mapHyperplasiaHistory(group);
 
         self.atypicalHyperplasia = 
             group
@@ -79,5 +78,19 @@ public class SelfMapper {
         self.ashkanaziJewish = ashkenaziMap.get(
             group.answer(QuestionIdentifier.SELF_ASHKENAZI).getOnlySelectedItem()
         );
+    }
+
+    private static HyperplasiaHistory mapHyperplasiaHistory(GroupAccess group) {
+        AnswerAccess biopsyType = group.answer(QuestionIdentifier.SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES);
+        Boolean confirmedHistory = biopsyType.selected(QuestionItemIdentifier.SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_ADH);
+        Boolean unknownHistory = biopsyType.selected(QuestionItemIdentifier.SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_UNKNOWN);
+
+        if (confirmedHistory) {
+            return HyperplasiaHistory.HAS_HISTORY;
+        } else if (unknownHistory) {
+            return HyperplasiaHistory.HISTORY_UNKNOWN;
+        } else {
+            return HyperplasiaHistory.HAS_NO_HISTORY;
+        }
     }
 }

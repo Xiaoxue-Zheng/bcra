@@ -94,9 +94,16 @@ public class TyrerCuzickService {
                 String participantIdentifier = participant.getUser().getLogin();
                 LocalDate dateOfBirth = participant.getIdentifiableData().getDateOfBirth();
                 
-                String fileOutput = mapper.map(participantIdentifier, dateOfBirth, answerResponse);
-                writeDataToFile(participantIdentifier, fileOutput);
-                answerResponse.setState(ResponseState.PROCESSED);
+                try {
+                    String fileOutput = mapper.map(participantIdentifier, dateOfBirth, answerResponse);
+                    writeDataToFile(participantIdentifier, fileOutput);
+                    answerResponse.setState(ResponseState.PROCESSED);
+                } catch (Exception ex) {
+                    log.error("Failed to process risk assessment for participant: " + participant.getUser().getLogin());
+                    log.error(ex.getMessage());
+                    answerResponse.setState(ResponseState.FAILED);
+                }
+
                 answerResponseRepository.save(answerResponse);
             }
         }   
@@ -125,23 +132,42 @@ public class TyrerCuzickService {
 
         File tcInputDirectory = new File(TC_INPUT_FILE_LOCATION);
         for (File fileEntry : tcInputDirectory.listFiles()) {
-            String fileName = fileEntry.getName();
-            String exeLocation = new File(TC_EXECUTABLE_FILE_LOCATION).getAbsolutePath();
-            String inputLocation = new File(TC_INPUT_FILE_LOCATION + fileName).getAbsolutePath();
-            String outputLocation = new File(TC_OUTPUT_FILE_LOCATION + fileName).getAbsolutePath();
+            if (isTCInputFile(fileEntry)) {
+                String fileName = fileEntry.getName();
+                String exeLocation = new File(TC_EXECUTABLE_FILE_LOCATION).getAbsolutePath();
+                String inputLocation = new File(TC_INPUT_FILE_LOCATION + fileName).getAbsolutePath();
+                String outputLocation = new File(TC_OUTPUT_FILE_LOCATION + fileName).getAbsolutePath();
 
-            try {
-                String tcCommand = exeLocation + " -i " + inputLocation + " -o " + outputLocation;
-                Runtime rt = Runtime.getRuntime();
-                Process p = rt.exec(tcCommand);
-                p.waitFor();
+                try {
+                    String tcCommand = exeLocation + " -i " + inputLocation + " -o " + outputLocation;
+                    Runtime rt = Runtime.getRuntime();
+                    Process p = rt.exec(tcCommand);
+                    p.waitFor();
 
-                fileEntry.delete();
-                log.info("Executed tyrercuzick command: " + tcCommand);
-            } catch(Exception ex) {
-                log.info("Failed to execute tyrercuzick executable, reason: " + ex.getMessage());
+                    fileEntry.delete();
+                    log.info("Executed tyrercuzick command: " + tcCommand);
+                } catch(Exception ex) {
+                    log.info("Failed to execute tyrercuzick executable, reason: " + ex.getMessage());
+                }
             }
         }
+    }
+
+    private boolean isTCInputFile(File file) {
+        // TC Files are in the format <STUDY_CODE>-<DATE yyyy-MM-dd>.txt
+        String filename = file.getName();
+
+        boolean isTxtFile = filename.contains(".txt");
+        boolean isDateValid = false;
+        try {
+            String dateString = filename.substring(filename.length() - 14, filename.length() - 4);
+            new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+            isDateValid = true;
+        } catch(Exception ex) {
+            isDateValid = false;
+        }
+        
+        return isTxtFile && isDateValid;
     }
 
     @Scheduled(cron = "0 10 0 * * *")

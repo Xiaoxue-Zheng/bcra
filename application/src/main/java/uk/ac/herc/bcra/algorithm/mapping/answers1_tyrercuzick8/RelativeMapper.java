@@ -93,25 +93,30 @@ public class RelativeMapper {
 
         boolean relativeUnknown = relativeAnswer.selected(QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_UNKNOWN);
         int relativeCount = relativeAnswer.selectedCount();
-        QuestionItemIdentifier relativeItem = relativeAnswer.getOnlySelectedItem();
-
-        boolean relativeOnlyOne = 
-            response
-            .section(QuestionSectionIdentifier.FAMILY_BREAST)
-            .getOnlyGroup()
-            .answer(QuestionIdentifier.FAMILY_BREAST_HOW_MANY)
-            .selected(QuestionItemIdentifier.FAMILY_BREAST_HOW_MANY_ONE);
-            
+        QuestionItemIdentifier relativeItem = null;
+        boolean relativeOnlyOne = false;
         Map<QuestionItemIdentifier, Relative> relativeMap =
             new HashMap<QuestionItemIdentifier, Relative>();
-        relativeMap.put(QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_MOTHER, Relative.MOTHER);
-        relativeMap.put(QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_GRANDMOTHER, Relative.GRANDMOTHER);
-        relativeMap.put(QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_SISTER, Relative.SISTER);
-        relativeMap.put(QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_HALFSISTER, Relative.HALFSISTER);
-        relativeMap.put(QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_AUNT, Relative.AUNT);
-        relativeMap.put(QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_NIECE, Relative.NIECE);
-        // Do not map FAMILY_BREAST_AFFECTED_FATHER because participant will be referred
-        // Do not map FAMILY_BREAST_AFFECTED_BROTHER because participant will be referred
+
+        if (relativeCount > 0) {
+            relativeItem = relativeAnswer.getOnlySelectedItem();
+
+            relativeOnlyOne = 
+                response
+                .section(QuestionSectionIdentifier.FAMILY_BREAST)
+                .getOnlyGroup()
+                .answer(QuestionIdentifier.FAMILY_BREAST_HOW_MANY)
+                .selected(QuestionItemIdentifier.FAMILY_BREAST_HOW_MANY_ONE);
+                
+            relativeMap.put(QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_MOTHER, Relative.MOTHER);
+            relativeMap.put(QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_GRANDMOTHER, Relative.GRANDMOTHER);
+            relativeMap.put(QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_SISTER, Relative.SISTER);
+            relativeMap.put(QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_HALFSISTER, Relative.HALFSISTER);
+            relativeMap.put(QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_AUNT, Relative.AUNT);
+            relativeMap.put(QuestionItemIdentifier.FAMILY_BREAST_AFFECTED_NIECE, Relative.NIECE);
+            // Do not map FAMILY_BREAST_AFFECTED_FATHER because participant will be referred
+            // Do not map FAMILY_BREAST_AFFECTED_BROTHER because participant will be referred
+        }
 
         return getRelative(
             relativeUnknown,
@@ -132,24 +137,29 @@ public class RelativeMapper {
 
         boolean relativeUnknown = relativeAnswer .selected(QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_UNKNOWN);
         int relativeCount = relativeAnswer.selectedCount();
-        QuestionItemIdentifier relativeItem = relativeAnswer.getOnlySelectedItem();
 
-        boolean relativeOnlyOne = 
-            response
-            .section(QuestionSectionIdentifier.FAMILY_OVARIAN)
-            .getOnlyGroup()
-            .answer(QuestionIdentifier.FAMILY_OVARIAN_HOW_MANY)
-            .selected(QuestionItemIdentifier.FAMILY_OVARIAN_HOW_MANY_ONE);
-
+        QuestionItemIdentifier relativeItem = null;
+        boolean relativeOnlyOne = false;
         Map<QuestionItemIdentifier, Relative> relativeMap =
             new HashMap<QuestionItemIdentifier, Relative>();
-        relativeMap.put(QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_MOTHER, Relative.MOTHER);
-        relativeMap.put(QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_GRANDMOTHER, Relative.GRANDMOTHER);
-        relativeMap.put(QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_SISTER, Relative.SISTER);
-        relativeMap.put(QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_HALFSISTER, Relative.HALFSISTER);
-        relativeMap.put(QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_AUNT, Relative.AUNT);
-        relativeMap.put(QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_NIECE, Relative.NIECE);        
+        
+        if (relativeCount > 0) {    
+            relativeItem = relativeAnswer.getOnlySelectedItem();
 
+            relativeOnlyOne = 
+                response
+                .section(QuestionSectionIdentifier.FAMILY_OVARIAN)
+                .getOnlyGroup()
+                .answer(QuestionIdentifier.FAMILY_OVARIAN_HOW_MANY)
+                .selected(QuestionItemIdentifier.FAMILY_OVARIAN_HOW_MANY_ONE);
+
+            relativeMap.put(QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_MOTHER, Relative.MOTHER);
+            relativeMap.put(QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_GRANDMOTHER, Relative.GRANDMOTHER);
+            relativeMap.put(QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_SISTER, Relative.SISTER);
+            relativeMap.put(QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_HALFSISTER, Relative.HALFSISTER);
+            relativeMap.put(QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_AUNT, Relative.AUNT);
+            relativeMap.put(QuestionItemIdentifier.FAMILY_OVARIAN_AFFECTED_NIECE, Relative.NIECE);        
+        }
         return getRelative(
             relativeUnknown,
             relativeCount,

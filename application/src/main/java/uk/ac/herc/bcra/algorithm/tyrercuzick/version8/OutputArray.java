@@ -6,6 +6,7 @@ import java.util.List;
 import uk.ac.herc.bcra.algorithm.tyrercuzick.version8.AlgorithmModel.BreastDensity;
 import uk.ac.herc.bcra.algorithm.tyrercuzick.version8.AlgorithmModel.BreastDensityMeasure;
 import uk.ac.herc.bcra.algorithm.tyrercuzick.version8.AlgorithmModel.GeneticTest;
+import uk.ac.herc.bcra.algorithm.tyrercuzick.version8.AlgorithmModel.HyperplasiaHistory;
 import uk.ac.herc.bcra.algorithm.tyrercuzick.version8.AlgorithmModel.MaleRelative;
 import uk.ac.herc.bcra.algorithm.tyrercuzick.version8.AlgorithmModel.MenopausalStatus;
 import uk.ac.herc.bcra.algorithm.tyrercuzick.version8.AlgorithmModel.Parent;
@@ -84,7 +85,7 @@ public class OutputArray {
         array.add(swapIfNull(self.liveBirths, TWO));
 
         // Age at first birth
-        array.add(swapIfOtherNull(self.firstBirthAge, self.liveBirths, ZERO));
+        array.add(mapAgeAtFirstBirth(self.liveBirths, self.firstBirthAge));
 
         // Menopausal status
         array.add(mapMenopausalStatus(self.menopausalStatus));
@@ -99,7 +100,7 @@ public class OutputArray {
         array.add(swapIfNull(self.weightKilos, MINUS_NINETY_NINE));
 
         // History of hyperplasia
-        array.add(swapIfNull(self.hyperplasiaHistory, ZERO));
+        array.add(mapHyperplasiaHistory(self.hyperplasiaHistory));
 
         // History of atypical hyperplasia
         array.add(swapIfNull(self.atypicalHyperplasia, ZERO));
@@ -163,6 +164,18 @@ public class OutputArray {
 
         // Genetic testing of the woman’s <relative>
         array.add(mapGeneticTest(relative.geneticTest));
+    }
+
+    private static Integer mapAgeAtFirstBirth(Integer liveBirths, Integer ageAtBirth) {
+        if (liveBirths == null || liveBirths == 0) {
+            return 0;
+        }
+
+        if (ageAtBirth == null) {
+            return MINUS_NINETY_NINE;
+        } else {
+            return ageAtBirth;
+        }
     }
 
     private static void mapMultipleParents(List<Parent> parents, List<Object>array) {
@@ -271,6 +284,16 @@ public class OutputArray {
         }
     }
 
+    private static Integer mapHyperplasiaHistory(HyperplasiaHistory hyperplasiaHistory) {
+        if (hyperplasiaHistory == HyperplasiaHistory.HISTORY_UNKNOWN) {
+            return 2;
+        } else if (hyperplasiaHistory == HyperplasiaHistory.HAS_HISTORY) {
+            return 1;
+        } else /* NULL OR NO HISTORY */ {
+            return 0;
+        }
+    }
+
     private static Integer mapHRTValue(UseHRT useHRT) {
         if (useHRT == UseHRT.OVER_FIVE_YEARS_AGO) {
             return 1;
@@ -335,15 +358,6 @@ public class OutputArray {
 
     private static Object swapIfNull(Object value, Object swap) {
         if (value == null) {
-            return swap;
-        }
-        else {
-            return value;
-        }
-    }
-
-    private static Object swapIfOtherNull(Object value, Object other, Object swap) {
-        if (other == null) {
             return swap;
         }
         else {

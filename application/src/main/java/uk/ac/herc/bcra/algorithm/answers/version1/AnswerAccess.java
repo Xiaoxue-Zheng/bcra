@@ -63,8 +63,7 @@ public class AnswerAccess {
 
     public QuestionItemIdentifier getOnlySelectedItem() {
         if (selectedItems.size() != 1) {
-            return null;
-            //throw new AlgorithmException("Answer does not have one selected item: " + answer);
+            throw new AlgorithmException("Answer does not have one selected item: " + answer);
         }
         return selectedItems.get(0).getQuestionItem().getIdentifier();
     }
@@ -110,7 +109,6 @@ public class AnswerAccess {
                 return height / INCHES_PER_METER;
             }
         }
-        return null;
-        //throw new AlgorithmException("Height answer has invalid units: " + answer);
+        throw new AlgorithmException("Height answer has invalid units: " + answer);
     }
 }

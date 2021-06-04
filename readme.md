@@ -103,16 +103,23 @@ Before the application is started, be sure that you have the following directory
 
 /home/tyrercuzick/input/
 /home/tyrercuzick/output/
+/home/tyrercuzick/extract/
 
-As well as this, make sure to place the tyrercuzick.exe application (which is found in the ./application directory) in the following directory:
+As well as this, make sure to place the tyrercuzick.exe application (which is found in the ./application directory), as well as the extract sql file (found in the ./scripts/sql directory) into the following directory:
 
 /home/tyrercuzick/tyrercuzick.exe
+/home/tyrercuzick/extract/risk_assessment_extract.sql
 
-If you are on an iOS system, then use the following directory structure for the tyrer cuzick files:
+If you are on an iOS system, then use the following directory structure for the tyrer cuzick files (tcuzick file also found in the ./application directory):
 
 /usr/local/share/tyrercuzick/input/
 /usr/local/share/tyrercuzick/output/
-/usr/local/share/tyrercuzick/tyrercuzick.exe
+/usr/local/share/tyrercuzick/extract/
+
+And place the mac appropriate files into the following directory:
+
+/usr/local/share/tyrercuzick/tcuzick
+/usr/local/share/tyrercuzick/extract/risk_assessment_extract_ios.sql
 
 #### Manual testing
 

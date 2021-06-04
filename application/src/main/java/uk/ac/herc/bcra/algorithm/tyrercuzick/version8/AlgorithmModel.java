@@ -38,6 +38,12 @@ public class AlgorithmModel {
         BIRADS_ATLAS
     }
 
+    public enum HyperplasiaHistory {
+        HAS_NO_HISTORY,
+        HAS_HISTORY,
+        HISTORY_UNKNOWN
+    }
+
     public AlgorithmModel(String participantIdentifier) {
         self.participantIdentifier = participantIdentifier;
     }
@@ -52,7 +58,7 @@ public class AlgorithmModel {
         public Integer menopauseAge = null;
         public Float heightMeters = null;
         public Integer weightKilos = null;
-        public Boolean hyperplasiaHistory = null;
+        public HyperplasiaHistory hyperplasiaHistory = null;
         public Boolean atypicalHyperplasia = null;
         public Boolean lcisHistory = null;
         public Boolean ovarianCancer = null;

@@ -62,6 +62,11 @@ const router = new Router({
       component: () => import('../views/Submit.vue')
     },
     {
+      path: '/referral',
+      name: 'referral',
+      component: () => import('../views/Referral.vue')
+    },
+    {
       path: '/participant-details',
       name: 'participantDetails',
       component: () => import('../views/ParticipantDetails.vue')

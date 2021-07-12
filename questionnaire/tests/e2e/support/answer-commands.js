@@ -80,7 +80,7 @@ Cypress.Commands.add('checkNotReferred', () => {
 })
 
 Cypress.Commands.add('checkReferredWithCorrectReason', (reason) => {
-  cy.url().should('equal', Cypress.config().baseUrl + 'submit')
+  cy.url().should('equal', Cypress.config().baseUrl + 'referral')
   cy.contains(reason).should('be.visible')
 })
 

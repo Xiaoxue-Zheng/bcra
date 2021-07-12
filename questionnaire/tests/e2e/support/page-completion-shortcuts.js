@@ -81,27 +81,36 @@ function enterPostCode(postcode) {
     return cy.get('input').eq(7).type(postcode)
 }
 
+function enterHomePhoneNumber(phoneNumber) {
+  return cy.get('input').eq(8).type(phoneNumber)
+}
+
+function enterMobilePhoneNumber(phoneNumber) {
+  return cy.get('input').eq(9).type(phoneNumber)
+}
+
 function enterDateOfBirth(dateOfBirth) {
-    return cy.get('input').eq(8).type(dateOfBirth)
+    return cy.get('input').eq(10).type(dateOfBirth)
 }
 
 function enterNhsNumber(nhsNumber) {
-    return cy.get('input').eq(9).type(nhsNumber)
+    return cy.get('input').eq(11).type(nhsNumber)
 }
 
 function enterGPName(gpName) {
-    return cy.get('input').eq(10).type(gpName)
+    return cy.get('input').eq(12).type(gpName)
 }
 
 Cypress.Commands.add('completeRiskAssessment', () => {
     continueToRiskAssessment()
-    selectMotherForBreastAndOvarian()
+    saveAndContinue()
+    continueToRiskAssessment()
     saveAndContinue()
     cy.url().should('include', 'submit')
 })
 
 function continueToRiskAssessment() {
-    cy.get('.pure-button').contains('Continue').click() 
+    cy.get('.pure-button').contains('Continue').click()
 }
 
 function selectMotherForBreastAndOvarian() {
@@ -110,5 +119,5 @@ function selectMotherForBreastAndOvarian() {
 }
 
 function saveAndContinue() {
-    cy.get('.pure-button').contains('Save and continue').click() 
+    cy.get('.pure-button').contains('Save and continue').click()
 }

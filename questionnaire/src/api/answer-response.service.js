@@ -18,6 +18,11 @@ export const AnswerResponseService = {
   saveRiskAssessment (answerResponse) {
     return ApiService.put('answer-responses/risk-assessment/save', answerResponse)
   },
+
+  referralRiskAssessment(answerResponse) {
+    return ApiService.put('answer-responses/risk-assessment/referral', answerResponse)
+  },
+
   submitRiskAssessment (answerResponse) {
     return ApiService.put('answer-responses/risk-assessment/submit', answerResponse)
   }

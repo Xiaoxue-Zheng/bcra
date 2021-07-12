@@ -128,7 +128,7 @@ export default {
     proceedToNextRoute () {
       this.referralConditions = ReferralConditionService.getNewReferralConditions(this.questionSection)
       if (this.referralConditions.length > 0) {
-        this.proceedToSubmit()
+        this.submitReferralAndProceed()
       } else {
         const nextSection = QuestionSectionService.getNextSection(this.questionSection, this.questionnaire)
         if (!nextSection) {
@@ -138,10 +138,22 @@ export default {
         }
       }
     },
+
     proceedToSubmit () {
       this.$store.commit('submit/setQuestionnaire', this.questionnaire)
       this.$store.commit('submit/setAnswerResponse', this.answerResponse)
       this.$router.push('/submit')
+    },
+
+    submitReferralAndProceed () {
+      AnswerResponseService.referralRiskAssessment(this.answerResponse)
+      this.proceedToReferral()
+    },
+
+    proceedToReferral (){
+      this.$store.commit('referral/setQuestionnaire', this.questionnaire)
+      this.$store.commit('referral/setAnswerResponse', this.answerResponse)
+      this.$router.push('/referral')
     }
   }
 }

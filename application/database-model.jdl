@@ -226,6 +226,7 @@ enum ResponseState {
     NOT_STARTED,
     IN_PROGRESS,
     SUBMITTED,
+    REFERRED,
     INVALID,
     VALIDATED,
     FAILED,

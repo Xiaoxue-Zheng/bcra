@@ -34,9 +34,9 @@ describe('Consent', () => {
         cy.deleteParticipants([UNREGISTERED_STUDY_CODE])
         cy.clearTables(['study_id', 'answer_item', 'answer', 'answer_group', 'answer_section', 'answer_response'])
     })
-    
+
     it('should open the consent page', () => {
-        cy.url().should('include', 'questionnaire/consent')
+        cy.url().should('include', 'consent')
         cy.contains('h1', 'Consent')
     })
 
@@ -69,4 +69,3 @@ describe('Consent', () => {
         cy.url().should('include', 'account')
     })
 })
-  

@@ -64,7 +64,7 @@ public class AnswerResponseResourceIT {
 
     @Autowired
     private StudyIdService studyIdService;
-    
+
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
@@ -178,7 +178,7 @@ public class AnswerResponseResourceIT {
     @Test
     @Transactional
     public void getConsentAnswerResponseEmptyResult() throws Exception {
-        
+
         Participant participant;
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
             participant = ParticipantResourceIT.createUpdatedEntity(em);
@@ -199,7 +199,7 @@ public class AnswerResponseResourceIT {
             )
             .andExpect(status().isOk())
             .andReturn();
-        
+
         String content = result.getResponse().getContentAsString();
         assertThat(content).isEqualTo("");
     }
@@ -230,7 +230,7 @@ public class AnswerResponseResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andReturn();
-        
+
         String content = result.getResponse().getContentAsString();
         ObjectMapper mapper = new ObjectMapper();
         AnswerResponseDTO response = mapper.readValue(content, AnswerResponseDTO.class);
@@ -243,7 +243,7 @@ public class AnswerResponseResourceIT {
     @Test
     @Transactional
     public void getRiskAssessmentAnswerResponseEmptyResult() throws Exception {
-        
+
         Participant participant;
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
             participant = ParticipantResourceIT.createUpdatedEntity(em);
@@ -264,7 +264,7 @@ public class AnswerResponseResourceIT {
             )
             .andExpect(status().isOk())
             .andReturn();
-        
+
         String content = result.getResponse().getContentAsString();
         assertThat(content).isEqualTo("");
     }
@@ -294,7 +294,7 @@ public class AnswerResponseResourceIT {
             )
             .andExpect(status().isOk())
             .andReturn();
-        
+
         String content = result.getResponse().getContentAsString();
         ObjectMapper mapper = new ObjectMapper();
         AnswerResponseDTO response = mapper.readValue(content, AnswerResponseDTO.class);
@@ -321,7 +321,7 @@ public class AnswerResponseResourceIT {
         int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
 
         // Update the answerResponse
-        AnswerResponse updatedAnswerResponse = 
+        AnswerResponse updatedAnswerResponse =
             answerResponseRepository.findById(
                 participant.getProcedure().getConsentResponse().getId()
             ).get();
@@ -355,7 +355,7 @@ public class AnswerResponseResourceIT {
         assertThat(answerResponseList).hasSize(databaseSizeBeforeUpdate);
 
         // Check that State and Status cannot be modified via API
-        AnswerResponse testAnswerResponse = 
+        AnswerResponse testAnswerResponse =
             answerResponseRepository.getOne(participant.getProcedure().getConsentResponse().getId());
 
         assertThat(testAnswerResponse.getState()).isNotEqualTo(UPDATED_STATE);
@@ -389,7 +389,7 @@ public class AnswerResponseResourceIT {
         int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
 
         // Update the answerResponse
-        AnswerResponse updatedAnswerResponse = 
+        AnswerResponse updatedAnswerResponse =
             answerResponseRepository.findById(
                 participant.getProcedure().getConsentResponse().getId()
             ).get();
@@ -423,7 +423,7 @@ public class AnswerResponseResourceIT {
         assertThat(answerResponseList).hasSize(databaseSizeBeforeUpdate);
 
         // Check that State and Status cannot be modified via API
-        AnswerResponse testAnswerResponse = 
+        AnswerResponse testAnswerResponse =
             answerResponseRepository.getOne(participant.getProcedure().getConsentResponse().getId());
 
         assertThat(testAnswerResponse.getState()).isNotEqualTo(UPDATED_STATE);
@@ -457,7 +457,7 @@ public class AnswerResponseResourceIT {
         int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
 
         // Update the answerResponse
-        AnswerResponse updatedAnswerResponse = 
+        AnswerResponse updatedAnswerResponse =
             answerResponseRepository.findById(
                 participant.getProcedure().getRiskAssessmentResponse().getId()
             ).get();
@@ -491,7 +491,7 @@ public class AnswerResponseResourceIT {
         assertThat(answerResponseList).hasSize(databaseSizeBeforeUpdate);
 
         // Check that State and Status cannot be modified via API
-        AnswerResponse testAnswerResponse = 
+        AnswerResponse testAnswerResponse =
             answerResponseRepository.getOne(participant.getProcedure().getRiskAssessmentResponse().getId());
 
         assertThat(testAnswerResponse.getState()).isNotEqualTo(UPDATED_STATE);
@@ -508,7 +508,7 @@ public class AnswerResponseResourceIT {
         ).isEqualTo(UPDATED_ANSWER_VALUE);
     }
 
-    
+
     @Test
     @Transactional
     public void submitRiskAssessmentAnswerResponse() throws Exception {
@@ -526,7 +526,7 @@ public class AnswerResponseResourceIT {
         int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
 
         // Update the answerResponse
-        AnswerResponse updatedAnswerResponse = 
+        AnswerResponse updatedAnswerResponse =
             answerResponseRepository.findById(
                 participant.getProcedure().getRiskAssessmentResponse().getId()
             ).get();
@@ -560,7 +560,7 @@ public class AnswerResponseResourceIT {
         assertThat(answerResponseList).hasSize(databaseSizeBeforeUpdate);
 
         // Check that State and Status cannot be modified via API
-        AnswerResponse testAnswerResponse = 
+        AnswerResponse testAnswerResponse =
             answerResponseRepository.getOne(participant.getProcedure().getRiskAssessmentResponse().getId());
 
         assertThat(testAnswerResponse.getState()).isNotEqualTo(UPDATED_STATE);
@@ -574,6 +574,74 @@ public class AnswerResponseResourceIT {
             .getAnswerGroups().iterator().next()
             .getAnswers().iterator().next()
             .getNumber()
+        ).isEqualTo(UPDATED_ANSWER_VALUE);
+    }
+
+    @Test
+    @Transactional
+    public void referralRiskAssessmentAnswerResponse() throws Exception {
+
+        // Initialize the database
+        Participant participant;
+        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
+            participant = ParticipantResourceIT.createUpdatedEntity(em);
+            em.persist(participant);
+            em.flush();
+        } else {
+            participant = TestUtil.findAll(em, Participant.class).get(0);
+        }
+
+        int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
+
+        // Update the answerResponse
+        AnswerResponse updatedAnswerResponse =
+            answerResponseRepository.findById(
+                participant.getProcedure().getRiskAssessmentResponse().getId()
+            ).get();
+
+        em.detach(updatedAnswerResponse);
+
+        updatedAnswerResponse
+            .state(UPDATED_STATE)
+            .status(UPDATED_STATUS)
+            .getAnswerSections().iterator().next()
+            .getAnswerGroups().iterator().next()
+            .getAnswers().iterator().next()
+            .setNumber(UPDATED_ANSWER_VALUE);
+
+        // Save
+        AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(updatedAnswerResponse);
+        restAnswerResponseMockMvc.perform(
+            put("/api/answer-responses/risk-assessment/referral")
+                .principal(new Principal() {
+                    @Override
+                    public String getName() {
+                        return participant.getUser().getLogin();
+                    }
+                })
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(answerResponseDTO)))
+            .andExpect(status().isOk());
+
+        // Validate the AnswerResponse in the database
+        List<AnswerResponse> answerResponseList = answerResponseRepository.findAll();
+        assertThat(answerResponseList).hasSize(databaseSizeBeforeUpdate);
+
+        // Check that State and Status cannot be modified via API
+        AnswerResponse testAnswerResponse =
+            answerResponseRepository.getOne(participant.getProcedure().getRiskAssessmentResponse().getId());
+
+        assertThat(testAnswerResponse.getState()).isNotEqualTo(UPDATED_STATE);
+        assertThat(testAnswerResponse.getStatus()).isNotEqualTo(UPDATED_STATUS);
+
+        // Check State and Updated Answer
+        assertThat(testAnswerResponse.getState()).isEqualTo(ResponseState.REFERRED);
+        assertThat(
+            testAnswerResponse
+                .getAnswerSections().iterator().next()
+                .getAnswerGroups().iterator().next()
+                .getAnswers().iterator().next()
+                .getNumber()
         ).isEqualTo(UPDATED_ANSWER_VALUE);
     }
 }

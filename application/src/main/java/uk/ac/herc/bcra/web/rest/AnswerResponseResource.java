@@ -108,6 +108,24 @@ public class AnswerResponseResource {
         }
     }
 
+    @PutMapping("/answer-responses/risk-assessment/referral")
+    public ResponseEntity<String> referralRiskAssessment(
+        Principal principal,
+        @Valid @RequestBody AnswerResponseDTO answerResponseDTO
+    ) throws URISyntaxException {
+        log.debug("REST request to save Risk Assessment AnswerResponse: {}", answerResponseDTO);
+        if(answerResponseService.save(
+            principal.getName(),
+            answerResponseDTO,
+            QuestionnaireType.RISK_ASSESSMENT,
+            ResponseState.REFERRED
+        )) {
+            return ResponseEntity.ok().body("REFERRED");
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("FAILED");
+        }
+    }
+
     @PutMapping("/answer-responses/risk-assessment/submit")
     public ResponseEntity<String> submitRiskAssessment(
             Principal principal,

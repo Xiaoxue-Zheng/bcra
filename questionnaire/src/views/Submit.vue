@@ -2,10 +2,6 @@
   <div class="content">
     <h1>Submit Questionnaire<ProgressState :progressStage="getFinalProgressStage"></ProgressState></h1>
     <p>You are about to submit, and you can never go back.<p>
-    <p v-if="referralConditions.length > 0">You will be referred because...</p>
-    <div v-for="condition in referralConditions" v-bind:key='condition.id'>
-        <strong>{{ formatConditionText(condition.reason) }}</strong>
-    </div>
     <PrimaryButton :clickEvent="submit">Submit Questionnaire</PrimaryButton>
     <div v-if="submitError">There was an error. Please try again or contact the study team.</div>
 </div>
@@ -15,7 +11,6 @@
 import ProgressState from '@/components/ProgressState.vue'
 import PrimaryButton from '@/components/PrimaryButton.vue'
 import { AnswerHelperService } from '@/services/answer-helper.service.js'
-import { ReferralConditionService } from '@/services/referral-condition.service.js'
 import { AnswerResponseService } from '@/api/answer-response.service.js'
 
 export default {
@@ -28,7 +23,6 @@ export default {
     return {
       questionnaire: null,
       answerResponse: null,
-      referralConditions: [],
       submitError: null
     }
   },
@@ -41,16 +35,12 @@ export default {
     this.questionnaire = await this.$store.dispatch('submit/getQuestionnaire')
     this.answerResponse = await this.$store.dispatch('submit/getAnswerResponse')
     AnswerHelperService.initialise(this.questionnaire, this.answerResponse)
-    this.referralConditions = ReferralConditionService.getHistoricalReferralConditions(this.questionnaire)
   },
   methods: {
     submit () {
       AnswerResponseService.submitRiskAssessment(this.answerResponse)
       this.$router.push('/wip')
     },
-    formatConditionText (text) {
-      return '- ' + text.substring(0, 1).toUpperCase() + text.substring(1) + '.'
-    }
   }
 }
 </script>

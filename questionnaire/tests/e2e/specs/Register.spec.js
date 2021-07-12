@@ -15,7 +15,7 @@ describe('Register', () => {
       cy.deleteParticipants([REGISTERED_STUDY_CODE, UNREGISTERED_STUDY_CODE])
       cy.clearTables(['study_id', 'answer_item', 'answer', 'answer_group', 'answer_section', 'answer_response'])
     })
-    
+
     it('should open the register page', () => {
       cy.server()
       cy.route({
@@ -23,15 +23,15 @@ describe('Register', () => {
         url: '/api/account'
       })
       .as('getAccount')
-  
+
       cy.visit('/register')
       cy.contains('h1', 'Register')
-  
+
       cy.get('input').first().should('have.value', '')
-  
+
       cy.wait('@getAccount')
     })
-  
+
     it('should display an error on already registered study code', () => {
       cy.server()
       cy.route({
@@ -39,10 +39,10 @@ describe('Register', () => {
         url: '/api/account'
       })
       .as('getAccount')
-  
+
       cy.visit('/register')
       cy.contains('h1', 'Register')
-  
+
       cy.get('input').first().clear().type(REGISTERED_STUDY_CODE)
       cy.get('button').first().click()
 
@@ -50,7 +50,7 @@ describe('Register', () => {
 
       cy.wait('@getAccount')
     })
-  
+
     it('should display an error when study code entered does not exist', () => {
       cy.server()
       cy.route({
@@ -58,10 +58,10 @@ describe('Register', () => {
         url: '/api/account'
       })
       .as('getAccount')
-  
+
       cy.visit('/register')
       cy.contains('h1', 'Register')
-  
+
       cy.get('input').first().clear().type(NON_EXISTENT_STUDY_CODE)
       cy.get('button').first().click()
 
@@ -77,16 +77,15 @@ describe('Register', () => {
         url: '/api/account'
       })
       .as('getAccount')
-  
+
       cy.visit('/register')
       cy.contains('h1', 'Register')
-  
+
       cy.get('input').first().clear().type(UNREGISTERED_STUDY_CODE)
       cy.get('button').first().click()
 
       cy.wait('@getAccount')
 
-      cy.url().should('include', 'questionnaire/consent')
+      cy.url().should('include', 'consent')
     })
   })
-  

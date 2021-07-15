@@ -3,7 +3,7 @@ Cypress.Commands.add('completeRegisterPage', (studyId) => {
     cy.contains('h1', 'Register')
 
     cy.get('input').first().clear().type(studyId)
-    cy.get('button').first().click()
+    cy.get('button').contains('Next').click()
 })
 
 Cypress.Commands.add('completeConsentPage', (studyId) => {
@@ -16,7 +16,7 @@ Cypress.Commands.add('completeConsentPage', (studyId) => {
 })
 
 function clickConsentButton() {
-    cy.get('.pure-button').first().click()
+    cy.get('.pure-button').contains('I give my consent').click()
 }
 
 function clickConsentOption(groupId, option) {

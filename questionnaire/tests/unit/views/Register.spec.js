@@ -1,14 +1,15 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Register from '@/views/Register.vue'
 import { SignUpHelperService } from '@/services/sign-up-helper.service'
 import { StudyService } from '@/api/study.service'
+import VueRouter from "vue-router";
 
 describe('Register.vue', () => {
     let register = null
 
-    let routerMock = {
-        push: (ref) => {}
-    }
+    const localVue = createLocalVue()
+    localVue.use(VueRouter)
+    const router = new VueRouter()
 
     let studyCodeAvailable = false
     let isStudyCodeAvailableMock = async (studyCode) => {
@@ -16,8 +17,7 @@ describe('Register.vue', () => {
     }
 
     beforeEach(() => {
-        register = shallowMount(Register, {stubs: ['router-link', 'router-view']})
-        register.vm.$router = routerMock
+        register = shallowMount(Register, { localVue, router, stubs: ['router-link', 'router-view'] })
         StudyService.isStudyCodeAvailable = isStudyCodeAvailableMock
 
         jest.spyOn(register.vm.$router, 'push')

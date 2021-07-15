@@ -40,7 +40,7 @@ export default {
     submit () {
       AnswerResponseService.submitRiskAssessment(this.answerResponse)
       this.$router.push('/wip')
-    },
+    }
   }
 }
 </script>

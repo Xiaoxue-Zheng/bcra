@@ -7,34 +7,31 @@
   </div>
 </template>
 <script>
-  import ProgressState from '@/components/ProgressState.vue'
-  import PrimaryButton from '@/components/PrimaryButton.vue'
-  import { AnswerHelperService } from '@/services/answer-helper.service.js'
-  import { ReferralConditionService } from '@/services/referral-condition.service.js'
-  import { AnswerResponseService } from '@/api/answer-response.service.js'
+import { AnswerHelperService } from '@/services/answer-helper.service.js'
+import { ReferralConditionService } from '@/services/referral-condition.service.js'
 
-  export default {
-    name: 'referral',
-    data() {
-      return {
-        questionnaire: null,
-        answerResponse: null,
-        referralConditions: []
-      }
-    },
-    methods: {
-      formatConditionText (text) {
-        return '- ' + text.substring(0, 1).toUpperCase() + text.substring(1) + '.'
-      }
-    },
-
-    async created() {
-      this.questionnaire = await this.$store.dispatch('referral/getQuestionnaire')
-      this.answerResponse = await this.$store.dispatch('referral/getAnswerResponse')
-      AnswerHelperService.initialise(this.questionnaire, this.answerResponse)
-      this.referralConditions = ReferralConditionService.getHistoricalReferralConditions(this.questionnaire)
+export default {
+  name: 'referral',
+  data () {
+    return {
+      questionnaire: null,
+      answerResponse: null,
+      referralConditions: []
     }
+  },
+  methods: {
+    formatConditionText (text) {
+      return '- ' + text.substring(0, 1).toUpperCase() + text.substring(1) + '.'
+    }
+  },
+
+  async created () {
+    this.questionnaire = await this.$store.dispatch('referral/getQuestionnaire')
+    this.answerResponse = await this.$store.dispatch('referral/getAnswerResponse')
+    AnswerHelperService.initialise(this.questionnaire, this.answerResponse)
+    this.referralConditions = ReferralConditionService.getHistoricalReferralConditions(this.questionnaire)
   }
+}
 </script>
 <style scoped>
   h1 {

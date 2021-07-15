@@ -66,7 +66,9 @@ export default {
   },
   watch: {
     $route (to, from) {
-      this.initialiseSection()
+      if (this.isQuestionnaireSectionPage(to)) {
+        this.initialiseSection()
+      }
     }
   },
   methods: {
@@ -150,11 +152,16 @@ export default {
       this.proceedToReferral()
     },
 
-    proceedToReferral (){
+    proceedToReferral () {
       this.$store.commit('referral/setQuestionnaire', this.questionnaire)
       this.$store.commit('referral/setAnswerResponse', this.answerResponse)
       this.$router.push('/referral')
+    },
+
+    isQuestionnaireSectionPage (to) {
+      return to.path.includes('/questionnaire')
     }
+
   }
 }
 </script>

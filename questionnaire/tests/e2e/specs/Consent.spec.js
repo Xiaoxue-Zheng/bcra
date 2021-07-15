@@ -5,7 +5,7 @@ describe('Consent', () => {
     const FUTURE_RESEARCH_RADIO_GROUP = "CONSENT_FUTURE_RESEARCH"
 
     function clickConsentButton() {
-        cy.get('.pure-button').first().click()
+        cy.get('.pure-button').contains('I give my consent').first().click()
     }
 
     function clickConsentOption(groupId, option) {

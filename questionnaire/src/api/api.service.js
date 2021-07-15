@@ -1,10 +1,21 @@
 import axios from 'axios'
 import { API_URL } from './config'
+import router from '../router/index'
 
 export default {
   init () {
     axios.defaults.baseURL = API_URL
     axios.defaults.withCredentials = true
+    axios.interceptors.response.use(function (response) {
+      return response
+    }, function (error) {
+      if (error.response.status === 403 || error.response.status === 401) {
+        if (!Object.is(error.response.data.path, '/api/account') && this.$router.history.current.path !== '/signin') {
+          router.push('/signin')
+        }
+      }
+      return Promise.reject(error)
+    })
   },
 
   query (resource, params) {

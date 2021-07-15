@@ -123,6 +123,7 @@ spring:
 server:
   servlet:
     session:
+      timeout: 15m
       cookie:
         http-only: true
 

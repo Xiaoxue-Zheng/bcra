@@ -1,11 +1,12 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import CreateAccount from '@/views/CreateAccount.vue'
 import { SignUpHelperService } from '@/services/sign-up-helper.service'
 import { SecurityService } from '@/api/security.service'
+import VueRouter from "vue-router";
 
 describe('CreateAccount.vue', () => {
     let createAccount = null
-    
+
     let dispatchResult = 'FAILURE'
     let storeMock = {
         dispatch: async () => {
@@ -13,14 +14,13 @@ describe('CreateAccount.vue', () => {
         }
     }
 
-    let routerMock = {
-        push: (ref) => {}
-    }
+    const localVue = createLocalVue()
+    localVue.use(VueRouter)
+    const router = new VueRouter()
 
     beforeEach(() => {
-        createAccount = shallowMount(CreateAccount, {stubs: ['router-link', 'router-view']})
+        createAccount = shallowMount(CreateAccount, { localVue, router, stubs: ['router-link', 'router-view'] })
         createAccount.vm.$store = storeMock
-        createAccount.vm.$router = routerMock
 
         SecurityService.createAccount = async function() { return 0 }
 
@@ -54,7 +54,7 @@ describe('CreateAccount.vue', () => {
             createAccount.vm.emailAddress = "test@email.com"
             createAccount.vm.password = "PASSWORD"
             createAccount.vm.repeatPassword = "PASSWORD"
-            createAccount.vm.passwordScore = 5 
+            createAccount.vm.passwordScore = 5
             await createAccount.vm.createAccount()
             createAccount.vm.autoLogin = () => { "disable this function" }
 

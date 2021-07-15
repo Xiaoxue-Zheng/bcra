@@ -1,17 +1,17 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Consent from '@/views/Consent.vue'
+import VueRouter from 'vue-router'
 import { SignUpHelperService } from '@/services/sign-up-helper.service'
 
 describe('Consent.vue', () => {
     let consent = null
 
-    let routerMock = {
-        push: (ref) => {}
-    }
+    const localVue = createLocalVue()
+    localVue.use(VueRouter)
+    const router = new VueRouter()
 
     beforeEach(() => {
-        consent = shallowMount(Consent, {stubs: ['router-link', 'router-view']})
-        consent.vm.$router = routerMock
+        consent = shallowMount(Consent, { localVue, router, stubs: ['router-link', 'router-view'] })
 
         jest.spyOn(SignUpHelperService, 'saveConsentResponse')
         jest.spyOn(consent.vm.$router, 'push')
@@ -31,7 +31,7 @@ describe('Consent.vue', () => {
             consent.vm.submitConsent()
             expect(SignUpHelperService.saveConsentResponse).toHaveBeenCalled()
         })
-        
+
         it('should navigate the user to the /account page', () => {
             consent.vm.submitConsent()
             expect(consent.vm.$router.push).toHaveBeenCalledWith('/account')

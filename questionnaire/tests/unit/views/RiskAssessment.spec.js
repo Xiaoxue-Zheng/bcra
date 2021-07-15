@@ -1,14 +1,26 @@
-import { shallowMount } from '@vue/test-utils'
+import {createLocalVue, shallowMount} from '@vue/test-utils'
 import RiskAssessment from '@/views/RiskAssessment.vue'
-import { QuestionSectionService } from '@/services/question-section.service'
-import { AnswerResponseService } from '@/api/answer-response.service'
+import {QuestionSectionService} from '@/services/question-section.service'
+import {AnswerResponseService} from '@/api/answer-response.service'
+import VueRouter from "vue-router";
 
 describe('RiskAssessment.vue', () => {
     let riskAssessment = null
 
-    let saveRiskAssessmentResult = { data: 'SAVED' }
-    let saveRiskAssessmentMock = async function() {
-        return saveRiskAssessmentResult
+    const localVue = createLocalVue()
+    localVue.use(VueRouter)
+    const router = new VueRouter()
+
+
+    let saveRiskAssessmentSuccessResult = { data: 'SAVED', status: 200 }
+    let saveRiskAssessmentUnauthorizedResult = { status: 401 }
+    let saveRiskAssessmentResult = saveRiskAssessmentSuccessResult
+
+    let saveRiskAssessmentMock = async function () {
+      if(saveRiskAssessmentResult.status === 401) {
+        router.push('/signin')
+      }
+      return saveRiskAssessmentResult
     }
 
     function populateQuestionnaire() {
@@ -27,7 +39,7 @@ describe('RiskAssessment.vue', () => {
     }
 
     beforeEach(() => {
-        riskAssessment = shallowMount(RiskAssessment, {stubs: ['router-link', 'router-view']})
+        riskAssessment = shallowMount(RiskAssessment,{ localVue, router, stubs: ['router-link', 'router-view'] })
         riskAssessment.vm.proceedToNextRoute = () => {} // prevent calls to $router service
 
         AnswerResponseService.saveRiskAssessment = saveRiskAssessmentMock
@@ -38,6 +50,7 @@ describe('RiskAssessment.vue', () => {
         jest.spyOn(QuestionSectionService, 'clearUntakenSectionAnswers')
         jest.spyOn(AnswerResponseService, 'saveRiskAssessment')
         jest.spyOn(QuestionSectionService, 'getSectionInfoComponent')
+        jest.spyOn(riskAssessment.vm.$router, 'push')
     })
 
     describe('initialisation', () => {
@@ -157,6 +170,14 @@ describe('RiskAssessment.vue', () => {
             await riskAssessment.vm.saveQuestionnaire()
             expect(riskAssessment.vm.saveError).toBe(true)
             done()
+        })
+
+        it('should redirect to sign in if session time out', async (done) => {
+          populateQuestionnaire()
+          saveRiskAssessmentResult = saveRiskAssessmentUnauthorizedResult
+          await riskAssessment.vm.saveQuestionnaire()
+          expect(riskAssessment.vm.$router.push).toHaveBeenCalledWith('/signin')
+          done()
         })
     })
 

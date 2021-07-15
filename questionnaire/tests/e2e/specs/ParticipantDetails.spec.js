@@ -101,11 +101,11 @@ describe('PartiicipantDetails', () => {
         cy.visit('/signin')
         cy.get('input').first().clear().type(UNREGISTERED_EMAIL_ADDRESS)
         cy.get('input').last().clear().type(STRONG_PASSWORD)
-        cy.get('button').click()
+        cy.get('button').contains('Sign in').click()
 
         cy.url().should('include', 'participant-details')
     }
-    
+
     it('should open the participant details page', () => {
         authenticateSelf()
 
@@ -163,4 +163,3 @@ describe('PartiicipantDetails', () => {
         cy.url().should('include', 'questionnaire/familyhistorycontext')
     })
 })
-  

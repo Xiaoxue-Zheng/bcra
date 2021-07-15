@@ -18,7 +18,7 @@
         </div>
       </div>
     </div>
-    <QuestionHint :hint="question" :id="'MODAL_'+ question.identifier"></QuestionHint>
+    <QuestionHint :question="question" :id="'MODAL_'+ question.identifier"></QuestionHint>
   </fieldset>
 </template>
 <script>

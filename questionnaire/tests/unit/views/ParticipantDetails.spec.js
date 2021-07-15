@@ -1,18 +1,23 @@
-import { shallowMount } from '@vue/test-utils'
+import {createLocalVue, shallowMount} from '@vue/test-utils'
 import ParticipantDetails from '@/views/ParticipantDetails.vue'
 import { ParticipantDetailsService } from '@/api/participant-details.service'
+import VueRouter from "vue-router";
 
 describe('ParticipantDetails.vue', () => {
     let participantDetails = null
 
-    let routerMock = {
-        push: (ref) => {}
-    }
+    const localVue = createLocalVue()
+    localVue.use(VueRouter)
+    const router = new VueRouter()
 
     let updateParticipantDetailsSuccessResponse = { status: 200 }
     let updateParticipantDetailsFailureResponse = { status: 0 }
-    let updateParticipantDetailsResponse = updateParticipantDetailsFailureResponse;
-    let updateParticipantDetailsMock = async function() {
+    let updateParticipantDetailsSessionTimeoutResponse = { status: 401 }
+    let updateParticipantDetailsResponse = updateParticipantDetailsFailureResponse
+    let updateParticipantDetailsMock = async function () {
+        if (updateParticipantDetailsResponse.status === 401) {
+          router.push('/signin')
+        }
         return updateParticipantDetailsResponse
     }
 
@@ -31,8 +36,7 @@ describe('ParticipantDetails.vue', () => {
     }
 
     beforeEach(() => {
-        participantDetails = shallowMount(ParticipantDetails, {stubs: ['router-link', 'router-view']})
-        participantDetails.vm.$router = routerMock
+        participantDetails = shallowMount(ParticipantDetails, { localVue, router, stubs: ['router-link', 'router-view'] })
 
         ParticipantDetailsService.updateParticipantDetails = updateParticipantDetailsMock
         jest.spyOn(participantDetails.vm, 'clearMessages')
@@ -93,6 +97,14 @@ describe('ParticipantDetails.vue', () => {
             await participantDetails.vm.register()
             expect(participantDetails.vm.$router.push).toHaveBeenCalledWith('/questionnaire/familyhistorycontext')
             done()
+        })
+
+        it('should navigate to the sign in when session has been timeout', async (done) => {
+          setParticipantDetails()
+          updateParticipantDetailsResponse = updateParticipantDetailsSessionTimeoutResponse
+          await participantDetails.vm.register()
+          expect(participantDetails.vm.$router.push).toHaveBeenCalledWith('/signin')
+          done()
         })
     })
 

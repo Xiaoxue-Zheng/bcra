@@ -1,5 +1,7 @@
 package uk.ac.herc.bcra.web.rest;
 
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.web.context.WebApplicationContext;
 import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.domain.User;
@@ -7,6 +9,7 @@ import uk.ac.herc.bcra.domain.IdentifiableData;
 import uk.ac.herc.bcra.domain.Procedure;
 import uk.ac.herc.bcra.domain.CsvFile;
 import uk.ac.herc.bcra.repository.ParticipantRepository;
+import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.ParticipantService;
 import uk.ac.herc.bcra.service.dto.ParticipantDTO;
 import uk.ac.herc.bcra.service.mapper.ParticipantMapper;
@@ -28,10 +31,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static uk.ac.herc.bcra.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -43,12 +46,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @SpringBootTest(classes = BcraApp.class)
 public class ParticipantResourceIT {
-
-    private static final Instant DEFAULT_REGISTER_DATETIME = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_REGISTER_DATETIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
-
-    private static final Instant DEFAULT_LAST_LOGIN_DATETIME = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_LAST_LOGIN_DATETIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     @Autowired
     private ParticipantRepository participantRepository;
@@ -82,7 +79,12 @@ public class ParticipantResourceIT {
 
     private MockMvc restParticipantMockMvc;
 
+    private MockMvc securityRestMvc;
+
     private Participant participant;
+
+    @Autowired
+    private WebApplicationContext context;
 
     @BeforeEach
     public void setup() {
@@ -94,78 +96,15 @@ public class ParticipantResourceIT {
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter)
             .setValidator(validator).build();
-    }
-
-    /**
-     * Create an entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static Participant createEntity(EntityManager em) {
-        Participant participant = new Participant()
-            .registerDatetime(DEFAULT_REGISTER_DATETIME)
-            .lastLoginDatetime(DEFAULT_LAST_LOGIN_DATETIME);
-        // Add required entity
-        User user = UserResourceIT.createEntity(em);
-        em.persist(user);
-        em.flush();
-        participant.setUser(user);
-        // Add required entity
-        IdentifiableData identifiableData;
-        identifiableData = IdentifiableDataResourceIT.createEntity(em);
-        em.persist(identifiableData);
-        em.flush();
-        participant.setIdentifiableData(identifiableData);
-        // Add required entity
-        Procedure procedure;
-        procedure = ProcedureResourceIT.createEntity(em);
-        em.persist(procedure);
-        em.flush();
-        participant.setProcedure(procedure);
-        return participant;
-    }
-    /**
-     * Create an updated entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static Participant createUpdatedEntity(EntityManager em) {
-        Participant participant = new Participant()
-            .registerDatetime(UPDATED_REGISTER_DATETIME)
-            .lastLoginDatetime(UPDATED_LAST_LOGIN_DATETIME);
-        // Add required entity
-        User user = UserResourceIT.createEntity(em);
-        em.persist(user);
-        em.flush();
-        participant.setUser(user);
-        // Add required entity
-        IdentifiableData identifiableData;
-        if (TestUtil.findAll(em, IdentifiableData.class).isEmpty()) {
-            identifiableData = IdentifiableDataResourceIT.createUpdatedEntity(em);
-            em.persist(identifiableData);
-            em.flush();
-        } else {
-            identifiableData = TestUtil.findAll(em, IdentifiableData.class).get(0);
-        }
-        participant.setIdentifiableData(identifiableData);
-        // Add required entity
-        Procedure procedure;
-        if (TestUtil.findAll(em, Procedure.class).isEmpty()) {
-            procedure = ProcedureResourceIT.createEntity(em);
-            em.persist(procedure);
-            em.flush();
-        } else {
-            procedure = TestUtil.findAll(em, Procedure.class).get(0);
-        }
-        participant.setProcedure(procedure);
-        return participant;
+        this.securityRestMvc = MockMvcBuilders
+            .webAppContextSetup(context)
+            .apply(springSecurity())
+            .build();
     }
 
     @BeforeEach
     public void initTest() {
-        participant = createEntity(em);
+        participant = DataFactory.createParticipant(em);
     }
 
     @Test
@@ -179,10 +118,23 @@ public class ParticipantResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(participant.getId().intValue())))
-            .andExpect(jsonPath("$.[*].registerDatetime").value(hasItem(DEFAULT_REGISTER_DATETIME.toString())))
-            .andExpect(jsonPath("$.[*].lastLoginDatetime").value(hasItem(DEFAULT_LAST_LOGIN_DATETIME.toString())));
+            .andExpect(jsonPath("$.[*].registerDatetime").value(hasItem(DataFactory.DEFAULT_REGISTER_DATETIME.toString())))
+            .andExpect(jsonPath("$.[*].lastLoginDatetime").value(hasItem(DataFactory.DEFAULT_LAST_LOGIN_DATETIME.toString())));
     }
-    
+
+    @Test
+    @Transactional
+    @WithMockUser(authorities = {RoleManager.PARTICIPANT, RoleManager.USER})
+    public void unauthorizedGetAllParticipants() throws Exception {
+        // Initialize the database
+        participantRepository.saveAndFlush(participant);
+
+        // Get all the participantList
+        securityRestMvc.perform(get("/api/participants?sort=id,desc")
+        .with(csrf()))
+            .andExpect(status().is(403));
+    }
+
     @Test
     @Transactional
     public void getParticipant() throws Exception {
@@ -194,8 +146,20 @@ public class ParticipantResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(participant.getId().intValue()))
-            .andExpect(jsonPath("$.registerDatetime").value(DEFAULT_REGISTER_DATETIME.toString()))
-            .andExpect(jsonPath("$.lastLoginDatetime").value(DEFAULT_LAST_LOGIN_DATETIME.toString()));
+            .andExpect(jsonPath("$.registerDatetime").value(DataFactory.DEFAULT_REGISTER_DATETIME.toString()))
+            .andExpect(jsonPath("$.lastLoginDatetime").value(DataFactory.DEFAULT_LAST_LOGIN_DATETIME.toString()));
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(authorities = {RoleManager.USER, RoleManager.MANAGER, RoleManager.PARTICIPANT})
+    public void unauthorizedGetParticipant() throws Exception {
+        // Initialize the database
+        participantRepository.saveAndFlush(participant);
+
+        // Get the participant
+        securityRestMvc.perform(get("/api/participants/{id}", participant.getId()).with(csrf()))
+            .andExpect(status().is(403));
     }
 
     @Test
@@ -205,10 +169,10 @@ public class ParticipantResourceIT {
         participantRepository.saveAndFlush(participant);
 
         // Get all the participantList where registerDatetime equals to DEFAULT_REGISTER_DATETIME
-        defaultParticipantShouldBeFound("registerDatetime.equals=" + DEFAULT_REGISTER_DATETIME);
+        defaultParticipantShouldBeFound("registerDatetime.equals=" + DataFactory.DEFAULT_REGISTER_DATETIME);
 
         // Get all the participantList where registerDatetime equals to UPDATED_REGISTER_DATETIME
-        defaultParticipantShouldNotBeFound("registerDatetime.equals=" + UPDATED_REGISTER_DATETIME);
+        defaultParticipantShouldNotBeFound("registerDatetime.equals=" + DataFactory.UPDATED_REGISTER_DATETIME);
     }
 
     @Test
@@ -218,10 +182,10 @@ public class ParticipantResourceIT {
         participantRepository.saveAndFlush(participant);
 
         // Get all the participantList where registerDatetime in DEFAULT_REGISTER_DATETIME or UPDATED_REGISTER_DATETIME
-        defaultParticipantShouldBeFound("registerDatetime.in=" + DEFAULT_REGISTER_DATETIME + "," + UPDATED_REGISTER_DATETIME);
+        defaultParticipantShouldBeFound("registerDatetime.in=" + DataFactory.DEFAULT_REGISTER_DATETIME + "," + DataFactory.UPDATED_REGISTER_DATETIME);
 
         // Get all the participantList where registerDatetime equals to UPDATED_REGISTER_DATETIME
-        defaultParticipantShouldNotBeFound("registerDatetime.in=" + UPDATED_REGISTER_DATETIME);
+        defaultParticipantShouldNotBeFound("registerDatetime.in=" + DataFactory.UPDATED_REGISTER_DATETIME);
     }
 
     @Test
@@ -241,10 +205,10 @@ public class ParticipantResourceIT {
         participantRepository.saveAndFlush(participant);
 
         // Get all the participantList where lastLoginDatetime equals to DEFAULT_LAST_LOGIN_DATETIME
-        defaultParticipantShouldBeFound("lastLoginDatetime.equals=" + DEFAULT_LAST_LOGIN_DATETIME);
+        defaultParticipantShouldBeFound("lastLoginDatetime.equals=" + DataFactory.DEFAULT_LAST_LOGIN_DATETIME);
 
         // Get all the participantList where lastLoginDatetime equals to UPDATED_LAST_LOGIN_DATETIME
-        defaultParticipantShouldNotBeFound("lastLoginDatetime.equals=" + UPDATED_LAST_LOGIN_DATETIME);
+        defaultParticipantShouldNotBeFound("lastLoginDatetime.equals=" + DataFactory.UPDATED_LAST_LOGIN_DATETIME);
     }
 
     @Test
@@ -254,10 +218,10 @@ public class ParticipantResourceIT {
         participantRepository.saveAndFlush(participant);
 
         // Get all the participantList where lastLoginDatetime in DEFAULT_LAST_LOGIN_DATETIME or UPDATED_LAST_LOGIN_DATETIME
-        defaultParticipantShouldBeFound("lastLoginDatetime.in=" + DEFAULT_LAST_LOGIN_DATETIME + "," + UPDATED_LAST_LOGIN_DATETIME);
+        defaultParticipantShouldBeFound("lastLoginDatetime.in=" + DataFactory.DEFAULT_LAST_LOGIN_DATETIME + "," + DataFactory.UPDATED_LAST_LOGIN_DATETIME);
 
         // Get all the participantList where lastLoginDatetime equals to UPDATED_LAST_LOGIN_DATETIME
-        defaultParticipantShouldNotBeFound("lastLoginDatetime.in=" + UPDATED_LAST_LOGIN_DATETIME);
+        defaultParticipantShouldNotBeFound("lastLoginDatetime.in=" + DataFactory.UPDATED_LAST_LOGIN_DATETIME);
     }
 
     @Test
@@ -345,8 +309,8 @@ public class ParticipantResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(participant.getId().intValue())))
-            .andExpect(jsonPath("$.[*].registerDatetime").value(hasItem(DEFAULT_REGISTER_DATETIME.toString())))
-            .andExpect(jsonPath("$.[*].lastLoginDatetime").value(hasItem(DEFAULT_LAST_LOGIN_DATETIME.toString())));
+            .andExpect(jsonPath("$.[*].registerDatetime").value(hasItem(DataFactory.DEFAULT_REGISTER_DATETIME.toString())))
+            .andExpect(jsonPath("$.[*].lastLoginDatetime").value(hasItem(DataFactory.DEFAULT_LAST_LOGIN_DATETIME.toString())));
 
         // Check, that the count is greater than zero
         restParticipantMockMvc.perform(get("/api/participants/count?sort=id,desc&" + filter))
@@ -397,6 +361,21 @@ public class ParticipantResourceIT {
         // Validate the database contains one less item
         List<Participant> participantList = participantRepository.findAll();
         assertThat(participantList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(authorities = {RoleManager.PARTICIPANT, RoleManager.USER, RoleManager.MANAGER})
+    public void unauthorizedDeleteParticipant() throws Exception {
+        // Initialize the database
+        participantRepository.saveAndFlush(participant);
+
+        int databaseSizeBeforeDelete = participantRepository.findAll().size();
+
+        // Delete the participant
+        securityRestMvc.perform(delete("/api/participants/{id}", participant.getId()).with(csrf())
+            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().is(403));
     }
 
     @Test

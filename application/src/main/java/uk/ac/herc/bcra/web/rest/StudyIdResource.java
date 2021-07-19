@@ -1,6 +1,8 @@
 package uk.ac.herc.bcra.web.rest;
 
+import org.springframework.security.access.annotation.Secured;
 import uk.ac.herc.bcra.domain.StudyId;
+import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.StudyIdService;
 
 import org.slf4j.Logger;
@@ -28,12 +30,14 @@ public class StudyIdResource {
     }
 
     @GetMapping("/study-ids")
+    @Secured({RoleManager.ADMIN})
     public List<StudyId> getStudyIds() {
         log.debug("REST request to get all study ids");
         return studyIdService.getStudyIds();
     }
 
     @PostMapping("/study-ids")
+    @Secured({RoleManager.ADMIN})
     public void createStudyIdsFromCodes(@RequestBody List<String> studyCodes) {
         log.debug("REST request to create new study ids");
         studyIdService.createStudyIdsFromCodes(studyCodes);
@@ -46,6 +50,7 @@ public class StudyIdResource {
     }
 
     @GetMapping("/study-ids/current")
+    @Secured({RoleManager.PARTICIPANT})
     public String getStudyCode(Principal principal) {
         log.debug("REST request to get unique study code of currently authenticated user: {}", principal);
         return studyIdService.getStudyCodeByParticipantLogin(principal.getName());

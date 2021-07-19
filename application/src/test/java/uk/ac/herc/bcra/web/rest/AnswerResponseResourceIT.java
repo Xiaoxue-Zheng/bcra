@@ -1,11 +1,15 @@
 package uk.ac.herc.bcra.web.rest;
 
+import org.junit.runner.RunWith;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.context.WebApplicationContext;
 import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.AnswerResponse;
 import uk.ac.herc.bcra.domain.Participant;
-import uk.ac.herc.bcra.domain.Questionnaire;
 import uk.ac.herc.bcra.domain.StudyId;
 import uk.ac.herc.bcra.repository.AnswerResponseRepository;
+import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.AnswerResponseService;
 import uk.ac.herc.bcra.service.StudyIdService;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
@@ -33,12 +37,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.security.Principal;
 import java.util.List;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static uk.ac.herc.bcra.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 import uk.ac.herc.bcra.domain.enumeration.ResponseState;
 /**
  * Integration tests for the {@link AnswerResponseResource} REST controller.
@@ -46,12 +51,8 @@ import uk.ac.herc.bcra.domain.enumeration.ResponseState;
 @SpringBootTest(classes = BcraApp.class)
 public class AnswerResponseResourceIT {
 
-    private static final ResponseState DEFAULT_STATE = ResponseState.PROCESSED;
-    private static final ResponseState UPDATED_STATE = ResponseState.INVALID;
-
-    private static final String DEFAULT_STATUS = "AAAAAAAAAA";
-    private static final String UPDATED_STATUS = "BBBBBBBBBB";
-    private static final Integer UPDATED_ANSWER_VALUE = 54321;
+    @Autowired
+    private WebApplicationContext context;
 
     @Autowired
     private AnswerResponseRepository answerResponseRepository;
@@ -82,6 +83,8 @@ public class AnswerResponseResourceIT {
 
     private MockMvc restAnswerResponseMockMvc;
 
+    private MockMvc securityRestMvc;
+
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
@@ -95,84 +98,16 @@ public class AnswerResponseResourceIT {
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter)
             .setValidator(validator).build();
+        this.securityRestMvc = MockMvcBuilders
+            .webAppContextSetup(context)
+            .apply(springSecurity())
+            .build();
     }
 
-    /**
-     * Create an entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static AnswerResponse createEntity(EntityManager em) {
-        AnswerResponse answerResponse = new AnswerResponse()
-            .state(DEFAULT_STATE)
-            .status(DEFAULT_STATUS);
-        // Add required entity
-        Questionnaire questionnaire;
-        if (TestUtil.findAll(em, Questionnaire.class).isEmpty()) {
-            questionnaire = QuestionnaireResourceIT.createEntity(em);
-            em.persist(questionnaire);
-            em.flush();
-        } else {
-            questionnaire = TestUtil.findAll(em, Questionnaire.class).get(0);
-        }
-        answerResponse.setQuestionnaire(questionnaire);
-        em.persist(answerResponse);
-        em.flush();
-
-        answerResponse.addAnswerSection(
-            AnswerSectionResourceIT.createEntity(em)
-        );
-        return answerResponse;
-    }
-
-    public static AnswerResponse createEntity(EntityManager em, QuestionnaireType type) {
-        AnswerResponse answerResponse = new AnswerResponse()
-            .state(DEFAULT_STATE)
-            .status(DEFAULT_STATUS);
-        // Add required entity
-        Questionnaire questionnaire = QuestionnaireResourceIT.createEntity(em, type);
-        em.persist(questionnaire);
-        em.flush();
-
-        answerResponse.setQuestionnaire(questionnaire);
-        em.persist(answerResponse);
-        em.flush();
-
-        answerResponse.addAnswerSection(
-            AnswerSectionResourceIT.createEntity(em)
-        );
-        return answerResponse;
-    }
-
-
-
-    /**
-     * Create an updated entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static AnswerResponse createUpdatedEntity(EntityManager em) {
-        AnswerResponse answerResponse = new AnswerResponse()
-            .state(UPDATED_STATE)
-            .status(UPDATED_STATUS);
-        // Add required entity
-        Questionnaire questionnaire;
-        if (TestUtil.findAll(em, Questionnaire.class).isEmpty()) {
-            questionnaire = QuestionnaireResourceIT.createUpdatedEntity(em);
-            em.persist(questionnaire);
-            em.flush();
-        } else {
-            questionnaire = TestUtil.findAll(em, Questionnaire.class).get(0);
-        }
-        answerResponse.setQuestionnaire(questionnaire);
-        return answerResponse;
-    }
 
     @BeforeEach
     public void initTest() {
-        createEntity(em);
+        DataFactory.createAnswerResponse(em);
     }
 
     @Test
@@ -181,7 +116,7 @@ public class AnswerResponseResourceIT {
 
         Participant participant;
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = ParticipantResourceIT.createUpdatedEntity(em);
+            participant = DataFactory.createUpdatedParticipant(em);
             em.persist(participant);
             em.flush();
         } else {
@@ -209,14 +144,14 @@ public class AnswerResponseResourceIT {
     public void getConsentAnswerResponseValidResult() throws Exception {
         Participant participant;
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = ParticipantResourceIT.createUpdatedEntity(em);
+            participant = DataFactory.createUpdatedParticipant(em);
             em.persist(participant);
             em.flush();
         } else {
             participant = TestUtil.findAll(em, Participant.class).get(0);
         }
 
-        StudyId studyId = StudyIdResourceIT.createEntity(em, participant);
+        StudyId studyId = DataFactory.createStudyId(em, participant);
 
         MvcResult result = restAnswerResponseMockMvc.perform(
                 get("/api/answer-responses/consent/" + studyId.getCode())
@@ -246,7 +181,7 @@ public class AnswerResponseResourceIT {
 
         Participant participant;
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = ParticipantResourceIT.createUpdatedEntity(em);
+            participant = DataFactory.createUpdatedParticipant(em);
             em.persist(participant);
             em.flush();
         } else {
@@ -274,14 +209,14 @@ public class AnswerResponseResourceIT {
     public void getRiskAssessmentAnswerResponseValidResult() throws Exception {
         Participant participant;
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = ParticipantResourceIT.createUpdatedEntity(em);
+            participant = DataFactory.createUpdatedParticipant(em);
             em.persist(participant);
             em.flush();
         } else {
             participant = TestUtil.findAll(em, Participant.class).get(0);
         }
 
-        StudyId studyId = StudyIdResourceIT.createEntity(em, participant);
+        StudyId studyId = DataFactory.createStudyId(em, participant);
 
         MvcResult result = restAnswerResponseMockMvc.perform(
                 get("/api/answer-responses/risk-assessment/" + studyId.getCode())
@@ -306,12 +241,35 @@ public class AnswerResponseResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(value = "getUnauthorizedGetRiskAssessmentAnswer", authorities = {RoleManager.USER, RoleManager.MANAGER, RoleManager.ADMIN})
+    public void getUnauthorizedGetRiskAssessmentAnswer() throws Exception {
+        String login = "getUnauthorizedGetRiskAssessmentAnswer";
+        Participant participant;
+        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
+            participant = DataFactory.createUpdatedParticipant(em, login);
+            em.persist(participant);
+            em.flush();
+        } else {
+            participant = TestUtil.findAll(em, Participant.class).get(0);
+        }
+
+        StudyId studyId = DataFactory.createStudyId(em, participant);
+
+        MvcResult result = securityRestMvc.perform(
+            get("/api/answer-responses/risk-assessment/" + studyId.getCode())
+            .with(csrf()))
+            .andExpect(status().is(403))
+            .andReturn();
+    }
+
+    @Test
+    @Transactional
     public void saveConsentAnswerResponse() throws Exception {
 
         // Initialize the database
         Participant participant;
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = ParticipantResourceIT.createUpdatedEntity(em);
+            participant = DataFactory.createUpdatedParticipant(em);
             em.persist(participant);
             em.flush();
         } else {
@@ -329,12 +287,12 @@ public class AnswerResponseResourceIT {
         em.detach(updatedAnswerResponse);
 
         updatedAnswerResponse
-            .state(UPDATED_STATE)
-            .status(UPDATED_STATUS)
+            .state(DataFactory.UPDATED_STATE)
+            .status(DataFactory.UPDATED_STATUS)
             .getAnswerSections().iterator().next()
             .getAnswerGroups().iterator().next()
             .getAnswers().iterator().next()
-            .setNumber(UPDATED_ANSWER_VALUE);
+            .setNumber(DataFactory.UPDATED_ANSWER_VALUE);
 
         // Save
         AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(updatedAnswerResponse);
@@ -358,8 +316,8 @@ public class AnswerResponseResourceIT {
         AnswerResponse testAnswerResponse =
             answerResponseRepository.getOne(participant.getProcedure().getConsentResponse().getId());
 
-        assertThat(testAnswerResponse.getState()).isNotEqualTo(UPDATED_STATE);
-        assertThat(testAnswerResponse.getStatus()).isNotEqualTo(UPDATED_STATUS);
+        assertThat(testAnswerResponse.getState()).isNotEqualTo(DataFactory.UPDATED_STATE);
+        assertThat(testAnswerResponse.getStatus()).isNotEqualTo(DataFactory.UPDATED_STATUS);
 
         // Check State and Updated Answer
         assertThat(testAnswerResponse.getState()).isEqualTo(ResponseState.IN_PROGRESS);
@@ -369,7 +327,7 @@ public class AnswerResponseResourceIT {
             .getAnswerGroups().iterator().next()
             .getAnswers().iterator().next()
             .getNumber()
-        ).isEqualTo(UPDATED_ANSWER_VALUE);
+        ).isEqualTo(DataFactory.UPDATED_ANSWER_VALUE);
     }
 
     @Test
@@ -379,7 +337,7 @@ public class AnswerResponseResourceIT {
         // Initialize the database
         Participant participant;
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = ParticipantResourceIT.createUpdatedEntity(em);
+            participant = DataFactory.createUpdatedParticipant(em);
             em.persist(participant);
             em.flush();
         } else {
@@ -397,12 +355,12 @@ public class AnswerResponseResourceIT {
         em.detach(updatedAnswerResponse);
 
         updatedAnswerResponse
-            .state(UPDATED_STATE)
-            .status(UPDATED_STATUS)
+            .state(DataFactory.UPDATED_STATE)
+            .status(DataFactory.UPDATED_STATUS)
             .getAnswerSections().iterator().next()
             .getAnswerGroups().iterator().next()
             .getAnswers().iterator().next()
-            .setNumber(UPDATED_ANSWER_VALUE);
+            .setNumber(DataFactory.UPDATED_ANSWER_VALUE);
 
         // Save
         AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(updatedAnswerResponse);
@@ -426,8 +384,8 @@ public class AnswerResponseResourceIT {
         AnswerResponse testAnswerResponse =
             answerResponseRepository.getOne(participant.getProcedure().getConsentResponse().getId());
 
-        assertThat(testAnswerResponse.getState()).isNotEqualTo(UPDATED_STATE);
-        assertThat(testAnswerResponse.getStatus()).isNotEqualTo(UPDATED_STATUS);
+        assertThat(testAnswerResponse.getState()).isNotEqualTo(DataFactory.UPDATED_STATE);
+        assertThat(testAnswerResponse.getStatus()).isNotEqualTo(DataFactory.UPDATED_STATUS);
 
         // Check State and Updated Answer
         assertThat(testAnswerResponse.getState()).isEqualTo(ResponseState.SUBMITTED);
@@ -437,7 +395,7 @@ public class AnswerResponseResourceIT {
             .getAnswerGroups().iterator().next()
             .getAnswers().iterator().next()
             .getNumber()
-        ).isEqualTo(UPDATED_ANSWER_VALUE);
+        ).isEqualTo(DataFactory.UPDATED_ANSWER_VALUE);
     }
 
     @Test
@@ -447,7 +405,7 @@ public class AnswerResponseResourceIT {
         // Initialize the database
         Participant participant;
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = ParticipantResourceIT.createUpdatedEntity(em);
+            participant = DataFactory.createUpdatedParticipant(em);
             em.persist(participant);
             em.flush();
         } else {
@@ -465,12 +423,12 @@ public class AnswerResponseResourceIT {
         em.detach(updatedAnswerResponse);
 
         updatedAnswerResponse
-            .state(UPDATED_STATE)
-            .status(UPDATED_STATUS)
+            .state(DataFactory.UPDATED_STATE)
+            .status(DataFactory.UPDATED_STATUS)
             .getAnswerSections().iterator().next()
             .getAnswerGroups().iterator().next()
             .getAnswers().iterator().next()
-            .setNumber(UPDATED_ANSWER_VALUE);
+            .setNumber(DataFactory.UPDATED_ANSWER_VALUE);
 
         // Save
         AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(updatedAnswerResponse);
@@ -494,8 +452,8 @@ public class AnswerResponseResourceIT {
         AnswerResponse testAnswerResponse =
             answerResponseRepository.getOne(participant.getProcedure().getRiskAssessmentResponse().getId());
 
-        assertThat(testAnswerResponse.getState()).isNotEqualTo(UPDATED_STATE);
-        assertThat(testAnswerResponse.getStatus()).isNotEqualTo(UPDATED_STATUS);
+        assertThat(testAnswerResponse.getState()).isNotEqualTo(DataFactory.UPDATED_STATE);
+        assertThat(testAnswerResponse.getStatus()).isNotEqualTo(DataFactory.UPDATED_STATUS);
 
         // Check State and Updated Answer
         assertThat(testAnswerResponse.getState()).isEqualTo(ResponseState.IN_PROGRESS);
@@ -505,18 +463,18 @@ public class AnswerResponseResourceIT {
             .getAnswerGroups().iterator().next()
             .getAnswers().iterator().next()
             .getNumber()
-        ).isEqualTo(UPDATED_ANSWER_VALUE);
+        ).isEqualTo(DataFactory.UPDATED_ANSWER_VALUE);
     }
-
 
     @Test
     @Transactional
-    public void submitRiskAssessmentAnswerResponse() throws Exception {
-
+    @WithMockUser(value = "unauthorizedSaveRiskAssessmentAnswerResponse", authorities = {RoleManager.USER, RoleManager.MANAGER, RoleManager.ADMIN})
+    public void unauthorizedSaveRiskAssessmentAnswerResponse() throws Exception {
         // Initialize the database
         Participant participant;
+        String login = "unauthorizedSaveRiskAssessmentAnswerResponse";
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = ParticipantResourceIT.createUpdatedEntity(em);
+            participant = DataFactory.createUpdatedParticipant(em, login);
             em.persist(participant);
             em.flush();
         } else {
@@ -534,12 +492,61 @@ public class AnswerResponseResourceIT {
         em.detach(updatedAnswerResponse);
 
         updatedAnswerResponse
-            .state(UPDATED_STATE)
-            .status(UPDATED_STATUS)
+            .state(DataFactory.UPDATED_STATE)
+            .status(DataFactory.UPDATED_STATUS)
             .getAnswerSections().iterator().next()
             .getAnswerGroups().iterator().next()
             .getAnswers().iterator().next()
-            .setNumber(UPDATED_ANSWER_VALUE);
+            .setNumber(DataFactory.UPDATED_ANSWER_VALUE);
+
+        // Save
+        AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(updatedAnswerResponse);
+        securityRestMvc.perform(
+            put("/api/answer-responses/risk-assessment/save")
+                .principal(new Principal() {
+                    @Override
+                    public String getName() {
+                        return participant.getUser().getLogin();
+                    }
+                })
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(answerResponseDTO))
+                .with(csrf()))
+            .andExpect(status().is(403));
+
+    }
+
+    @Test
+    @Transactional
+    public void submitRiskAssessmentAnswerResponse() throws Exception {
+
+        // Initialize the database
+        Participant participant;
+        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
+            participant = DataFactory.createUpdatedParticipant(em);
+            em.persist(participant);
+            em.flush();
+        } else {
+            participant = TestUtil.findAll(em, Participant.class).get(0);
+        }
+
+        int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
+
+        // Update the answerResponse
+        AnswerResponse updatedAnswerResponse =
+            answerResponseRepository.findById(
+                participant.getProcedure().getRiskAssessmentResponse().getId()
+            ).get();
+
+        em.detach(updatedAnswerResponse);
+
+        updatedAnswerResponse
+            .state(DataFactory.UPDATED_STATE)
+            .status(DataFactory.UPDATED_STATUS)
+            .getAnswerSections().iterator().next()
+            .getAnswerGroups().iterator().next()
+            .getAnswers().iterator().next()
+            .setNumber(DataFactory.UPDATED_ANSWER_VALUE);
 
         // Save
         AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(updatedAnswerResponse);
@@ -563,8 +570,8 @@ public class AnswerResponseResourceIT {
         AnswerResponse testAnswerResponse =
             answerResponseRepository.getOne(participant.getProcedure().getRiskAssessmentResponse().getId());
 
-        assertThat(testAnswerResponse.getState()).isNotEqualTo(UPDATED_STATE);
-        assertThat(testAnswerResponse.getStatus()).isNotEqualTo(UPDATED_STATUS);
+        assertThat(testAnswerResponse.getState()).isNotEqualTo(DataFactory.UPDATED_STATE);
+        assertThat(testAnswerResponse.getStatus()).isNotEqualTo(DataFactory.UPDATED_STATUS);
 
         // Check State and Updated Answer
         assertThat(testAnswerResponse.getState()).isEqualTo(ResponseState.VALIDATED);
@@ -574,17 +581,18 @@ public class AnswerResponseResourceIT {
             .getAnswerGroups().iterator().next()
             .getAnswers().iterator().next()
             .getNumber()
-        ).isEqualTo(UPDATED_ANSWER_VALUE);
+        ).isEqualTo(DataFactory.UPDATED_ANSWER_VALUE);
     }
 
     @Test
     @Transactional
-    public void referralRiskAssessmentAnswerResponse() throws Exception {
-
+    @WithMockUser(value = "unauthorizedSubmitRiskAssessmentAnswerResponse", authorities = {RoleManager.USER, RoleManager.MANAGER, RoleManager.ADMIN})
+    public void unauthorizedSubmitRiskAssessmentAnswerResponse() throws Exception {
+        String login = "unauthorizedSubmitRiskAssessmentAnswerResponse";
         // Initialize the database
         Participant participant;
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = ParticipantResourceIT.createUpdatedEntity(em);
+            participant = DataFactory.createUpdatedParticipant(em, login);
             em.persist(participant);
             em.flush();
         } else {
@@ -602,12 +610,60 @@ public class AnswerResponseResourceIT {
         em.detach(updatedAnswerResponse);
 
         updatedAnswerResponse
-            .state(UPDATED_STATE)
-            .status(UPDATED_STATUS)
+            .state(DataFactory.UPDATED_STATE)
+            .status(DataFactory.UPDATED_STATUS)
             .getAnswerSections().iterator().next()
             .getAnswerGroups().iterator().next()
             .getAnswers().iterator().next()
-            .setNumber(UPDATED_ANSWER_VALUE);
+            .setNumber(DataFactory.UPDATED_ANSWER_VALUE);
+
+        // Save
+        AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(updatedAnswerResponse);
+        securityRestMvc.perform(
+            put("/api/answer-responses/risk-assessment/submit")
+                .principal(new Principal() {
+                    @Override
+                    public String getName() {
+                        return participant.getUser().getLogin();
+                    }
+                })
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(answerResponseDTO))
+                .with(csrf()))
+            .andExpect(status().is(403));
+    }
+
+    @Test
+    @Transactional
+    public void referralRiskAssessmentAnswerResponse() throws Exception {
+
+        // Initialize the database
+        Participant participant;
+        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
+            participant = DataFactory.createUpdatedParticipant(em);
+            em.persist(participant);
+            em.flush();
+        } else {
+            participant = TestUtil.findAll(em, Participant.class).get(0);
+        }
+
+        int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
+
+        // Update the answerResponse
+        AnswerResponse updatedAnswerResponse =
+            answerResponseRepository.findById(
+                participant.getProcedure().getRiskAssessmentResponse().getId()
+            ).get();
+
+        em.detach(updatedAnswerResponse);
+
+        updatedAnswerResponse
+            .state(DataFactory.UPDATED_STATE)
+            .status(DataFactory.UPDATED_STATUS)
+            .getAnswerSections().iterator().next()
+            .getAnswerGroups().iterator().next()
+            .getAnswers().iterator().next()
+            .setNumber(DataFactory.UPDATED_ANSWER_VALUE);
 
         // Save
         AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(updatedAnswerResponse);
@@ -631,8 +687,8 @@ public class AnswerResponseResourceIT {
         AnswerResponse testAnswerResponse =
             answerResponseRepository.getOne(participant.getProcedure().getRiskAssessmentResponse().getId());
 
-        assertThat(testAnswerResponse.getState()).isNotEqualTo(UPDATED_STATE);
-        assertThat(testAnswerResponse.getStatus()).isNotEqualTo(UPDATED_STATUS);
+        assertThat(testAnswerResponse.getState()).isNotEqualTo(DataFactory.UPDATED_STATE);
+        assertThat(testAnswerResponse.getStatus()).isNotEqualTo(DataFactory.UPDATED_STATUS);
 
         // Check State and Updated Answer
         assertThat(testAnswerResponse.getState()).isEqualTo(ResponseState.REFERRED);
@@ -642,6 +698,56 @@ public class AnswerResponseResourceIT {
                 .getAnswerGroups().iterator().next()
                 .getAnswers().iterator().next()
                 .getNumber()
-        ).isEqualTo(UPDATED_ANSWER_VALUE);
+        ).isEqualTo(DataFactory.UPDATED_ANSWER_VALUE);
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(value = "unauthorizedReferralRiskAssessmentAnswerResponse", authorities = {RoleManager.USER, RoleManager.MANAGER, RoleManager.ADMIN})
+    public void unauthorizedReferralRiskAssessmentAnswerResponse() throws Exception {
+        String login = "unauthorizedReferralRiskAssessmentAnswerResponse";
+        // Initialize the database
+        Participant participant;
+        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
+            participant = DataFactory.createUpdatedParticipant(em, login);
+            em.persist(participant);
+            em.flush();
+        } else {
+            participant = TestUtil.findAll(em, Participant.class).get(0);
+        }
+
+        int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
+
+        // Update the answerResponse
+        AnswerResponse updatedAnswerResponse =
+            answerResponseRepository.findById(
+                participant.getProcedure().getRiskAssessmentResponse().getId()
+            ).get();
+
+        em.detach(updatedAnswerResponse);
+
+        updatedAnswerResponse
+            .state(DataFactory.UPDATED_STATE)
+            .status(DataFactory.UPDATED_STATUS)
+            .getAnswerSections().iterator().next()
+            .getAnswerGroups().iterator().next()
+            .getAnswers().iterator().next()
+            .setNumber(DataFactory.UPDATED_ANSWER_VALUE);
+
+        // Save
+        AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(updatedAnswerResponse);
+        securityRestMvc.perform(
+            put("/api/answer-responses/risk-assessment/referral")
+                .principal(new Principal() {
+                    @Override
+                    public String getName() {
+                        return participant.getUser().getLogin();
+                    }
+                })
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(answerResponseDTO))
+                .with(csrf()))
+            .andExpect(status().is(403));
+
     }
 }

@@ -1,6 +1,8 @@
 package uk.ac.herc.bcra.web.rest;
 
+import org.springframework.security.access.annotation.Secured;
 import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
+import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.QuestionnaireService;
 import uk.ac.herc.bcra.service.dto.QuestionnaireDTO;
 
@@ -41,9 +43,10 @@ public class QuestionnaireResource {
     }
 
     @GetMapping("/questionnaires/risk-assessment")
+    @Secured(RoleManager.PARTICIPANT)
     public ResponseEntity<QuestionnaireDTO> getRiskAssessment(Principal principal) {
         log.debug("REST request to get Risk Assessment Questionnaire");
-        Optional<QuestionnaireDTO> questionnaireDTO = 
+        Optional<QuestionnaireDTO> questionnaireDTO =
             questionnaireService
                 .findOne(
                     principal.getName(),
@@ -59,6 +62,7 @@ public class QuestionnaireResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of questionnaires in body.
      */
     @GetMapping("/questionnaires")
+    @Secured({RoleManager.MANAGER})
     public List<QuestionnaireDTO> getAllQuestionnaires() {
         log.debug("REST request to get all Questionnaires");
         return questionnaireService.findAll();

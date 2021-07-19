@@ -6,7 +6,7 @@ import uk.ac.herc.bcra.domain.User;
 import uk.ac.herc.bcra.repository.AuthorityRepository;
 import uk.ac.herc.bcra.repository.PersistentTokenRepository;
 import uk.ac.herc.bcra.repository.UserRepository;
-import uk.ac.herc.bcra.security.AuthoritiesConstants;
+import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.security.SecurityUtils;
 import uk.ac.herc.bcra.service.dto.UserDTO;
 import uk.ac.herc.bcra.service.util.RandomUtil;
@@ -120,7 +120,7 @@ public class UserService {
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();
-        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+        authorityRepository.findById(RoleManager.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
         this.clearUserCaches(newUser);

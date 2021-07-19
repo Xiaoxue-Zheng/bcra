@@ -17,14 +17,14 @@ import uk.ac.herc.bcra.domain.User;
 import uk.ac.herc.bcra.repository.AuthorityRepository;
 import uk.ac.herc.bcra.repository.ParticipantRepository;
 import uk.ac.herc.bcra.repository.UserRepository;
-import uk.ac.herc.bcra.security.AuthoritiesConstants;
+import uk.ac.herc.bcra.security.RoleManager;
 
 @Component
 public class BcraAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     @Autowired
     AuthorityRepository authorityRepository;
- 
+
     @Autowired
     UserRepository userRepository;
 
@@ -35,11 +35,11 @@ public class BcraAuthenticationSuccessHandler implements AuthenticationSuccessHa
     @Override
     @Transactional
     public void onAuthenticationSuccess(
-        HttpServletRequest request, 
+        HttpServletRequest request,
         HttpServletResponse response,
         Authentication authentication
     ) {
-        if (authenticatedUserHasAuthority(authentication, AuthoritiesConstants.PARTICIPANT)) {
+        if (authenticatedUserHasAuthority(authentication, RoleManager.PARTICIPANT)) {
             User user = userRepository.findOneByLogin(authentication.getName()).get();
             Participant participant = participantRepository.findOneByUser(user).get();
             participant.setLastLoginDatetime(Instant.now());

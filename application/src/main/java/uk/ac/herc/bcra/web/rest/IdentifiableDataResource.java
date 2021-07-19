@@ -1,5 +1,7 @@
 package uk.ac.herc.bcra.web.rest;
 
+import org.springframework.security.access.annotation.Secured;
+import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.IdentifiableDataService;
 import uk.ac.herc.bcra.web.rest.errors.BadRequestAlertException;
 import uk.ac.herc.bcra.service.dto.IdentifiableDataDTO;
@@ -24,6 +26,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
+@Secured({RoleManager.ADMIN})
 public class IdentifiableDataResource {
 
     private final Logger log = LoggerFactory.getLogger(IdentifiableDataResource.class);

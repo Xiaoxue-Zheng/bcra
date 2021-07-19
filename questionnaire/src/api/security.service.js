@@ -6,6 +6,8 @@ export const SecurityService = {
     var formData = new FormData()
     formData.set('username', username)
     formData.set('password', password)
+    formData.set('source', 'QUESTIONNAIRE_PAGE')
+
     return new Promise((resolve) => {
       ApiService.postFormData('authentication', formData).then(() => {
         resolve('SUCCESS')
@@ -13,7 +15,7 @@ export const SecurityService = {
         if (!error.response) {
           resolve('ERROR')
         } else if (error.response.status === RESPONSE_STATUS_UNAUTHORIZED) {
-          resolve('UNAUTHORIZED')
+          resolve(error.response)
         } else {
           resolve('ERROR')
         }

@@ -1,5 +1,7 @@
 package uk.ac.herc.bcra.web.rest;
 
+import org.springframework.security.access.annotation.Secured;
+import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.ParticipantService;
 import uk.ac.herc.bcra.service.StudyIdService;
 import uk.ac.herc.bcra.web.rest.errors.InvalidPasswordException;
@@ -54,8 +56,8 @@ public class ParticipantResource {
 
     private final StudyIdService studyIdService;
 
-    public ParticipantResource(ParticipantService participantService, 
-        ParticipantQueryService participantQueryService, 
+    public ParticipantResource(ParticipantService participantService,
+        ParticipantQueryService participantQueryService,
         StudyIdService studyIdService) {
 
         this.participantService = participantService;
@@ -73,6 +75,7 @@ public class ParticipantResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of participants in body.
      */
     @GetMapping("/participants")
+    @Secured({RoleManager.MANAGER})
     public ResponseEntity<List<ParticipantDTO>> getAllParticipants(ParticipantCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Participants by criteria: {}", criteria);
         Page<ParticipantDTO> page = participantQueryService.findByCriteria(criteria, pageable);
@@ -87,6 +90,7 @@ public class ParticipantResource {
     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
     */
     @GetMapping("/participants/count")
+    @Secured({RoleManager.MANAGER})
     public ResponseEntity<Long> countParticipants(ParticipantCriteria criteria) {
         log.debug("REST request to count Participants by criteria: {}", criteria);
         return ResponseEntity.ok().body(participantQueryService.countByCriteria(criteria));
@@ -99,6 +103,7 @@ public class ParticipantResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the participantDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/participants/{id}")
+    @Secured(RoleManager.ADMIN)
     public ResponseEntity<ParticipantDTO> getParticipant(@PathVariable Long id) {
         log.debug("REST request to get Participant : {}", id);
         Optional<ParticipantDTO> participantDTO = participantService.findOne(id);
@@ -112,6 +117,7 @@ public class ParticipantResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/participants/{id}")
+    @Secured(RoleManager.ADMIN)
     public ResponseEntity<Void> deleteParticipant(@PathVariable Long id) {
         log.debug("REST request to delete Participant : {}", id);
         participantService.delete(id);
@@ -139,11 +145,13 @@ public class ParticipantResource {
     }
 
     @PostMapping("/participants/details")
+    @Secured(RoleManager.PARTICIPANT)
     public void updateParticipantDetails(@Valid @RequestBody ParticipantDetailsDTO participantDetailsDTO, Principal principal) {
         participantService.updateParticipantDetails(principal, participantDetailsDTO);
     }
 
     @GetMapping("/participants/details")
+    @Secured(RoleManager.PARTICIPANT)
     public boolean hasCompletedParticipantDetails(Principal principal) {
         IdentifiableData details = participantService.getParticipantDetails(principal);
         return details != null;

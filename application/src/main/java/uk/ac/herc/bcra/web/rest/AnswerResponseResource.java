@@ -1,7 +1,9 @@
 package uk.ac.herc.bcra.web.rest;
 
+import org.springframework.security.access.annotation.Secured;
 import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 import uk.ac.herc.bcra.domain.enumeration.ResponseState;
+import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.AnswerResponseService;
 import uk.ac.herc.bcra.service.StudyIdService;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
@@ -84,6 +86,7 @@ public class AnswerResponseResource {
     }
 
     @GetMapping("/answer-responses/risk-assessment/{studyCode}")
+    @Secured(RoleManager.PARTICIPANT)
     public AnswerResponseDTO getRiskAssessmentResponseFromStudyCode(@PathVariable String studyCode) {
         log.debug("REST request to get Risk Assessment AnswerResponse");
         AnswerResponseDTO answerResponseDTO = studyIdService.getRiskAssessmentResponseFromStudyCode(studyCode);
@@ -91,6 +94,7 @@ public class AnswerResponseResource {
     }
 
     @PutMapping("/answer-responses/risk-assessment/save")
+    @Secured(RoleManager.PARTICIPANT)
     public ResponseEntity<String> saveRiskAssessment(
             Principal principal,
             @Valid @RequestBody AnswerResponseDTO answerResponseDTO
@@ -109,6 +113,7 @@ public class AnswerResponseResource {
     }
 
     @PutMapping("/answer-responses/risk-assessment/referral")
+    @Secured(RoleManager.PARTICIPANT)
     public ResponseEntity<String> referralRiskAssessment(
         Principal principal,
         @Valid @RequestBody AnswerResponseDTO answerResponseDTO
@@ -127,6 +132,7 @@ public class AnswerResponseResource {
     }
 
     @PutMapping("/answer-responses/risk-assessment/submit")
+    @Secured(RoleManager.PARTICIPANT)
     public ResponseEntity<String> submitRiskAssessment(
             Principal principal,
             @Valid @RequestBody AnswerResponseDTO answerResponseDTO

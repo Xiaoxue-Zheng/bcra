@@ -1,4 +1,4 @@
-<template>
+``<template>
   <div class="signin content">
     <h1>Sign in</h1>
     <p class="introduction">
@@ -19,8 +19,8 @@
               <input required v-model="password" type="password" class="pure-input-1"/>
             </div>
           </fieldset>
-            <p class="error-message" v-if="displayFailureMessage">Your username or password were not recognised. Please try again.</p>
-            <p class="error-message" v-if="displayErrorMessage">Something went wrong. Please try again.</p>
+            <p class="error-message" v-if="displayFailureMessage">{{failMessage}}</p>
+            <p class="error-message" v-if="displayErrorMessage">{{errorMessage}}</p>
             <button class="pure-button pure-button-primary" type="submit">Sign in</button>
         </form>
       </div>
@@ -38,7 +38,9 @@ export default {
       username: '',
       password: '',
       displayFailureMessage: false,
-      displayErrorMessage: false
+      failMessage: '',
+      displayErrorMessage: false,
+      errorMessage: ''
     }
   },
   computed: {
@@ -56,13 +58,17 @@ export default {
     },
     clearErrors: function () {
       this.displayFailureMessage = false
+      this.failMessage = ''
       this.displayErrorMessage = false
+      this.errorMessage = ''
     },
     setErrorMessage (loginOutcome) {
-      if (loginOutcome === 'UNAUTHORIZED') {
-        this.displayFailureMessage = true
-      } else {
+      if (loginOutcome === 'ERROR') {
         this.displayErrorMessage = true
+        this.errorMessage = 'Something went wrong. Please try again.'
+      } else {
+        this.displayFailureMessage = true
+        this.failMessage = loginOutcome.data.message
       }
     },
     async navigateToIncompleteSection () {

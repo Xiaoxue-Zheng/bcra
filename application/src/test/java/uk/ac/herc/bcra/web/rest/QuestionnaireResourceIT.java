@@ -1,9 +1,12 @@
 package uk.ac.herc.bcra.web.rest;
 
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.web.context.WebApplicationContext;
 import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.domain.Questionnaire;
 import uk.ac.herc.bcra.repository.QuestionnaireRepository;
+import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.QuestionnaireService;
 import uk.ac.herc.bcra.service.dto.QuestionnaireDTO;
 import uk.ac.herc.bcra.service.mapper.QuestionnaireMapper;
@@ -22,8 +25,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
+import javax.management.relation.Role;
 import javax.persistence.EntityManager;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static uk.ac.herc.bcra.web.rest.TestUtil.createFormattingConversionService;
 
 import java.security.Principal;
@@ -45,6 +51,8 @@ public class QuestionnaireResourceIT {
 
     private static final Integer DEFAULT_VERSION = 1;
     private static final Integer UPDATED_VERSION = 2;
+    @Autowired
+    private WebApplicationContext context;
 
     @Autowired
     private QuestionnaireRepository questionnaireRepository;
@@ -72,6 +80,8 @@ public class QuestionnaireResourceIT {
 
     private MockMvc restQuestionnaireMockMvc;
 
+    private MockMvc securityRestMvc;
+
     private Questionnaire questionnaire;
 
     @BeforeEach
@@ -84,6 +94,10 @@ public class QuestionnaireResourceIT {
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter)
             .setValidator(validator).build();
+        this.securityRestMvc = MockMvcBuilders
+            .webAppContextSetup(context)
+            .apply(springSecurity())
+            .build();
     }
 
     /**
@@ -140,7 +154,7 @@ public class QuestionnaireResourceIT {
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].version").value(hasItem(DEFAULT_VERSION)));
     }
-    
+
     @Test
     @Transactional
     public void getConsentQuestionnaire() throws Exception {
@@ -160,7 +174,7 @@ public class QuestionnaireResourceIT {
         // Initialize the database
         Participant participant;
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = ParticipantResourceIT.createEntity(em);
+            participant = DataFactory.createParticipant(em);
             em.persist(participant);
             em.flush();
         } else {
@@ -181,6 +195,34 @@ public class QuestionnaireResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(participant.getProcedure().getRiskAssessmentResponse().getQuestionnaire().getId().intValue()))
             .andExpect(jsonPath("$.type").value(QuestionnaireType.RISK_ASSESSMENT.toString()));
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(authorities = {RoleManager.MANAGER, RoleManager.USER, RoleManager.ADMIN})
+    public void unauthorizedGetRiskAssessmentQuestionnaire() throws Exception {
+        // Initialize the database
+        String login = "unauthorizedGetRiskAssessmentQuestionnaire";
+        Participant participant;
+        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
+            participant = DataFactory.createParticipant(em, login);
+            em.persist(participant);
+            em.flush();
+        } else {
+            participant = TestUtil.findAll(em, Participant.class).get(0);
+        }
+
+        // Get the questionnaire
+        securityRestMvc.perform(
+            get("/api/questionnaires/risk-assessment")
+                .principal(new Principal() {
+                    @Override
+                    public String getName() {
+                        return participant.getUser().getLogin();
+                    }
+                }).with(csrf())
+        )
+            .andExpect(status().is(403));
     }
 
     @Test

@@ -1,10 +1,12 @@
 package uk.ac.herc.bcra.web.rest;
 
 
+import org.springframework.security.access.annotation.Secured;
 import uk.ac.herc.bcra.domain.PersistentToken;
 import uk.ac.herc.bcra.repository.PersistentTokenRepository;
 import uk.ac.herc.bcra.domain.User;
 import uk.ac.herc.bcra.repository.UserRepository;
+import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.security.SecurityUtils;
 import uk.ac.herc.bcra.service.MailService;
 import uk.ac.herc.bcra.service.UserService;
@@ -124,6 +126,7 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the user login wasn't found.
      */
     @PostMapping("/account")
+    @Secured({RoleManager.USER})
     public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
@@ -145,6 +148,7 @@ public class AccountResource {
      * @throws InvalidPasswordException {@code 400 (Bad Request)} if the new password is incorrect.
      */
     @PostMapping(path = "/account/change-password")
+    @Secured({RoleManager.USER})
     public void changePassword(@RequestBody PasswordChangeDTO passwordChangeDto) {
         if (!checkPasswordLength(passwordChangeDto.getNewPassword())) {
             throw new InvalidPasswordException();
@@ -159,6 +163,7 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the current open sessions couldn't be retrieved.
      */
     @GetMapping("/account/sessions")
+    @Secured({RoleManager.USER})
     public List<PersistentToken> getCurrentSessions() {
         return persistentTokenRepository.findByUser(
             userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()
@@ -184,6 +189,7 @@ public class AccountResource {
      * @throws UnsupportedEncodingException if the series couldn't be URL decoded.
      */
     @DeleteMapping("/account/sessions/{series}")
+    @Secured({RoleManager.USER})
     public void invalidateSession(@PathVariable String series) throws UnsupportedEncodingException {
         String decodedSeries = URLDecoder.decode(series, "UTF-8");
         SecurityUtils.getCurrentUserLogin()

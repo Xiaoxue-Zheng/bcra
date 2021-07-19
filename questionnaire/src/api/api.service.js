@@ -9,8 +9,8 @@ export default {
     axios.interceptors.response.use(function (response) {
       return response
     }, function (error) {
-      if (error.response.status === 403 || error.response.status === 401) {
-        if (!Object.is(error.response.data.path, '/api/account') && this.$router.history.current.path !== '/signin') {
+      if (error.response.status === 401) {
+        if (!Object.is(error.response.data.path, '/api/account') && !Object.is(window.location.pathname, '/signin')) {
           router.push('/signin')
         }
       }

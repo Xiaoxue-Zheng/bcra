@@ -43,7 +43,7 @@ public class AnswerSectionResourceIT {
         // Add required entity
         AnswerResponse answerResponse;
         if (TestUtil.findAll(em, AnswerResponse.class).isEmpty()) {
-            answerResponse = AnswerResponseResourceIT.createEntity(em);
+            answerResponse = DataFactory.createAnswerResponse(em);
             em.persist(answerResponse);
             em.flush();
         } else {
@@ -79,7 +79,7 @@ public class AnswerSectionResourceIT {
         // Add required entity
         AnswerResponse answerResponse;
         if (TestUtil.findAll(em, AnswerResponse.class).isEmpty()) {
-            answerResponse = AnswerResponseResourceIT.createUpdatedEntity(em);
+            answerResponse = DataFactory.createUpdatedAnswerResponse(em);
             em.persist(answerResponse);
             em.flush();
         } else {

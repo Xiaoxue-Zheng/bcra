@@ -87,11 +87,11 @@ public class ProcedureResourceIT {
     public static Procedure createEntity(EntityManager em) {
         Procedure procedure = new Procedure();
         // Add required entity
-        AnswerResponse consentResponse = AnswerResponseResourceIT.createEntity(em, QuestionnaireType.CONSENT_FORM);
+        AnswerResponse consentResponse = DataFactory.createAnswerResponse(em, QuestionnaireType.CONSENT_FORM);
         em.persist(consentResponse);
         em.flush();
 
-        AnswerResponse riskAssessmentResponse = AnswerResponseResourceIT.createEntity(em, QuestionnaireType.RISK_ASSESSMENT);
+        AnswerResponse riskAssessmentResponse = DataFactory.createAnswerResponse(em, QuestionnaireType.RISK_ASSESSMENT);
         em.persist(riskAssessmentResponse);
         em.flush();
         procedure.setConsentResponse(consentResponse);
@@ -112,10 +112,10 @@ public class ProcedureResourceIT {
         AnswerResponse consentResponse = null;
         AnswerResponse riskAssessmentResponse = null;
         if (TestUtil.findAll(em, AnswerResponse.class).isEmpty()) {
-            consentResponse = AnswerResponseResourceIT.createEntity(em);
+            consentResponse = DataFactory.createAnswerResponse(em);
             em.persist(consentResponse);
-            
-            riskAssessmentResponse = AnswerResponseResourceIT.createUpdatedEntity(em);
+
+            riskAssessmentResponse = DataFactory.createUpdatedAnswerResponse(em);
             em.persist(riskAssessmentResponse);
 
             em.flush();
@@ -160,7 +160,7 @@ public class ProcedureResourceIT {
     @Test
     @Transactional
     public void createProcedureWithExistingId() throws Exception {
-        createProcedure(); 
+        createProcedure();
 
         int databaseSizeBeforeCreate = procedureRepository.findAll().size();
 
@@ -192,7 +192,7 @@ public class ProcedureResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(procedure.getId().intValue())));
     }
-    
+
     @Test
     @Transactional
     public void getProcedure() throws Exception {

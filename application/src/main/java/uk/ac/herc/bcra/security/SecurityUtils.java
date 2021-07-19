@@ -48,7 +48,7 @@ public final class SecurityUtils {
                 List<GrantedAuthority> authorities = new ArrayList<>();
                     authorities.addAll(authentication.getAuthorities());
                 return authorities.stream()
-                    .noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(AuthoritiesConstants.ANONYMOUS));
+                    .noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(RoleManager.ANONYMOUS));
             })
             .orElse(false);
     }

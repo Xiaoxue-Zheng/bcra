@@ -1,16 +1,13 @@
 package uk.ac.herc.bcra.service.impl;
 
+import uk.ac.herc.bcra.domain.*;
+import uk.ac.herc.bcra.repository.AuthorityRepository;
+import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.IdentifiableDataService;
 import uk.ac.herc.bcra.service.ParticipantService;
 import uk.ac.herc.bcra.service.AnswerResponseService;
 import uk.ac.herc.bcra.service.StudyIdService;
 import uk.ac.herc.bcra.service.ProcedureService;
-import uk.ac.herc.bcra.domain.AnswerResponse;
-import uk.ac.herc.bcra.domain.IdentifiableData;
-import uk.ac.herc.bcra.domain.Participant;
-import uk.ac.herc.bcra.domain.Procedure;
-import uk.ac.herc.bcra.domain.StudyId;
-import uk.ac.herc.bcra.domain.User;
 import uk.ac.herc.bcra.domain.enumeration.ResponseState;
 import uk.ac.herc.bcra.repository.IdentifiableDataRepository;
 import uk.ac.herc.bcra.repository.ParticipantRepository;
@@ -34,7 +31,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.Principal;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Service Implementation for managing {@link Participant}.
@@ -61,8 +60,9 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     private final StudyIdService studyIdService;
 
-    
     private final ProcedureService procedureService;
+
+    private final AuthorityRepository authorityRepository;
 
     public ParticipantServiceImpl(
         ParticipantRepository participantRepository,
@@ -73,7 +73,8 @@ public class ParticipantServiceImpl implements ParticipantService {
         PasswordEncoder passwordEncoder,
         AnswerResponseService answerResponseService,
         StudyIdService studyIdService,
-        ProcedureService procedureService
+        ProcedureService procedureService,
+        AuthorityRepository authorityRepository
     ) {
         this.participantRepository = participantRepository;
         this.participantMapper = participantMapper;
@@ -84,6 +85,7 @@ public class ParticipantServiceImpl implements ParticipantService {
         this.answerResponseService = answerResponseService;
         this.studyIdService = studyIdService;
         this.procedureService = procedureService;
+        this.authorityRepository = authorityRepository;
     }
 
     /**
@@ -171,7 +173,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 
         return ParticipantExistsDTO.READY;
     }
-    
+
     @Override
     public void activate(ParticipantActivationDTO participantActivationDTO) {
         String email = participantActivationDTO.getEmailAddress();
@@ -191,6 +193,13 @@ public class ParticipantServiceImpl implements ParticipantService {
         String studyCode = participantActivationDTO.getStudyCode();
         user.setLogin(studyCode);
         user.setActivated(true);
+        Set<Authority> authorities = new HashSet<Authority>();
+        authorities.add(
+            authorityRepository.getOne(
+                RoleManager.PARTICIPANT
+            )
+        );
+        user.setAuthorities(authorities);
         userRepository.save(user);
 
         AnswerResponse consentResponse = answerResponseService.saveDto(participantActivationDTO.getConsentRepsonse());

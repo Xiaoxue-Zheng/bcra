@@ -27,6 +27,20 @@ describe('account', () => {
     expect(value2).to.eq(expect2);
   });
 
+  it('should fail to login with participant user', async () => {
+    await browser.get('/');
+    const expect1 = 'Breast Cancer Risk Assessment';
+    const value1 = await element(by.css('h1')).getText();
+    expect(value1).to.eq(expect1);
+    signInPage = await navBarPage.getSignInPage();
+    await signInPage.autoSignInUsing('test9', 'user');
+
+    const expect2 =
+      'Failed to sign in! You are not authorized to access this page. If you think this is a mistake, please contact the study team.';
+    const value2 = await element(by.css('.alert-danger')).getText();
+    expect(value2).to.eq(expect2);
+  });
+
   it('should login successfully with admin account', async () => {
     await browser.get('/');
     signInPage = await navBarPage.getSignInPage();

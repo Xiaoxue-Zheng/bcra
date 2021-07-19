@@ -19,7 +19,7 @@ import uk.ac.herc.bcra.domain.User;
 import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 import uk.ac.herc.bcra.questionnaire.AnswerResponseGenerator;
 import uk.ac.herc.bcra.repository.AuthorityRepository;
-import uk.ac.herc.bcra.security.AuthoritiesConstants;
+import uk.ac.herc.bcra.security.RoleManager;
 
 @Service
 @Transactional
@@ -34,7 +34,7 @@ public class ParticipantCreator {
         this.authorityRepository = authorityRepository;
         this.answerResponseGenerator = answerResponseGenerator;
     }
-    
+
     public Participant createParticipant(ParticipantRow participantRow, CsvFile csvFile) {
         Participant participant = new Participant();
         participant.setUser(createUser());
@@ -45,7 +45,7 @@ public class ParticipantCreator {
     }
 
     private IdentifiableData createIdentifiableData(ParticipantRow participantRow) {
-        LocalDate localDateOfBirth = 
+        LocalDate localDateOfBirth =
             participantRow
                 .getDateOfBirth()
                 .toInstant()
@@ -77,11 +77,11 @@ public class ParticipantCreator {
         // Imported participants do not need to
         // validate their email address.
         user.setActivated(true);
-                
+
         Set<Authority> authorities = new HashSet<Authority>();
         authorities.add(
             authorityRepository.getOne(
-                AuthoritiesConstants.PARTICIPANT
+                RoleManager.PARTICIPANT
             )
         );
         user.setAuthorities(authorities);

@@ -1,10 +1,12 @@
 package uk.ac.herc.bcra.web.rest;
 
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.web.context.WebApplicationContext;
 import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.Authority;
 import uk.ac.herc.bcra.domain.User;
 import uk.ac.herc.bcra.repository.UserRepository;
-import uk.ac.herc.bcra.security.AuthoritiesConstants;
+import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.MailService;
 import uk.ac.herc.bcra.service.UserService;
 import uk.ac.herc.bcra.service.dto.UserDTO;
@@ -24,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.management.relation.Role;
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.util.*;
@@ -31,6 +34,8 @@ import java.util.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -41,27 +46,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserResourceIT {
 
     private static final String DEFAULT_LOGIN = "johndoe";
-    private static final String UPDATED_LOGIN = "jhipster";
-
-    private static final Long DEFAULT_ID = 1L;
-
-    private static final String DEFAULT_PASSWORD = "passjohndoe";
-    private static final String UPDATED_PASSWORD = "passjhipster";
-
-    private static final String DEFAULT_EMAIL = "johndoe@localhost";
-    private static final String UPDATED_EMAIL = "jhipster@localhost";
-
-    private static final String DEFAULT_FIRSTNAME = "john";
-    private static final String UPDATED_FIRSTNAME = "jhipsterFirstName";
-
-    private static final String DEFAULT_LASTNAME = "doe";
-    private static final String UPDATED_LASTNAME = "jhipsterLastName";
-
-    private static final String DEFAULT_IMAGEURL = "http://placehold.it/50x50";
-    private static final String UPDATED_IMAGEURL = "http://placehold.it/40x40";
-
-    private static final String DEFAULT_LANGKEY = "en";
-    private static final String UPDATED_LANGKEY = "fr";
+    @Autowired
+    private WebApplicationContext context;
 
     @Autowired
     private UserRepository userRepository;
@@ -92,6 +78,8 @@ public class UserResourceIT {
 
     private MockMvc restUserMockMvc;
 
+    private MockMvc securityRestMvc;
+
     private User user;
 
     @BeforeEach
@@ -105,32 +93,18 @@ public class UserResourceIT {
             .setControllerAdvice(exceptionTranslator)
             .setMessageConverters(jacksonMessageConverter)
             .build();
-    }
-
-    /**
-     * Create a User.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which has a required relationship to the User entity.
-     */
-    public static User createEntity(EntityManager em) {
-        User user = new User();
-        user.setLogin(DEFAULT_LOGIN + RandomStringUtils.randomAlphabetic(5));
-        user.setPassword(RandomStringUtils.random(60));
-        user.setActivated(true);
-        user.setEmail(RandomStringUtils.randomAlphabetic(5) + DEFAULT_EMAIL);
-        user.setFirstName(DEFAULT_FIRSTNAME);
-        user.setLastName(DEFAULT_LASTNAME);
-        user.setImageUrl(DEFAULT_IMAGEURL);
-        user.setLangKey(DEFAULT_LANGKEY);
-        return user;
+        this.securityRestMvc = MockMvcBuilders
+            .webAppContextSetup(context)
+            .apply(springSecurity())
+            .build();
     }
 
     @BeforeEach
     public void initTest() {
-        user = createEntity(em);
-        user.setLogin(DEFAULT_LOGIN);
-        user.setEmail(DEFAULT_EMAIL);
+        user = DataFactory.buildUser();
+        String login = "userResourceT" + RandomStringUtils.randomAlphabetic(5);
+        user.setLogin(login);
+        user.setEmail(login + "@localhost");
     }
 
     @Test
@@ -139,16 +113,17 @@ public class UserResourceIT {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         // Create the User
+        String login = "createUser"+ RandomStringUtils.randomAlphabetic(5);
         ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setLogin(DEFAULT_LOGIN);
-        managedUserVM.setPassword(DEFAULT_PASSWORD);
-        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
-        managedUserVM.setLastName(DEFAULT_LASTNAME);
-        managedUserVM.setEmail(DEFAULT_EMAIL);
+        managedUserVM.setLogin(login);
+        managedUserVM.setPassword(DataFactory.DEFAULT_PASSWORD);
+        managedUserVM.setFirstName(DataFactory.DEFAULT_FIRSTNAME);
+        managedUserVM.setLastName(DataFactory.DEFAULT_LASTNAME);
+        managedUserVM.setEmail(login+"@localhost");
         managedUserVM.setActivated(true);
-        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
-        managedUserVM.setLangKey(DEFAULT_LANGKEY);
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        managedUserVM.setImageUrl(DataFactory.DEFAULT_IMAGEURL);
+        managedUserVM.setLangKey(DataFactory.DEFAULT_LANGKEY);
+        managedUserVM.setAuthorities(Collections.singleton(RoleManager.USER));
 
         restUserMockMvc.perform(post("/api/users")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -158,13 +133,39 @@ public class UserResourceIT {
         // Validate the User in the database
         List<User> userList = userRepository.findAll();
         assertThat(userList).hasSize(databaseSizeBeforeCreate + 1);
-        User testUser = userList.get(userList.size() - 1);
-        assertThat(testUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
-        assertThat(testUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
-        assertThat(testUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
-        assertThat(testUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
-        assertThat(testUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
-        assertThat(testUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
+        User testUser = userRepository.findOneByLogin(login.toLowerCase(Locale.ROOT)).get();
+
+        assertThat(testUser.getLogin()).isEqualTo(managedUserVM.getLogin().toLowerCase(Locale.ROOT));
+        assertThat(testUser.getFirstName()).isEqualTo(managedUserVM.getFirstName());
+        assertThat(testUser.getLastName()).isEqualTo(managedUserVM.getLastName());
+        assertThat(testUser.getEmail()).isEqualTo(managedUserVM.getEmail().toLowerCase(Locale.ROOT));
+        assertThat(testUser.getImageUrl()).isEqualTo(managedUserVM.getImageUrl());
+        assertThat(testUser.getLangKey()).isEqualTo(managedUserVM.getLangKey());
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(authorities = {RoleManager.MANAGER, RoleManager.USER, RoleManager.PARTICIPANT})
+    public void unauthorizedCreateUser() throws Exception {
+        int databaseSizeBeforeCreate = userRepository.findAll().size();
+
+        // Create the User
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setLogin(DEFAULT_LOGIN);
+        managedUserVM.setPassword(DataFactory.DEFAULT_PASSWORD);
+        managedUserVM.setFirstName(DataFactory.DEFAULT_FIRSTNAME);
+        managedUserVM.setLastName(DataFactory.DEFAULT_LASTNAME);
+        managedUserVM.setEmail(DataFactory.DEFAULT_EMAIL);
+        managedUserVM.setActivated(true);
+        managedUserVM.setImageUrl(DataFactory.DEFAULT_IMAGEURL);
+        managedUserVM.setLangKey(DataFactory.DEFAULT_LANGKEY);
+        managedUserVM.setAuthorities(Collections.singleton(RoleManager.USER));
+
+        securityRestMvc.perform(post("/api/users")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM)).with(csrf()))
+            .andExpect(status().is(403));
+
     }
 
     @Test
@@ -175,14 +176,14 @@ public class UserResourceIT {
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setId(1L);
         managedUserVM.setLogin(DEFAULT_LOGIN);
-        managedUserVM.setPassword(DEFAULT_PASSWORD);
-        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
-        managedUserVM.setLastName(DEFAULT_LASTNAME);
-        managedUserVM.setEmail(DEFAULT_EMAIL);
+        managedUserVM.setPassword(DataFactory.DEFAULT_PASSWORD);
+        managedUserVM.setFirstName(DataFactory.DEFAULT_FIRSTNAME);
+        managedUserVM.setLastName(DataFactory.DEFAULT_LASTNAME);
+        managedUserVM.setEmail(DataFactory.DEFAULT_EMAIL);
         managedUserVM.setActivated(true);
-        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
-        managedUserVM.setLangKey(DEFAULT_LANGKEY);
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        managedUserVM.setImageUrl(DataFactory.DEFAULT_IMAGEURL);
+        managedUserVM.setLangKey(DataFactory.DEFAULT_LANGKEY);
+        managedUserVM.setAuthorities(Collections.singleton(RoleManager.USER));
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restUserMockMvc.perform(post("/api/users")
@@ -204,14 +205,14 @@ public class UserResourceIT {
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setLogin(DEFAULT_LOGIN);// this login should already be used
-        managedUserVM.setPassword(DEFAULT_PASSWORD);
-        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
-        managedUserVM.setLastName(DEFAULT_LASTNAME);
+        managedUserVM.setPassword(DataFactory.DEFAULT_PASSWORD);
+        managedUserVM.setFirstName(DataFactory.DEFAULT_FIRSTNAME);
+        managedUserVM.setLastName(DataFactory.DEFAULT_LASTNAME);
         managedUserVM.setEmail("anothermail@localhost");
         managedUserVM.setActivated(true);
-        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
-        managedUserVM.setLangKey(DEFAULT_LANGKEY);
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        managedUserVM.setImageUrl(DataFactory.DEFAULT_IMAGEURL);
+        managedUserVM.setLangKey(DataFactory.DEFAULT_LANGKEY);
+        managedUserVM.setAuthorities(Collections.singleton(RoleManager.USER));
 
         // Create the User
         restUserMockMvc.perform(post("/api/users")
@@ -233,14 +234,14 @@ public class UserResourceIT {
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setLogin("anotherlogin");
-        managedUserVM.setPassword(DEFAULT_PASSWORD);
-        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
-        managedUserVM.setLastName(DEFAULT_LASTNAME);
-        managedUserVM.setEmail(DEFAULT_EMAIL);// this email should already be used
+        managedUserVM.setPassword(DataFactory.DEFAULT_PASSWORD);
+        managedUserVM.setFirstName(DataFactory.DEFAULT_FIRSTNAME);
+        managedUserVM.setLastName(DataFactory.DEFAULT_LASTNAME);
+        managedUserVM.setEmail(DataFactory.DEFAULT_EMAIL);// this email should already be used
         managedUserVM.setActivated(true);
-        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
-        managedUserVM.setLangKey(DEFAULT_LANGKEY);
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        managedUserVM.setImageUrl(DataFactory.DEFAULT_IMAGEURL);
+        managedUserVM.setLangKey(DataFactory.DEFAULT_LANGKEY);
+        managedUserVM.setAuthorities(Collections.singleton(RoleManager.USER));
 
         // Create the User
         restUserMockMvc.perform(post("/api/users")
@@ -265,11 +266,24 @@ public class UserResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)))
-            .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRSTNAME)))
-            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LASTNAME)))
-            .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
-            .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGEURL)))
-            .andExpect(jsonPath("$.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
+            .andExpect(jsonPath("$.[*].firstName").value(hasItem(DataFactory.DEFAULT_FIRSTNAME)))
+            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DataFactory.DEFAULT_LASTNAME)))
+            .andExpect(jsonPath("$.[*].email").value(hasItem(DataFactory.DEFAULT_EMAIL)))
+            .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DataFactory.DEFAULT_IMAGEURL)))
+            .andExpect(jsonPath("$.[*].langKey").value(hasItem(DataFactory.DEFAULT_LANGKEY)));
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(authorities = {RoleManager.MANAGER, RoleManager.USER, RoleManager.PARTICIPANT})
+    public void unauthorizedGetAllUsers() throws Exception {
+        // Initialize the database
+        userRepository.saveAndFlush(user);
+
+        // Get all the users
+        restUserMockMvc.perform(get("/api/users?sort=id,desc")
+            .accept(MediaType.APPLICATION_JSON).with(csrf()))
+            .andExpect(status().isOk());
     }
 
     @Test
@@ -285,13 +299,26 @@ public class UserResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.login").value(user.getLogin()))
-            .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRSTNAME))
-            .andExpect(jsonPath("$.lastName").value(DEFAULT_LASTNAME))
-            .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
-            .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGEURL))
-            .andExpect(jsonPath("$.langKey").value(DEFAULT_LANGKEY));
+            .andExpect(jsonPath("$.firstName").value(user.getFirstName()))
+            .andExpect(jsonPath("$.lastName").value(user.getLastName()))
+            .andExpect(jsonPath("$.email").value(user.getEmail()))
+            .andExpect(jsonPath("$.imageUrl").value(user.getImageUrl()))
+            .andExpect(jsonPath("$.langKey").value(user.getLangKey()));
 
         assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNotNull();
+    }
+
+    @Test
+    @WithMockUser(authorities = {RoleManager.MANAGER, RoleManager.USER, RoleManager.PARTICIPANT})
+    public void unauthorizedGetUser() throws Exception {
+        // Initialize the database
+        userRepository.saveAndFlush(user);
+
+        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNull();
+
+        // Get the user
+        securityRestMvc.perform(get("/api/users/{login}", user.getLogin()).with(csrf()))
+            .andExpect(status().is(403));
     }
 
     @Test
@@ -314,18 +341,18 @@ public class UserResourceIT {
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setId(updatedUser.getId());
         managedUserVM.setLogin(updatedUser.getLogin());
-        managedUserVM.setPassword(UPDATED_PASSWORD);
-        managedUserVM.setFirstName(UPDATED_FIRSTNAME);
-        managedUserVM.setLastName(UPDATED_LASTNAME);
-        managedUserVM.setEmail(UPDATED_EMAIL);
+        managedUserVM.setPassword(DataFactory.UPDATED_PASSWORD);
+        managedUserVM.setFirstName(DataFactory.UPDATED_FIRSTNAME);
+        managedUserVM.setLastName(DataFactory.UPDATED_LASTNAME);
+        managedUserVM.setEmail(DataFactory.UPDATED_EMAIL);
         managedUserVM.setActivated(updatedUser.getActivated());
-        managedUserVM.setImageUrl(UPDATED_IMAGEURL);
-        managedUserVM.setLangKey(UPDATED_LANGKEY);
+        managedUserVM.setImageUrl(DataFactory.UPDATED_IMAGEURL);
+        managedUserVM.setLangKey(DataFactory.UPDATED_LANGKEY);
         managedUserVM.setCreatedBy(updatedUser.getCreatedBy());
         managedUserVM.setCreatedDate(updatedUser.getCreatedDate());
         managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
         managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        managedUserVM.setAuthorities(Collections.singleton(RoleManager.USER));
 
         restUserMockMvc.perform(put("/api/users")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -335,12 +362,12 @@ public class UserResourceIT {
         // Validate the User in the database
         List<User> userList = userRepository.findAll();
         assertThat(userList).hasSize(databaseSizeBeforeUpdate);
-        User testUser = userList.get(userList.size() - 1);
-        assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
-        assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
-        assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
-        assertThat(testUser.getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
-        assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
+        User testUser = userRepository.findById(user.getId()).get();
+        assertThat(testUser.getFirstName()).isEqualTo(managedUserVM.getFirstName());
+        assertThat(testUser.getLastName()).isEqualTo(managedUserVM.getLastName());
+        assertThat(testUser.getEmail()).isEqualTo(managedUserVM.getEmail());
+        assertThat(testUser.getImageUrl()).isEqualTo(managedUserVM.getImageUrl());
+        assertThat(testUser.getLangKey()).isEqualTo(managedUserVM.getLangKey());
     }
 
     @Test
@@ -355,19 +382,19 @@ public class UserResourceIT {
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setId(updatedUser.getId());
-        managedUserVM.setLogin(UPDATED_LOGIN);
-        managedUserVM.setPassword(UPDATED_PASSWORD);
-        managedUserVM.setFirstName(UPDATED_FIRSTNAME);
-        managedUserVM.setLastName(UPDATED_LASTNAME);
-        managedUserVM.setEmail(UPDATED_EMAIL);
+        managedUserVM.setLogin(DataFactory.UPDATED_LOGIN);
+        managedUserVM.setPassword(DataFactory.UPDATED_PASSWORD);
+        managedUserVM.setFirstName(DataFactory.UPDATED_FIRSTNAME);
+        managedUserVM.setLastName(DataFactory.UPDATED_LASTNAME);
+        managedUserVM.setEmail(DataFactory.UPDATED_EMAIL);
         managedUserVM.setActivated(updatedUser.getActivated());
-        managedUserVM.setImageUrl(UPDATED_IMAGEURL);
-        managedUserVM.setLangKey(UPDATED_LANGKEY);
+        managedUserVM.setImageUrl(DataFactory.UPDATED_IMAGEURL);
+        managedUserVM.setLangKey(DataFactory.UPDATED_LANGKEY);
         managedUserVM.setCreatedBy(updatedUser.getCreatedBy());
         managedUserVM.setCreatedDate(updatedUser.getCreatedDate());
         managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
         managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        managedUserVM.setAuthorities(Collections.singleton(RoleManager.USER));
 
         restUserMockMvc.perform(put("/api/users")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -375,15 +402,13 @@ public class UserResourceIT {
             .andExpect(status().isOk());
 
         // Validate the User in the database
-        List<User> userList = userRepository.findAll();
-        assertThat(userList).hasSize(databaseSizeBeforeUpdate);
-        User testUser = userList.get(userList.size() - 1);
-        assertThat(testUser.getLogin()).isEqualTo(UPDATED_LOGIN);
-        assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
-        assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
-        assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
-        assertThat(testUser.getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
-        assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
+        User testUser = userRepository.findById(user.getId()).get();
+        assertThat(testUser.getLogin()).isEqualTo(managedUserVM.getLogin());
+        assertThat(testUser.getFirstName()).isEqualTo(DataFactory.UPDATED_FIRSTNAME);
+        assertThat(testUser.getLastName()).isEqualTo(DataFactory.UPDATED_LASTNAME);
+        assertThat(testUser.getEmail()).isEqualTo(DataFactory.UPDATED_EMAIL);
+        assertThat(testUser.getImageUrl()).isEqualTo(DataFactory.UPDATED_IMAGEURL);
+        assertThat(testUser.getLangKey()).isEqualTo(DataFactory.UPDATED_LANGKEY);
     }
 
     @Test
@@ -420,7 +445,7 @@ public class UserResourceIT {
         managedUserVM.setCreatedDate(updatedUser.getCreatedDate());
         managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
         managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        managedUserVM.setAuthorities(Collections.singleton(RoleManager.USER));
 
         restUserMockMvc.perform(put("/api/users")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -462,12 +487,45 @@ public class UserResourceIT {
         managedUserVM.setCreatedDate(updatedUser.getCreatedDate());
         managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
         managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
-        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        managedUserVM.setAuthorities(Collections.singleton(RoleManager.USER));
 
         restUserMockMvc.perform(put("/api/users")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
             .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(authorities = {RoleManager.MANAGER, RoleManager.USER, RoleManager.PARTICIPANT})
+    public void unauthorizedUpdateUser() throws Exception {
+        // Initialize the database
+        userRepository.saveAndFlush(user);
+        int databaseSizeBeforeUpdate = userRepository.findAll().size();
+
+        // Update the user
+        User updatedUser = userRepository.findById(user.getId()).get();
+
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setId(updatedUser.getId());
+        managedUserVM.setLogin(updatedUser.getLogin());
+        managedUserVM.setPassword(DataFactory.UPDATED_PASSWORD);
+        managedUserVM.setFirstName(DataFactory.UPDATED_FIRSTNAME);
+        managedUserVM.setLastName(DataFactory.UPDATED_LASTNAME);
+        managedUserVM.setEmail(DataFactory.UPDATED_EMAIL);
+        managedUserVM.setActivated(updatedUser.getActivated());
+        managedUserVM.setImageUrl(DataFactory.UPDATED_IMAGEURL);
+        managedUserVM.setLangKey(DataFactory.UPDATED_LANGKEY);
+        managedUserVM.setCreatedBy(updatedUser.getCreatedBy());
+        managedUserVM.setCreatedDate(updatedUser.getCreatedDate());
+        managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
+        managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
+        managedUserVM.setAuthorities(Collections.singleton(RoleManager.USER));
+
+        securityRestMvc.perform(put("/api/users")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM)).with(csrf()))
+            .andExpect(status().is(403));
     }
 
     @Test
@@ -491,6 +549,21 @@ public class UserResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(authorities = {RoleManager.MANAGER, RoleManager.USER, RoleManager.PARTICIPANT})
+    public void unauthorizedDeleteUser() throws Exception {
+        // Initialize the database
+        userRepository.saveAndFlush(user);
+        int databaseSizeBeforeDelete = userRepository.findAll().size();
+
+        // Delete the user
+        securityRestMvc.perform(delete("/api/users/{login}", user.getLogin())
+            .accept(TestUtil.APPLICATION_JSON_UTF8).with(csrf()))
+            .andExpect(status().is(403));
+
+    }
+
+    @Test
+    @Transactional
     public void getAllAuthorities() throws Exception {
         restUserMockMvc.perform(get("/api/users/authorities")
             .accept(TestUtil.APPLICATION_JSON_UTF8)
@@ -498,7 +571,17 @@ public class UserResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
-            .andExpect(jsonPath("$").value(hasItems(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)));
+            .andExpect(jsonPath("$").value(hasItems(RoleManager.USER, RoleManager.ADMIN)));
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(authorities = {RoleManager.MANAGER, RoleManager.USER, RoleManager.PARTICIPANT})
+    public void unauthorizedGetAllAuthorities() throws Exception {
+        securityRestMvc.perform(get("/api/users/authorities")
+            .accept(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().is(403));
     }
 
     @Test
@@ -520,63 +603,63 @@ public class UserResourceIT {
     @Transactional
     public void testUserDTOtoUser() {
         UserDTO userDTO = new UserDTO();
-        userDTO.setId(DEFAULT_ID);
+        userDTO.setId(DataFactory.DEFAULT_ID);
         userDTO.setLogin(DEFAULT_LOGIN);
-        userDTO.setFirstName(DEFAULT_FIRSTNAME);
-        userDTO.setLastName(DEFAULT_LASTNAME);
-        userDTO.setEmail(DEFAULT_EMAIL);
+        userDTO.setFirstName(DataFactory.DEFAULT_FIRSTNAME);
+        userDTO.setLastName(DataFactory.DEFAULT_LASTNAME);
+        userDTO.setEmail(DataFactory.DEFAULT_EMAIL);
         userDTO.setActivated(true);
-        userDTO.setImageUrl(DEFAULT_IMAGEURL);
-        userDTO.setLangKey(DEFAULT_LANGKEY);
+        userDTO.setImageUrl(DataFactory.DEFAULT_IMAGEURL);
+        userDTO.setLangKey(DataFactory.DEFAULT_LANGKEY);
         userDTO.setCreatedBy(DEFAULT_LOGIN);
         userDTO.setLastModifiedBy(DEFAULT_LOGIN);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Collections.singleton(RoleManager.USER));
 
         User user = userMapper.userDTOToUser(userDTO);
-        assertThat(user.getId()).isEqualTo(DEFAULT_ID);
+        assertThat(user.getId()).isEqualTo(DataFactory.DEFAULT_ID);
         assertThat(user.getLogin()).isEqualTo(DEFAULT_LOGIN);
-        assertThat(user.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
-        assertThat(user.getLastName()).isEqualTo(DEFAULT_LASTNAME);
-        assertThat(user.getEmail()).isEqualTo(DEFAULT_EMAIL);
+        assertThat(user.getFirstName()).isEqualTo(DataFactory.DEFAULT_FIRSTNAME);
+        assertThat(user.getLastName()).isEqualTo(DataFactory.DEFAULT_LASTNAME);
+        assertThat(user.getEmail()).isEqualTo(DataFactory.DEFAULT_EMAIL);
         assertThat(user.getActivated()).isEqualTo(true);
-        assertThat(user.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
-        assertThat(user.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
+        assertThat(user.getImageUrl()).isEqualTo(DataFactory.DEFAULT_IMAGEURL);
+        assertThat(user.getLangKey()).isEqualTo(DataFactory.DEFAULT_LANGKEY);
         assertThat(user.getCreatedBy()).isNull();
         assertThat(user.getCreatedDate()).isNotNull();
         assertThat(user.getLastModifiedBy()).isNull();
         assertThat(user.getLastModifiedDate()).isNotNull();
-        assertThat(user.getAuthorities()).extracting("name").containsExactly(AuthoritiesConstants.USER);
+        assertThat(user.getAuthorities()).extracting("name").containsExactly(RoleManager.USER);
     }
 
     @Test
     @Transactional
     public void testUserToUserDTO() {
-        user.setId(DEFAULT_ID);
+        user.setId(DataFactory.DEFAULT_ID);
         user.setCreatedBy(DEFAULT_LOGIN);
         user.setCreatedDate(Instant.now());
         user.setLastModifiedBy(DEFAULT_LOGIN);
         user.setLastModifiedDate(Instant.now());
         Set<Authority> authorities = new HashSet<>();
         Authority authority = new Authority();
-        authority.setName(AuthoritiesConstants.USER);
+        authority.setName(RoleManager.USER);
         authorities.add(authority);
         user.setAuthorities(authorities);
 
         UserDTO userDTO = userMapper.userToUserDTO(user);
 
-        assertThat(userDTO.getId()).isEqualTo(DEFAULT_ID);
-        assertThat(userDTO.getLogin()).isEqualTo(DEFAULT_LOGIN);
-        assertThat(userDTO.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
-        assertThat(userDTO.getLastName()).isEqualTo(DEFAULT_LASTNAME);
-        assertThat(userDTO.getEmail()).isEqualTo(DEFAULT_EMAIL);
+        assertThat(userDTO.getId()).isEqualTo(DataFactory.DEFAULT_ID);
+        assertThat(userDTO.getLogin()).isEqualTo(user.getLogin());
+        assertThat(userDTO.getFirstName()).isEqualTo(user.getFirstName());
+        assertThat(userDTO.getLastName()).isEqualTo(user.getLastName());
+        assertThat(userDTO.getEmail()).isEqualTo(user.getEmail());
         assertThat(userDTO.isActivated()).isEqualTo(true);
-        assertThat(userDTO.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
-        assertThat(userDTO.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
-        assertThat(userDTO.getCreatedBy()).isEqualTo(DEFAULT_LOGIN);
+        assertThat(userDTO.getImageUrl()).isEqualTo(user.getImageUrl());
+        assertThat(userDTO.getLangKey()).isEqualTo(user.getLangKey());
+        assertThat(userDTO.getCreatedBy()).isEqualTo(user.getCreatedBy());
         assertThat(userDTO.getCreatedDate()).isEqualTo(user.getCreatedDate());
-        assertThat(userDTO.getLastModifiedBy()).isEqualTo(DEFAULT_LOGIN);
+        assertThat(userDTO.getLastModifiedBy()).isEqualTo(user.getLastModifiedBy());
         assertThat(userDTO.getLastModifiedDate()).isEqualTo(user.getLastModifiedDate());
-        assertThat(userDTO.getAuthorities()).containsExactly(AuthoritiesConstants.USER);
+        assertThat(userDTO.getAuthorities()).containsExactly(RoleManager.USER);
         assertThat(userDTO.toString()).isNotNull();
     }
 
@@ -593,13 +676,13 @@ public class UserResourceIT {
         Authority authorityB = new Authority();
         assertThat(authorityA).isEqualTo(authorityB);
 
-        authorityB.setName(AuthoritiesConstants.ADMIN);
+        authorityB.setName(RoleManager.ADMIN);
         assertThat(authorityA).isNotEqualTo(authorityB);
 
-        authorityA.setName(AuthoritiesConstants.USER);
+        authorityA.setName(RoleManager.USER);
         assertThat(authorityA).isNotEqualTo(authorityB);
 
-        authorityB.setName(AuthoritiesConstants.USER);
+        authorityB.setName(RoleManager.USER);
         assertThat(authorityA).isEqualTo(authorityB);
         assertThat(authorityA.hashCode()).isEqualTo(authorityB.hashCode());
     }

@@ -1,5 +1,12 @@
 package uk.ac.herc.bcra.config;
 
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.authentication.AuthenticationDetailsSource;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import uk.ac.herc.bcra.security.*;
 
 import io.github.jhipster.config.JHipsterProperties;
@@ -22,8 +29,12 @@ import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWrite
 import org.springframework.web.filter.CorsFilter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+
+import static uk.ac.herc.bcra.security.RoleManager.*;
+
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Import(SecurityProblemSupport.class)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -32,13 +43,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final RememberMeServices rememberMeServices;
 
     private final CorsFilter corsFilter;
+
     private final SecurityProblemSupport problemSupport;
 
-    public SecurityConfiguration(JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices, CorsFilter corsFilter, SecurityProblemSupport problemSupport) {
+    private final UserDetailsService userDetailsService;
+
+    public SecurityConfiguration(JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices, CorsFilter corsFilter,
+                                 SecurityProblemSupport problemSupport, UserDetailsService userDetailsService) {
         this.jHipsterProperties = jHipsterProperties;
         this.rememberMeServices = rememberMeServices;
         this.corsFilter = corsFilter;
         this.problemSupport = problemSupport;
+        this.userDetailsService = userDetailsService;
     }
 
     @Bean
@@ -47,8 +63,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AjaxAuthenticationFailureHandler ajaxAuthenticationFailureHandler() {
-        return new AjaxAuthenticationFailureHandler();
+    public AuthenticationFailureHandler ajaxAuthenticationFailureHandler() {
+        return new AuthenticationFailureHandler();
     }
 
     @Bean
@@ -59,6 +75,28 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public RoleDependentAuthenticationProvider myAuthProvider() {
+        RoleDependentAuthenticationProvider provider = new RoleDependentAuthenticationProvider();
+        provider.setPasswordEncoder(passwordEncoder());
+        provider.setUserDetailsService(userDetailsService);
+        return provider;
+    }
+
+    @Bean
+    public DefaultWebSecurityExpressionHandler webSecurityExpressionHandler() {
+        DefaultWebSecurityExpressionHandler expressionHandler = new DefaultWebSecurityExpressionHandler();
+        expressionHandler.setRoleHierarchy(roleHierarchy());
+        return expressionHandler;
+    }
+
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        roleHierarchy.setHierarchy(RoleManager.buildHierarchy());
+        return roleHierarchy;
     }
 
     @Override
@@ -94,6 +132,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .loginProcessingUrl("/api/authentication")
             .successHandler(bcraAuthenticationSuccessHandler())
             .failureHandler(ajaxAuthenticationFailureHandler())
+            .authenticationDetailsSource(authenticationDetailsSource())
             .permitAll()
         .and()
             .logout()
@@ -126,7 +165,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/info").permitAll()
             .antMatchers("/management/prometheus").permitAll()
-            .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
-        // @formatter:on
+            .antMatchers("/management/**").hasAuthority(ADMIN)
+        .expressionHandler(webSecurityExpressionHandler());
     }
+
+    private AuthenticationDetailsSource<HttpServletRequest, WebAuthenticationDetails> authenticationDetailsSource() {
+        return AuthenticationDetails::new;
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(myAuthProvider());
+    }
+
 }

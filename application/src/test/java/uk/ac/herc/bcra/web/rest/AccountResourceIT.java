@@ -1,5 +1,10 @@
 package uk.ac.herc.bcra.web.rest;
 
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.context.WebApplicationContext;
 import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.config.Constants;
 import uk.ac.herc.bcra.domain.Authority;
@@ -8,7 +13,7 @@ import uk.ac.herc.bcra.domain.User;
 import uk.ac.herc.bcra.repository.AuthorityRepository;
 import uk.ac.herc.bcra.repository.PersistentTokenRepository;
 import uk.ac.herc.bcra.repository.UserRepository;
-import uk.ac.herc.bcra.security.AuthoritiesConstants;
+import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.MailService;
 import uk.ac.herc.bcra.service.UserService;
 import uk.ac.herc.bcra.service.dto.PasswordChangeDTO;
@@ -32,6 +37,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.management.relation.Role;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
@@ -41,6 +47,8 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -49,6 +57,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @SpringBootTest(classes = BcraApp.class)
 public class AccountResourceIT {
+    @Autowired
+    private WebApplicationContext context;
 
     @Autowired
     private UserRepository userRepository;
@@ -81,6 +91,8 @@ public class AccountResourceIT {
 
     private MockMvc restUserMockMvc;
 
+    private MockMvc securityRestMvc;
+
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
@@ -96,6 +108,10 @@ public class AccountResourceIT {
             .build();
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(accountUserMockResource)
             .setControllerAdvice(exceptionTranslator)
+            .build();
+        this.securityRestMvc = MockMvcBuilders
+            .webAppContextSetup(context)
+            .apply(springSecurity())
             .build();
     }
 
@@ -126,7 +142,7 @@ public class AccountResourceIT {
     public void testGetExistingAccount() throws Exception {
         Set<Authority> authorities = new HashSet<>();
         Authority authority = new Authority();
-        authority.setName(AuthoritiesConstants.ADMIN);
+        authority.setName(RoleManager.ADMIN);
         authorities.add(authority);
 
         User user = new User();
@@ -149,7 +165,7 @@ public class AccountResourceIT {
             .andExpect(jsonPath("$.email").value("john.doe@jhipster.com"))
             .andExpect(jsonPath("$.imageUrl").value("http://placehold.it/50x50"))
             .andExpect(jsonPath("$.langKey").value("en"))
-            .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
+            .andExpect(jsonPath("$.authorities").value(RoleManager.ADMIN));
     }
 
     @Test
@@ -173,7 +189,7 @@ public class AccountResourceIT {
         validUser.setEmail("test-register-valid@example.com");
         validUser.setImageUrl("http://placehold.it/50x50");
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        validUser.setAuthorities(Collections.singleton(RoleManager.USER));
         assertThat(userRepository.findOneByLogin("test-register-valid").isPresent()).isFalse();
 
         restMvc.perform(
@@ -197,7 +213,7 @@ public class AccountResourceIT {
         invalidUser.setActivated(true);
         invalidUser.setImageUrl("http://placehold.it/50x50");
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        invalidUser.setAuthorities(Collections.singleton(RoleManager.USER));
 
         restUserMockMvc.perform(
             post("/api/register")
@@ -221,7 +237,7 @@ public class AccountResourceIT {
         invalidUser.setActivated(true);
         invalidUser.setImageUrl("http://placehold.it/50x50");
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        invalidUser.setAuthorities(Collections.singleton(RoleManager.USER));
 
         restUserMockMvc.perform(
             post("/api/register")
@@ -245,7 +261,7 @@ public class AccountResourceIT {
         invalidUser.setActivated(true);
         invalidUser.setImageUrl("http://placehold.it/50x50");
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        invalidUser.setAuthorities(Collections.singleton(RoleManager.USER));
 
         restUserMockMvc.perform(
             post("/api/register")
@@ -269,7 +285,7 @@ public class AccountResourceIT {
         invalidUser.setActivated(true);
         invalidUser.setImageUrl("http://placehold.it/50x50");
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        invalidUser.setAuthorities(Collections.singleton(RoleManager.USER));
 
         restUserMockMvc.perform(
             post("/api/register")
@@ -293,7 +309,7 @@ public class AccountResourceIT {
         firstUser.setEmail("alice@example.com");
         firstUser.setImageUrl("http://placehold.it/50x50");
         firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        firstUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        firstUser.setAuthorities(Collections.singleton(RoleManager.USER));
 
         // Duplicate login, different email
         ManagedUserVM secondUser = new ManagedUserVM();
@@ -349,7 +365,7 @@ public class AccountResourceIT {
         firstUser.setEmail("test-register-duplicate-email@example.com");
         firstUser.setImageUrl("http://placehold.it/50x50");
         firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        firstUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        firstUser.setAuthorities(Collections.singleton(RoleManager.USER));
 
         // Register first user
         restMvc.perform(
@@ -431,7 +447,7 @@ public class AccountResourceIT {
         validUser.setActivated(true);
         validUser.setImageUrl("http://placehold.it/50x50");
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        validUser.setAuthorities(Collections.singleton(RoleManager.ADMIN));
 
         restMvc.perform(
             post("/api/register")
@@ -442,7 +458,7 @@ public class AccountResourceIT {
         Optional<User> userDup = userRepository.findOneByLogin("badguy");
         assertThat(userDup.isPresent()).isTrue();
         assertThat(userDup.get().getAuthorities()).hasSize(1)
-            .containsExactly(authorityRepository.findById(AuthoritiesConstants.USER).get());
+            .containsExactly(authorityRepository.findById(RoleManager.USER).get());
     }
 
     @Test
@@ -474,7 +490,7 @@ public class AccountResourceIT {
 
     @Test
     @Transactional
-    @WithMockUser("save-account")
+    @WithMockUser(value = "save-account", authorities = RoleManager.USER)
     public void testSaveAccount() throws Exception {
         User user = new User();
         user.setLogin("save-account");
@@ -492,7 +508,7 @@ public class AccountResourceIT {
         userDTO.setActivated(false);
         userDTO.setImageUrl("http://placehold.it/50x50");
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        userDTO.setAuthorities(Collections.singleton(RoleManager.ADMIN));
 
         restMvc.perform(
             post("/api/account")
@@ -531,7 +547,7 @@ public class AccountResourceIT {
         userDTO.setActivated(false);
         userDTO.setImageUrl("http://placehold.it/50x50");
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        userDTO.setAuthorities(Collections.singleton(RoleManager.ADMIN));
 
         restMvc.perform(
             post("/api/account")
@@ -570,7 +586,7 @@ public class AccountResourceIT {
         userDTO.setActivated(false);
         userDTO.setImageUrl("http://placehold.it/50x50");
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        userDTO.setAuthorities(Collections.singleton(RoleManager.ADMIN));
 
         restMvc.perform(
             post("/api/account")
@@ -602,7 +618,7 @@ public class AccountResourceIT {
         userDTO.setActivated(false);
         userDTO.setImageUrl("http://placehold.it/50x50");
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        userDTO.setAuthorities(Collections.singleton(RoleManager.ADMIN));
 
         restMvc.perform(
             post("/api/account")
@@ -613,6 +629,39 @@ public class AccountResourceIT {
         User updatedUser = userRepository.findOneByLogin("save-existing-email-and-login").orElse(null);
         assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email-and-login@example.com");
     }
+
+    @Test
+    @Transactional
+    @WithMockUser(value = "save-participant-user", authorities = RoleManager.PARTICIPANT)
+    public void testUnAuthorizedSaveAccount() throws Exception {
+        User user = new User();
+        String login = "save-participant-user";
+        user.setLogin(login);
+        user.setEmail("participant@example.com");
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(true);
+
+        userRepository.saveAndFlush(user);
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setLogin(login);
+        userDTO.setFirstName("firstname");
+        userDTO.setLastName("lastname");
+        userDTO.setEmail("new-participant@example.com");
+        userDTO.setActivated(false);
+        userDTO.setImageUrl("http://placehold.it/50x50");
+        userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
+        userDTO.setAuthorities(Collections.singleton(RoleManager.PARTICIPANT));
+
+        securityRestMvc.perform(
+            post("/api/account")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(userDTO)).with(csrf()))
+
+            .andExpect(status().is(403));
+    }
+
+
 
     @Test
     @Transactional
@@ -637,7 +686,7 @@ public class AccountResourceIT {
 
     @Test
     @Transactional
-    @WithMockUser("change-password")
+    @WithMockUser(value = "change-password", authorities = RoleManager.USER)
     public void testChangePassword() throws Exception {
         User user = new User();
         String currentPassword = RandomStringUtils.random(60);
@@ -653,6 +702,24 @@ public class AccountResourceIT {
 
         User updatedUser = userRepository.findOneByLogin("change-password").orElse(null);
         assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isTrue();
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(value = "change-password", authorities = RoleManager.PARTICIPANT)
+    public void testUnauthorizedChangePassword() throws Exception {
+        User user = new User();
+        String currentPassword = RandomStringUtils.random(60);
+        user.setPassword(passwordEncoder.encode(currentPassword));
+        user.setLogin("change-password");
+        user.setEmail("change-password@example.com");
+        userRepository.saveAndFlush(user);
+
+        securityRestMvc.perform(post("/api/account/change-password")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, "new password")))
+            .with(csrf()))
+            .andExpect(status().is(403));
     }
 
     @Test
@@ -721,7 +788,7 @@ public class AccountResourceIT {
 
     @Test
     @Transactional
-    @WithMockUser("current-sessions")
+    @WithMockUser(value = "current-sessions", authorities = RoleManager.USER)
     public void testGetCurrentSessions() throws Exception {
         User user = new User();
         user.setPassword(RandomStringUtils.random(60));
@@ -748,7 +815,30 @@ public class AccountResourceIT {
 
     @Test
     @Transactional
-    @WithMockUser("invalidate-session")
+    @WithMockUser(value = "current-sessions", authorities = RoleManager.PARTICIPANT)
+    public void testAuthorizedGetCurrentSessions() throws Exception {
+        User user = new User();
+        user.setPassword(RandomStringUtils.random(60));
+        user.setLogin("current-sessions");
+        user.setEmail("current-sessions@example.com");
+        userRepository.saveAndFlush(user);
+
+        PersistentToken token = new PersistentToken();
+        token.setSeries("current-sessions");
+        token.setUser(user);
+        token.setTokenValue("current-session-data");
+        token.setTokenDate(LocalDate.of(2017, 3, 23));
+        token.setIpAddress("127.0.0.1");
+        token.setUserAgent("Test agent");
+        persistentTokenRepository.saveAndFlush(token);
+
+        securityRestMvc.perform(get("/api/account/sessions").with(csrf()))
+            .andExpect(status().is(403));
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(value = "invalidate-session", authorities = RoleManager.USER)
     public void testInvalidateSession() throws Exception {
         User user = new User();
         user.setPassword(RandomStringUtils.random(60));
@@ -771,6 +861,32 @@ public class AccountResourceIT {
             .andExpect(status().isOk());
 
         assertThat(persistentTokenRepository.findByUser(user)).isEmpty();
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(value = "invalidate-session", authorities = RoleManager.PARTICIPANT)
+    public void testUnAuthorizedInvalidateSession() throws Exception {
+        User user = new User();
+        user.setPassword(RandomStringUtils.random(60));
+        user.setLogin("invalidate-session");
+        user.setEmail("invalidate-session@example.com");
+        userRepository.saveAndFlush(user);
+
+        PersistentToken token = new PersistentToken();
+        token.setSeries("invalidate-session");
+        token.setUser(user);
+        token.setTokenValue("invalidate-data");
+        token.setTokenDate(LocalDate.of(2017, 3, 23));
+        token.setIpAddress("127.0.0.1");
+        token.setUserAgent("Test agent");
+        persistentTokenRepository.saveAndFlush(token);
+
+        assertThat(persistentTokenRepository.findByUser(user)).hasSize(1);
+
+        securityRestMvc.perform(delete("/api/account/sessions/invalidate-session").with(csrf()))
+            .andExpect(status().is(403));
+
     }
 
     @Test

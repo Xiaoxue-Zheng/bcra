@@ -11,6 +11,6 @@ id;login;password_hash;first_name;last_name;email;image_url;activated;lang_key;c
 16;test6;NULL;;;NULL;;true;en;system;system
 17;test7;NULL;;;NULL;;true;en;system;system
 18;test8;NULL;;;NULL;;true;en;system;system
-19;test9;NULL;;;NULL;;true;en;system;system
+19;test9;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;;;NULL;;true;en;system;system
 100;cypressexisting;$2a$10$xfxxf5eZbLo0S70V55c8FO6R.741QpR4Lkh84749m/B7kP6/XIFc2;;;NULL;;true;en;system;system
 101;cypressnew;NULL;;;NULL;;true;en;system;system

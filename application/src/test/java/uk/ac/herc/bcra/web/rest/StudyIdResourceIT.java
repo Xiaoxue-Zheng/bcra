@@ -1,8 +1,10 @@
 package uk.ac.herc.bcra.web.rest;
 
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.web.context.WebApplicationContext;
 import uk.ac.herc.bcra.BcraApp;
-import uk.ac.herc.bcra.domain.AnswerResponse;
 import uk.ac.herc.bcra.domain.Participant;
+import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.StudyIdService;
 import uk.ac.herc.bcra.web.rest.errors.ExceptionTranslator;
 
@@ -22,20 +24,27 @@ import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static uk.ac.herc.bcra.web.rest.TestUtil.createFormattingConversionService;
 
+import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import uk.ac.herc.bcra.domain.StudyId;
-import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 import uk.ac.herc.bcra.repository.StudyIdRepository;
 
 @SpringBootTest(classes = BcraApp.class)
 public class StudyIdResourceIT {
+
+    @Autowired
+    private WebApplicationContext context;
 
     @Autowired
     private EntityManager em;
@@ -48,7 +57,7 @@ public class StudyIdResourceIT {
 
     @Autowired
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-    
+
     @Autowired
     private ExceptionTranslator exceptionTranslator;
 
@@ -58,14 +67,14 @@ public class StudyIdResourceIT {
     @Autowired
     private StudyIdService studyIdService;
 
-    private static int numberOfStudies = 0;
-    public static final String DEFAULT_STUDY_CODE_PREFIX = "TST_";
-
     private StudyId studyId;
 
     private Participant participant;
 
     private MockMvc restStudyIdMockMvc;
+
+    private MockMvc securityRestMvc;
+
 
     @BeforeEach
     public void setup() {
@@ -81,52 +90,17 @@ public class StudyIdResourceIT {
             .setMessageConverters(jacksonMessageConverter)
             .setValidator(validator)
             .build();
-    }
-
-    /**
-     * Create an entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static StudyId createEntity(EntityManager em) {
-        StudyId studyId = new StudyId()
-            .code(DEFAULT_STUDY_CODE_PREFIX + numberOfStudies);
-
-        numberOfStudies += 1;
-
-        AnswerResponse consentResponse = AnswerResponseResourceIT.createEntity(em, QuestionnaireType.CONSENT_FORM);
-        AnswerResponse riskAssessmentResponse = AnswerResponseResourceIT.createEntity(em, QuestionnaireType.RISK_ASSESSMENT);
-
-        studyId.setConsentResponse(consentResponse);
-        studyId.setRiskAssessmentResponse(riskAssessmentResponse);
-
-        em.persist(studyId);
-
-        return studyId;
-    }
-
-    public static StudyId createEntity(EntityManager em, Participant participant) {
-        StudyId studyId = new StudyId()
-            .code(DEFAULT_STUDY_CODE_PREFIX + numberOfStudies);
-        numberOfStudies += 1;
-
-        AnswerResponse consentResponse = AnswerResponseResourceIT.createEntity(em);
-        AnswerResponse riskAssessmentResponse = AnswerResponseResourceIT.createEntity(em);
-        studyId.setConsentResponse(consentResponse);
-        studyId.setRiskAssessmentResponse(riskAssessmentResponse);
-        studyId.setParticipant(participant);
-
-        em.persist(studyId);
-
-        return studyId;
+        this.securityRestMvc = MockMvcBuilders
+            .webAppContextSetup(context)
+            .apply(springSecurity())
+            .build();
     }
 
     @BeforeEach
     public void initTest() {
-        studyId = createEntity(em);
+        studyId = DataFactory.createStudyId(em);
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = ParticipantResourceIT.createUpdatedEntity(em);
+            participant = DataFactory.createUpdatedParticipant(em);
             em.persist(participant);
             em.flush();
         } else {
@@ -177,7 +151,7 @@ public class StudyIdResourceIT {
     @Transactional
     public void getStudyCode() throws Exception {
         // Add an assigned study id to the database.
-        StudyId studyIdAssigned = createEntity(em);
+        StudyId studyIdAssigned = DataFactory.createStudyId(em);
         studyIdAssigned.setParticipant(participant);
 
         studyIdRepository.saveAndFlush(studyIdAssigned);
@@ -197,4 +171,26 @@ public class StudyIdResourceIT {
         String returnedStudyCode = result.getResponse().getContentAsString();
         assertThat(returnedStudyCode).isEqualTo("\"" + studyIdAssigned.getCode() + "\"");
     }
+
+    @Test
+    @Transactional
+    @WithMockUser(authorities = {RoleManager.PARTICIPANT, RoleManager.USER, RoleManager.MANAGER})
+    public void unauthorizedCreateStudyId() throws Exception {
+        List<String> studyIdList = new ArrayList<>();
+        studyIdList.add("unauthorizedCreateSturdyId");
+        securityRestMvc.perform(post("/api/study-ids")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(studyIdList)).with(csrf()))
+            .andExpect(status().is(403));
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(authorities = {RoleManager.PARTICIPANT, RoleManager.USER, RoleManager.MANAGER})
+    public void unauthorizedGetAllSturdyId() throws Exception {
+        securityRestMvc.perform(get("/api/study-ids")
+            .with(csrf()))
+            .andExpect(status().is(403));
+    }
+
 }

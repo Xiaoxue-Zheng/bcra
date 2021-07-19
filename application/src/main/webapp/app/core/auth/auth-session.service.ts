@@ -10,11 +10,13 @@ export class AuthServerProvider {
   constructor(private http: HttpClient) {}
 
   login(credentials): Observable<any> {
+    const source = 'ADMIN_PAGE';
     const data =
       `username=${encodeURIComponent(credentials.username)}` +
       `&password=${encodeURIComponent(credentials.password)}` +
       `&remember-me=${credentials.rememberMe}` +
-      `&submit=Login`;
+      `&submit=Login` +
+      `&source=${source}`;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(SERVER_API_URL + 'api/authentication', data, { headers });

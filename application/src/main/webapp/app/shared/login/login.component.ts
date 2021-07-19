@@ -13,6 +13,7 @@ import { StateStorageService } from 'app/core/auth/state-storage.service';
 })
 export class JhiLoginModalComponent implements AfterViewInit {
   authenticationError: boolean;
+  authenticationErrorMessage: '';
 
   loginForm = this.fb.group({
     username: [''],
@@ -37,6 +38,7 @@ export class JhiLoginModalComponent implements AfterViewInit {
 
   cancel() {
     this.authenticationError = false;
+    this.authenticationErrorMessage = '';
     this.loginForm.patchValue({
       username: '',
       password: ''
@@ -71,8 +73,10 @@ export class JhiLoginModalComponent implements AfterViewInit {
           this.router.navigateByUrl(redirect);
         }
       })
-      .catch(() => {
+      .catch(error => {
         this.authenticationError = true;
+        this.authenticationErrorMessage =
+          error.error && error.error.message ? error.error.message : 'Please check your credentials and try again.';
       });
   }
 

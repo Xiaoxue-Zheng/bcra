@@ -13,13 +13,15 @@ function deleteNextParticipant(participantLogins, currentLoginIx) {
             return deleteParticipant(participant.id).then(() => {
                 return deleteIdentifiableData(participant.identifiable_data_id).then(() => {
                     return deleteProcedure(participant.procedure_id).then(() => {
-                        return deleteUser(login).then(() => {
-                            if (currentLoginIx == participantLogins.length-1) {
-                                return 'DONE'
-                            } else {
-                                return deleteNextParticipant(participantLogins, currentLoginIx+1)
-                            }
-                        })
+                        return deleteUserAuthority(participant.user_id).then(() => {
+                            return deleteUser(login).then(() => {
+                                if (currentLoginIx == participantLogins.length-1) {
+                                    return 'DONE'
+                                } else {
+                                    return deleteNextParticipant(participantLogins, currentLoginIx+1)
+                                }
+                            })
+                      })
                     })
                 })
             })
@@ -88,6 +90,16 @@ function deleteUser(login) {
             WHERE u.login = $1
         `,
         values: [login]
+    })
+}
+
+function deleteUserAuthority(userId) {
+    return cy.task('query', {
+        sql: `
+            DELETE FROM jhi_user_authority u
+            WHERE u.user_id = $1
+        `,
+        values: [userId]
     })
 }
 
@@ -203,7 +215,7 @@ function getNextIdForTable(tableName) {
     }).then((result) => {
         if (result.rows[0].max)
             return parseInt(result.rows[0].max) + 1
-        else 
+        else
             return 1
     })
 }
@@ -215,7 +227,7 @@ Cypress.Commands.add('updateParticipantDetails', (studyCode, nhsNumber) => {
                 return assignIdentifiableDataToParticipant(identifiableData, participant)
             })
         })
-    }) 
+    })
 })
 
 function getUserByStudyCode(studyCode) {
@@ -271,7 +283,7 @@ Cypress.Commands.add('removeIdentifiableDataForParticipant', (studyCode) => {
                 return deleteIdentifiableDataById(identifiableDataId)
             })
         })
-    }) 
+    })
 })
 
 function unassignParticipantFromIdentifiableData(participant) {

@@ -19,7 +19,7 @@ export const AnswerResponseService = {
     return ApiService.put('answer-responses/risk-assessment/save', answerResponse)
   },
 
-  referralRiskAssessment(answerResponse) {
+  referralRiskAssessment (answerResponse) {
     return ApiService.put('answer-responses/risk-assessment/referral', answerResponse)
   },
 

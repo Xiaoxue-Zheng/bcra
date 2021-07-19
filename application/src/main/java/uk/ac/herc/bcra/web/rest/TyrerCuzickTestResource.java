@@ -1,5 +1,7 @@
 package uk.ac.herc.bcra.web.rest;
 
+import org.springframework.security.access.annotation.Secured;
+import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.TyrerCuzickExtractService;
 import uk.ac.herc.bcra.service.TyrerCuzickService;
 
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 @Transactional
+@Secured({RoleManager.MANAGER})
 public class TyrerCuzickTestResource {
 
     private final Logger log = LoggerFactory.getLogger(StudyIdResource.class);
@@ -19,7 +22,7 @@ public class TyrerCuzickTestResource {
     private final TyrerCuzickExtractService tyrerCuzickExtractService;
 
     public TyrerCuzickTestResource(
-        TyrerCuzickService tyrerCuzickService, 
+        TyrerCuzickService tyrerCuzickService,
         TyrerCuzickExtractService tyrerCuzickExtractService) {
 
         this.tyrerCuzickService = tyrerCuzickService;

@@ -38,29 +38,29 @@ public class TyrerCuzickPathUtilIT {
     @Test
     public void testTyrerCuzickExeForWindows() throws Exception {
         OSValidator.OPERATING_SYSTEM = "windows";
-        String path = TyrerCuzickPathUtil.getTyrerCuzickExe();
-        assertThat(path).isEqualTo("tyrercuzick.exe");
+        String path = TyrerCuzickPathUtil.getTyrerCuzickCommand();
+        assertThat(path).isEqualTo("/home/tyrercuzick/tyrercuzick.exe -i <INPUT> -o <OUTPUT>");
     }
 
     @Test
     public void testTyrerCuzickExeForMac() throws Exception {
         OSValidator.OPERATING_SYSTEM = "mac";
-        String path = TyrerCuzickPathUtil.getTyrerCuzickExe();
-        assertThat(path).isEqualTo("tcuzick");
+        String path = TyrerCuzickPathUtil.getTyrerCuzickCommand();
+        assertThat(path).isEqualTo("/usr/local/share/tyrercuzick/tcuzick <INPUT> <OUTPUT>");
     }
 
     @Test
     public void testTyrerCuzickExeForUnix() throws Exception {
         OSValidator.OPERATING_SYSTEM = "linux";
-        String path = TyrerCuzickPathUtil.getTyrerCuzickExe();
-        assertThat(path).isEqualTo("tcuzick");
+        String path = TyrerCuzickPathUtil.getTyrerCuzickCommand();
+        assertThat(path).isEqualTo("/usr/local/lib/glibc-2.29-bin/lib64/ld-linux-x86-64.so.2 --library-path /usr/local/lib/glibc-2.29-bin/lib64:/usr/lib64 /home/tyrercuzick/tcuzick <INPUT> <OUTPUT>");
     }
 
     @Test
     public void testTyrerCuzickExeForUnsupportedOS() {
         assertThrows(Exception.class, () -> {
             OSValidator.OPERATING_SYSTEM = "unsupported operating system";
-            TyrerCuzickPathUtil.getTyrerCuzickExe();
+            TyrerCuzickPathUtil.getTyrerCuzickCommand();
         });
     }
 

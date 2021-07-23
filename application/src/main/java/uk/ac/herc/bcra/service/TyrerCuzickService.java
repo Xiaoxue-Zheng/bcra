@@ -37,7 +37,7 @@ import java.util.*;
 public class TyrerCuzickService {
     private final Logger log = LoggerFactory.getLogger(TyrerCuzickService.class);
 
-    public static String TC_EXECUTABLE_FILE_LOCATION;
+    public static String TC_EXECUTABLE_COMMAND;
     public static String TC_INPUT_FILE_LOCATION;
     public static String TC_OUTPUT_FILE_LOCATION;
 
@@ -73,8 +73,8 @@ public class TyrerCuzickService {
     private void setUpPathVariables() {
         try {
             String tyrerCuzickRoot = TyrerCuzickPathUtil.getTyrerCuzickPath();
-            String tyrerCuzickExe = TyrerCuzickPathUtil.getTyrerCuzickExe();
-            TC_EXECUTABLE_FILE_LOCATION = tyrerCuzickRoot + tyrerCuzickExe;
+            String tyrerCuzickCommand = TyrerCuzickPathUtil.getTyrerCuzickCommand();
+            TC_EXECUTABLE_COMMAND = tyrerCuzickCommand;
             TC_INPUT_FILE_LOCATION = tyrerCuzickRoot + "input/";
             TC_OUTPUT_FILE_LOCATION = tyrerCuzickRoot + "output/";
         } catch(Exception ex) {
@@ -134,12 +134,13 @@ public class TyrerCuzickService {
         for (File fileEntry : tcInputDirectory.listFiles()) {
             if (isTCInputFile(fileEntry)) {
                 String fileName = fileEntry.getName();
-                String exeLocation = new File(TC_EXECUTABLE_FILE_LOCATION).getAbsolutePath();
                 String inputLocation = new File(TC_INPUT_FILE_LOCATION + fileName).getAbsolutePath();
                 String outputLocation = new File(TC_OUTPUT_FILE_LOCATION + fileName).getAbsolutePath();
 
-                try {
-                    String tcCommand = exeLocation + " -i " + inputLocation + " -o " + outputLocation;
+                try {                    
+                    String tcCommand = TC_EXECUTABLE_COMMAND
+                        .replace("<INPUT>", inputLocation)
+                        .replace("<OUTPUT>", outputLocation);
                     Runtime rt = Runtime.getRuntime();
                     Process p = rt.exec(tcCommand);
                     p.waitFor();

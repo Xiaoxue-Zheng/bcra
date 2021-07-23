@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.repository.RiskAssessmentResultRepository;
+import uk.ac.herc.bcra.service.util.OSValidator;
 import uk.ac.herc.bcra.service.util.TyrerCuzickPathUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,7 +50,11 @@ public class TyrerCuzickServiceIT {
 
     private void configureTyrerCuzickService() throws Exception {
         String testDirectory = TyrerCuzickTestFilesUtil.getTestDirectory();
-        TyrerCuzickService.TC_EXECUTABLE_FILE_LOCATION = testDirectory + TyrerCuzickPathUtil.getTyrerCuzickExe();
+        TyrerCuzickService.TC_EXECUTABLE_COMMAND = TyrerCuzickPathUtil.getTyrerCuzickCommand();
+        if (OSValidator.isUnix()) {
+            TyrerCuzickService.TC_EXECUTABLE_COMMAND = TyrerCuzickService.TC_EXECUTABLE_COMMAND.replace("/home/tyrercuzick", testDirectory);
+        }
+
         TyrerCuzickService.TC_INPUT_FILE_LOCATION = testDirectory + "/input/";
         TyrerCuzickService.TC_OUTPUT_FILE_LOCATION = testDirectory + "/output/";
     }

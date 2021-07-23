@@ -8,6 +8,8 @@ import uk.ac.herc.bcra.algorithm.AlgorithmException;
 import uk.ac.herc.bcra.algorithm.mapping.answers1_tyrercuzick8.Mapper;
 import uk.ac.herc.bcra.domain.AnswerResponse;
 import uk.ac.herc.bcra.domain.Participant;
+import uk.ac.herc.bcra.service.util.OSValidator;
+import uk.ac.herc.bcra.service.util.TyrerCuzickPathUtil;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -196,9 +198,13 @@ public class TyrerCuzickTestParticipantsIT {
         em.flush();
     }
 
-    private void configureTyrerCuzickService() {
+    private void configureTyrerCuzickService() throws Exception {
         String testDir = TyrerCuzickTestFilesUtil.getTestDirectory();
-        TyrerCuzickService.TC_EXECUTABLE_FILE_LOCATION = testDir + "/tyrercuzick.exe";
+        TyrerCuzickService.TC_EXECUTABLE_COMMAND = TyrerCuzickPathUtil.getTyrerCuzickCommand();
+        if (OSValidator.isUnix()) {
+            TyrerCuzickService.TC_EXECUTABLE_COMMAND = TyrerCuzickService.TC_EXECUTABLE_COMMAND.replace("/home/tyrercuzick", testDir);
+        }
+        
         TyrerCuzickService.TC_INPUT_FILE_LOCATION = testDir + "/input/";
         TyrerCuzickService.TC_OUTPUT_FILE_LOCATION = testDir + "/output/";
     }

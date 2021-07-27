@@ -7,7 +7,6 @@ import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.domain.User;
 import uk.ac.herc.bcra.domain.IdentifiableData;
 import uk.ac.herc.bcra.domain.Procedure;
-import uk.ac.herc.bcra.domain.CsvFile;
 import uk.ac.herc.bcra.repository.ParticipantRepository;
 import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.ParticipantService;
@@ -279,26 +278,6 @@ public class ParticipantResourceIT {
 
         // Get all the participantList where procedure equals to procedureId + 1
         defaultParticipantShouldNotBeFound("procedureId.equals=" + (procedureId + 1000));
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllParticipantsByCsvFileIsEqualToSomething() throws Exception {
-        // Initialize the database
-        participantRepository.saveAndFlush(participant);
-        CsvFile csvFile = CsvFileResourceIT.createEntity(em);
-        em.persist(csvFile);
-        em.flush();
-        participant.setCsvFile(csvFile);
-        participantRepository.saveAndFlush(participant);
-        Long csvFileId = csvFile.getId();
-
-        // Get all the participantList where csvFile equals to csvFileId
-        defaultParticipantShouldBeFound("csvFileId.equals=" + csvFileId);
-
-        // Get all the participantList where csvFile equals to csvFileId + 1
-        defaultParticipantShouldNotBeFound("csvFileId.equals=" + (csvFileId + 1000));
     }
 
     /**

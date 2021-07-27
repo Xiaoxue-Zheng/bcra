@@ -72,10 +72,8 @@ public class CacheConfiguration {
             createCache(cm, uk.ac.herc.bcra.domain.Question.class.getName() + ".displayConditions");
             createCache(cm, uk.ac.herc.bcra.domain.Question.class.getName() + ".referralConditions");
             createCache(cm, uk.ac.herc.bcra.domain.ReferralCondition.class.getName());
-            createCache(cm, uk.ac.herc.bcra.domain.CsvFile.class.getName());
             createCache(cm, uk.ac.herc.bcra.domain.Participant.class.getName());
             createCache(cm, uk.ac.herc.bcra.domain.IdentifiableData.class.getName());
-            createCache(cm, uk.ac.herc.bcra.domain.CsvContent.class.getName());
             createCache(cm, uk.ac.herc.bcra.domain.Procedure.class.getName());
             createCache(cm, uk.ac.herc.bcra.domain.QuestionSection.class.getName() + ".referralConditions");
             createCache(cm, uk.ac.herc.bcra.domain.StudyId.class.getName());

@@ -84,7 +84,7 @@ public class ParticipantQueryService extends QueryService<Participant> {
      * Function to convert ConsumerCriteria to a {@link Specification}
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching {@link Specification} of the entity.
-     */    
+     */
     protected Specification<Participant> createSpecification(ParticipantCriteria criteria) {
         Specification<Participant> specification = Specification.where(null);
         if (criteria != null) {
@@ -108,10 +108,6 @@ public class ParticipantQueryService extends QueryService<Participant> {
             if (criteria.getProcedureId() != null) {
                 specification = specification.and(buildSpecification(criteria.getProcedureId(),
                     root -> root.join(Participant_.procedure, JoinType.LEFT).get(Procedure_.id)));
-            }
-            if (criteria.getCsvFileId() != null) {
-                specification = specification.and(buildSpecification(criteria.getCsvFileId(),
-                    root -> root.join(Participant_.csvFile, JoinType.LEFT).get(CsvFile_.id)));
             }
             if (criteria.getNhsNumber() != null) {
                 specification = specification.and(buildSpecification(criteria.getNhsNumber(),

@@ -8,8 +8,6 @@ export interface IParticipant {
   userId?: number;
   identifiableDataId?: number;
   procedureId?: number;
-  csvFileFileName?: string;
-  csvFileId?: number;
 }
 
 export class Participant implements IParticipant {
@@ -20,8 +18,6 @@ export class Participant implements IParticipant {
     public userLogin?: string,
     public userId?: number,
     public identifiableDataId?: number,
-    public procedureId?: number,
-    public csvFileFileName?: string,
-    public csvFileId?: number
+    public procedureId?: number
   ) {}
 }

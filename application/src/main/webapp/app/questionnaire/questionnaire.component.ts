@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { filter, map } from 'rxjs/operators';
 import { IQuestionnaire } from 'app/shared/model/questionnaire.model';
-import { QuestionnaireService } from '../entities/questionnaire/questionnaire.service';
+import { QuestionnaireService } from './questionnaire.service';
 import { JhiAlertService } from 'ng-jhipster';
 
 @Component({

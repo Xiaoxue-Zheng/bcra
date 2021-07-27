@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { filter } from 'rxjs/operators';
 import { IParticipant } from 'app/shared/model/participant.model';
-import { ParticipantService } from '../entities/participant/participant.service';
+import { ParticipantService } from './participant.service';
 import { JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 import { ITEMS_PER_PAGE } from 'app/shared';
 import { ActivatedRoute, Router } from '@angular/router';

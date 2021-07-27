@@ -7,7 +7,7 @@
         Added the constraints for entity Participant.
     -->
     <changeSet id="20191119110520-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="participant"
                                  constraintName="fk_participant_user_id"
@@ -25,12 +25,6 @@
                                  constraintName="fk_participant_procedure_id"
                                  referencedColumnNames="id"
                                  referencedTableName="procedure"/>
-
-        <addForeignKeyConstraint baseColumnNames="csv_file_id"
-                                 baseTableName="participant"
-                                 constraintName="fk_participant_csv_file_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="csv_file"/>
 
     </changeSet>
 </databaseChangeLog>

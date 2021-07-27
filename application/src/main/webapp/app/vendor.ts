@@ -39,7 +39,6 @@ import {
   faTrashAlt,
   faAsterisk,
   faClipboardList,
-  faFileCsv,
   faUsers,
   faEnvelope,
   faTasks,
@@ -82,7 +81,6 @@ library.add(faSearch);
 library.add(faTrashAlt);
 library.add(faAsterisk);
 library.add(faClipboardList);
-library.add(faFileCsv);
 library.add(faUsers);
 library.add(faEnvelope);
 

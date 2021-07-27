@@ -1,7 +1,7 @@
 import { element, by, ElementFinder } from 'protractor';
 
 export class NavBarPage {
-  entityMenu = element(by.id('entity-menu'));
+  studyIdsMenu = element(by.css('[routerLink="study-id"]'));
   accountMenu = element(by.id('account-menu'));
   adminMenu: ElementFinder;
   signIn = element(by.id('login'));
@@ -14,10 +14,6 @@ export class NavBarPage {
     if (asAdmin) {
       this.adminMenu = element(by.id('admin-menu'));
     }
-  }
-
-  async clickOnEntityMenu() {
-    await this.entityMenu.click();
   }
 
   async clickOnAccountMenu() {
@@ -48,8 +44,8 @@ export class NavBarPage {
     await this.settingsMenu.click();
   }
 
-  async clickOnEntity(entityName: string) {
-    await element(by.css('[routerLink="' + entityName + '"]')).click();
+  async clickOnStudyIds() {
+    await element(by.css('[routerLink="study-id"]')).click();
   }
 
   async clickOnAdmin(entityName: string) {
@@ -71,11 +67,6 @@ export class NavBarPage {
     await this.clickOnAccountMenu();
     await this.clickOnSettingsMenu();
     return new SettingsPage();
-  }
-
-  async goToEntity(entityName: string) {
-    await this.clickOnEntityMenu();
-    await this.clickOnEntity(entityName);
   }
 
   async goToSignInPage() {

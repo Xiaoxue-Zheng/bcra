@@ -44,10 +44,6 @@ public class Participant implements Serializable {
     @JoinColumn(unique = true)
     private Procedure procedure;
 
-    @ManyToOne
-    @JsonIgnoreProperties("participants")
-    private CsvFile csvFile;
-
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -122,18 +118,6 @@ public class Participant implements Serializable {
         this.procedure = procedure;
     }
 
-    public CsvFile getCsvFile() {
-        return csvFile;
-    }
-
-    public Participant csvFile(CsvFile csvFile) {
-        this.csvFile = csvFile;
-        return this;
-    }
-
-    public void setCsvFile(CsvFile csvFile) {
-        this.csvFile = csvFile;
-    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override

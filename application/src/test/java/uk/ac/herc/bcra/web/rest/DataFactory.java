@@ -102,7 +102,7 @@ public class DataFactory {
         participant.setIdentifiableData(identifiableData);
         // Add required entity
         Procedure procedure;
-        procedure = ProcedureResourceIT.createEntity(em);
+        procedure = createProcedure(em);
         em.persist(procedure);
         em.flush();
         participant.setProcedure(procedure);
@@ -126,7 +126,7 @@ public class DataFactory {
         participant.setIdentifiableData(identifiableData);
         // Add required entity
         Procedure procedure;
-        procedure = ProcedureResourceIT.createEntity(em);
+        procedure = createProcedure(em);
         em.persist(procedure);
         em.flush();
         participant.setProcedure(procedure);
@@ -161,7 +161,7 @@ public class DataFactory {
         // Add required entity
         Procedure procedure;
         if (TestUtil.findAll(em, Procedure.class).isEmpty()) {
-            procedure = ProcedureResourceIT.createEntity(em);
+            procedure = createProcedure(em);
             em.persist(procedure);
             em.flush();
         } else {
@@ -190,7 +190,7 @@ public class DataFactory {
         participant.setIdentifiableData(identifiableData);
         // Add required entity
         Procedure procedure;
-        procedure = ProcedureResourceIT.createEntity(em);
+        procedure = createProcedure(em);
         em.persist(procedure);
         em.flush();
 
@@ -390,5 +390,62 @@ public class DataFactory {
         }
         answerResponse.setQuestionnaire(questionnaire);
         return answerResponse;
+    }
+
+    /**
+     * Create an updated entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static Procedure createUpdatedProcedure(EntityManager em) {
+        Procedure procedure = new Procedure();
+        // Add required entity
+        AnswerResponse consentResponse = null;
+        AnswerResponse riskAssessmentResponse = null;
+        if (TestUtil.findAll(em, AnswerResponse.class).isEmpty()) {
+            consentResponse = createAnswerResponse(em);
+            em.persist(consentResponse);
+
+            riskAssessmentResponse = createUpdatedAnswerResponse(em);
+            em.persist(riskAssessmentResponse);
+
+            em.flush();
+        } else {
+            for (AnswerResponse ar : TestUtil.findAll(em, AnswerResponse.class)) {
+                if (ar.getQuestionnaire().getType() == QuestionnaireType.CONSENT_FORM) {
+                    consentResponse = ar;
+                } else {
+                    riskAssessmentResponse = ar;
+                }
+            }
+        }
+
+        procedure.setConsentResponse(consentResponse);
+        procedure.setRiskAssessmentResponse(riskAssessmentResponse);
+        return procedure;
+    }
+
+    /**
+     * Create an entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static Procedure createProcedure(EntityManager em) {
+        Procedure procedure = new Procedure();
+        // Add required entity
+        AnswerResponse consentResponse = createAnswerResponse(em, QuestionnaireType.CONSENT_FORM);
+        em.persist(consentResponse);
+        em.flush();
+
+        AnswerResponse riskAssessmentResponse = createAnswerResponse(em, QuestionnaireType.RISK_ASSESSMENT);
+        em.persist(riskAssessmentResponse);
+        em.flush();
+        procedure.setConsentResponse(consentResponse);
+        // Add required entity
+        procedure.setRiskAssessmentResponse(riskAssessmentResponse);
+
+        return procedure;
     }
 }

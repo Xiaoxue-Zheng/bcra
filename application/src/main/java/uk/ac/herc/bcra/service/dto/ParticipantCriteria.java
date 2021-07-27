@@ -34,8 +34,6 @@ public class ParticipantCriteria implements Serializable, Criteria {
 
     private LongFilter procedureId;
 
-    private LongFilter csvFileId;
-
     private StringFilter nhsNumber;
 
     public ParticipantCriteria(){
@@ -49,7 +47,6 @@ public class ParticipantCriteria implements Serializable, Criteria {
         this.nhsNumber = other.nhsNumber == null ? null : other.nhsNumber.copy();
         this.identifiableDataId = other.identifiableDataId == null ? null : other.identifiableDataId.copy();
         this.procedureId = other.procedureId == null ? null : other.procedureId.copy();
-        this.csvFileId = other.csvFileId == null ? null : other.csvFileId.copy();
     }
 
     @Override
@@ -105,14 +102,6 @@ public class ParticipantCriteria implements Serializable, Criteria {
         this.procedureId = procedureId;
     }
 
-    public LongFilter getCsvFileId() {
-        return csvFileId;
-    }
-
-    public void setCsvFileId(LongFilter csvFileId) {
-        this.csvFileId = csvFileId;
-    }
-
     public StringFilter getNhsNumber() {
         return nhsNumber;
     }
@@ -137,7 +126,6 @@ public class ParticipantCriteria implements Serializable, Criteria {
             Objects.equals(userId, that.userId) &&
             Objects.equals(identifiableDataId, that.identifiableDataId) &&
             Objects.equals(procedureId, that.procedureId) &&
-            Objects.equals(csvFileId, that.csvFileId) &&
             Objects.equals(nhsNumber, that.nhsNumber);
     }
 
@@ -150,7 +138,6 @@ public class ParticipantCriteria implements Serializable, Criteria {
         userId,
         identifiableDataId,
         procedureId,
-        csvFileId,
         nhsNumber
         );
     }
@@ -164,7 +151,6 @@ public class ParticipantCriteria implements Serializable, Criteria {
                 (userId != null ? "userId=" + userId + ", " : "") +
                 (identifiableDataId != null ? "identifiableDataId=" + identifiableDataId + ", " : "") +
                 (procedureId != null ? "procedureId=" + procedureId + ", " : "") +
-                (csvFileId != null ? "csvFileId=" + csvFileId + ", " : "") +
                 (nhsNumber != null ? "nhsNumber=" + nhsNumber + ", " : "") +
             "}";
     }

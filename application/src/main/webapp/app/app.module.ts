@@ -15,11 +15,10 @@ import { BcraCoreModule } from 'app/core';
 import { BcraAppRoutingModule } from './app-routing.module';
 import { BcraHomeModule } from './home/home.module';
 import { BcraQuestionnaireModule } from './questionnaire/questionnaire.module';
-import { BcraCsvFileModule } from './csvfile/csvfile.module';
 import { BcraParticipantModule } from './participant/participant.module';
 import { BcraAccountModule } from './account/account.module';
-import { BcraEntityModule } from './entities/entity.module';
 import { BcraTyrerCuzickTestModule } from './tyrercuzicktest/tyrercuzicktest.module';
+import { BcraStudyIdModule } from './study-id/study-id.module';
 
 import moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
@@ -38,12 +37,11 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
     BcraCoreModule,
     BcraHomeModule,
     BcraQuestionnaireModule,
-    BcraCsvFileModule,
     BcraParticipantModule,
     BcraAccountModule,
     BcraTyrerCuzickTestModule,
+    BcraStudyIdModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
-    BcraEntityModule,
     BcraAppRoutingModule
   ],
   declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, FooterComponent],

@@ -17,14 +17,6 @@
                 </a>
             </li>
             <li *jhiHasAnyAuthority="['ROLE_ADMIN','ROLE_MANAGER']" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                <a class="nav-link" routerLink="csvfiles" (click)="collapseNavbar()">
-                    <span>
-                        <fa-icon icon="file-csv" fixedWidth="true"></fa-icon>
-                        <span>Csv Files</span>
-                    </span>
-                </a>
-            </li>
-            <li *jhiHasAnyAuthority="['ROLE_ADMIN','ROLE_MANAGER']" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link" routerLink="participants" (click)="collapseNavbar()">
                     <span>
                         <fa-icon icon="users" fixedWidth="true"></fa-icon>
@@ -48,55 +40,13 @@
                     </span>
                 </a>
             </li>
-            <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
-            <li *jhiHasAnyAuthority="['ROLE_ADMIN']" ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
+            <li *jhiHasAnyAuthority="['ROLE_ADMIN','ROLE_MANAGER']" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link" routerLink="study-id" (click)="collapseNavbar()">
                     <span>
-                        <fa-icon icon="th-list"></fa-icon>
-                        <span>
-                            Entities
-                        </span>
+                        <fa-icon icon="clipboard-list" fixedWidth="true"></fa-icon>
+                        <span>Study IDs</span>
                     </span>
                 </a>
-                <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
-                    <li>
-                        <a class="dropdown-item" routerLink="questionnaire" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
-                            <span>Questionnaire</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="answer-response" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
-                            <span>Answer Response</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="csv-file" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
-                            <span>Csv File</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="participant" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
-                            <span>Participant</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="identifiable-data" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
-                            <span>Identifiable Data</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="study-id" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
-                            <span>Study IDs</span>
-                        </a>
-                    </li>
-                    <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
-                </ul>
             </li>
             <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">

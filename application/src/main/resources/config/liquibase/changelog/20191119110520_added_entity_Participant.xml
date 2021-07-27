@@ -29,9 +29,6 @@
             </column>            <column name="procedure_id" type="bigint">
                 <constraints unique="true" nullable="false" uniqueConstraintName="ux_participant_procedure_id" />
             </column>
-            <column name="csv_file_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
 
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>

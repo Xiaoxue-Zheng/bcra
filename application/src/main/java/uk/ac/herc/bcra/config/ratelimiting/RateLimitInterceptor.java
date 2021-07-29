@@ -13,8 +13,8 @@ public class RateLimitInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     private RateLimiterService limiter;
     
-    private final int DEFAULT_RATE_LIMIT = 4; // 4 times per second
-    private final int SECURE_ENDPOINT_RATE_LIMIT = 1; //1 time per second
+    private final int DEFAULT_RATE_LIMIT = 20; // 20 times per second
+    private final int SECURE_ENDPOINT_RATE_LIMIT = 10; //10 time per second
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

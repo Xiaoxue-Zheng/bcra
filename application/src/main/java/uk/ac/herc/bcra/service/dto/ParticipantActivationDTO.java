@@ -1,9 +1,10 @@
 package uk.ac.herc.bcra.service.dto;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 public class ParticipantActivationDTO {
-    
+
     @NotNull
     private String emailAddress;
 
@@ -16,6 +17,8 @@ public class ParticipantActivationDTO {
     @NotNull
     private String studyCode;
 
+    @NotNull
+    private LocalDate dateOfBirth;
 
     public ParticipantActivationDTO() {
         // Empty constructor needed for Jackson.
@@ -37,7 +40,7 @@ public class ParticipantActivationDTO {
         this.password = password;
     }
 
-    public AnswerResponseDTO getConsentRepsonse() {
+    public AnswerResponseDTO getConsentResponse() {
         return consentResponse;
     }
 
@@ -51,6 +54,14 @@ public class ParticipantActivationDTO {
 
     public void setStudyCode(String studyCode) {
         this.studyCode = studyCode;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     @Override

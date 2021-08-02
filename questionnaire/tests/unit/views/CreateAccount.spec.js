@@ -139,7 +139,7 @@ describe('CreateAccount.vue', () => {
         it('should navigate the user to participant-details on successful login', async (done) => {
             dispatchResult = 'SUCCESS'
             await createAccount.vm.autoLogin()
-            expect(createAccount.vm.$router.push).toHaveBeenCalledWith('/participant-details')
+            expect(createAccount.vm.$router.push).toHaveBeenCalledWith('/questionnaire/familyhistorycontext')
             done()
         })
     })

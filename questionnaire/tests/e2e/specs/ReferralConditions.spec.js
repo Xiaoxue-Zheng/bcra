@@ -13,7 +13,7 @@ describe('Referral Conditions Tests', () => {
     cy.completeRegisterPage(UNREGISTERED_STUDY_CODE)
     cy.completeConsentPage()
     cy.completeCreateAccountPage(UNREGISTERED_EMAIL_ADDRESS, STRONG_PASSWORD)
-    cy.completeParticipantDetailsPage()
+    //cy.completeParticipantDetailsPage()
 
     cy.saveLocalStorage()
   })
@@ -43,7 +43,7 @@ describe('Referral Conditions Tests', () => {
 
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
     cy.checkNotReferred()
-    
+
     cy.backAndAssertSuccessfulNavToPath(path)
     FAMILY_BREAST_AFFECTED_ITEMS = ['FAMILY_BREAST_AFFECTED_AUNT', 'FAMILY_BREAST_AFFECTED_NIECE']
     cy.setCheckboxAnswerItems('FAMILY_BREAST_AFFECTED', FAMILY_BREAST_AFFECTED_ITEMS)

@@ -8,6 +8,7 @@ import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDate;
 
 /**
  * A Participant.
@@ -30,8 +31,8 @@ public class Participant implements Serializable {
     @Column(name = "last_login_datetime")
     private Instant lastLoginDatetime;
 
-    @OneToOne(optional = false)    @NotNull
-
+    @OneToOne(optional = false)
+    @NotNull
     @JoinColumn(unique = true)
     private User user;
 
@@ -39,10 +40,14 @@ public class Participant implements Serializable {
     @JoinColumn(unique = true)
     private IdentifiableData identifiableData;
 
-    @OneToOne(optional = false)    @NotNull
-
+    @OneToOne(optional = false)
+    @NotNull
     @JoinColumn(unique = true)
     private Procedure procedure;
+
+    @NotNull
+    @Column(name = "date_of_birth")
+    private LocalDate dateOfBirth;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -118,6 +123,19 @@ public class Participant implements Serializable {
         this.procedure = procedure;
     }
 
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public Participant dateOfBirth(LocalDate dateOfBirth){
+        this.dateOfBirth = dateOfBirth;
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -142,6 +160,7 @@ public class Participant implements Serializable {
             "id=" + getId() +
             ", registerDatetime='" + getRegisterDatetime() + "'" +
             ", lastLoginDatetime='" + getLastLoginDatetime() + "'" +
+            ", dateOfBirth='" + getDateOfBirth() + "'" +
             "}";
     }
 }

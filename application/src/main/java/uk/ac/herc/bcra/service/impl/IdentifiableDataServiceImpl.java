@@ -89,19 +89,10 @@ public class IdentifiableDataServiceImpl implements IdentifiableDataService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<IdentifiableData> findOne(String emailAddress) {
         IdentifiableData exampleIdentifiableData = new IdentifiableData();
         exampleIdentifiableData.setEmail(emailAddress);
-
-        Example<IdentifiableData> example = Example.of(exampleIdentifiableData);
-        return identifiableDataRepository.findOne(example);
-    }
-
-    @Override
-    public Optional<IdentifiableData> findOne(String nhsNumber, LocalDate dateOfBirth) {
-        IdentifiableData exampleIdentifiableData = new IdentifiableData();
-        exampleIdentifiableData.setNhsNumber(nhsNumber);
-        exampleIdentifiableData.setDateOfBirth(dateOfBirth);
 
         Example<IdentifiableData> example = Example.of(exampleIdentifiableData);
         return identifiableDataRepository.findOne(example);

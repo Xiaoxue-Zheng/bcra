@@ -25,7 +25,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
-import javax.management.relation.Role;
 import javax.persistence.EntityManager;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -205,9 +204,7 @@ public class QuestionnaireResourceIT {
         String login = "unauthorizedGetRiskAssessmentQuestionnaire";
         Participant participant;
         if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = DataFactory.createParticipant(em, login);
-            em.persist(participant);
-            em.flush();
+            participant = DataFactory.createParticipantNoIdentifiableData(em, login);
         } else {
             participant = TestUtil.findAll(em, Participant.class).get(0);
         }

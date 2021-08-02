@@ -55,7 +55,8 @@ describe('SecurityService', () => {
         it('should return "UNAUTHORIZED" on an unsuccessful login', async (done) => {
             ApiService.postFormData = postFormDataUnauthorized
             service.login('test', 'test1234').then((result) => {
-                expect(result).toBe("UNAUTHORIZED")
+                let res = {"status": 401}
+                expect(result).toEqual(res)
                 done()
             })
         })

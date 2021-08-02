@@ -22,7 +22,7 @@ describe('SignIn.vue', () => {
 
       expect(typeof signin.vm.clearErrors).toBe('function')
       signin.vm.clearErrors()
-      
+
       expect(signin.vm.displayFailureMessage).toBe(false)
       expect(signin.vm.displayErrorMessage).toBe(false)
     })
@@ -31,7 +31,8 @@ describe('SignIn.vue', () => {
       signin.vm.clearErrors()
 
       expect(typeof signin.vm.setErrorMessage).toBe('function')
-      signin.vm.setErrorMessage('UNAUTHORIZED')
+      let res = {"data":{"status": 401, "message":"UNAUTHORIZED"}}
+      signin.vm.setErrorMessage(res)
 
       expect(signin.vm.displayFailureMessage).toBe(true)
       expect(signin.vm.displayErrorMessage).toBe(false)

@@ -65,6 +65,7 @@ export default {
           'emailAddress': this.emailAddress,
           'password': this.password,
           'studyCode': SignUpHelperService.getStudyCode(),
+          'dateOfBirth': SignUpHelperService.getDateOfBirth(),
           'consentResponse': SignUpHelperService.getConsentResponse()
         }
 
@@ -94,7 +95,7 @@ export default {
       const loginOutcome = await this.$store.dispatch('security/login', parameters)
       if (loginOutcome === 'SUCCESS') {
         SignUpHelperService.clearSignUpInfo()
-        this.$router.push('/participant-details')
+        this.$router.push('/questionnaire/familyhistorycontext')
       } else {
         this.displayErrorMessage = true
       }

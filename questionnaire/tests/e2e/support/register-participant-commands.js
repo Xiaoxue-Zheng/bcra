@@ -178,8 +178,8 @@ function createParticipantFromUserAndProcedure(user, procedure) {
         return cy.task('query', {
             sql: `
                 INSERT INTO participant
-                (id, user_id, procedure_id)
-                VALUES($1, $2, $3)
+                (id, user_id, procedure_id,date_of_birth)
+                VALUES($1, $2, $3, '01/01/1990')
             `,
             values: [next_id, user.id, procedure.id]
         }).then(() => {
@@ -220,10 +220,10 @@ function getNextIdForTable(tableName) {
     })
 }
 
-Cypress.Commands.add('updateParticipantDetails', (studyCode, nhsNumber) => {
+Cypress.Commands.add('updateParticipantDetails', (studyCode) => {
     return getUserByStudyCode(studyCode).then((user) => {
         return getParticipantByLogin(studyCode).then((participant) => {
-            return createIdentifiableDataFromUserAndNhsNumber(user, nhsNumber).then((identifiableData) => {
+            return createIdentifiableDataFromUser(user).then((identifiableData) => {
                 return assignIdentifiableDataToParticipant(identifiableData, participant)
             })
         })
@@ -242,15 +242,15 @@ function getUserByStudyCode(studyCode) {
     })
 }
 
-function createIdentifiableDataFromUserAndNhsNumber(user, nhsNumber) {
+function createIdentifiableDataFromUser(user) {
     return getNextIdForTable('identifiable_data').then((next_id) => {
         return cy.task('query', {
             sql: `
                 INSERT INTO identifiable_data
-                (id, nhs_number, date_of_birth, email, firstname, surname, address_1, postcode, practice_name)
-                VALUES ($1, $2, '01/01/1990', $3, 'John', 'Doe', '123 Fake Street', 'AA1 1AA', 'Generic GP practice')
+                (id, date_of_birth, email, firstname, surname, address_1, postcode)
+                VALUES ($1, '01/01/1990', $2, 'John', 'Doe', '123 Fake Street', 'AA1 1AA')
             `,
-            values: [next_id, nhsNumber, user.email]
+            values: [next_id, user.email]
         }).then(() => {
             return cy.task('query', {
                 sql: `

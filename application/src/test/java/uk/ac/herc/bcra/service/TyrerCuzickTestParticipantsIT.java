@@ -38,7 +38,7 @@ public class TyrerCuzickTestParticipantsIT {
 
     @Autowired
     private QuestionnaireUtil questionnaireUtil;
-    
+
     @Autowired
     private TyrerCuzickService tyrerCuzickService;
 
@@ -51,7 +51,7 @@ public class TyrerCuzickTestParticipantsIT {
     }
 
     private void createTestParticipants() {
-        /* 
+        /*
             The following participants reflect test participant information that
             was provided by the clinical team working on the HRYWS project.
             The participant information provided can be found in the following
@@ -59,21 +59,21 @@ public class TyrerCuzickTestParticipantsIT {
                 <PROJECT_ROOT>/data/test-participant-information/
         */
         testParticipants = new ArrayList<Participant>();
-        testParticipants.add(createTestParticipant("TST_1", "1111111111", 35));
-        testParticipants.add(createTestParticipant("TST_2", "2222222222", 35));
-        testParticipants.add(createTestParticipant("TST_3", "3333333333", 30));
-        testParticipants.add(createTestParticipant("TST_4", "4444444444", 33));
-        testParticipants.add(createTestParticipant("TST_5", "5555555555", 36));
-        testParticipants.add(createTestParticipant("TST_6", "6666666666", 32));
-        testParticipants.add(createTestParticipant("TST_7", "7777777777", 39));
-        testParticipants.add(createTestParticipant("TST_8", "8888888888", 39));
-        testParticipants.add(createTestParticipant("TST_9", "9999999999", 35));
-        testParticipants.add(createTestParticipant("TST_10", "1010101010", 39));
+        testParticipants.add(createTestParticipant("TST_1", 35));
+        testParticipants.add(createTestParticipant("TST_2", 35));
+        testParticipants.add(createTestParticipant("TST_3", 30));
+        testParticipants.add(createTestParticipant("TST_4", 33));
+        testParticipants.add(createTestParticipant("TST_5", 36));
+        testParticipants.add(createTestParticipant("TST_6", 32));
+        testParticipants.add(createTestParticipant("TST_7", 39));
+        testParticipants.add(createTestParticipant("TST_8", 39));
+        testParticipants.add(createTestParticipant("TST_9", 35));
+        testParticipants.add(createTestParticipant("TST_10", 39));
     }
 
-    private Participant createTestParticipant(String identifier, String nhsNumber, int age) {
+    private Participant createTestParticipant(String identifier, int age) {
         LocalDate dateOfBirth = LocalDate.now().minusYears(age);
-        return studyUtil.createParticipant(em, identifier, nhsNumber, dateOfBirth);
+        return studyUtil.createParticipant(em, identifier, dateOfBirth);
     }
 
     private void answerParticipantQuestionnaires() {
@@ -81,7 +81,7 @@ public class TyrerCuzickTestParticipantsIT {
         AnswerResponse rar1 = tst1.getProcedure().getRiskAssessmentResponse();
         questionnaireUtil.selectFamilyBreastAffected(em, rar1, QuestionnaireUtil.AUNT, true, 55);
         questionnaireUtil.selectFamilyMembersAffected(em, rar1, QuestionnaireUtil.AUNT, true);
-        
+
         questionnaireUtil.setHeightAndWeight(em, rar1, 170, 60);
         questionnaireUtil.setAgeOfFirstPeriod(em, rar1, 12);
         questionnaireUtil.setThirdTrimesterPregnancies(em, rar1, 0, 0);
@@ -91,7 +91,7 @@ public class TyrerCuzickTestParticipantsIT {
 
         Participant tst2 = testParticipants.get(1);
         AnswerResponse rar2 = tst2.getProcedure().getRiskAssessmentResponse();
-        
+
         questionnaireUtil.setHeightAndWeight(em, rar2, 160, 60);
         questionnaireUtil.setAgeOfFirstPeriod(em, rar2, 12);
         questionnaireUtil.setThirdTrimesterPregnancies(em, rar2, 1, 33);
@@ -103,7 +103,7 @@ public class TyrerCuzickTestParticipantsIT {
         AnswerResponse rar3 = tst3.getProcedure().getRiskAssessmentResponse();
         questionnaireUtil.selectFamilyBreastAffected(em, rar3, QuestionnaireUtil.GRANDMOTHER, true, 50);
         questionnaireUtil.selectFamilyMembersAffected(em, rar3, QuestionnaireUtil.GRANDMOTHER, true);
-        
+
         questionnaireUtil.setHeightAndWeight(em, rar3, 150, 60);
         questionnaireUtil.setAgeOfFirstPeriod(em, rar3, 11);
         questionnaireUtil.setThirdTrimesterPregnancies(em, rar3, 1, 23);
@@ -115,7 +115,7 @@ public class TyrerCuzickTestParticipantsIT {
         AnswerResponse rar4 = tst4.getProcedure().getRiskAssessmentResponse();
         questionnaireUtil.selectFamilyBreastAffected(em, rar4, QuestionnaireUtil.GRANDMOTHER, true, 50);
         questionnaireUtil.selectFamilyMembersAffected(em, rar4, QuestionnaireUtil.GRANDMOTHER, true);
-        
+
         questionnaireUtil.setHeightAndWeight(em, rar4, 160, 60);
         questionnaireUtil.setAgeOfFirstPeriod(em, rar4, 12);
         questionnaireUtil.setThirdTrimesterPregnancies(em, rar4, 0, 0);
@@ -128,7 +128,7 @@ public class TyrerCuzickTestParticipantsIT {
         questionnaireUtil.selectFamilyBreastAffected(em, rar5, QuestionnaireUtil.MOTHER, true, 40);
         questionnaireUtil.selectFamilyBreastAffected(em, rar5, QuestionnaireUtil.GRANDMOTHER, true, 50);
         questionnaireUtil.selectFamilyMembersAffected(em, rar5, QuestionnaireUtil.GRANDMOTHER, true);
-        
+
         questionnaireUtil.setHeightAndWeight(em, rar5, 160, 60);
         questionnaireUtil.setAgeOfFirstPeriod(em, rar5, 12);
         questionnaireUtil.setThirdTrimesterPregnancies(em, rar5, 1, 30);
@@ -138,7 +138,7 @@ public class TyrerCuzickTestParticipantsIT {
 
         Participant tst6 = testParticipants.get(5);
         AnswerResponse rar6 = tst6.getProcedure().getRiskAssessmentResponse();
-        
+
         questionnaireUtil.setHeightAndWeight(em, rar6, 160, 65);
         questionnaireUtil.setAgeOfFirstPeriod(em, rar6, 12);
         questionnaireUtil.setThirdTrimesterPregnancies(em, rar6, 0, 0);
@@ -150,7 +150,7 @@ public class TyrerCuzickTestParticipantsIT {
         AnswerResponse rar7 = tst7.getProcedure().getRiskAssessmentResponse();
         questionnaireUtil.selectFamilyBreastAffected(em, rar7, QuestionnaireUtil.AUNT, true, 40);
         questionnaireUtil.selectFamilyMembersAffected(em, rar7, QuestionnaireUtil.AUNT, true);
-        
+
         questionnaireUtil.setHeightAndWeight(em, rar7, 160, 65);
         questionnaireUtil.setAgeOfFirstPeriod(em, rar7, 12);
         questionnaireUtil.setThirdTrimesterPregnancies(em, rar7, 1, 18);
@@ -160,7 +160,7 @@ public class TyrerCuzickTestParticipantsIT {
 
         Participant tst8 = testParticipants.get(7);
         AnswerResponse rar8 = tst8.getProcedure().getRiskAssessmentResponse();
-        
+
         questionnaireUtil.setHeightAndWeight(em, rar8, 160, 65);
         questionnaireUtil.setAgeOfFirstPeriod(em, rar8, 15);
         questionnaireUtil.setThirdTrimesterPregnancies(em, rar8, 1, 25);
@@ -172,7 +172,7 @@ public class TyrerCuzickTestParticipantsIT {
         AnswerResponse rar9 = tst9.getProcedure().getRiskAssessmentResponse();
         questionnaireUtil.selectFamilyBreastAffected(em, rar9, QuestionnaireUtil.AUNT, true, 0);
         questionnaireUtil.selectFamilyMembersAffected(em, rar9, QuestionnaireUtil.AUNT, false);
-        
+
         questionnaireUtil.setHeightAndWeight(em, rar9, 170, 60);
         questionnaireUtil.setAgeOfFirstPeriod(em, rar9, 13);
         questionnaireUtil.setThirdTrimesterPregnancies(em, rar9, 0, 0);
@@ -184,7 +184,7 @@ public class TyrerCuzickTestParticipantsIT {
         AnswerResponse rar10 = tst10.getProcedure().getRiskAssessmentResponse();
         questionnaireUtil.selectFamilyOvarianAffected(em, rar10, QuestionnaireUtil.GRANDMOTHER, true, 50);
         questionnaireUtil.selectFamilyMembersAffected(em, rar10, QuestionnaireUtil.GRANDMOTHER, true);
-        
+
         questionnaireUtil.setHeightAndWeight(em, rar10, 170, 60);
         questionnaireUtil.setAgeOfFirstPeriod(em, rar10, 12);
         questionnaireUtil.setThirdTrimesterPregnancies(em, rar10, 1, 30);
@@ -204,7 +204,7 @@ public class TyrerCuzickTestParticipantsIT {
         if (OSValidator.isUnix()) {
             TyrerCuzickService.TC_EXECUTABLE_COMMAND = TyrerCuzickService.TC_EXECUTABLE_COMMAND.replace("/home/tyrercuzick", testDir);
         }
-        
+
         TyrerCuzickService.TC_INPUT_FILE_LOCATION = testDir + "/input/";
         TyrerCuzickService.TC_OUTPUT_FILE_LOCATION = testDir + "/output/";
     }
@@ -213,13 +213,13 @@ public class TyrerCuzickTestParticipantsIT {
     @Transactional
     public void assertThatEachTestParticipantProducesCorrectAlgorithmOutput() {
         Mapper mapper = new Mapper();
-        
+
         for (Participant participant : testParticipants) {
             String identifier = participant.getUser().getLogin();
 
             LocalDate dateOfBirth = participant.getIdentifiableData().getDateOfBirth();
             AnswerResponse response = participant.getProcedure().getRiskAssessmentResponse();
-            
+
             if (!identifier.equals("TST_5")) {
                 String expectedOutput = getExpectedAlgorithmOutputForParticipant(identifier);
                 String actualOutput = mapper.map(identifier, dateOfBirth, response);
@@ -242,7 +242,7 @@ public class TyrerCuzickTestParticipantsIT {
     public void assertThatEachTestParticipantProducesCorrectTyrerCuzickOutput() {
         tyrerCuzickService.writeValidatedAnswerResponsesToFile();
         tyrerCuzickService.runTyrerCuzickExecutable();
-        
+
         for (Participant participant : testParticipants) {
             String identifier = participant.getUser().getLogin();
             if (identifier.equals("TST_4") || identifier.equals("TST_5")) {
@@ -266,9 +266,9 @@ public class TyrerCuzickTestParticipantsIT {
 
     private String getTyrerCuzickOutputForParticipant(String identifier) {
         String testDir = TyrerCuzickTestFilesUtil.getTestDirectory();
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
-        LocalDateTime now = LocalDateTime.now();  
-        System.out.println(dtf.format(now));  
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println(dtf.format(now));
 
         return readFile(testDir + "/output/" + identifier + "-" + dtf.format(now) + ".txt");
     }

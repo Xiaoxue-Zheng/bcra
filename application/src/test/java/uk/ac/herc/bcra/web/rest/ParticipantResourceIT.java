@@ -1,16 +1,18 @@
 package uk.ac.herc.bcra.web.rest;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.web.context.WebApplicationContext;
 import uk.ac.herc.bcra.BcraApp;
-import uk.ac.herc.bcra.domain.Participant;
-import uk.ac.herc.bcra.domain.User;
-import uk.ac.herc.bcra.domain.IdentifiableData;
-import uk.ac.herc.bcra.domain.Procedure;
+import uk.ac.herc.bcra.domain.*;
+import uk.ac.herc.bcra.domain.enumeration.ParticipantContactWay;
 import uk.ac.herc.bcra.repository.ParticipantRepository;
 import uk.ac.herc.bcra.security.RoleManager;
+import uk.ac.herc.bcra.service.IdentifiableDataService;
 import uk.ac.herc.bcra.service.ParticipantService;
+import uk.ac.herc.bcra.service.dto.ParticipantActivationDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantDTO;
+import uk.ac.herc.bcra.service.dto.ParticipantDetailsDTO;
 import uk.ac.herc.bcra.service.mapper.ParticipantMapper;
 import uk.ac.herc.bcra.web.rest.errors.ExceptionTranslator;
 import uk.ac.herc.bcra.service.ParticipantQueryService;
@@ -30,7 +32,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
+import java.security.Principal;
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -60,6 +66,9 @@ public class ParticipantResourceIT {
 
     @Autowired
     private StudyIdService studyIdService;
+
+    @Autowired
+    private IdentifiableDataService identifiableDataService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -393,5 +402,67 @@ public class ParticipantResourceIT {
     public void testEntityFromId() {
         assertThat(participantMapper.fromId(42L).getId()).isEqualTo(42);
         assertThat(participantMapper.fromId(null)).isNull();
+    }
+
+    @Test
+    @Transactional
+    public void testActivation() throws Exception {
+        String studyCode = "testActivation-1"+ RandomStringUtils.randomAlphabetic(5);
+        String emailAddress = "participant@localhost.com";
+        LocalDate dateOfBirth = LocalDate.of(1990, 9, 15);
+        StudyId studyId = DataFactory.createStudyId(em, studyCode);
+        ParticipantActivationDTO request = new ParticipantActivationDTO();
+        request.setDateOfBirth(dateOfBirth);
+        request.setEmailAddress(emailAddress);
+        request.setPassword(RandomStringUtils.randomAlphabetic(6));
+        request.setStudyCode(studyCode);
+        request.setConsentResponse(studyIdService.getConsentResponseFromStudyCode(studyCode));
+        restParticipantMockMvc.perform(post("/api/participants/activate")
+            .content(TestUtil.convertObjectToJsonBytes(request))
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isCreated());
+        Optional<Participant> participantOptional = participantRepository.findOneByUserLogin(studyCode);
+        assertThat(participantOptional.isPresent()).isTrue();
+        Participant participant = participantOptional.get();
+        assertThat(participant.getDateOfBirth()).isEqualTo(dateOfBirth);
+        assertThat(participant.getUser()).isNotNull();
+        User user = participant.getUser();
+        assertThat(user.getEmail()).isEqualTo(emailAddress);
+        assertThat(user.getLogin()).isEqualTo(studyCode);
+        assertThat(participant.getProcedure()).isNotNull();
+        assertThat(participant.getIdentifiableData()).isNull();
+    }
+
+    @Test
+    @Transactional
+    public void testUpdateParticipantDetail() throws Exception {
+        String login = "testUpdateParticipantDetail-1"+ RandomStringUtils.randomAlphabetic(5);
+        Participant participant = DataFactory.createParticipantNoIdentifiableData(em, login);
+        ParticipantDetailsDTO participantDetailsDTO = new ParticipantDetailsDTO();
+        participantDetailsDTO.setAddressLine1("test");
+        participantDetailsDTO.setForename("test");
+        participantDetailsDTO.setHomePhoneNumber("11111111111");
+        participantDetailsDTO.setMobilePhoneNumber("11111111111");
+        participantDetailsDTO.setSurname("test");
+        participantDetailsDTO.setPostCode("M156QQ");
+        participantDetailsDTO.setPreferredContactWays(Arrays.asList(ParticipantContactWay.SMS, ParticipantContactWay.CALL));
+        restParticipantMockMvc.perform(post("/api/participants/details")
+            .principal(new Principal() {
+                @Override
+                public String getName() {
+                    return participant.getUser().getLogin();
+                }
+            })
+            .content(TestUtil.convertObjectToJsonBytes(participantDetailsDTO))
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk());
+        //testUpdateParticipantDetail-1IDmUz@localhost
+        //testUpdateParticipantDetail-1IDmUz@localhost
+        Optional<IdentifiableData> identifiableDataOptional = identifiableDataService.findOne(participant.getUser().getEmail());
+        assertThat(identifiableDataOptional.isPresent()).isTrue();
+        IdentifiableData identifiableData = identifiableDataOptional.get();
+        assertThat(identifiableData.getPreferContactWay()).isEqualTo(6);
     }
 }

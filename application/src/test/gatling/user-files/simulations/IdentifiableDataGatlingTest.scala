@@ -76,7 +76,6 @@ class IdentifiableDataGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "nhsNumber":"SAMPLE_TEXT"
                 , "dateOfBirth":"2020-01-01T00:00:00.000Z"
                 , "firstname":"SAMPLE_TEXT"
                 , "surname":"SAMPLE_TEXT"
@@ -87,7 +86,6 @@ class IdentifiableDataGatlingTest extends Simulation {
                 , "address4":"SAMPLE_TEXT"
                 , "address5":"SAMPLE_TEXT"
                 , "postcode":"SAMPLE_TEXT"
-                , "practiceName":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_identifiableData_url"))).exitHereIfFailed

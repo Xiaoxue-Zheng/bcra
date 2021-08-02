@@ -10,6 +10,14 @@ export const SignUpHelperService = {
     return StorageService.get('STUDY_CODE')
   },
 
+  setDateOfBirth (dateOfBirth) {
+    StorageService.set('DATE_OF_BIRTH', dateOfBirth)
+  },
+
+  getDateOfBirth () {
+    return StorageService.get('DATE_OF_BIRTH')
+  },
+
   saveConsentResponse (consentResponse) {
     StorageService.set('CONSENT_RESPONSE', consentResponse)
   },
@@ -20,6 +28,7 @@ export const SignUpHelperService = {
 
   clearSignUpInfo () {
     StorageService.remove('STUDY_CODE')
+    StorageService.remove('DATE_OF_BIRTH')
     StorageService.remove('CONSENT_RESPONSE')
   },
 

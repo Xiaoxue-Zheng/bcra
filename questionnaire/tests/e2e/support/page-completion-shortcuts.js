@@ -3,6 +3,7 @@ Cypress.Commands.add('completeRegisterPage', (studyId) => {
     cy.contains('h1', 'Register')
 
     cy.get('input').first().clear().type(studyId)
+    cy.get('input').eq(1).clear().type('1990-01-01')
     cy.get('button').contains('Next').click()
 })
 
@@ -35,7 +36,7 @@ Cypress.Commands.add('completeCreateAccountPage', (email, password) => {
     getPasswordField().type(password)
     getPasswordConfirmationField().type(password)
     cy.get('button').contains('Create account').click()
-    cy.url().should('include', 'participant-details')
+    cy.url().should('include', '/questionnaire/familyhistorycontext')
 })
 
 function getEmailField() {
@@ -55,12 +56,9 @@ Cypress.Commands.add('completeParticipantDetailsPage', () => {
     enterSurname('TEST')
     enterAddress(['TEST','TEST','TEST','TEST','TEST'])
     enterPostCode('AA1 1AA')
-    enterDateOfBirth('1990-01-01')
-    enterNhsNumber('1111111111')
-    enterGPName('TEST')
 
     cy.get('.pure-button').contains('Save details').click()
-    cy.url().should('include', 'questionnaire/familyhistorycontext')
+    cy.url().should('include', 'end')
 })
 
 function enterFirstName(firstname) {
@@ -87,18 +85,6 @@ function enterHomePhoneNumber(phoneNumber) {
 
 function enterMobilePhoneNumber(phoneNumber) {
   return cy.get('input').eq(9).type(phoneNumber)
-}
-
-function enterDateOfBirth(dateOfBirth) {
-    return cy.get('input').eq(10).type(dateOfBirth)
-}
-
-function enterNhsNumber(nhsNumber) {
-    return cy.get('input').eq(11).type(nhsNumber)
-}
-
-function enterGPName(gpName) {
-    return cy.get('input').eq(12).type(gpName)
 }
 
 Cypress.Commands.add('completeRiskAssessment', () => {

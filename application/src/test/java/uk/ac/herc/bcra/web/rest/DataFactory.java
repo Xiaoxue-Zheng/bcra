@@ -2,6 +2,7 @@ package uk.ac.herc.bcra.web.rest;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import uk.ac.herc.bcra.domain.*;
+import uk.ac.herc.bcra.domain.enumeration.ParticipantContactWay;
 import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 import uk.ac.herc.bcra.domain.enumeration.ResponseState;
 
@@ -10,7 +11,9 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 public class DataFactory {
@@ -50,8 +53,6 @@ public class DataFactory {
     static final String UPDATED_POSTCODE = "BBBBBBBB";
     static final String DEFAULT_PRACTICE_NAME = "AAAAAAAAAA";
     static final String UPDATED_PRACTICE_NAME = "BBBBBBBBBB";
-    private static final String DEFAULT_NHS_NUMBER = "AAAAAAAAAA";
-    private static final String UPDATED_NHS_NUMBER = "BBBBBBBBBB";
     private static final LocalDate DEFAULT_DATE_OF_BIRTH = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_DATE_OF_BIRTH = LocalDate.now(ZoneId.systemDefault());
 
@@ -69,16 +70,6 @@ public class DataFactory {
     static final Integer UPDATED_ANSWER_VALUE = 54321;
     private static int numberOfStudies = 0;
 
-    public static Set<Authority> createAuthorities(String... authorityNames){
-        Set<Authority> result = new HashSet<>();
-        for(String name: authorityNames){
-            Authority authority = new Authority();
-            authority.setName(name);
-            result.add(authority);
-        }
-        return result;
-    }
-
     /**
      * Create an entity for this test.
      *
@@ -87,6 +78,7 @@ public class DataFactory {
      */
     public static Participant createParticipant(EntityManager em) {
         Participant participant = new Participant()
+            .dateOfBirth(LocalDate.of(1990, 9,15))
             .registerDatetime(DEFAULT_REGISTER_DATETIME)
             .lastLoginDatetime(DEFAULT_LAST_LOGIN_DATETIME);
         // Add required entity
@@ -109,27 +101,22 @@ public class DataFactory {
         return participant;
     }
 
-    public static Participant createParticipant(EntityManager em, String login) {
+    public static Participant createParticipantNoIdentifiableData(EntityManager em, String login) {
         Participant participant = new Participant()
+            .dateOfBirth(LocalDate.of(1990, 9,15))
             .registerDatetime(DEFAULT_REGISTER_DATETIME)
             .lastLoginDatetime(DEFAULT_LAST_LOGIN_DATETIME);
         // Add required entity
         User user = buildUser(login);
         em.persist(user);
-        em.flush();
         participant.setUser(user);
-        // Add required entity
-        IdentifiableData identifiableData;
-        identifiableData = buildIdentifiableData();
-        em.persist(identifiableData);
-        em.flush();
-        participant.setIdentifiableData(identifiableData);
         // Add required entity
         Procedure procedure;
         procedure = createProcedure(em);
         em.persist(procedure);
-        em.flush();
         participant.setProcedure(procedure);
+        em.persist(participant);
+        em.flush();
         return participant;
     }
 
@@ -141,6 +128,7 @@ public class DataFactory {
      */
     public static Participant createUpdatedParticipant(EntityManager em) {
         Participant participant = new Participant()
+            .dateOfBirth(LocalDate.of(1990, 9,15))
             .registerDatetime(UPDATED_REGISTER_DATETIME)
             .lastLoginDatetime(UPDATED_LAST_LOGIN_DATETIME);
         // Add required entity
@@ -173,6 +161,7 @@ public class DataFactory {
 
     public static Participant createUpdatedParticipant(EntityManager em, String login) {
         Participant participant = new Participant()
+            .dateOfBirth(LocalDate.of(1990, 9,15))
             .registerDatetime(UPDATED_REGISTER_DATETIME)
             .lastLoginDatetime(UPDATED_LAST_LOGIN_DATETIME);
         // Add required entity
@@ -206,7 +195,7 @@ public class DataFactory {
      */
     public static User buildUser() {
         User user = new User();
-        user.setLogin(DEFAULT_LOGIN + RandomStringUtils.randomAlphabetic(5));
+        user.setLogin((DEFAULT_LOGIN + RandomStringUtils.randomAlphabetic(5)).toLowerCase(Locale.ROOT));
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
         user.setEmail(RandomStringUtils.randomAlphabetic(5) + DEFAULT_EMAIL);
@@ -244,7 +233,6 @@ public class DataFactory {
      */
     public static IdentifiableData buildIdentifiableData() {
         IdentifiableData identifiableData = new IdentifiableData()
-            .nhsNumber(DEFAULT_NHS_NUMBER)
             .dateOfBirth(DEFAULT_DATE_OF_BIRTH)
             .firstname(DEFAULT_IDENTIFIABLE_FIRSTNAME)
             .surname(DEFAULT_IDENTIFIABLE_SURNAME)
@@ -255,7 +243,8 @@ public class DataFactory {
             .address4(DEFAULT_ADDRESS_4)
             .address5(DEFAULT_ADDRESS_5)
             .postcode(DEFAULT_POSTCODE)
-            .practiceName(DEFAULT_PRACTICE_NAME);
+            .preferContactWay(ParticipantContactWay.calculateCodes(Arrays.asList(ParticipantContactWay.SMS)));
+
         return identifiableData;
     }
 
@@ -267,7 +256,6 @@ public class DataFactory {
      */
     public static IdentifiableData buildUpdatedIdentifiableData() {
         IdentifiableData identifiableData = new IdentifiableData()
-            .nhsNumber(UPDATED_NHS_NUMBER)
             .dateOfBirth(UPDATED_DATE_OF_BIRTH)
             .firstname(UPDATED_IDENTIFIABLE_FIRSTNAME)
             .surname(UPDATED_IDENTIFIABLE_SURNAME)
@@ -278,7 +266,7 @@ public class DataFactory {
             .address4(UPDATED_ADDRESS_4)
             .address5(UPDATED_ADDRESS_5)
             .postcode(UPDATED_POSTCODE)
-            .practiceName(UPDATED_PRACTICE_NAME);
+            .preferContactWay(ParticipantContactWay.calculateCodes(Arrays.asList(ParticipantContactWay.SMS)));
         return identifiableData;
     }
 
@@ -302,6 +290,29 @@ public class DataFactory {
 
         em.persist(studyId);
 
+        return studyId;
+    }
+
+    /**
+     * Create an entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static StudyId createStudyId(EntityManager em, String studyCode) {
+        StudyId studyId = new StudyId()
+            .code(studyCode);
+
+        numberOfStudies += 1;
+
+        AnswerResponse consentResponse = createAnswerResponse(em, QuestionnaireType.CONSENT_FORM);
+        AnswerResponse riskAssessmentResponse = createAnswerResponse(em, QuestionnaireType.RISK_ASSESSMENT);
+
+        studyId.setConsentResponse(consentResponse);
+        studyId.setRiskAssessmentResponse(riskAssessmentResponse);
+
+        em.persist(studyId);
+        em.flush();
         return studyId;
     }
 

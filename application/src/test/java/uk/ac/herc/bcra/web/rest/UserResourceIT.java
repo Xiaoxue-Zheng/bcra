@@ -102,9 +102,6 @@ public class UserResourceIT {
     @BeforeEach
     public void initTest() {
         user = DataFactory.buildUser();
-        String login = "userResourceT" + RandomStringUtils.randomAlphabetic(5);
-        user.setLogin(login);
-        user.setEmail(login + "@localhost");
     }
 
     @Test
@@ -204,7 +201,7 @@ public class UserResourceIT {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
-        managedUserVM.setLogin(DEFAULT_LOGIN);// this login should already be used
+        managedUserVM.setLogin(user.getLogin());// this login should already be used
         managedUserVM.setPassword(DataFactory.DEFAULT_PASSWORD);
         managedUserVM.setFirstName(DataFactory.DEFAULT_FIRSTNAME);
         managedUserVM.setLastName(DataFactory.DEFAULT_LASTNAME);
@@ -237,7 +234,7 @@ public class UserResourceIT {
         managedUserVM.setPassword(DataFactory.DEFAULT_PASSWORD);
         managedUserVM.setFirstName(DataFactory.DEFAULT_FIRSTNAME);
         managedUserVM.setLastName(DataFactory.DEFAULT_LASTNAME);
-        managedUserVM.setEmail(DataFactory.DEFAULT_EMAIL);// this email should already be used
+        managedUserVM.setEmail(user.getEmail());// this email should already be used
         managedUserVM.setActivated(true);
         managedUserVM.setImageUrl(DataFactory.DEFAULT_IMAGEURL);
         managedUserVM.setLangKey(DataFactory.DEFAULT_LANGKEY);
@@ -265,10 +262,10 @@ public class UserResourceIT {
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)))
+            .andExpect(jsonPath("$.[*].login").value(hasItem(user.getLogin())))
             .andExpect(jsonPath("$.[*].firstName").value(hasItem(DataFactory.DEFAULT_FIRSTNAME)))
             .andExpect(jsonPath("$.[*].lastName").value(hasItem(DataFactory.DEFAULT_LASTNAME)))
-            .andExpect(jsonPath("$.[*].email").value(hasItem(DataFactory.DEFAULT_EMAIL)))
+            .andExpect(jsonPath("$.[*].email").value(hasItem(user.getEmail())))
             .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DataFactory.DEFAULT_IMAGEURL)))
             .andExpect(jsonPath("$.[*].langKey").value(hasItem(DataFactory.DEFAULT_LANGKEY)));
     }

@@ -1,6 +1,7 @@
 package uk.ac.herc.bcra.service;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -24,6 +25,7 @@ import uk.ac.herc.bcra.domain.Risk;
 import uk.ac.herc.bcra.domain.RiskAssessmentResult;
 import uk.ac.herc.bcra.domain.RiskFactor;
 import uk.ac.herc.bcra.domain.User;
+import uk.ac.herc.bcra.domain.enumeration.ParticipantContactWay;
 import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 import uk.ac.herc.bcra.domain.enumeration.ResponseState;
 import uk.ac.herc.bcra.questionnaire.AnswerResponseGenerator;
@@ -33,8 +35,8 @@ import uk.ac.herc.bcra.questionnaire.AnswerResponseGenerator;
 public class StudyUtil {
     @Autowired
     private AnswerResponseGenerator answerResponseGenerator;
-    
-    public Participant createParticipant(EntityManager em, String identifier, String nhsNumber, LocalDate dateOfBirth) {
+
+    public Participant createParticipant(EntityManager em, String identifier, LocalDate dateOfBirth) {
         User u = new User();
         u.setLogin(identifier);
         u.setPassword("PASSWORDPASSWORDPASSWORDPASSWORDPASSWORDPASSWORDPASSWORDPASS");
@@ -43,14 +45,12 @@ public class StudyUtil {
         em.persist(u);
 
         IdentifiableData id = new IdentifiableData();
-        id.setNhsNumber(nhsNumber);
         id.setDateOfBirth(dateOfBirth);
         id.setFirstname("FIRSTNAME");
         id.setSurname("SURNAME");
         id.setAddress1("ADDRESS_1");
         id.setPostcode("POSTCODE");
-        id.setPracticeName("PRACTICE_NAME");
-
+        id.setPreferContactWay(ParticipantContactWay.calculateCodes(Arrays.asList(ParticipantContactWay.SMS)));
         em.persist(id);
 
         AnswerResponse cr = answerResponseGenerator.generateAnswerResponseToQuestionnaire(QuestionnaireType.CONSENT_FORM);
@@ -70,6 +70,7 @@ public class StudyUtil {
         p.setUser(u);
         p.setIdentifiableData(id);
         p.setProcedure(pr);
+        p.dateOfBirth(LocalDate.of(1990, 9, 15));
         pr.setParticipant(p);
 
         em.persist(p);
@@ -87,7 +88,7 @@ public class StudyUtil {
         rar.setIndividualRisk(createRisk(em));
         rar.setPopulationRisk(createRisk(em));
         rar.setParticipant(participant);
-        
+
         em.persist(rar);
         em.flush();
         return rar;
@@ -95,7 +96,7 @@ public class StudyUtil {
 
     private Risk createRisk(EntityManager em) {
         Random random = new Random();
-        
+
         Risk risk = new Risk();
         risk.setLifetimeRisk(random.nextDouble());
         risk.setProbBcra1(random.nextDouble());

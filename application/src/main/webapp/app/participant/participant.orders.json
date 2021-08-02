@@ -1,9 +1,5 @@
 [
   {
-    "caption": "NHS Number",
-    "sorts": ["identifiableDataNhsNumber,asc", "id,asc"]
-  },
-  {
     "caption": "Most Recently Imported",
     "sorts": ["registerDatetime,desc", "id,asc"]
   }

@@ -7,17 +7,17 @@ describe('PartiicipantDetails', () => {
 
     const REGISTERED_STUDY_CODE = "CYPRESS_TST_1"
     const REGISTERED_EMAIL = "test@test.com"
-    const IN_USE_NHS_NUMBER = "1234512345"
 
     before(function () {
         cy.createStudyIdFromCode(REGISTERED_STUDY_CODE)
         cy.registerPatientWithStudyCodeAndEmail(REGISTERED_STUDY_CODE, REGISTERED_EMAIL)
-        cy.updateParticipantDetails(REGISTERED_STUDY_CODE, IN_USE_NHS_NUMBER)
+        cy.updateParticipantDetails(REGISTERED_STUDY_CODE)
 
         cy.createStudyIdFromCode(UNREGISTERED_STUDY_CODE)
         cy.completeRegisterPage(UNREGISTERED_STUDY_CODE)
         cy.completeConsentPage()
         cy.completeCreateAccountPage(UNREGISTERED_EMAIL_ADDRESS, STRONG_PASSWORD)
+        cy.completeRiskAssessment()
 
         cy.saveLocalStorage()
         Cypress.Cookies.preserveOnce('JSESSIONID')
@@ -59,16 +59,8 @@ describe('PartiicipantDetails', () => {
         return cy.get('input').eq(9)
     }
 
-    function getDateOfBirthField() {
-        return cy.get('input').eq(10)
-    }
-
-    function getNhsNumberField() {
-        return cy.get('input').eq(11)
-    }
-
-    function getGPNameField() {
-        return cy.get('input').eq(12)
+    function getPreferWayToContactField() {
+        return cy.get('[type="checkbox"]').first() // Check checkbox element
     }
 
     function fillMandatoryFields() {
@@ -76,9 +68,7 @@ describe('PartiicipantDetails', () => {
         getSurnameField().type("Smith")
         getAddressField(0).type("Address line 1")
         getPostCodeField().type("AA1 1AA")
-        getDateOfBirthField().type("1990-01-01")
-        getNhsNumberField().type(IN_USE_NHS_NUMBER)
-        getGPNameField().type("GP name")
+        getPreferWayToContactField().check({force: true})
     }
 
     function fillNonMandatoryFields() {
@@ -91,8 +81,11 @@ describe('PartiicipantDetails', () => {
     }
 
     function clearFields() {
-        for (let i = 0; i < 13; i++) {
+        for (let i = 0; i < 10; i++) {
             cy.get('input').eq(i).clear()
+        }
+        for (let i = 10; i < 14; i++) {
+            cy.get('input').eq(i).uncheck({force: true})
         }
     }
 
@@ -110,7 +103,7 @@ describe('PartiicipantDetails', () => {
         authenticateSelf()
 
         cy.url().should('include', 'participant-details')
-        cy.contains('h1', 'Participant details')
+        cy.contains('h1', 'Thank you for completing the questionnaire.')
     })
 
     it('should remain on the current page when no details have been entered', () => {
@@ -129,37 +122,13 @@ describe('PartiicipantDetails', () => {
         cy.url().should('include', 'participant-details')
     })
 
-    it('should remain on the current page when all details have been entered but the NHS number is in use', () => {
-        authenticateSelf()
-
-        fillMandatoryFields()
-        getNhsNumberField().clear()
-        getNhsNumberField().type(IN_USE_NHS_NUMBER)
-
-        cy.get('.pure-button').contains('Save details').click()
-        cy.url().should('include', 'participant-details')
-    })
-
-    it('should navigate to the risk assessment questionnaire if all mandatory details have been entered even if non-mandatory fields have not been filled out', () => {
-        authenticateSelf()
-
-        fillMandatoryFields()
-        getNhsNumberField().clear()
-        getNhsNumberField().type(UNUSED_NHS_NUMBER)
-
-        cy.get('.pure-button').contains('Save details').click()
-        cy.url().should('include', 'questionnaire/familyhistorycontext')
-    })
-
     it('should navigate to the risk assessment questionnaire if all mandatory and non-mandatory details have been entered', () => {
         authenticateSelf()
 
         fillMandatoryFields()
         fillNonMandatoryFields()
-        getNhsNumberField().clear()
-        getNhsNumberField().type(UNUSED_NHS_NUMBER)
 
         cy.get('.pure-button').contains('Save details').click()
-        cy.url().should('include', 'questionnaire/familyhistorycontext')
+        cy.url().should('include', 'end')
     })
 })

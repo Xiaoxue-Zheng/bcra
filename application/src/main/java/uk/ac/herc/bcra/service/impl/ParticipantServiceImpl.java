@@ -1,6 +1,7 @@
 package uk.ac.herc.bcra.service.impl;
 
 import uk.ac.herc.bcra.domain.*;
+import uk.ac.herc.bcra.domain.enumeration.ParticipantContactWay;
 import uk.ac.herc.bcra.repository.AuthorityRepository;
 import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.IdentifiableDataService;
@@ -201,8 +202,7 @@ public class ParticipantServiceImpl implements ParticipantService {
         );
         user.setAuthorities(authorities);
         userRepository.save(user);
-
-        AnswerResponse consentResponse = answerResponseService.saveDto(participantActivationDTO.getConsentRepsonse());
+        AnswerResponse consentResponse = answerResponseService.saveDto(participantActivationDTO.getConsentResponse());
         consentResponse.setState(ResponseState.SUBMITTED);
 
         Optional<StudyId> studyIdOptional = studyIdService.getStudyIdByCode(studyCode);
@@ -217,6 +217,7 @@ public class ParticipantServiceImpl implements ParticipantService {
         newParticipant.setUser(user);
         newParticipant.setRegisterDatetime(Instant.now());
         newParticipant.setProcedure(procedure);
+        newParticipant.setDateOfBirth(participantActivationDTO.getDateOfBirth());
         participantRepository.save(newParticipant);
 
         studyId.setParticipant(newParticipant);
@@ -231,9 +232,7 @@ public class ParticipantServiceImpl implements ParticipantService {
         IdentifiableData identifiableData = new IdentifiableData();
         identifiableData.setFirstname(participantDetailsDTO.getForename());
         identifiableData.setSurname(participantDetailsDTO.getSurname());
-        identifiableData.setDateOfBirth(participantDetailsDTO.getDateOfBirth());
-        identifiableData.setNhsNumber(participantDetailsDTO.getNhsNumber());
-        identifiableData.setPracticeName(participantDetailsDTO.getPracticeName());
+        identifiableData.setDateOfBirth(participant.getDateOfBirth());
         identifiableData.setAddress1(participantDetailsDTO.getAddressLine1());
         identifiableData.setAddress2(participantDetailsDTO.getAddressLine2());
         identifiableData.setAddress3(participantDetailsDTO.getAddressLine3());
@@ -243,6 +242,7 @@ public class ParticipantServiceImpl implements ParticipantService {
         identifiableData.setHomePhoneNumber(participantDetailsDTO.getHomePhoneNumber());
         identifiableData.setMobilePhoneNumber(participantDetailsDTO.getMobilePhoneNumber());
         identifiableData.setEmail(participant.getUser().getEmail());
+        identifiableData.setPreferContactWay(ParticipantContactWay.calculateCodes(participantDetailsDTO.getPreferredContactWays()));
         identifiableDataRepository.save(identifiableData);
 
         participant.setIdentifiableData(identifiableData);

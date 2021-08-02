@@ -45,5 +45,4 @@ public interface IdentifiableDataService {
 
     Optional<IdentifiableData> findOne(String emailAddress);
 
-    Optional<IdentifiableData> findOne(String nhsNumber, LocalDate dateOfBirth);
 }

@@ -21,7 +21,7 @@ describe('SignIn', () => {
         cy.get('button').contains('Sign in').click()
     }
 
-    it('should open the participant details page', () => {
+    it('should sign in fail when the user is not participant', () => {
         authenticateSelf('admin@localhost', 'admin')
         cy.contains('p', 'It appears you have tried to access this questionnaire page in error. If you think this is a mistake, please contact the study team')
     })

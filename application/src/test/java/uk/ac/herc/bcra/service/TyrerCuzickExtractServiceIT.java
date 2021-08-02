@@ -34,15 +34,12 @@ import java.util.Set;
 public class TyrerCuzickExtractServiceIT {
 
     private static String USER_IDENTIFIER_1 = "TST_USR_1";
-    private static String USER_NHS_NUMBER_1 = "1111111111";
     private static String USER_IDENTIFIER_2 = "TST_USR_2";
-    private static String USER_NHS_NUMBER_2 = "2222222222";
     private static String USER_IDENTIFIER_3 = "TST_USR_3";
-    private static String USER_NHS_NUMBER_3 = "3333333333";
 
     @Autowired
     private EntityManager em;
-    
+
     @Autowired
     private TyrerCuzickExtractService tyrerCuzickExtractService;
 
@@ -68,8 +65,8 @@ public class TyrerCuzickExtractServiceIT {
         em.flush();
     }
 
-    private Participant createParticipant(String userIdentifier, String nhsNumber) {
-        Participant p = studyUtil.createParticipant(em, userIdentifier, nhsNumber, LocalDate.now());
+    private Participant createParticipant(String userIdentifier) {
+        Participant p = studyUtil.createParticipant(em, userIdentifier, LocalDate.now());
         studyUtil.answerQuestionnaireWithAnything(em, p.getProcedure().getRiskAssessmentResponse());
         return p;
     }
@@ -81,14 +78,14 @@ public class TyrerCuzickExtractServiceIT {
         rar.setIndividualRisk(createRisk());
         rar.setPopulationRisk(createRisk());
         rar.setParticipant(participant);
-        
+
         RiskAssessmentResult result = riskAssessmentResultRepository.save(rar);
         return result;
     }
 
     private Risk createRisk() {
         Random random = new Random();
-        
+
         Risk risk = new Risk();
         risk.setLifetimeRisk(random.nextDouble());
         risk.setProbBcra1(random.nextDouble());
@@ -130,7 +127,7 @@ public class TyrerCuzickExtractServiceIT {
         String sqlPath = TyrerCuzickPathUtil.getTyrerCuzickExtractSql();
         File sqlFile = new File(sqlPath);
         String csvPath = sqlFile.getParent() + "/tyrer_cuzick_extract.csv";
-        
+
         return new File(csvPath);
     }
 
@@ -150,7 +147,7 @@ public class TyrerCuzickExtractServiceIT {
     public void assertThatEmptyTCExtractIsCreated() throws Exception {
         deleteExtractCsvIfExists();
         tyrerCuzickExtractService.runTyrerCuzickDataExtract();
-        
+
         File extractFile = getExtractCsv();
         assertThat(extractFile.exists()).isEqualTo(true);
 
@@ -162,7 +159,7 @@ public class TyrerCuzickExtractServiceIT {
     @Transactional
     public void assertThatTCExtractIsCreatedWithOneRiskAssessmentResult() throws Exception {
         deleteExtractCsvIfExists();
-        Participant p = createParticipant(USER_IDENTIFIER_1, USER_NHS_NUMBER_1);
+        Participant p = createParticipant(USER_IDENTIFIER_1);
         createRiskAssessmentResultForParticipant(p);
 
         tyrerCuzickExtractService.runTyrerCuzickDataExtract();
@@ -178,11 +175,11 @@ public class TyrerCuzickExtractServiceIT {
     @Transactional
     public void assertThatTCExtractIsCreatedWithThreeRiskAssessmentResult() throws Exception {
         deleteExtractCsvIfExists();
-        Participant p1 = createParticipant(USER_IDENTIFIER_1, USER_NHS_NUMBER_1);
+        Participant p1 = createParticipant(USER_IDENTIFIER_1);
         createRiskAssessmentResultForParticipant(p1);
-        Participant p2 = createParticipant(USER_IDENTIFIER_2, USER_NHS_NUMBER_2);
+        Participant p2 = createParticipant(USER_IDENTIFIER_2);
         createRiskAssessmentResultForParticipant(p2);
-        Participant p3 = createParticipant(USER_IDENTIFIER_3, USER_NHS_NUMBER_3);
+        Participant p3 = createParticipant(USER_IDENTIFIER_3);
         createRiskAssessmentResultForParticipant(p3);
 
         tyrerCuzickExtractService.runTyrerCuzickDataExtract();
@@ -198,7 +195,7 @@ public class TyrerCuzickExtractServiceIT {
     @Transactional
     public void assertThatTCExtractDataMatchesOneRiskAssessmentResultData() throws Exception {
         deleteExtractCsvIfExists();
-        Participant p = createParticipant(USER_IDENTIFIER_1, USER_NHS_NUMBER_1);
+        Participant p = createParticipant(USER_IDENTIFIER_1);
         RiskAssessmentResult rar = createRiskAssessmentResultForParticipant(p);
 
         tyrerCuzickExtractService.runTyrerCuzickDataExtract();
@@ -218,11 +215,11 @@ public class TyrerCuzickExtractServiceIT {
     @Transactional
     public void assertThatTCExtractDataMatchesThreeRiskAssessmentResultData() throws Exception {
         deleteExtractCsvIfExists();
-        Participant p1 = createParticipant(USER_IDENTIFIER_1, USER_NHS_NUMBER_1);
+        Participant p1 = createParticipant(USER_IDENTIFIER_1);
         RiskAssessmentResult rar1 = createRiskAssessmentResultForParticipant(p1);
-        Participant p2 = createParticipant(USER_IDENTIFIER_2, USER_NHS_NUMBER_2);
+        Participant p2 = createParticipant(USER_IDENTIFIER_2);
         RiskAssessmentResult rar2 = createRiskAssessmentResultForParticipant(p2);
-        Participant p3 = createParticipant(USER_IDENTIFIER_3, USER_NHS_NUMBER_3);
+        Participant p3 = createParticipant(USER_IDENTIFIER_3);
         RiskAssessmentResult rar3 = createRiskAssessmentResultForParticipant(p3);
 
         tyrerCuzickExtractService.runTyrerCuzickDataExtract();
@@ -231,7 +228,7 @@ public class TyrerCuzickExtractServiceIT {
         assertThat(extractFile.exists()).isEqualTo(true);
 
         ArrayList<String> fileData = readFile(extractFile);
-        
+
         String extractLine = fileData.get(1);
         assertThatRiskAssessmentResultMatchesDataExtract(
             USER_IDENTIFIER_1, rar1, extractLine
@@ -246,12 +243,12 @@ public class TyrerCuzickExtractServiceIT {
         assertThatRiskAssessmentResultMatchesDataExtract(
             USER_IDENTIFIER_3, rar3, extractLine
         );
-        
+
     }
 
     private void assertThatRiskAssessmentResultMatchesDataExtract(String userIdentifier, RiskAssessmentResult rar, String extractLine) {
         String[] extractLineData = extractLine.split(",");
-        
+
         assertThat(extractLineData[0]).isEqualTo(userIdentifier);
 
         assertThat(Long.parseLong(extractLineData[1])).isEqualTo(rar.getIndividualRisk().getId());
@@ -259,7 +256,7 @@ public class TyrerCuzickExtractServiceIT {
         assertThat(Double.parseDouble(extractLineData[3])).isEqualTo(rar.getIndividualRisk().getProbNotBcra());
         assertThat(Double.parseDouble(extractLineData[4])).isEqualTo(rar.getIndividualRisk().getProbBcra1());
         assertThat(Double.parseDouble(extractLineData[5])).isEqualTo(rar.getIndividualRisk().getProbBcra2());
-        
+
         Set<RiskFactor> indiRiskFactors = rar.getIndividualRisk().getRiskFactors();
         for (int riskFactorIndex = 0; riskFactorIndex < 20; riskFactorIndex++) {
             double factor = Double.parseDouble(extractLineData[6 + riskFactorIndex]);

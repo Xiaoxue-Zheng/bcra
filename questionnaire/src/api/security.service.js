@@ -31,14 +31,6 @@ export const SecurityService = {
     return ApiService.get('account')
   },
 
-  checkParticipant (nhsNumber, dateOfBirth) {
-    const parameters = {
-      nhsNumber: nhsNumber,
-      dateOfBirth: dateOfBirth
-    }
-    return ApiService.query('participants/exists', parameters)
-  },
-
   registerUser (accountDetails) {
     return new Promise((resolve) => {
       ApiService.post('register', accountDetails).then(() => {

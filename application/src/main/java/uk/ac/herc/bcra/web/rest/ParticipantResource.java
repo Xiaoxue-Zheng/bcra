@@ -133,6 +133,7 @@ public class ParticipantResource {
     @PostMapping("/participants/activate")
     @ResponseStatus(HttpStatus.CREATED)
     public void activateParticipant(@Valid @RequestBody ParticipantActivationDTO participantActivationDTO){
+        //todo should check consent are ticked
         if (!AccountResource.checkPasswordLength(participantActivationDTO.getPassword())) {
             throw new InvalidPasswordException();
         }

@@ -72,9 +72,9 @@ const router = new Router({
       component: () => import('../views/ParticipantDetails.vue')
     },
     {
-      path: '/wip',
-      name: 'workInProgress',
-      component: () => import('../views/WorkInProgress.vue')
+      path: '/end',
+      name: 'end',
+      component: () => import('../views/End.vue')
     }
   ],
   scrollBehavior (to, from, savedPosition) {

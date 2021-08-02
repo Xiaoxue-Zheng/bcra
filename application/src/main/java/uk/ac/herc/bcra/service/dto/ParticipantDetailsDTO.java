@@ -1,11 +1,15 @@
 package uk.ac.herc.bcra.service.dto;
 
-import java.time.LocalDate;
+import uk.ac.herc.bcra.domain.enumeration.ParticipantContactWay;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class ParticipantDetailsDTO {
-    
+
     @NotNull
     private String forename;
 
@@ -22,14 +26,8 @@ public class ParticipantDetailsDTO {
     @NotNull
     private String postCode;
 
-    @NotNull
-    private LocalDate dateOfBirth;
-
-    @NotNull
-    private String nhsNumber;
-
-    @NotNull
-    private String practiceName;
+    @NotEmpty
+    List<ParticipantContactWay> preferredContactWays;
 
     private String homePhoneNumber;
 
@@ -103,30 +101,6 @@ public class ParticipantDetailsDTO {
         this.postCode = postCode;
     }
 
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getNhsNumber() {
-        return nhsNumber;
-    }
-
-    public void setNhsNumber(String nhsNumber) {
-        this.nhsNumber = nhsNumber;
-    }
-
-    public String getPracticeName() {
-        return practiceName;
-    }
-
-    public void setPracticeName(String practiceName) {
-        this.practiceName = practiceName;
-    }
-
     public String getHomePhoneNumber() {
         return homePhoneNumber;
     }
@@ -141,6 +115,14 @@ public class ParticipantDetailsDTO {
 
     public void setMobilePhoneNumber(String mobilePhoneNumber) {
         this.mobilePhoneNumber = mobilePhoneNumber;
+    }
+
+    public List<ParticipantContactWay> getPreferredContactWays() {
+        return preferredContactWays;
+    }
+
+    public void setPreferredContactWays(List<ParticipantContactWay> preferredContactWays) {
+        this.preferredContactWays = preferredContactWays;
     }
 
     @Override

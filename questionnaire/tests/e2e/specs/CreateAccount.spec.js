@@ -46,7 +46,7 @@ describe('CreateAccount', () => {
         getPasswordField().clear()
         getPasswordConfirmationField().clear()
     }
-    
+
     it('should open the account page', () => {
         cy.url().should('include', 'account')
         cy.contains('h1', 'Create your account')
@@ -101,8 +101,7 @@ describe('CreateAccount', () => {
         getPasswordField().type(STRONG_PASSWORD)
         getPasswordConfirmationField().type(STRONG_PASSWORD)
         cy.get('button').contains('Create account').click()
-        cy.url().should('include', 'participant-details')
+        cy.url().should('include', '/questionnaire/familyhistorycontext')
     })
 
 })
-  

@@ -1,4 +1,4 @@
-``<template>
+<template>
   <div class="signin content">
     <h1>Sign in</h1>
     <p class="introduction">
@@ -76,15 +76,15 @@ export default {
       if (!completeConsent) {
         this.$router.push('/consent')
       } else {
-        let completeParticipantDetails = await SignUpHelperService.hasCompletedParticipantDetails()
-        if (!completeParticipantDetails) {
-          this.$router.push('/participant-details')
+        let completeRiskAssessment = await SignUpHelperService.hasCompletedRiskAssessment()
+        if (!completeRiskAssessment) {
+          this.$router.push('/questionnaire/familyhistorycontext')
         } else {
-          let completeRiskAssessment = await SignUpHelperService.hasCompletedRiskAssessment()
-          if (!completeRiskAssessment) {
-            this.$router.push('/questionnaire/familyhistorycontext')
+          let completeParticipantDetails = await SignUpHelperService.hasCompletedParticipantDetails()
+          if (!completeParticipantDetails) {
+            this.$router.push('/participant-details')
           } else {
-            this.$router.push('/')
+            this.$router.push('/end')
           }
         }
       }

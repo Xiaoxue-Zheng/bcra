@@ -9,9 +9,8 @@ describe('Submit', () => {
         cy.completeRegisterPage(UNREGISTERED_STUDY_CODE)
         cy.completeConsentPage()
         cy.completeCreateAccountPage(UNREGISTERED_EMAIL_ADDRESS, STRONG_PASSWORD)
-        cy.completeParticipantDetailsPage()
         cy.completeRiskAssessment()
-
+        //cy.completeParticipantDetailsPage()
         cy.saveLocalStorage()
     })
 
@@ -51,11 +50,11 @@ describe('Submit', () => {
         cy.wait('@submitRiskAssessment').its('status').should('be', 200)
     })
 
-    it('should navigate the user to the WIP page - NOTE: TO BE ALTERED IN LATER TICKETS', () => {
+    it('should navigate the user to the participant detail page', () => {
         authenticateSelf()
 
         cy.get('.pure-button').contains('Submit Questionnaire').click()
         cy.wait('@submitRiskAssessment').its('status').should('be', 200)
-        cy.url().should('include', 'wip')
+        cy.url().should('include', '/participant-details')
     })
 })

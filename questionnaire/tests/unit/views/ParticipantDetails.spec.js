@@ -31,8 +31,6 @@ describe('ParticipantDetails.vue', () => {
         participantDetails.vm.addressLine5 = "ADDRESS5"
         participantDetails.vm.postCode = "POSTCODE"
         participantDetails.vm.dateOfBirth = "DATEOFBIRTH"
-        participantDetails.vm.nhsNumber = "NHSNUMBER"
-        participantDetails.vm.practiceName = "PRACTICENAME"
     }
 
     beforeEach(() => {
@@ -55,8 +53,6 @@ describe('ParticipantDetails.vue', () => {
             expect(participantDetails.vm.addressLine5).toBe(null)
             expect(participantDetails.vm.postCode).toBe(null)
             expect(participantDetails.vm.dateOfBirth).toBe(null)
-            expect(participantDetails.vm.nhsNumber).toBe(null)
-            expect(participantDetails.vm.practiceName).toBe(null)
             expect(participantDetails.vm.failure).toBe(false)
         })
     })
@@ -95,7 +91,7 @@ describe('ParticipantDetails.vue', () => {
             setParticipantDetails()
             updateParticipantDetailsResponse = updateParticipantDetailsSuccessResponse
             await participantDetails.vm.register()
-            expect(participantDetails.vm.$router.push).toHaveBeenCalledWith('/questionnaire/familyhistorycontext')
+            expect(participantDetails.vm.$router.push).toHaveBeenCalledWith('/end')
             done()
         })
 

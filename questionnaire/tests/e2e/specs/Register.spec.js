@@ -28,6 +28,7 @@ describe('Register', () => {
       cy.contains('h1', 'Register')
 
       cy.get('input').first().should('have.value', '')
+      cy.get('input').eq(1).should('have.value', '')
 
       cy.wait('@getAccount')
     })
@@ -40,11 +41,7 @@ describe('Register', () => {
       })
       .as('getAccount')
 
-      cy.visit('/register')
-      cy.contains('h1', 'Register')
-
-      cy.get('input').first().clear().type(REGISTERED_STUDY_CODE)
-      cy.get('button').contains('Next').first().click()
+      cy.completeRegisterPage(REGISTERED_STUDY_CODE)
 
       cy.get('div').contains('This study code is either in use or otherwise not available. Please double check code or contact the study team.').should('exist')
 
@@ -59,11 +56,7 @@ describe('Register', () => {
       })
       .as('getAccount')
 
-      cy.visit('/register')
-      cy.contains('h1', 'Register')
-
-      cy.get('input').first().clear().type(NON_EXISTENT_STUDY_CODE)
-      cy.get('button').contains('Next').first().click()
+      cy.completeRegisterPage(NON_EXISTENT_STUDY_CODE)
 
       cy.get('div').contains('This study code is either in use or otherwise not available. Please double check code or contact the study team.').should('exist')
 
@@ -78,11 +71,7 @@ describe('Register', () => {
       })
       .as('getAccount')
 
-      cy.visit('/register')
-      cy.contains('h1', 'Register')
-
-      cy.get('input').first().clear().type(UNREGISTERED_STUDY_CODE)
-      cy.get('button').contains('Next').first().click()
+      cy.completeRegisterPage(UNREGISTERED_STUDY_CODE)
 
       cy.wait('@getAccount')
 

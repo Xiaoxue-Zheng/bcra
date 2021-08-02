@@ -39,7 +39,7 @@ export default {
   methods: {
     submit () {
       AnswerResponseService.submitRiskAssessment(this.answerResponse)
-      this.$router.push('/wip')
+      this.$router.push('/participant-details')
     }
   }
 }

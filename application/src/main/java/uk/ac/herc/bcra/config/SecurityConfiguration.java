@@ -35,6 +35,7 @@ import java.util.Arrays;
 import static uk.ac.herc.bcra.security.RoleManager.*;
 
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true)
 @Import(SecurityProblemSupport.class)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 

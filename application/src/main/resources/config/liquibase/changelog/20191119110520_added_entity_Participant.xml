@@ -22,6 +22,11 @@
             <column name="last_login_datetime" type="datetime">
                 <constraints nullable="true" />
             </column>
+
+            <column name="date_of_birth" type="date">
+                <constraints nullable="false" />
+            </column>
+
             <column name="user_id" type="bigint">
                 <constraints unique="true" nullable="false" uniqueConstraintName="ux_participant_user_id" />
             </column>            <column name="identifiable_data_id" type="bigint">

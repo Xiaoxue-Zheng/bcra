@@ -23,9 +23,8 @@ public class IdentifiableData implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @NotNull
     @Size(min = 10, max = 10)
-    @Column(name = "nhs_number", length = 10, nullable = false, unique = true)
+    @Column(name = "nhs_number", length = 10)
     private String nhsNumber;
 
     @NotNull
@@ -65,8 +64,7 @@ public class IdentifiableData implements Serializable {
     @Column(name = "postcode", length = 8, nullable = false)
     private String postcode;
 
-    @NotNull
-    @Column(name = "practice_name", nullable = false)
+    @Column(name = "practice_name")
     private String practiceName;
 
     @Column(name = "home_phone_number")
@@ -74,6 +72,9 @@ public class IdentifiableData implements Serializable {
 
     @Column(name = "mobile_phone_number")
     private String mobilePhoneNumber;
+
+    @Column(name = "prefer_contact_way", nullable = false)
+    private Integer preferContactWay;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -265,7 +266,19 @@ public class IdentifiableData implements Serializable {
     public void setMobilePhoneNumber(String mobilePhoneNumber) {
         this.mobilePhoneNumber = mobilePhoneNumber;
     }
-    
+
+    public Integer getPreferContactWay() {
+        return preferContactWay;
+    }
+
+    public void setPreferContactWay(Integer preferContactWay) {
+        this.preferContactWay = preferContactWay;
+    }
+
+    public IdentifiableData preferContactWay(int preferContactWay){
+        this.preferContactWay = preferContactWay;
+        return this;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -299,7 +312,7 @@ public class IdentifiableData implements Serializable {
             ", address4='" + getAddress4() + "'" +
             ", address5='" + getAddress5() + "'" +
             ", postcode='" + getPostcode() + "'" +
-            ", homePhoneNumber='" + getHomePhoneNumber() + "'" + 
+            ", homePhoneNumber='" + getHomePhoneNumber() + "'" +
             ", mobilePhoneNumber='" + getMobilePhoneNumber() + "'" +
             ", practiceName='" + getPracticeName() + "'" +
             "}";

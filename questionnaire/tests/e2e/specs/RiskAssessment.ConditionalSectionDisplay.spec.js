@@ -10,7 +10,7 @@ describe('Risk Assessment - testing conditional display of sections', () => {
     cy.completeRegisterPage(UNREGISTERED_STUDY_CODE)
     cy.completeConsentPage()
     cy.completeCreateAccountPage(UNREGISTERED_EMAIL_ADDRESS, STRONG_PASSWORD)
-    cy.completeParticipantDetailsPage()
+    //cy.completeParticipantDetailsPage()
 
     cy.saveLocalStorage()
   })
@@ -94,4 +94,13 @@ describe('Risk Assessment - testing conditional display of sections', () => {
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
     cy.checkElementVisibility(true, 'FAMILY_AFFECTED_HALF_SISTER')
   })
-})
+  it('should direct ot questionnaire page if not completed', () => {
+    cy.server()
+    cy.visit('/signin')
+    cy.get('input').first().clear().type(UNREGISTERED_EMAIL_ADDRESS)
+    cy.get('input').last().clear().type(STRONG_PASSWORD)
+    cy.get('button').contains('Sign in').click()
+    cy.url().should('include', '/questionnaire')
+  })
+
+  })

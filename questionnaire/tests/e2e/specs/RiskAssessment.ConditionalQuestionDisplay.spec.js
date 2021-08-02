@@ -8,7 +8,7 @@ describe('Risk Assessment - testing conditional display of questons', () => {
     cy.completeRegisterPage(UNREGISTERED_STUDY_CODE)
     cy.completeConsentPage()
     cy.completeCreateAccountPage(UNREGISTERED_EMAIL_ADDRESS, STRONG_PASSWORD)
-    cy.completeParticipantDetailsPage()
+    //cy.completeParticipantDetailsPage()
 
     cy.saveLocalStorage()
   })

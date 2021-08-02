@@ -40,7 +40,7 @@
                     </span>
                 </a>
             </li>
-            <li *jhiHasAnyAuthority="['ROLE_ADMIN','ROLE_MANAGER']" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <li *jhiHasAnyAuthority="['ROLE_ADMIN']" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link" routerLink="study-id" (click)="collapseNavbar()">
                     <span>
                         <fa-icon icon="clipboard-list" fixedWidth="true"></fa-icon>

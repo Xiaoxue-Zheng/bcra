@@ -11,11 +11,14 @@
         Added the entity RiskFactor.
     -->
     <changeSet id="20210219085250-1" author="jhipster">
-        <createTable tableName="risk_factor">
+        <createTable tableName="yearly_risk">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="factor" type="double">
+            <column name="risk_factor" type="double">
+                <constraints nullable="false" />
+            </column>
+            <column name="year" type="double">
                 <constraints nullable="false" />
             </column>
             <column name="risk_id" type="bigint">

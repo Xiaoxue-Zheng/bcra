@@ -5,7 +5,7 @@ import uk.ac.herc.bcra.algorithm.mapping.answers1_tyrercuzick8.Mapper;
 import uk.ac.herc.bcra.domain.Procedure;
 import uk.ac.herc.bcra.domain.Risk;
 import uk.ac.herc.bcra.domain.RiskAssessmentResult;
-import uk.ac.herc.bcra.domain.RiskFactor;
+import uk.ac.herc.bcra.domain.YearlyRisk;
 import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.domain.AnswerResponse;
 import uk.ac.herc.bcra.domain.enumeration.ResponseState;
@@ -15,7 +15,7 @@ import uk.ac.herc.bcra.repository.ProcedureRepository;
 import uk.ac.herc.bcra.repository.RiskAssessmentResultRepository;
 import uk.ac.herc.bcra.repository.RiskRepository;
 import uk.ac.herc.bcra.service.util.TyrerCuzickPathUtil;
-import uk.ac.herc.bcra.repository.RiskFactorRepository;
+import uk.ac.herc.bcra.repository.YearlyRiskRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +46,7 @@ public class TyrerCuzickService {
     private ParticipantRepository participantRepository;
     private RiskAssessmentResultRepository riskAssessmentResultRepository;
     private RiskRepository riskRepository;
-    private RiskFactorRepository riskFactorRepository;
+    private YearlyRiskRepository yearlyRiskRepository;
 
     private Mapper mapper;
 
@@ -57,7 +57,7 @@ public class TyrerCuzickService {
         ParticipantRepository participantRepository,
         RiskAssessmentResultRepository riskAssessmentResultRepository, 
         RiskRepository riskRepository,
-        RiskFactorRepository riskFactorRepository) {
+        YearlyRiskRepository yearlyRiskRepository) {
 
         this.answerResponseRepository = answerResponseRepository;
         this.mapper = mapper;
@@ -65,7 +65,7 @@ public class TyrerCuzickService {
         this.participantRepository = participantRepository;
         this.riskAssessmentResultRepository = riskAssessmentResultRepository;
         this.riskRepository = riskRepository;
-        this.riskFactorRepository = riskFactorRepository;
+        this.yearlyRiskRepository = yearlyRiskRepository;
 
         setUpPathVariables();
     }
@@ -220,15 +220,15 @@ public class TyrerCuzickService {
         Risk populationRisk = parseRisk(riskData, 45);
 
         individualRisk = riskRepository.save(individualRisk);
-        Set<RiskFactor> individualRiskFactors = parseRiskFactors(individualRisk, riskData, 1);
-        individualRisk.setRiskFactors(individualRiskFactors);
+        Set<YearlyRisk> individualYearlyRisks = parseYearlyRisks(individualRisk, riskData, 1);
+        individualRisk.setYearlyRisks(individualYearlyRisks);
 
         populationRisk = riskRepository.save(populationRisk);
-        Set<RiskFactor> populationRiskFactors = parseRiskFactors(populationRisk, riskData, 25);
-        populationRisk.setRiskFactors(populationRiskFactors);
+        Set<YearlyRisk> populationYearlyRisks = parseYearlyRisks(populationRisk, riskData, 25);
+        populationRisk.setYearlyRisks(populationYearlyRisks);
 
-        riskFactorRepository.saveAll(individualRiskFactors);
-        riskFactorRepository.saveAll(populationRiskFactors);
+        yearlyRiskRepository.saveAll(individualYearlyRisks);
+        yearlyRiskRepository.saveAll(populationYearlyRisks);
 
         result.setIndividualRisk(individualRisk);
         result.setPopulationRisk(populationRisk);
@@ -246,17 +246,21 @@ public class TyrerCuzickService {
         return risk;
     }
 
-    private Set<RiskFactor> parseRiskFactors(Risk risk, String[] riskData, int index) {
-        Set<RiskFactor> riskFactors = new HashSet<>();
-        for (int i = index; i < index + 20; i++) {
-            Double factor = Double.parseDouble(riskData[i]);
-            RiskFactor riskFactor = new RiskFactor();
-            riskFactor.setFactor(factor);
-            riskFactor.setRisk(risk);
+    private Set<YearlyRisk> parseYearlyRisks(Risk risk, String[] riskData, int index) {
+        Set<YearlyRisk> yearlyRisks = new HashSet<>();
+        int year = 1;
 
-            riskFactors.add(riskFactor);
+        for (int i = index; i < index + 20; i++) {
+            Double riskFactor = Double.parseDouble(riskData[i]);
+            YearlyRisk yearlyRisk = new YearlyRisk();
+            yearlyRisk.setRiskFactor(riskFactor);
+            yearlyRisk.setYear(year);
+            yearlyRisk.setRisk(risk);
+            year += 1;
+
+            yearlyRisks.add(yearlyRisk);
         }
 
-        return riskFactors;
+        return yearlyRisks;
     }
 }

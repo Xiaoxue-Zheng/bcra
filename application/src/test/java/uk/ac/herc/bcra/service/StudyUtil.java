@@ -23,7 +23,7 @@ import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.domain.Procedure;
 import uk.ac.herc.bcra.domain.Risk;
 import uk.ac.herc.bcra.domain.RiskAssessmentResult;
-import uk.ac.herc.bcra.domain.RiskFactor;
+import uk.ac.herc.bcra.domain.YearlyRisk;
 import uk.ac.herc.bcra.domain.User;
 import uk.ac.herc.bcra.domain.enumeration.ParticipantContactWay;
 import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
@@ -103,27 +103,28 @@ public class StudyUtil {
         risk.setProbBcra2(random.nextDouble());
         risk.setProbNotBcra(random.nextDouble());
 
-        Set<RiskFactor> riskFactors = new HashSet<RiskFactor>();
+        Set<YearlyRisk> yearlyRisks = new HashSet<YearlyRisk>();
         for (int i = 0; i < 20; i++) {
-            RiskFactor rf = createRiskFactorForRisk(em, risk);
-            riskFactors.add(rf);
+            YearlyRisk rf = createRiskFactorForRisk(em, risk, i+1);
+            yearlyRisks.add(rf);
         }
 
-        risk.setRiskFactors(riskFactors);
+        risk.setYearlyRisks(yearlyRisks);
 
         em.persist(risk);
         return risk;
     }
 
-    private RiskFactor createRiskFactorForRisk(EntityManager em, Risk risk) {
+    private YearlyRisk createRiskFactorForRisk(EntityManager em, Risk risk, int year) {
         Random random = new Random();
 
-        RiskFactor riskFactor = new RiskFactor();
-        riskFactor.setRisk(risk);
-        riskFactor.setFactor(random.nextDouble());
+        YearlyRisk yearlyRisk = new YearlyRisk();
+        yearlyRisk.setRisk(risk);
+        yearlyRisk.setRiskFactor(random.nextDouble());
+        yearlyRisk.setYear(year);
 
-        em.persist(riskFactor);
-        return riskFactor;
+        em.persist(yearlyRisk);
+        return yearlyRisk;
     }
 
     public void answerQuestionnaireWithAnything(EntityManager em, AnswerResponse res) {

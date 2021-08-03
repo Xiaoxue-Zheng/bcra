@@ -1,6 +1,6 @@
 package uk.ac.herc.bcra.repository;
 
-import uk.ac.herc.bcra.domain.RiskFactor;
+import uk.ac.herc.bcra.domain.YearlyRisk;
 
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface RiskFactorRepository extends JpaRepository<RiskFactor, Long> {
+public interface YearlyRiskRepository extends JpaRepository<YearlyRisk, Long> {
 
 }

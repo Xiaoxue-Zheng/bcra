@@ -9,12 +9,12 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 
 /**
- * A RiskFactor.
+ * A YearlyRisk.
  */
 @Entity
-@Table(name = "risk_factor")
+@Table(name = "yearly_risk")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class RiskFactor implements Serializable {
+public class YearlyRisk implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,8 +24,12 @@ public class RiskFactor implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "factor", nullable = false)
-    private Double factor;
+    @Column(name = "risk_factor", nullable = false)
+    private Double riskFactor;
+
+    @NotNull
+    @Column(name = "year", nullable = false)
+    private Integer year;
 
     @ManyToOne()
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -40,17 +44,30 @@ public class RiskFactor implements Serializable {
         this.id = id;
     }
 
-    public Double getFactor() {
-        return factor;
+    public Double getRiskFactor() {
+        return riskFactor;
     }
 
-    public RiskFactor factor(Double factor) {
-        this.factor = factor;
+    public YearlyRisk riskFactor(Double riskFactor) {
+        this.riskFactor = riskFactor;
         return this;
     }
 
-    public void setFactor(Double factor) {
-        this.factor = factor;
+    public void setRiskFactor(Double riskFactor) {
+        this.riskFactor = riskFactor;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public YearlyRisk year(Integer year) {
+        this.year = year;
+        return this;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
     }
 
     public Risk getRisk() {
@@ -67,10 +84,10 @@ public class RiskFactor implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof RiskFactor)) {
+        if (!(o instanceof YearlyRisk)) {
             return false;
         }
-        return id != null && id.equals(((RiskFactor) o).id);
+        return id != null && id.equals(((YearlyRisk) o).id);
     }
 
     @Override
@@ -80,9 +97,10 @@ public class RiskFactor implements Serializable {
 
     @Override
     public String toString() {
-        return "RiskFactor{" +
+        return "YearlyRisk{" +
             "id=" + getId() +
-            ", factor=" + getFactor() +
+            ", factor=" + getRiskFactor() +
+            ", year=" + getYear() + 
             "}";
     }
 }

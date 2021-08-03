@@ -30,7 +30,7 @@
     <include file="config/liquibase/changelog/20191119110521_added_entity_IdentifiableData.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200115171045_added_entity_Procedure.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210210150449_added_entity_StudyId.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210219085250_added_entity_RiskFactor.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210219085250_added_entity_YearlyRisk.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210219085821_added_entity_Risk.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210219090346_added_entity_RiskAssessmentResult.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210722111121_added_entity_IPRestriction.xml" relativeToChangelogFile="false"/>
@@ -48,7 +48,7 @@
     <include file="config/liquibase/changelog/20191119110520_added_entity_constraints_Participant.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200115171045_added_entity_constraints_Procedure.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210210150449_added_entity_constraints_StudyId.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210219085250_added_entity_constraints_RiskFactor.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210219085250_added_entity_constraints_YearlyRisk.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210219090346_added_entity_constraints_RiskAssessmentResult.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <include file="config/liquibase/changelog/20210517151200_updated_IdentifiableData_with_PhoneNumbers.xml" relativeToChangelogFile="false"/>

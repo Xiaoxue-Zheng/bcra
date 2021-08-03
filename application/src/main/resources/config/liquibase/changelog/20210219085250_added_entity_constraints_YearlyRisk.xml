@@ -9,8 +9,8 @@
     <changeSet id="20210219085250-2" author="jhipster">
         
         <addForeignKeyConstraint baseColumnNames="risk_id"
-                                 baseTableName="risk_factor"
-                                 constraintName="fk_risk_factor_risk_id"
+                                 baseTableName="yearly_risk"
+                                 constraintName="fk_yearly_risk_risk_id"
                                  referencedColumnNames="id"
                                  referencedTableName="risk"/>
 

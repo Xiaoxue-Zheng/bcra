@@ -4,8 +4,15 @@
     "relationships": [],
     "fields": [
         {
-            "fieldName": "factor",
+            "fieldName": "risk_factor",
             "fieldType": "Double",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "year",
+            "fieldType": "Integer",
             "fieldValidateRules": [
                 "required"
             ]
@@ -15,7 +22,7 @@
     "dto": "no",
     "searchEngine": false,
     "service": "serviceImpl",
-    "entityTableName": "risk_factor",
+    "entityTableName": "yearly_risk",
     "databaseType": "sql",
     "readOnly": false,
     "jpaMetamodelFiltering": false,

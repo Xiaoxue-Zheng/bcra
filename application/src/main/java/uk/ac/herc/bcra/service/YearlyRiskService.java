@@ -1,40 +1,40 @@
 package uk.ac.herc.bcra.service;
 
-import uk.ac.herc.bcra.domain.RiskFactor;
+import uk.ac.herc.bcra.domain.YearlyRisk;
 
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Service Interface for managing {@link RiskFactor}.
+ * Service Interface for managing {@link YearlyRiskFactor}.
  */
-public interface RiskFactorService {
+public interface YearlyRiskService {
 
     /**
      * Save a riskFactor.
      *
-     * @param riskFactor the entity to save.
+     * @param yearlyRisk the entity to save.
      * @return the persisted entity.
      */
-    RiskFactor save(RiskFactor riskFactor);
+    YearlyRisk save(YearlyRisk yearlyRisk);
 
     /**
-     * Get all the riskFactors.
+     * Get all the yearlyRisks.
      *
      * @return the list of entities.
      */
-    List<RiskFactor> findAll();
+    List<YearlyRisk> findAll();
 
     /**
-     * Get the "id" riskFactor.
+     * Get the "id" yearlyRisk.
      *
      * @param id the id of the entity.
      * @return the entity.
      */
-    Optional<RiskFactor> findOne(Long id);
+    Optional<YearlyRisk> findOne(Long id);
 
     /**
-     * Delete the "id" riskFactor.
+     * Delete the "id" yearlyRisk.
      *
      * @param id the id of the entity.
      */

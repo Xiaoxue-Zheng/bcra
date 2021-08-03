@@ -18,9 +18,9 @@ import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.domain.Risk;
 import uk.ac.herc.bcra.domain.RiskAssessmentResult;
-import uk.ac.herc.bcra.domain.RiskFactor;
+import uk.ac.herc.bcra.domain.YearlyRisk;
 import uk.ac.herc.bcra.repository.RiskAssessmentResultRepository;
-import uk.ac.herc.bcra.repository.RiskFactorRepository;
+import uk.ac.herc.bcra.repository.YearlyRiskRepository;
 import uk.ac.herc.bcra.repository.RiskRepository;
 import uk.ac.herc.bcra.service.util.TyrerCuzickPathUtil;
 
@@ -50,7 +50,7 @@ public class TyrerCuzickExtractServiceIT {
     private RiskRepository riskRepository;
 
     @Autowired
-    private RiskFactorRepository riskFactorRepository;
+    private YearlyRiskRepository yearlyRiskRepository;
 
     @Autowired
     private StudyUtil studyUtil;
@@ -92,26 +92,27 @@ public class TyrerCuzickExtractServiceIT {
         risk.setProbBcra2(random.nextDouble());
         risk.setProbNotBcra(random.nextDouble());
 
-        Set<RiskFactor> riskFactors = new HashSet<RiskFactor>();
+        Set<YearlyRisk> riskFactors = new HashSet<YearlyRisk>();
         for (int i = 0; i < 20; i++) {
-            RiskFactor rf = createRiskFactorForRisk(risk);
+            YearlyRisk rf = createRiskFactorForRisk(risk, i+1);
             riskFactors.add(rf);
         }
 
-        risk.setRiskFactors(riskFactors);
+        risk.setYearlyRisks(riskFactors);
 
         Risk savedRisk = riskRepository.save(risk);
         return savedRisk;
     }
 
-    private RiskFactor createRiskFactorForRisk(Risk risk) {
+    private YearlyRisk createRiskFactorForRisk(Risk risk, int year) {
         Random random = new Random();
 
-        RiskFactor riskFactor = new RiskFactor();
+        YearlyRisk riskFactor = new YearlyRisk();
         riskFactor.setRisk(risk);
-        riskFactor.setFactor(random.nextDouble());
+        riskFactor.setRiskFactor(random.nextDouble());
+        riskFactor.setYear(year);
 
-        RiskFactor savedRiskFactor = riskFactorRepository.save(riskFactor);
+        YearlyRisk savedRiskFactor = yearlyRiskRepository.save(riskFactor);
         return savedRiskFactor;
     }
 
@@ -257,10 +258,10 @@ public class TyrerCuzickExtractServiceIT {
         assertThat(Double.parseDouble(extractLineData[4])).isEqualTo(rar.getIndividualRisk().getProbBcra1());
         assertThat(Double.parseDouble(extractLineData[5])).isEqualTo(rar.getIndividualRisk().getProbBcra2());
 
-        Set<RiskFactor> indiRiskFactors = rar.getIndividualRisk().getRiskFactors();
+        Set<YearlyRisk> indiRiskFactors = rar.getIndividualRisk().getYearlyRisks();
         for (int riskFactorIndex = 0; riskFactorIndex < 20; riskFactorIndex++) {
             double factor = Double.parseDouble(extractLineData[6 + riskFactorIndex]);
-            Optional<RiskFactor> riskFactor = indiRiskFactors.stream().filter(rf -> rf.getFactor().equals(factor)).findFirst();
+            Optional<YearlyRisk> riskFactor = indiRiskFactors.stream().filter(rf -> rf.getRiskFactor().equals(factor)).findFirst();
             assertThat(riskFactor.isPresent()).isEqualTo(true);
         }
 
@@ -270,10 +271,10 @@ public class TyrerCuzickExtractServiceIT {
         assertThat(Double.parseDouble(extractLineData[29])).isEqualTo(rar.getPopulationRisk().getProbBcra1());
         assertThat(Double.parseDouble(extractLineData[30])).isEqualTo(rar.getPopulationRisk().getProbBcra2());
 
-        Set<RiskFactor> popRiskFactors = rar.getPopulationRisk().getRiskFactors();
+        Set<YearlyRisk> popRiskFactors = rar.getPopulationRisk().getYearlyRisks();
         for (int riskFactorIndex = 0; riskFactorIndex < 20; riskFactorIndex++) {
             double factor = Double.parseDouble(extractLineData[31 + riskFactorIndex]);
-            Optional<RiskFactor> riskFactor = popRiskFactors.stream().filter(rf -> rf.getFactor().equals(factor)).findFirst();
+            Optional<YearlyRisk> riskFactor = popRiskFactors.stream().filter(rf -> rf.getRiskFactor().equals(factor)).findFirst();
             assertThat(riskFactor.isPresent()).isEqualTo(true);
         }
     }

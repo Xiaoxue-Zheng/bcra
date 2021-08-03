@@ -43,7 +43,7 @@ public class Risk implements Serializable {
 
     @OneToMany(mappedBy = "risk")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<RiskFactor> riskFactors = new HashSet<>();
+    private Set<YearlyRisk> yearlyRisks = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -106,29 +106,29 @@ public class Risk implements Serializable {
         this.probBcra2 = probBcra2;
     }
 
-    public Set<RiskFactor> getRiskFactors() {
-        return riskFactors;
+    public Set<YearlyRisk> getYearlyRisks() {
+        return yearlyRisks;
     }
 
-    public Risk riskFactors(Set<RiskFactor> riskFactors) {
-        this.riskFactors = riskFactors;
+    public Risk yearlyRisks(Set<YearlyRisk> yearlyRisks) {
+        this.yearlyRisks = yearlyRisks;
         return this;
     }
 
-    public Risk addRiskFactor(RiskFactor riskFactor) {
-        this.riskFactors.add(riskFactor);
-        riskFactor.setRisk(this);
+    public Risk addYearlyRisk(YearlyRisk yearlyRisk) {
+        this.yearlyRisks.add(yearlyRisk);
+        yearlyRisk.setRisk(this);
         return this;
     }
 
-    public Risk removeRiskFactor(RiskFactor riskFactor) {
-        this.riskFactors.remove(riskFactor);
-        riskFactor.setRisk(null);
+    public Risk removeYearlyRisk(YearlyRisk yearlyRisk) {
+        this.yearlyRisks.remove(yearlyRisk);
+        yearlyRisk.setRisk(null);
         return this;
     }
 
-    public void setRiskFactors(Set<RiskFactor> riskFactors) {
-        this.riskFactors = riskFactors;
+    public void setYearlyRisks(Set<YearlyRisk> yearlyRisks) {
+        this.yearlyRisks = yearlyRisks;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

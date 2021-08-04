@@ -1,5 +1,6 @@
 package uk.ac.herc.bcra.service;
 
+import uk.ac.herc.bcra.config.ApplicationProperties;
 import uk.ac.herc.bcra.domain.User;
 
 import io.github.jhipster.config.JHipsterProperties;
@@ -17,6 +18,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
+import uk.ac.herc.bcra.domain.enumeration.RequestSource;
 
 /**
  * Service for sending emails.
@@ -32,7 +34,7 @@ public class MailService {
 
     private static final String BASE_URL = "baseUrl";
 
-    private final JHipsterProperties jHipsterProperties;
+    private final ApplicationProperties applicationProperties;
 
     private final JavaMailSender javaMailSender;
 
@@ -40,10 +42,10 @@ public class MailService {
 
     private final SpringTemplateEngine templateEngine;
 
-    public MailService(JHipsterProperties jHipsterProperties, JavaMailSender javaMailSender,
+    public MailService(ApplicationProperties applicationProperties, JavaMailSender javaMailSender,
             MessageSource messageSource, SpringTemplateEngine templateEngine) {
 
-        this.jHipsterProperties = jHipsterProperties;
+        this.applicationProperties = applicationProperties;
         this.javaMailSender = javaMailSender;
         this.messageSource = messageSource;
         this.templateEngine = templateEngine;
@@ -59,7 +61,7 @@ public class MailService {
         try {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, StandardCharsets.UTF_8.name());
             message.setTo(to);
-            message.setFrom(jHipsterProperties.getMail().getFrom());
+            message.setFrom(applicationProperties.getEmail().getFrom());
             message.setSubject(subject);
             message.setText(content, isHtml);
             javaMailSender.send(mimeMessage);
@@ -75,13 +77,24 @@ public class MailService {
 
     @Async
     public void sendEmailFromTemplate(User user, String templateName, String titleKey) {
+        String content = buildEmailContent(user, templateName, applicationProperties.getAdmin().getUrl());
+        String subject = messageSource.getMessage(titleKey, null, Locale.forLanguageTag(user.getLangKey()));
+        sendEmail(user.getEmail(), subject, content, false, true);
+    }
+
+    private void sendEmailFromTemplate(User user, RequestSource requestRole, String templateName, String titleKey) {
+        String baseUrl = getPasswordResetBaseUrl(requestRole);
+        String content = buildEmailContent(user, templateName, baseUrl);
+        String subject = messageSource.getMessage(titleKey, null, Locale.forLanguageTag(user.getLangKey()));
+        sendEmail(user.getEmail(), subject, content, false, true);
+    }
+
+    private String buildEmailContent(User user, String templateName, String baseUrl){
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
         context.setVariable(USER, user);
-        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
-        String content = templateEngine.process(templateName, context);
-        String subject = messageSource.getMessage(titleKey, null, locale);
-        sendEmail(user.getEmail(), subject, content, false, true);
+        context.setVariable(BASE_URL, baseUrl);
+        return templateEngine.process(templateName, context);
     }
 
     @Async
@@ -97,8 +110,17 @@ public class MailService {
     }
 
     @Async
-    public void sendPasswordResetMail(User user) {
+    public void sendPasswordResetMail(User user, RequestSource requestRole) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
-        sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
+        String templateName = "mail/passwordResetEmail";
+        String titleKey = "email.reset.title";
+        sendEmailFromTemplate(user, requestRole, templateName, titleKey);
+    }
+
+    private String getPasswordResetBaseUrl(RequestSource requestRole) {
+        if (requestRole == RequestSource.QUESTIONNAIRE) {
+            return applicationProperties.getQuestionnaire().getUrl();
+        }
+        return applicationProperties.getAdmin().getUrl();
     }
 }

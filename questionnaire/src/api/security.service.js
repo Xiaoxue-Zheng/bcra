@@ -6,7 +6,7 @@ export const SecurityService = {
     var formData = new FormData()
     formData.set('username', username)
     formData.set('password', password)
-    formData.set('source', 'QUESTIONNAIRE_PAGE')
+    formData.set('source', 'QUESTIONNAIRE')
 
     return new Promise((resolve) => {
       ApiService.postFormData('authentication', formData).then(() => {
@@ -43,5 +43,13 @@ export const SecurityService = {
 
   createAccount (signUpInformation) {
     return ApiService.post('participants/activate', signUpInformation)
+  },
+
+  resetPasswordInit (email) {
+    return ApiService.post('account/reset-password/init', { 'email': email, 'requestRole': 'QUESTIONNAIRE' })
+  },
+
+  resetPasswordFinish (key, newPassword) {
+    return ApiService.post('account/reset-password/finish', { 'key': key, 'newPassword': newPassword })
   }
 }

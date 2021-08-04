@@ -11,6 +11,7 @@ import uk.ac.herc.bcra.security.SecurityUtils;
 import uk.ac.herc.bcra.service.MailService;
 import uk.ac.herc.bcra.service.UserService;
 import uk.ac.herc.bcra.service.dto.PasswordChangeDTO;
+import uk.ac.herc.bcra.service.dto.PasswordResetDTO;
 import uk.ac.herc.bcra.service.dto.UserDTO;
 import uk.ac.herc.bcra.web.rest.errors.*;
 import uk.ac.herc.bcra.web.rest.vm.KeyAndPasswordVM;
@@ -203,14 +204,15 @@ public class AccountResource {
     /**
      * {@code POST   /account/reset-password/init} : Send an email to reset the password of the user.
      *
-     * @param mail the mail of the user.
+     * @param passwordResetDTO the mail and request role of the user.
      * @throws EmailNotFoundException {@code 400 (Bad Request)} if the email address is not registered.
      */
     @PostMapping(path = "/account/reset-password/init")
-    public void requestPasswordReset(@RequestBody String mail) {
+    public void requestPasswordReset(@RequestBody PasswordResetDTO passwordResetDTO) {
        mailService.sendPasswordResetMail(
-           userService.requestPasswordReset(mail)
-               .orElseThrow(EmailNotFoundException::new)
+           userService.requestPasswordReset(passwordResetDTO.getEmail())
+               .orElseThrow(EmailNotFoundException::new),
+           passwordResetDTO.getRequestRole()
        );
     }
 

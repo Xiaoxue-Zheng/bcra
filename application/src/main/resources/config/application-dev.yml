@@ -64,10 +64,7 @@ spring:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
   mail:
-    host: localhost
-    port: 25
-    username:
-    password:
+    host: mailrouter.man.ac.uk
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:
@@ -108,8 +105,6 @@ jhipster:
     remember-me:
       # security key (this key should be unique for your application, and kept secret)
       key: 68551ae080029e4c2f69071029b0cb7d12ccd633c34987998a0e3424eb9f2d313270a05b220aaf464868522f0f12265e2550
-  mail: # specific JHipster mail property, for standard properties see MailProperties
-    base-url: http://127.0.0.1:8080
   metrics:
     logs: # Reports metrics in the logs
       enabled: false
@@ -129,5 +124,8 @@ jhipster:
 # More documentation is available at:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
-
-# application:
+application:
+  admin:
+    url: http://localhost:8080
+  questionnaire:
+    url: http://localhost:3210

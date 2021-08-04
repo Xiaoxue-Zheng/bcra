@@ -36,6 +36,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import static uk.ac.herc.bcra.config.Constants.DEFAULT_LANGUAGE;
+
 /**
  * Service Implementation for managing {@link Participant}.
  */
@@ -194,6 +196,7 @@ public class ParticipantServiceImpl implements ParticipantService {
         String studyCode = participantActivationDTO.getStudyCode();
         user.setLogin(studyCode);
         user.setActivated(true);
+        user.setLangKey(DEFAULT_LANGUAGE);
         Set<Authority> authorities = new HashSet<Authority>();
         authorities.add(
             authorityRepository.getOne(

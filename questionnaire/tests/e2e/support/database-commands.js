@@ -3,6 +3,11 @@ Cypress.Commands.add('clearTables', (tables) => {
   clearNextTable(tables, 0)
 })
 
+Cypress.Commands.add('removeParticipant', (studyCode) => {
+  cy.deleteParticipants([studyCode])
+  cy.clearTables(['study_id', 'answer_item', 'answer', 'answer_group', 'answer_section', 'answer_response'])
+})
+
 function clearNextTable(tables, currentTableIx) {
   return deleteAllFromTable(tables[currentTableIx]).then(() => {
     if (currentTableIx == tables.length-1) {

@@ -139,7 +139,7 @@ export default {
         } else {
           this.failure = true
         }
-      }).catch((error) => {
+      }).catch(() => {
         this.failure = true
       })
     },

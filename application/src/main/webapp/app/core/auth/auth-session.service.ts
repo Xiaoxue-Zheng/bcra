@@ -10,7 +10,7 @@ export class AuthServerProvider {
   constructor(private http: HttpClient) {}
 
   login(credentials): Observable<any> {
-    const source = 'ADMIN_PAGE';
+    const source = 'ADMIN';
     const data =
       `username=${encodeURIComponent(credentials.username)}` +
       `&password=${encodeURIComponent(credentials.password)}` +

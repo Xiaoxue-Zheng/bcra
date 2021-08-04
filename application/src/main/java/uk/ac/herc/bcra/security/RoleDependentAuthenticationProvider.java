@@ -19,7 +19,7 @@ public class RoleDependentAuthenticationProvider extends DaoAuthenticationProvid
         AuthenticationDetails details = (AuthenticationDetails)authentication.getDetails();
         RequestSource requestSource = details.getRequestSource();
         if(!canAccess(requestSource, authorities)){
-            if(RequestSource.QUESTIONNAIRE_PAGE.equals(requestSource)){
+            if(RequestSource.QUESTIONNAIRE.equals(requestSource)){
                 throw new InsufficientAuthenticationException("It appears you have tried to access this questionnaire page in error. If you think this is a mistake, please contact the study team.");
             }else{
                 throw new InsufficientAuthenticationException("You are not authorized to access this page. If you think this is a mistake, please contact the study team.");
@@ -31,7 +31,7 @@ public class RoleDependentAuthenticationProvider extends DaoAuthenticationProvid
         if(null == requestSource){
             return false;
         }
-        if(RequestSource.QUESTIONNAIRE_PAGE.equals(requestSource)){
+        if(RequestSource.QUESTIONNAIRE.equals(requestSource)){
             return authorities.stream().anyMatch(it -> RoleManager.isParticipant(it.getAuthority()));
         }else{
             return authorities.stream().anyMatch(it -> RoleManager.isAdminUser(it.getAuthority()));

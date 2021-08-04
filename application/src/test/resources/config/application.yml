@@ -114,9 +114,6 @@ jhipster:
       host: localhost
       port: 5000
       queue-size: 512
-  mail:
-    from: test@localhost
-    base-url: http://127.0.0.1:8080
   security:
     remember-me:
       # security key (this key should be unique for your application, and kept secret)
@@ -135,4 +132,10 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# application:
+application:
+  email:
+    from: HRYWS@localhost
+  admin:
+    url: http://localhost:8080
+  questionnaire:
+    url: http://localhost:3210

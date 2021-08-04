@@ -75,6 +75,16 @@ const router = new Router({
       path: '/end',
       name: 'end',
       component: () => import('../views/End.vue')
+    },
+    {
+      path: '/reset/init',
+      name: 'passwordResetInit',
+      component: () => import('../views/PasswordResetInit.vue')
+    },
+    {
+      path: '/reset/finish',
+      name: 'passwordResetFinish',
+      component: () => import('../views/PasswordResetFinish.vue')
     }
   ],
   scrollBehavior (to, from, savedPosition) {

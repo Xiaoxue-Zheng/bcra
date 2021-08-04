@@ -149,8 +149,6 @@ jhipster:
   #     exposed-headers: "Link,X-Total-Count"
   #     allow-credentials: true
   #     max-age: 1800
-  mail:
-    from: bcra@localhost
   swagger:
     default-include-pattern: /api/.*
     title: bcra API
@@ -170,5 +168,6 @@ jhipster:
 # More documentation is available at:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
-
-# application:
+application:
+  email:
+    from: donotreply@manchester.ac.uk

@@ -16,6 +16,13 @@ Cypress.Commands.add('completeConsentPage', (studyId) => {
     clickConsentButton()
 })
 
+Cypress.Commands.add('createStudyCodeAndRegister', (studyCode, email, password) =>{
+  cy.createStudyIdFromCode(studyCode)
+  cy.completeRegisterPage(studyCode)
+  cy.completeConsentPage()
+  cy.completeCreateAccountPage(email, password)
+})
+
 function clickConsentButton() {
     cy.get('.pure-button').contains('I give my consent').click()
 }
@@ -93,6 +100,7 @@ Cypress.Commands.add('completeRiskAssessment', () => {
     continueToRiskAssessment()
     saveAndContinue()
     cy.url().should('include', 'submit')
+    cy.get('.pure-button').contains('Submit Questionnaire').click()
 })
 
 function continueToRiskAssessment() {

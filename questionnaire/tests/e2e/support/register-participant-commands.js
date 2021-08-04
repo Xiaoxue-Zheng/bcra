@@ -247,8 +247,8 @@ function createIdentifiableDataFromUser(user) {
         return cy.task('query', {
             sql: `
                 INSERT INTO identifiable_data
-                (id, date_of_birth, email, firstname, surname, address_1, postcode)
-                VALUES ($1, '01/01/1990', $2, 'John', 'Doe', '123 Fake Street', 'AA1 1AA')
+                (id, date_of_birth, email, firstname, surname, address_1, postcode, prefer_contact_way)
+                VALUES ($1, '01/01/1990', $2, 'John', 'Doe', '123 Fake Street', 'AA1 1AA', 1)
             `,
             values: [next_id, user.email]
         }).then(() => {
@@ -308,3 +308,20 @@ function deleteIdentifiableDataById(identifiableDataId) {
         values: [identifiableDataId]
     })
 }
+
+Cypress.Commands.add('updateAccountResetKey', (email, key) => {
+  return updateAccountResetKeyByEmail(email, key)
+})
+
+function updateAccountResetKeyByEmail(email, key){
+  return cy.task('query', {
+    sql: `
+            UPDATE jhi_user
+            SET reset_key = $2, reset_date = $3
+            WHERE email = $1
+        `,
+    values: [email, key, new Date().toISOString()]
+  })
+}
+
+

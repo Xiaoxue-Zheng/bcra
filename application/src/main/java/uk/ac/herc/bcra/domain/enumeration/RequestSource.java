@@ -5,11 +5,10 @@ import org.apache.commons.lang.StringUtils;
 import java.util.Locale;
 
 public enum RequestSource {
-    ADMIN_PAGE,
-    QUESTIONNAIRE_PAGE;
+    ADMIN,
+    QUESTIONNAIRE;
 
     public static RequestSource getRequestSource(String str){
-        RequestSource defaultRequestSource = null;
         if(StringUtils.isEmpty(str)){
             return null;
         }else{

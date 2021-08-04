@@ -22,6 +22,9 @@
             <p class="error-message" v-if="displayFailureMessage">{{failMessage}}</p>
             <p class="error-message" v-if="displayErrorMessage">{{errorMessage}}</p>
             <button class="pure-button pure-button-primary" type="submit">Sign in</button>
+          <p class="introduction">
+            <router-link to="/reset/init">Did you forget your password?</router-link>
+          </p>
         </form>
       </div>
     </div>

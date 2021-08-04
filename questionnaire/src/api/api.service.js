@@ -20,7 +20,7 @@ export default {
 
   query (resource, params) {
     return axios.get(resource, { params: params }).catch(error => {
-      throw new Error(`BCRA ApiService ${error}`)
+      throw new Error(`HRYWS ApiService ${error}`)
     })
   },
 
@@ -35,7 +35,7 @@ export default {
   get (resource, slug = '') {
     var template = this.getTemplateFromSlug(slug, resource)
     return axios.get(template).catch(error => {
-      throw new Error(`BCRA ApiService ${error}`)
+      throw new Error(`HRYWS ApiService ${error}`)
     })
   },
 

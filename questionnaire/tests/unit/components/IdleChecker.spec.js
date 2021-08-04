@@ -19,7 +19,7 @@ describe('IdleChecker.vue', () => {
 
   let getUserMock = async function () {
     if (userResult.status === 401) {
-      throw new Error(`BCRA ApiService unauthorized`)
+      throw new Error(`HRYWS ApiService unauthorized`)
     }
     return userResult
   }

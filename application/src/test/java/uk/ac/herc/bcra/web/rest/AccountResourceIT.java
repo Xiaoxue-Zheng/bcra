@@ -10,6 +10,7 @@ import uk.ac.herc.bcra.config.Constants;
 import uk.ac.herc.bcra.domain.Authority;
 import uk.ac.herc.bcra.domain.PersistentToken;
 import uk.ac.herc.bcra.domain.User;
+import uk.ac.herc.bcra.domain.enumeration.RequestSource;
 import uk.ac.herc.bcra.repository.AuthorityRepository;
 import uk.ac.herc.bcra.repository.PersistentTokenRepository;
 import uk.ac.herc.bcra.repository.UserRepository;
@@ -17,6 +18,7 @@ import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.MailService;
 import uk.ac.herc.bcra.service.UserService;
 import uk.ac.herc.bcra.service.dto.PasswordChangeDTO;
+import uk.ac.herc.bcra.service.dto.PasswordResetDTO;
 import uk.ac.herc.bcra.service.dto.UserDTO;
 import uk.ac.herc.bcra.web.rest.errors.ExceptionTranslator;
 import uk.ac.herc.bcra.web.rest.vm.KeyAndPasswordVM;
@@ -898,9 +900,12 @@ public class AccountResourceIT {
         user.setLogin("password-reset");
         user.setEmail("password-reset@example.com");
         userRepository.saveAndFlush(user);
-
+        PasswordResetDTO passwordResetDTO = new PasswordResetDTO();
+        passwordResetDTO.setEmail("password-reset@example.com");
+        passwordResetDTO.setRequestRole(RequestSource.ADMIN);
         restMvc.perform(post("/api/account/reset-password/init")
-            .content("password-reset@example.com"))
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(passwordResetDTO)))
             .andExpect(status().isOk());
     }
 
@@ -913,18 +918,26 @@ public class AccountResourceIT {
         user.setLogin("password-reset");
         user.setEmail("password-reset@example.com");
         userRepository.saveAndFlush(user);
-
+        PasswordResetDTO passwordResetDTO = new PasswordResetDTO();
+        passwordResetDTO.setEmail("password-reset@EXAMPLE.COM");
+        passwordResetDTO.setRequestRole(RequestSource.ADMIN);
         restMvc.perform(post("/api/account/reset-password/init")
-            .content("password-reset@EXAMPLE.COM"))
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(passwordResetDTO)))
             .andExpect(status().isOk());
     }
 
     @Test
     @Transactional
     public void testRequestPasswordResetWrongEmail() throws Exception {
+        PasswordResetDTO passwordResetDTO = new PasswordResetDTO();
+        passwordResetDTO.setEmail("password-reset-wrong-email@example.com");
+        passwordResetDTO.setRequestRole(RequestSource.ADMIN);
         restMvc.perform(
             post("/api/account/reset-password/init")
-                .content("password-reset-wrong-email@example.com"))
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(passwordResetDTO)))
+
             .andExpect(status().isBadRequest());
     }
 

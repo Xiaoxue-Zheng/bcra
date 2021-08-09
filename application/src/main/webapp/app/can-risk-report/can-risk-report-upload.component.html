@@ -1,0 +1,44 @@
+<div>
+    <h2 id="page-heading">
+        <span>Upload CanRisk Reports</span>
+    </h2>
+
+    <label class="btn btn-primary" for="fileSelector">
+        <span>Select CanRisk reports</span>
+        <input id="fileSelector" type="file" multiple accept=".pdf" style="display: none;" (change)="selectCanRiskReports($event.target.files)" />
+    </label>
+
+    <button type="submit" class="btn btn-primary uploadButton" [disabled]="!canUploadCanRiskReports()" (click)="uploadCanRiskReports()">
+        <span>Upload CanRisk reports</span>
+    </button>
+    
+    <div>
+        <div>Please be aware that the file selected for upload must be named in the format STUDY_ID.pdf. Refreshing this page will remove all selected files.</div> 
+    </div>
+
+    <div *ngIf="isError">
+        <div class="errorMessage">There was an error uploading this CanRiskReport. Make sure it is a valid .pdf file. If error persists, please contact the software team.</div>
+        <div class="errorDetail">[Http error {{ error.status }}]: {{ error.message }}</div>
+    </div>
+
+    <hr />
+
+    <div *ngIf="canRiskReports?.length > 0">
+        <table class="canRiskReports">
+            <tr class="canRiskReport" *ngFor="let canRiskReport of canRiskReports ;trackBy: trackId">
+                <td class="info filename">{{ canRiskReport.name }}</td>
+                <td class="info studyId">{{ getStudyId(canRiskReport) }}</td>
+                <td class="info fileSize">{{ canRiskReport.fileSize | number }} bytes</td>
+                <td class="info">
+                    <span class="no-issue" *ngIf="!canRiskReport.inError">
+                        This report is ready to be uploaded.
+                    </span>
+                    <span class="issue" *ngIf="canRiskReport.inError">
+                        {{ canRiskReport.error }}
+                    </span>
+                </td>
+                <td class="info removeButton" (click)="removeCanRiskReport(canRiskReport)">remove</td>
+            </tr>
+        </table>
+    </div>
+</div>

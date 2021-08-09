@@ -34,6 +34,7 @@
     <include file="config/liquibase/changelog/20210219085821_added_entity_Risk.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210219090346_added_entity_RiskAssessmentResult.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210722111121_added_entity_IPRestriction.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210806092507_added_entity_CanRiskReport.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20191008133423_added_entity_constraints_QuestionSection.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191008133425_added_entity_constraints_Question.xml" relativeToChangelogFile="false"/>
@@ -50,6 +51,7 @@
     <include file="config/liquibase/changelog/20210210150449_added_entity_constraints_StudyId.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210219085250_added_entity_constraints_YearlyRisk.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210219090346_added_entity_constraints_RiskAssessmentResult.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210806092507_added_entity_constraints_CanRiskReport.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <include file="config/liquibase/changelog/20210517151200_updated_IdentifiableData_with_PhoneNumbers.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210810105214_added_entity_TwoFactorAuthentication.xml" relativeToChangelogFile="false"/>

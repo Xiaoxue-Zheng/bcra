@@ -19,6 +19,7 @@ import { BcraParticipantModule } from './participant/participant.module';
 import { BcraAccountModule } from './account/account.module';
 import { BcraTyrerCuzickTestModule } from './tyrercuzicktest/tyrercuzicktest.module';
 import { BcraStudyIdModule } from './study-id/study-id.module';
+import { BcraCanRiskReportModule } from './can-risk-report/can-risk-report.module';
 
 import moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
@@ -40,6 +41,7 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
     BcraParticipantModule,
     BcraAccountModule,
     BcraTyrerCuzickTestModule,
+    BcraCanRiskReportModule,
     BcraStudyIdModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
     BcraAppRoutingModule

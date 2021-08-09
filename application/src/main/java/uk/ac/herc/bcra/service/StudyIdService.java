@@ -24,4 +24,6 @@ public interface StudyIdService {
     AnswerResponseDTO getRiskAssessmentResponseFromStudyCode(String studyCode);
 
     String getStudyCodeByParticipantLogin(String login);
+
+    boolean doesStudyIdExistAndNotAssignedToCanRiskReport(String code);
 }

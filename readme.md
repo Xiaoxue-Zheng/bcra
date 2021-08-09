@@ -162,6 +162,17 @@ To run this process:
 4. Head to the Tyrer Cuzick Test page from the navigation bar.
 5. Select the "Trigger TC Extract Test" button.
 6. This should create an extract file in the tyrercuzick directory under a subdirectory titled /extract/.
+
+### CanRisk report folder
+
+When setting up a new server, be sure that you have created the CanRisk report directory for these files to be stored.
+This is shown below:
+
+/home/canrisk/
+
+or, for iOS:
+
+/usr/local/share/canrisk/
  
 ## Questionnaire
 

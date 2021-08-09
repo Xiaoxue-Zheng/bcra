@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity CanRiskReport.
+    -->
+    <changeSet id="20210806092507-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="associated_study_id_id"
+                                 baseTableName="can_risk_report"
+                                 constraintName="fk_can_risk_report_associated_study_id_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="study_id"/>
+
+        <addForeignKeyConstraint baseColumnNames="uploaded_by_id"
+                                 baseTableName="can_risk_report"
+                                 constraintName="fk_can_risk_report_uploaded_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+    </changeSet>
+</databaseChangeLog>

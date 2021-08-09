@@ -4,10 +4,12 @@ import uk.ac.herc.bcra.service.StudyIdService;
 import uk.ac.herc.bcra.service.mapper.AnswerResponseMapper;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
 import uk.ac.herc.bcra.domain.AnswerResponse;
+import uk.ac.herc.bcra.domain.CanRiskReport;
 import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.domain.StudyId;
 import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 import uk.ac.herc.bcra.questionnaire.AnswerResponseGenerator;
+import uk.ac.herc.bcra.repository.CanRiskReportRepository;
 import uk.ac.herc.bcra.repository.ParticipantRepository;
 import uk.ac.herc.bcra.repository.StudyIdRepository;
 import org.slf4j.Logger;
@@ -29,16 +31,19 @@ public class StudyIdServiceImpl implements StudyIdService {
     private final AnswerResponseMapper answerResponseMapper;
     private final ParticipantRepository participantRepository;
     private final AnswerResponseGenerator answerResponseGenerator;
+    private final CanRiskReportRepository canRiskReportRepository;
 
     public StudyIdServiceImpl(StudyIdRepository studyIdRepository, 
         AnswerResponseMapper answerResponseMapper, 
         ParticipantRepository participantRepository,
-        AnswerResponseGenerator answerResponseGenerator) {
+        AnswerResponseGenerator answerResponseGenerator,
+        CanRiskReportRepository canRiskReportRepository) {
             
         this.studyIdRepository = studyIdRepository;
         this.answerResponseMapper = answerResponseMapper;
         this.participantRepository = participantRepository;
         this.answerResponseGenerator = answerResponseGenerator;
+        this.canRiskReportRepository = canRiskReportRepository;
     }
 
     @Override
@@ -132,5 +137,17 @@ public class StudyIdServiceImpl implements StudyIdService {
         }
 
         return null;
+    }
+
+    @Override
+    public boolean doesStudyIdExistAndNotAssignedToCanRiskReport(String code) {
+        Optional<StudyId> studyIdOptional = studyIdRepository.findOneByCode(code);
+        if (studyIdOptional.isPresent()) {
+            StudyId studyId = studyIdOptional.get();
+            Optional<CanRiskReport> reportOptional = canRiskReportRepository.findOneByAssociatedStudyId(studyId);
+            return !reportOptional.isPresent();
+        }
+
+        return false;
     }
 }

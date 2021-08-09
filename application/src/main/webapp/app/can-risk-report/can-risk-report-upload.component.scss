@@ -1,0 +1,62 @@
+.canRiskReports {
+  width: -webkit-fill-available;
+  width: -moz-available;
+  width: fill-available;
+}
+
+.canRiskReport {
+  border: 0;
+  border-radius: 5px;
+
+  padding: 5px;
+  margin: 5px;
+}
+
+.canRiskReport:hover {
+  background-color: lightgrey;
+}
+
+.canRiskReport .info {
+  padding: 10px 10px;
+}
+
+.canRiskReport .filename {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.canRiskReport .studyId {
+  font-weight: lighter;
+}
+
+.canRiskReport .issue {
+  color: red;
+}
+
+.canRiskReport .no-issue {
+  color: green;
+}
+
+.canRiskReport .removeButton {
+  text-align: center;
+  padding: 0 5px;
+  color: red;
+}
+
+.canRiskReport .removeButton:hover {
+  background-color: pink;
+  cursor: pointer;
+}
+
+.uploadButton {
+  float: right;
+}
+
+.errorMessage {
+  color: red;
+}
+
+.errorDetail {
+  color: red;
+  font-size: 10px;
+}

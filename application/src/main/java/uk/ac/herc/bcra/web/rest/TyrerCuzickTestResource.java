@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 @Transactional
-@Secured({RoleManager.MANAGER})
+@Secured({RoleManager.MANAGER, RoleManager.ADMIN})
 public class TyrerCuzickTestResource {
 
     private final Logger log = LoggerFactory.getLogger(StudyIdResource.class);

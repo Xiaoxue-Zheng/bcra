@@ -62,7 +62,7 @@ public class QuestionnaireResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of questionnaires in body.
      */
     @GetMapping("/questionnaires")
-    @Secured({RoleManager.MANAGER})
+    @Secured({RoleManager.MANAGER, RoleManager.ADMIN})
     public List<QuestionnaireDTO> getAllQuestionnaires() {
         log.debug("REST request to get all Questionnaires");
         return questionnaireService.findAll();

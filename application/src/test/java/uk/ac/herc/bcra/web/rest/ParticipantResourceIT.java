@@ -160,7 +160,7 @@ public class ParticipantResourceIT {
 
     @Test
     @Transactional
-    @WithMockUser(authorities = {RoleManager.USER, RoleManager.MANAGER, RoleManager.PARTICIPANT})
+    @WithMockUser(authorities = {RoleManager.USER, RoleManager.PARTICIPANT})
     public void unauthorizedGetParticipant() throws Exception {
         // Initialize the database
         participantRepository.saveAndFlush(participant);
@@ -353,7 +353,7 @@ public class ParticipantResourceIT {
 
     @Test
     @Transactional
-    @WithMockUser(authorities = {RoleManager.PARTICIPANT, RoleManager.USER, RoleManager.MANAGER})
+    @WithMockUser(authorities = {RoleManager.PARTICIPANT, RoleManager.USER})
     public void unauthorizedDeleteParticipant() throws Exception {
         // Initialize the database
         participantRepository.saveAndFlush(participant);

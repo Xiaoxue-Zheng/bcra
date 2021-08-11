@@ -75,7 +75,7 @@ public class ParticipantResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of participants in body.
      */
     @GetMapping("/participants")
-    @Secured({RoleManager.MANAGER})
+    @Secured({RoleManager.MANAGER, RoleManager.ADMIN})
     public ResponseEntity<List<ParticipantDTO>> getAllParticipants(ParticipantCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Participants by criteria: {}", criteria);
         Page<ParticipantDTO> page = participantQueryService.findByCriteria(criteria, pageable);
@@ -90,7 +90,7 @@ public class ParticipantResource {
     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
     */
     @GetMapping("/participants/count")
-    @Secured({RoleManager.MANAGER})
+    @Secured({RoleManager.MANAGER, RoleManager.ADMIN})
     public ResponseEntity<Long> countParticipants(ParticipantCriteria criteria) {
         log.debug("REST request to count Participants by criteria: {}", criteria);
         return ResponseEntity.ok().body(participantQueryService.countByCriteria(criteria));
@@ -103,7 +103,7 @@ public class ParticipantResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the participantDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/participants/{id}")
-    @Secured(RoleManager.ADMIN)
+    @Secured({RoleManager.ADMIN, RoleManager.MANAGER})
     public ResponseEntity<ParticipantDTO> getParticipant(@PathVariable Long id) {
         log.debug("REST request to get Participant : {}", id);
         Optional<ParticipantDTO> participantDTO = participantService.findOne(id);
@@ -117,7 +117,7 @@ public class ParticipantResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/participants/{id}")
-    @Secured(RoleManager.ADMIN)
+    @Secured({RoleManager.ADMIN, RoleManager.MANAGER})
     public ResponseEntity<Void> deleteParticipant(@PathVariable Long id) {
         log.debug("REST request to delete Participant : {}", id);
         participantService.delete(id);

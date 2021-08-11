@@ -1,12 +1,15 @@
 package uk.ac.herc.bcra.config;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import uk.ac.herc.bcra.security.*;
 
 import io.github.jhipster.config.JHipsterProperties;
@@ -28,9 +31,9 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.web.filter.CorsFilter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
+import uk.ac.herc.bcra.service.TwoFactorAuthenticationService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 
 import static uk.ac.herc.bcra.security.RoleManager.*;
 
@@ -49,13 +52,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
 
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+    private final TwoFactorAuthenticationService twoFactorAuthenticationService;
+
     public SecurityConfiguration(JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices, CorsFilter corsFilter,
-                                 SecurityProblemSupport problemSupport, UserDetailsService userDetailsService) {
+                                 SecurityProblemSupport problemSupport, UserDetailsService userDetailsService,
+                                 ApplicationEventPublisher applicationEventPublisher, TwoFactorAuthenticationService twoFactorAuthenticationService) {
         this.jHipsterProperties = jHipsterProperties;
         this.rememberMeServices = rememberMeServices;
         this.corsFilter = corsFilter;
         this.problemSupport = problemSupport;
         this.userDetailsService = userDetailsService;
+        this.applicationEventPublisher = applicationEventPublisher;
+        this.twoFactorAuthenticationService = twoFactorAuthenticationService;
     }
 
     @Bean
@@ -94,6 +104,25 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public TwoFactorAuthenticationFilter authenticationFilter(TwoFactorAuthenticationService twoFactorAuthenticationService) throws Exception {
+        TwoFactorAuthenticationFilter authenticationFilter = new TwoFactorAuthenticationFilter(twoFactorAuthenticationService);
+        authenticationFilter.setAuthenticationManager(authenticationManagerBean());
+        authenticationFilter.setAuthenticationDetailsSource(authenticationDetailsSource());
+        authenticationFilter.setAuthenticationFailureHandler(ajaxAuthenticationFailureHandler());
+        authenticationFilter.setAuthenticationSuccessHandler(bcraAuthenticationSuccessHandler());
+        authenticationFilter.setRememberMeServices(rememberMeServices);
+        authenticationFilter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/api/authentication", "POST"));
+        authenticationFilter.setApplicationEventPublisher(applicationEventPublisher);
+        return authenticationFilter;
+    }
+
+    @Override
     public void configure(WebSecurity web) {
         web.ignoring()
             .antMatchers(HttpMethod.OPTIONS, "/**")
@@ -122,13 +151,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .rememberMeParameter("remember-me")
             .key(jHipsterProperties.getSecurity().getRememberMe().getKey())
         .and()
-            .formLogin()
-            .loginProcessingUrl("/api/authentication")
-            .successHandler(bcraAuthenticationSuccessHandler())
-            .failureHandler(ajaxAuthenticationFailureHandler())
-            .authenticationDetailsSource(authenticationDetailsSource())
-            .permitAll()
-        .and()
+            .addFilterBefore(authenticationFilter(twoFactorAuthenticationService), TwoFactorAuthenticationFilter.class)
+//            .formLogin()
+//            .loginProcessingUrl("/api/authentication")
+//            .successHandler(bcraAuthenticationSuccessHandler())
+//            .failureHandler(ajaxAuthenticationFailureHandler())
+//            .authenticationDetailsSource(authenticationDetailsSource())
+//            .permitAll()
+        //.and()
             .logout()
             .logoutUrl("/api/logout")
             .logoutSuccessHandler(ajaxLogoutSuccessHandler())
@@ -148,6 +178,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/participants/exists").permitAll()
             .antMatchers("/api/participants/activate").permitAll()
             .antMatchers("/api/authenticate").permitAll()
+            .antMatchers("/api/authenticate/two-factor-init").permitAll()
             .antMatchers("/api/register").permitAll()
             .antMatchers("/api/activate").permitAll()
             .antMatchers("/api/account/reset-password/init").permitAll()

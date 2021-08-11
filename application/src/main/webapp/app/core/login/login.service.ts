@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AccountService } from 'app/core/auth/account.service';
 import { AuthServerProvider } from 'app/core/auth/auth-session.service';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class LoginService {
@@ -19,6 +20,22 @@ export class LoginService {
         },
         err => {
           this.logout();
+          reject(err);
+          return cb(err);
+        }
+      );
+    });
+  }
+
+  twoFactorAuthInit(login: string, callback?) {
+    const cb = callback || function(a) {};
+    return new Promise((resolve, reject) => {
+      this.authServerProvider.twoFactorAuthInit(login).subscribe(
+        data => {
+          resolve(data);
+          return cb(data);
+        },
+        err => {
           reject(err);
           return cb(err);
         }

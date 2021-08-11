@@ -52,4 +52,5 @@
     <include file="config/liquibase/changelog/20210219090346_added_entity_constraints_RiskAssessmentResult.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <include file="config/liquibase/changelog/20210517151200_updated_IdentifiableData_with_PhoneNumbers.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210810105214_added_entity_TwoFactorAuthentication.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

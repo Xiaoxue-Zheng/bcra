@@ -10,6 +10,8 @@ import uk.ac.herc.bcra.domain.enumeration.RequestSource;
 
 import java.util.Collection;
 
+import static uk.ac.herc.bcra.security.RoleManager.isAdminUser;
+
 public class RoleDependentAuthenticationProvider extends DaoAuthenticationProvider {
 
     @Override
@@ -34,7 +36,7 @@ public class RoleDependentAuthenticationProvider extends DaoAuthenticationProvid
         if(RequestSource.QUESTIONNAIRE.equals(requestSource)){
             return authorities.stream().anyMatch(it -> RoleManager.isParticipant(it.getAuthority()));
         }else{
-            return authorities.stream().anyMatch(it -> RoleManager.isAdminUser(it.getAuthority()));
+            return authorities.stream().anyMatch(it -> isAdminUser(it.getAuthority()));
         }
     }
 

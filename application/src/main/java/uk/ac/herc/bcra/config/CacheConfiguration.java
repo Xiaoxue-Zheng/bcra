@@ -82,6 +82,7 @@ public class CacheConfiguration {
             createCache(cm, uk.ac.herc.bcra.domain.Risk.class.getName() + ".riskFactors");
             createCache(cm, uk.ac.herc.bcra.domain.RiskAssessmentResult.class.getName());
             createCache(cm, uk.ac.herc.bcra.domain.IPRestriction.class.getName());
+            createCache(cm, uk.ac.herc.bcra.domain.TwoFactorAuthentication.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

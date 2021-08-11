@@ -1,6 +1,13 @@
 package uk.ac.herc.bcra.security;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import uk.ac.herc.bcra.domain.User;
+
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Constants for Spring Security authorities.
@@ -23,6 +30,14 @@ public class RoleManager {
 
     public static boolean isAdminUser(String authority){
         return MANAGER.equals(authority) || ADMIN.equals(authority) || USER.equals(authority);
+    }
+
+    public static boolean isAdminUser(User user) {
+        return user.getAuthorities().stream().anyMatch(it->isAdminUser(it.getName()));
+    }
+
+    public static boolean requireTwoFactorAuth(Set<String> authorities){
+        return authorities.stream().anyMatch(it->MANAGER.equals(it) || ADMIN.equals(it));
     }
 
     public static String buildHierarchy(){

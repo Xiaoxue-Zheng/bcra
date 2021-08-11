@@ -14,6 +14,7 @@ export class AuthServerProvider {
     const data =
       `username=${encodeURIComponent(credentials.username)}` +
       `&password=${encodeURIComponent(credentials.password)}` +
+      `&pin=${encodeURIComponent(credentials.pin)}` +
       `&remember-me=${credentials.rememberMe}` +
       `&submit=Login` +
       `&source=${source}`;
@@ -31,5 +32,9 @@ export class AuthServerProvider {
         return response;
       })
     );
+  }
+
+  twoFactorAuthInit(login): Observable<any> {
+    return this.http.post(SERVER_API_URL + 'api/authenticate/two-factor-init', login);
   }
 }

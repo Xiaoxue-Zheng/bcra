@@ -11,7 +11,7 @@
             </div>
         </div>
         <div class="col-md-8">
-            <form class="form" role="form" (ngSubmit)="login()" [formGroup]="loginForm">
+            <form class="form" role="form" (ngSubmit)="login()" [formGroup]="loginForm" *ngIf="!twoFactorAuthentication">
                 <div class="form-group">
                     <label class="username-label" for="username">Login</label>
                     <input type="text" class="form-control" name="username" id="username" placeholder="Your username"
@@ -30,10 +30,19 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Sign in</button>
             </form>
-            <p></p>
-            <div class="alert alert-warning">
+            <div class="alert alert-warning" *ngIf="!twoFactorAuthentication">
                 <a class="alert-link" (click)="requestResetPassword()">Did you forget your password?</a>
             </div>
+            <form class="form" *ngIf="twoFactorAuthentication" [formGroup]="pinForm" (ngSubmit)="validatePin()">
+                <div *ngIf="showFailedPinValidationAlert">
+                    <div class="alert alert-warning text-center" role="alert"><b> {{failedPinValidationAttempts}} failed pin validation attempt(s)! <br>Login for user will be locked after 5 failed attempts</b></div>
+                </div>
+                <label class="form-control-label">Pin</label>
+                <input class="form-control" type="password" name="pin" id="pin" formControlName="pin" placeholder="Enter Pin">
+                <button class="btn btn-primary" type="submit">Continue</button>
+                <a (click)="cancelPinValidation()" href="">Cancel Sign In</a>
+            </form>
+            <p></p>
         </div>
     </div>
 </div>

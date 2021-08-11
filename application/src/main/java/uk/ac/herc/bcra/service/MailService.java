@@ -3,8 +3,6 @@ package uk.ac.herc.bcra.service;
 import uk.ac.herc.bcra.config.ApplicationProperties;
 import uk.ac.herc.bcra.domain.User;
 
-import io.github.jhipster.config.JHipsterProperties;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import javax.mail.internet.MimeMessage;

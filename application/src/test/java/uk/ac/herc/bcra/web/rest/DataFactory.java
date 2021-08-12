@@ -12,9 +12,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 public class DataFactory {
 
@@ -222,6 +221,15 @@ public class DataFactory {
         user.setLastName(DEFAULT_LASTNAME);
         user.setImageUrl(DEFAULT_IMAGEURL);
         user.setLangKey(DEFAULT_LANGKEY);
+        return user;
+    }
+
+    public static User createUser(EntityManager entityManager, String login, String password, String... authorities) {
+        User user = buildUser(login);
+        user.setPassword(password);
+        user.setAuthorities(Arrays.stream(authorities).map(Authority::new).collect(Collectors.toSet()));
+        entityManager.persist(user);
+        entityManager.flush();
         return user;
     }
 

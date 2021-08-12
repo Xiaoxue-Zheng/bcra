@@ -61,23 +61,37 @@ describe('Component Tests', () => {
           rememberMe: true
         };
 
+        const credentialsWithPin = {
+          username: 'admin',
+          password: 'admin',
+          pin: '111111',
+          rememberMe: true
+        };
+
         comp.loginForm.patchValue({
           username: 'admin',
           password: 'admin',
+          pin: '111111',
           rememberMe: true
         });
-        mockLoginService.setResponse({});
+
+        mockLoginService.setResponse(null);
+        mockLoginService.setTwoFactorAuthInitResponse(true);
         mockStateStorageService.setResponse('admin/users?page=0');
 
         // WHEN/
         comp.login();
         tick(); // simulate async
+        comp.validatePin();
+        tick();
 
         // THEN
         expect(comp.authenticationError).toEqual(false);
+        expect(comp.showFailedPinValidationAlert).toEqual(false);
         expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('login success');
         expect(mockEventManager.broadcastSpy).toHaveBeenCalledTimes(1);
-        expect(mockLoginService.loginSpy).toHaveBeenCalledWith(credentials);
+        expect(mockLoginService.twoFactorAuthInitSpy).toHaveBeenCalledWith('admin', 'admin');
+        expect(mockLoginService.loginSpy).toHaveBeenCalledWith(credentialsWithPin);
         expect(mockStateStorageService.getUrlSpy).toHaveBeenCalledTimes(1);
         expect(mockStateStorageService.storeUrlSpy).toHaveBeenCalledWith(null);
         expect(mockRouter.navigateByUrlSpy).toHaveBeenCalledWith('admin/users?page=0');
@@ -93,23 +107,34 @@ describe('Component Tests', () => {
           password: 'admin',
           rememberMe: true
         };
+        const credentialsWithPin = {
+          username: 'admin',
+          password: 'admin',
+          pin: '111111',
+          rememberMe: true
+        };
         comp.loginForm.patchValue({
           username: 'admin',
           password: 'admin',
+          pin: '111111',
           rememberMe: true
         });
-        mockLoginService.setResponse({});
+        mockLoginService.setTwoFactorAuthInitResponse(true);
+        mockLoginService.setResponse(null);
         mockStateStorageService.setResponse(null);
 
         // WHEN
         comp.login();
         tick(); // simulate async
-
+        comp.validatePin();
+        tick();
         // THEN
         expect(comp.authenticationError).toEqual(false);
+        expect(comp.showFailedPinValidationAlert).toEqual(false);
         expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('login success');
         expect(mockEventManager.broadcastSpy).toHaveBeenCalledTimes(1);
-        expect(mockLoginService.loginSpy).toHaveBeenCalledWith(credentials);
+        expect(mockLoginService.twoFactorAuthInitSpy).toHaveBeenCalledWith('admin', 'admin');
+        expect(mockLoginService.loginSpy).toHaveBeenCalledWith(credentialsWithPin);
         expect(mockStateStorageService.getUrlSpy).toHaveBeenCalledTimes(1);
         expect(mockStateStorageService.storeUrlSpy).not.toHaveBeenCalled();
         expect(mockRouter.navigateSpy).not.toHaveBeenCalled();

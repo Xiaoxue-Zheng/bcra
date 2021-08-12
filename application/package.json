@@ -103,7 +103,8 @@
     "webpack-notifier": "1.7.0",
     "webpack-visualizer-plugin": "0.1.11",
     "workbox-webpack-plugin": "4.3.1",
-    "write-file-webpack-plugin": "4.5.0"
+    "write-file-webpack-plugin": "4.5.0",
+    "pg": "^8.0.3"
   },
   "engines": {
     "node": ">=8.9.0"

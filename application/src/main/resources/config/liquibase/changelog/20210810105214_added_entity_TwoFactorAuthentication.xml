@@ -5,9 +5,9 @@
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="two_factor_authenticationPK"/>
             </column>
-            <column name="expiry_date_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="expiry_date_time" type="TIMESTAMP"/>
             <column name="failed_attempts" type="INTEGER"/>
-            <column name="pin" type="VARCHAR(255)"/>
+            <column name="pin" type="VARCHAR(63)"/>
             <column name="user_id" type="BIGINT"/>
         </createTable>
     </changeSet>

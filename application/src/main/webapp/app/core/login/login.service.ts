@@ -27,10 +27,10 @@ export class LoginService {
     });
   }
 
-  twoFactorAuthInit(login: string, callback?) {
+  twoFactorAuthInit(login: string, password: string, callback?) {
     const cb = callback || function(a) {};
     return new Promise((resolve, reject) => {
-      this.authServerProvider.twoFactorAuthInit(login).subscribe(
+      this.authServerProvider.twoFactorAuthInit(login, password).subscribe(
         data => {
           resolve(data);
           return cb(data);

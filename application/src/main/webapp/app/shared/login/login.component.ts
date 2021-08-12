@@ -21,11 +21,8 @@ export class JhiLoginModalComponent implements AfterViewInit {
   loginForm = this.fb.group({
     username: [''],
     password: [''],
+    pin: [''],
     rememberMe: [false]
-  });
-
-  pinForm = this.fb.group({
-    pin: ['']
   });
 
   constructor(
@@ -51,38 +48,43 @@ export class JhiLoginModalComponent implements AfterViewInit {
     this.failedPinValidationAttempts = 0;
     this.loginForm.patchValue({
       username: '',
-      password: ''
-    });
-    this.pinForm.patchValue({
+      password: '',
       pin: ''
     });
+
     this.activeModal.dismiss('cancel');
   }
 
   login() {
-    this.loginService.twoFactorAuthInit(this.loginForm.get('username').value).then(res => {
-      this.authenticationError = false;
-      if (res) {
-        this.twoFactorAuthentication = true;
-      } else {
-        this.loginService
-          .login({
-            username: this.loginForm.get('username').value,
-            password: this.loginForm.get('password').value,
-            rememberMe: this.loginForm.get('rememberMe').value
-          })
-          .then((response: any) => {
-            this.loginSuccess();
-          })
-          .catch(error => {
-            this.loginFail(error);
-          });
-      }
-    });
+    this.loginService
+      .twoFactorAuthInit(this.loginForm.get('username').value, this.loginForm.get('password').value)
+      .then(res => {
+        this.authenticationError = false;
+        if (res) {
+          this.twoFactorAuthentication = true;
+        } else {
+          this.loginService
+            .login({
+              username: this.loginForm.get('username').value,
+              password: this.loginForm.get('password').value,
+              rememberMe: this.loginForm.get('rememberMe').value
+            })
+            .then((response: any) => {
+              this.loginSuccess();
+            })
+            .catch(error => {
+              this.loginFail(error);
+            });
+        }
+      })
+      .catch(error => {
+        this.loginFail(error);
+      });
   }
 
   loginSuccess() {
     this.authenticationError = false;
+    this.showFailedPinValidationAlert = false;
     this.activeModal.dismiss('login success');
     if (this.router.url === '/register' || /^\/activate\//.test(this.router.url) || /^\/reset\//.test(this.router.url)) {
       this.router.navigate(['']);
@@ -104,25 +106,33 @@ export class JhiLoginModalComponent implements AfterViewInit {
 
   loginFail(error) {
     this.authenticationError = true;
-    this.authenticationErrorMessage =
-      error.error && error.error.message ? error.error.message : 'Please check your credentials and try again.';
+    if (error.error && error.error.detail) {
+      if (error.error.detail === 'Bad credentials') {
+        this.authenticationErrorMessage = 'Please check your credentials and try again.';
+      } else {
+        this.authenticationErrorMessage = error.error.detail;
+      }
+    } else {
+      this.authenticationErrorMessage = 'Please check your credentials and try again.';
+    }
   }
 
   validatePin() {
     if (this.failedPinValidationAttempts === 5) {
       this.authenticationError = true;
-      this.authenticationErrorMessage = 'Login is not permitted. User has had five failed pin validation attempts';
-      setTimeout(() => this.cancelPinValidation(), 5000);
+      this.authenticationErrorMessage =
+        'Login is not permitted. User has had five failed pin validation attempts. Please try again after 30 minutes';
     } else {
       this.loginService
         .login({
           username: this.loginForm.get('username').value,
           password: this.loginForm.get('password').value,
-          pin: this.pinForm.get('pin').value
+          pin: this.loginForm.get('pin').value,
+          rememberMe: this.loginForm.get('rememberMe').value
         })
         .then((response: any) => {
-          console.log(response);
           this.authenticationError = false;
+          console.log(response);
           if (response !== null && response.authenticated !== null && !response.authenticated) {
             this.showFailedPinValidationAlert = true;
             this.failedPinValidationAttempts = response.failedAttempts;
@@ -135,12 +145,6 @@ export class JhiLoginModalComponent implements AfterViewInit {
           this.loginFail(error);
         });
     }
-  }
-
-  cancelPinValidation() {
-    this.twoFactorAuthentication = false;
-    this.showFailedPinValidationAlert = false;
-    this.authenticationError = false;
   }
 
   register() {

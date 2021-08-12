@@ -8,11 +8,12 @@ export class MockLoginService extends SpyObject {
   registerSpy: Spy;
   requestResetPasswordSpy: Spy;
   cancelSpy: Spy;
+  twoFactorAuthInitSpy;
 
   constructor() {
     super(LoginService);
-
     this.setLoginSpy({});
+    this.setTwoFactorAuthInitSpy({});
     this.logoutSpy = this.spy('logout').andReturn(this);
     this.registerSpy = this.spy('register').andReturn(this);
     this.requestResetPasswordSpy = this.spy('requestResetPassword').andReturn(this);
@@ -23,7 +24,15 @@ export class MockLoginService extends SpyObject {
     this.loginSpy = this.spy('login').andReturn(Promise.resolve(json));
   }
 
+  setTwoFactorAuthInitSpy(res: any) {
+    this.twoFactorAuthInitSpy = this.spy('twoFactorAuthInit').andReturn(Promise.resolve(res));
+  }
+
   setResponse(json: any): void {
     this.setLoginSpy(json);
+  }
+
+  setTwoFactorAuthInitResponse(res: any): void {
+    this.setTwoFactorAuthInitSpy(res);
   }
 }

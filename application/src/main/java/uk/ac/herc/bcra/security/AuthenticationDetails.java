@@ -13,6 +13,11 @@ public class AuthenticationDetails extends WebAuthenticationDetails {
         this.requestSource = RequestSource.getRequestSource(request.getParameter("source"));
     }
 
+    public AuthenticationDetails(HttpServletRequest request, RequestSource requestSource) {
+        super(request);
+        this.requestSource = requestSource;
+    }
+
     RequestSource getRequestSource(){
         return requestSource;
     }

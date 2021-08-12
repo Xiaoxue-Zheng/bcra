@@ -1,4 +1,5 @@
 import { element, by, ElementFinder } from 'protractor';
+import { DB } from '../db-commands/DB';
 
 export class NavBarPage {
   studyIdsMenu = element(by.css('[routerLink="study-id"]'));
@@ -88,7 +89,10 @@ export class NavBarPage {
 export class SignInPage {
   username = element(by.id('username'));
   password = element(by.id('password'));
-  loginButton = element(by.css('button[type=submit]'));
+  pin = element(by.id('pin'));
+  loginButton = element(by.id('sign-in-button'));
+  confirmPinButton = element(by.id('confirm-pin-button'));
+  db = new DB();
 
   async setUserName(username) {
     await this.username.sendKeys(username);
@@ -114,7 +118,39 @@ export class SignInPage {
     await this.password.clear();
   }
 
-  async autoSignInUsing(username: string, password: string) {
+  async setPin(pin) {
+    await this.pin.sendKeys(pin);
+  }
+
+  async getPin() {
+    return this.pin.getAttribute('value');
+  }
+
+  async clearPin() {
+    await this.pin.clear();
+  }
+
+  async twoFactorSignIn(username: string, password: string) {
+    await this.setUserName(username);
+    await this.setPassword(password);
+    await this.login();
+    const sql = 'select pin from two_factor_authentication where user_id= (select id from jhi_user where login = $1)';
+    const pinVal = await this.db.execute(sql, [username]).then(res => {
+      return res.pin;
+    });
+    await this.setPin(pinVal);
+    await this.confirmPin();
+  }
+
+  async twoFactorSignInWithPin(username: string, password: string, pinVal: string) {
+    await this.setUserName(username);
+    await this.setPassword(password);
+    await this.login();
+    await this.setPin(pinVal);
+    await this.confirmPin();
+  }
+
+  async autoSignNormalUserInUsing(username: string, password: string) {
     await this.setUserName(username);
     await this.setPassword(password);
     await this.login();
@@ -122,6 +158,16 @@ export class SignInPage {
 
   async login() {
     await this.loginButton.click();
+    // have to wait hibernate refresh cache
+    await this.delay(1000);
+  }
+
+  delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async confirmPin() {
+    await this.confirmPinButton.click();
   }
 }
 export class PasswordPage {

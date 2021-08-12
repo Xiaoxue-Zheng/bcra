@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.ac.herc.bcra.domain.Authority;
 import uk.ac.herc.bcra.domain.TwoFactorAuthentication;
 import uk.ac.herc.bcra.domain.User;
-import uk.ac.herc.bcra.exception.TwoFactorAuthenticationException;
+import uk.ac.herc.bcra.web.rest.errors.TwoFactorAuthenticationException;
 import uk.ac.herc.bcra.repository.TwoFactorAuthenticationRepository;
 import uk.ac.herc.bcra.repository.UserRepository;
 import uk.ac.herc.bcra.security.RoleManager;
@@ -18,10 +18,10 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static uk.ac.herc.bcra.exception.TwoFactorAuthenticationException.TwoFactorAuthenticationExceptionReason.PIN_NOT_MATCH;
-import static uk.ac.herc.bcra.exception.TwoFactorAuthenticationException.TwoFactorAuthenticationExceptionReason.PIN_HAS_EXPIRED;
-import static uk.ac.herc.bcra.exception.TwoFactorAuthenticationException.TwoFactorAuthenticationExceptionReason.PIN_NOT_EXIST;
-import static uk.ac.herc.bcra.exception.TwoFactorAuthenticationException.TwoFactorAuthenticationExceptionReason.PIN_VALIDATION_ATTEMPT_EXCEEDED;
+import static uk.ac.herc.bcra.web.rest.errors.TwoFactorAuthenticationException.TwoFactorAuthenticationExceptionReason.PIN_NOT_MATCH;
+import static uk.ac.herc.bcra.web.rest.errors.TwoFactorAuthenticationException.TwoFactorAuthenticationExceptionReason.PIN_HAS_EXPIRED;
+import static uk.ac.herc.bcra.web.rest.errors.TwoFactorAuthenticationException.TwoFactorAuthenticationExceptionReason.PIN_NOT_EXIST;
+import static uk.ac.herc.bcra.web.rest.errors.TwoFactorAuthenticationException.TwoFactorAuthenticationExceptionReason.PIN_VALIDATION_ATTEMPT_EXCEEDED;
 
 @Service
 @Transactional
@@ -46,9 +46,6 @@ public class TwoFactorAuthenticationServiceImpl implements TwoFactorAuthenticati
 
     @Override
     public String generateAndSendPin(User user) {
-        if(!RoleManager.requireTwoFactorAuth(user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet()))){
-            return null;
-        }
         TwoFactorAuthentication authentication = getExistingOrCreateTwoFactorAuthentication(user);
         emailUserPin(user, authentication.getPin());
         return authentication.getPin();
@@ -61,10 +58,11 @@ public class TwoFactorAuthenticationServiceImpl implements TwoFactorAuthenticati
             return new TwoFactorLoginResultDTO(false, PIN_NOT_EXIST);
         }
         TwoFactorAuthentication authentication = authenticationOptional.get();
-        if (authentication.isExpired())
+        if (authentication.isExpired()){
             return new TwoFactorLoginResultDTO(false, PIN_HAS_EXPIRED);
+        }
         Integer failedAttempts = authentication.getFailedAttempts();
-        if (failedAttempts == 5) {
+        if (failedAttempts >= 5) {
             return new TwoFactorLoginResultDTO(false, failedAttempts, PIN_VALIDATION_ATTEMPT_EXCEEDED);
         } else {
             Boolean isPinValid = authentication.getPin().equals(pin);
@@ -78,8 +76,7 @@ public class TwoFactorAuthenticationServiceImpl implements TwoFactorAuthenticati
         }
     }
 
-    @Override
-    public Optional<TwoFactorAuthentication> getTwoFactorAuthenticationForUser(String login) {
+    private Optional<TwoFactorAuthentication> getTwoFactorAuthenticationForUser(String login) {
         User user = userRepository.findOneByLogin(login).get();
         return twoFactorAuthenticationRepository.findOneByUserId(user.getId());
     }
@@ -94,7 +91,7 @@ public class TwoFactorAuthenticationServiceImpl implements TwoFactorAuthenticati
             return twoFactorAuthenticationRepository.save(authentication);
         } else {
             authentication = authenticationOptional.get();
-            if (authentication.getFailedAttempts() == 5) {
+            if (authentication.getFailedAttempts() >= 5 && !authentication.isExpired()) {
                 throw new TwoFactorAuthenticationException(
                     TwoFactorAuthenticationException.TwoFactorAuthenticationExceptionReason.PIN_VALIDATION_ATTEMPT_EXCEEDED);
             }

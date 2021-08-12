@@ -1,4 +1,4 @@
-package uk.ac.herc.bcra.exception;
+package uk.ac.herc.bcra.web.rest.errors;
 
 import org.springframework.security.core.AuthenticationException;
 
@@ -8,7 +8,7 @@ public class TwoFactorAuthenticationException extends AuthenticationException {
     public enum TwoFactorAuthenticationExceptionReason {
         PIN_HAS_EXPIRED("Pin for two factor authentication has expired. Cancel sign in and try again."),
         PIN_NOT_EXIST("Pin for two factor authentication failed. Cancel sign in and try again."),
-        PIN_VALIDATION_ATTEMPT_EXCEEDED("User had five failed attempts in the previous login. Login is not permitted"),
+        PIN_VALIDATION_ATTEMPT_EXCEEDED("User had five failed attempts in the previous login. Login is not permitted. Please try again after 30 minutes"),
         PIN_NOT_MATCH("Pin is wrong");
 
         private final String message;

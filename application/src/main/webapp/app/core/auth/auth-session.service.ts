@@ -34,7 +34,7 @@ export class AuthServerProvider {
     );
   }
 
-  twoFactorAuthInit(login): Observable<any> {
-    return this.http.post(SERVER_API_URL + 'api/authenticate/two-factor-init', login);
+  twoFactorAuthInit(login, pwd): Observable<any> {
+    return this.http.post(SERVER_API_URL + 'api/login/two-factor-init', { username: login, password: pwd });
   }
 }

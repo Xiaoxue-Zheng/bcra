@@ -11,6 +11,4 @@ public interface TwoFactorAuthenticationService {
     String generateAndSendPin(User user);
 
     TwoFactorLoginResultDTO validatePin(UserDetails user, String pin);
-
-    Optional<TwoFactorAuthentication> getTwoFactorAuthenticationForUser(String login);
 }

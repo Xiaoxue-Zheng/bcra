@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import uk.ac.herc.bcra.exception.TwoFactorAuthenticationException;
+import uk.ac.herc.bcra.web.rest.errors.TwoFactorAuthenticationException;
 import uk.ac.herc.bcra.service.TwoFactorAuthenticationService;
 import uk.ac.herc.bcra.service.dto.TwoFactorLoginResultDTO;
 

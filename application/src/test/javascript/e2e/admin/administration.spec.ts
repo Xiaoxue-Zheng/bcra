@@ -12,7 +12,7 @@ describe('administration', () => {
     await browser.get('/');
     navBarPage = new NavBarPage(true);
     signInPage = await navBarPage.getSignInPage();
-    await signInPage.autoSignInUsing('admin', 'admin');
+    await signInPage.twoFactorSignIn('admin', 'admin');
     await browser.wait(ec.visibilityOf(navBarPage.adminMenu), 5000);
   });
 

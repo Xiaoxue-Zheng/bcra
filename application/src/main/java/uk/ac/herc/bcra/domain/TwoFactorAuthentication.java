@@ -42,7 +42,7 @@ public class TwoFactorAuthentication {
 
 	@NotNull
 	@JsonIgnore
-    @Column(name = "failedAttempts")
+    @Column(name = "failed_attempts")
 	private Integer failedAttempts;
 
 	public Long getId() {

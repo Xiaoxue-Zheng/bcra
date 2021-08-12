@@ -1,6 +1,6 @@
 package uk.ac.herc.bcra.service.dto;
 
-import uk.ac.herc.bcra.exception.TwoFactorAuthenticationException;
+import uk.ac.herc.bcra.web.rest.errors.TwoFactorAuthenticationException;
 
 public class TwoFactorLoginResultDTO {
 

@@ -177,7 +177,7 @@ public class AccountResourceIT {
 
         restUserMockMvc.perform(get("/api/account")
             .accept(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(status().isInternalServerError());
+            .andExpect(status().isNotFound());
     }
 
     @Test
@@ -487,7 +487,7 @@ public class AccountResourceIT {
     @Transactional
     public void testActivateAccountWithWrongKey() throws Exception {
         restMvc.perform(get("/api/activate?key=wrongActivationKey"))
-            .andExpect(status().isInternalServerError());
+            .andExpect(status().isNotFound());
     }
 
     @Test
@@ -1003,6 +1003,6 @@ public class AccountResourceIT {
             post("/api/account/reset-password/finish")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
-            .andExpect(status().isInternalServerError());
+            .andExpect(status().isNotFound());
     }
 }

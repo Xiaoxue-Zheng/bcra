@@ -42,11 +42,6 @@ const router = new Router({
       component: () => import('../views/Tabs.vue')
     },
     {
-      path: '/privacy',
-      name: 'privacy',
-      component: () => import('../views/Privacy.vue')
-    },
-    {
       path: '/consent',
       name: 'consent',
       component: () => import('../views/Consent.vue')

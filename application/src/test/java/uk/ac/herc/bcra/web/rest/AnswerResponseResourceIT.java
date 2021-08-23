@@ -1,19 +1,17 @@
 package uk.ac.herc.bcra.web.rest;
 
-import org.junit.runner.RunWith;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.context.WebApplicationContext;
 import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.AnswerResponse;
 import uk.ac.herc.bcra.domain.Participant;
-import uk.ac.herc.bcra.domain.StudyId;
 import uk.ac.herc.bcra.repository.AnswerResponseRepository;
 import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.AnswerResponseService;
 import uk.ac.herc.bcra.service.StudyIdService;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
 import uk.ac.herc.bcra.service.mapper.AnswerResponseMapper;
+import uk.ac.herc.bcra.testutils.MockMvcUtil;
+import uk.ac.herc.bcra.testutils.StudyUtil;
 import uk.ac.herc.bcra.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -32,18 +31,16 @@ import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.security.Principal;
-import java.util.List;
+import java.time.LocalDate;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static uk.ac.herc.bcra.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static uk.ac.herc.bcra.testutils.MockMvcUtil.createFormattingConversionService;
 
+import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 import uk.ac.herc.bcra.domain.enumeration.ResponseState;
 /**
  * Integration tests for the {@link AnswerResponseResource} REST controller.
@@ -53,12 +50,6 @@ public class AnswerResponseResourceIT {
 
     @Autowired
     private WebApplicationContext context;
-
-    @Autowired
-    private AnswerResponseRepository answerResponseRepository;
-
-    @Autowired
-    private AnswerResponseMapper answerResponseMapper;
 
     @Autowired
     private AnswerResponseService answerResponseService;
@@ -76,6 +67,15 @@ public class AnswerResponseResourceIT {
     private ExceptionTranslator exceptionTranslator;
 
     @Autowired
+    private StudyUtil studyUtil;
+
+    @Autowired
+    private AnswerResponseMapper answerResponseMapper;
+
+    @Autowired
+    private AnswerResponseRepository answerResponseRepository;
+
+    @Autowired
     private EntityManager em;
 
     @Autowired
@@ -84,6 +84,9 @@ public class AnswerResponseResourceIT {
     private MockMvc restAnswerResponseMockMvc;
 
     private MockMvc securityRestMvc;
+
+    private static final String STUDY_CODE = "TST_101";
+    private Participant participant;
 
     @BeforeEach
     public void setup() {
@@ -107,24 +110,180 @@ public class AnswerResponseResourceIT {
 
     @BeforeEach
     public void initTest() {
-        DataFactory.createAnswerResponse(em);
+        participant = studyUtil.createParticipant(em, STUDY_CODE, LocalDate.now());
+        studyUtil.createStudyIdForParticipant(em, participant);
     }
 
     @Test
     @Transactional
-    public void getConsentAnswerResponseEmptyResult() throws Exception {
+    public void testGetConsentAnswerResponseFromStudyCode() throws Exception {
+        MvcResult result = restAnswerResponseMockMvc.perform(get("/api/answer-responses/consent/" + STUDY_CODE))
+            .andExpect(status().isOk())
+            .andReturn();
+        
+        byte[] data = result.getResponse().getContentAsByteArray();
+        AnswerResponseDTO consentDto = MockMvcUtil.convertJsonBytesToObject(AnswerResponseDTO.class, data);
+        assertThat(consentDto.getQuestionnaireId()).isEqualTo(participant.getProcedure().getConsentResponse().getQuestionnaire().getId());
+    }
 
-        Participant participant;
-        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = DataFactory.createUpdatedParticipant(em);
-            em.persist(participant);
-            em.flush();
-        } else {
-            participant = TestUtil.findAll(em, Participant.class).get(0);
-        }
+    @Test
+    @Transactional
+    public void testSaveConsent() throws Exception {
+        AnswerResponse consent = participant.getProcedure().getConsentResponse();
+        AnswerResponseDTO consentDto = answerResponseMapper.toDto(consent);
+        consentDto.getAnswerSections().iterator().next()
+            .getAnswerGroups().iterator().next()
+            .getAnswers().iterator().next()
+            .setNumber(99);
 
-        MvcResult result = restAnswerResponseMockMvc.perform(
-                get("/api/answer-responses/consent/TST_1")
+        restAnswerResponseMockMvc.perform(
+                put("/api/answer-responses/consent/save")
+                .content(MockMvcUtil.convertObjectToJsonBytes(consentDto))
+                .contentType(MediaType.APPLICATION_JSON)
+                .principal(new Principal() {
+                    @Override
+                    public String getName() {
+                        return participant.getUser().getLogin();
+                    }
+                })
+            )
+            .andExpect(status().isOk());
+
+        AnswerResponseDTO updatedConsentDto = answerResponseService.findOne(participant.getUser().getLogin(), QuestionnaireType.CONSENT_FORM).get();
+        AnswerResponse updatedConsent = answerResponseMapper.toEntity(updatedConsentDto);
+        Integer number = updatedConsent
+             .getAnswerSections().iterator().next()
+             .getAnswerGroups().iterator().next()
+             .getAnswers().iterator().next()
+             .getNumber();
+        assertThat(number).isEqualTo(99);
+    }
+
+    @Test
+    @Transactional
+    public void testSubmitConsent() throws Exception {
+        AnswerResponse consent = participant.getProcedure().getConsentResponse();
+        AnswerResponseDTO consentDto = answerResponseMapper.toDto(consent);
+
+        restAnswerResponseMockMvc.perform(
+                put("/api/answer-responses/consent/submit")
+                .content(MockMvcUtil.convertObjectToJsonBytes(consentDto))
+                .contentType(MediaType.APPLICATION_JSON)
+                .principal(new Principal() {
+                    @Override
+                    public String getName() {
+                        return participant.getUser().getLogin();
+                    }
+                })
+            )
+            .andExpect(status().isOk());
+
+        AnswerResponseDTO updatedConsentDto = answerResponseService.findOne(participant.getUser().getLogin(), QuestionnaireType.CONSENT_FORM).get();
+        AnswerResponse updatedConsent = answerResponseMapper.toEntity(updatedConsentDto);
+        assertThat(updatedConsent.getState()).isEqualTo(ResponseState.SUBMITTED);
+    }
+
+    @Test
+    @Transactional
+    public void testGetRiskAssessmentResponseFromStudyCode() throws Exception {
+        MvcResult result = restAnswerResponseMockMvc.perform(get("/api/answer-responses/risk-assessment/" + STUDY_CODE))
+            .andExpect(status().isOk())
+            .andReturn();
+        
+        byte[] data = result.getResponse().getContentAsByteArray();
+        AnswerResponseDTO riskAssessmentDto = MockMvcUtil.convertJsonBytesToObject(AnswerResponseDTO.class, data);
+        assertThat(riskAssessmentDto.getQuestionnaireId()).isEqualTo(participant.getProcedure().getRiskAssessmentResponse().getQuestionnaire().getId());
+    }
+
+    @Test
+    @Transactional
+    public void testSaveRiskAssessment() throws Exception {
+        AnswerResponse riskAssessment = participant.getProcedure().getRiskAssessmentResponse();
+        AnswerResponseDTO riskAssessmentDto = answerResponseMapper.toDto(riskAssessment);
+        riskAssessmentDto.getAnswerSections().iterator().next()
+            .getAnswerGroups().iterator().next()
+            .getAnswers().iterator().next()
+            .setNumber(99);
+
+        restAnswerResponseMockMvc.perform(
+                put("/api/answer-responses/risk-assessment/save")
+                .content(MockMvcUtil.convertObjectToJsonBytes(riskAssessmentDto))
+                .contentType(MediaType.APPLICATION_JSON)
+                .principal(new Principal() {
+                    @Override
+                    public String getName() {
+                        return participant.getUser().getLogin();
+                    }
+                })
+            )
+            .andExpect(status().isOk());
+
+        
+        AnswerResponseDTO updatedRiskAssessmentDto = answerResponseService.findOne(participant.getUser().getLogin(), QuestionnaireType.RISK_ASSESSMENT).get();
+        AnswerResponse updatedRiskAssessment = answerResponseMapper.toEntity(updatedRiskAssessmentDto);
+        Integer number = updatedRiskAssessment
+             .getAnswerSections().iterator().next()
+             .getAnswerGroups().iterator().next()
+             .getAnswers().iterator().next()
+             .getNumber();
+        assertThat(number).isEqualTo(99);
+    }
+
+    @Test
+    @Transactional
+    public void testReferralRiskAssessment() throws Exception {
+        AnswerResponse riskAssessment = participant.getProcedure().getRiskAssessmentResponse();
+        AnswerResponseDTO riskAssessmentDto = answerResponseMapper.toDto(riskAssessment);
+
+        restAnswerResponseMockMvc.perform(
+                put("/api/answer-responses/risk-assessment/referral")
+                .content(MockMvcUtil.convertObjectToJsonBytes(riskAssessmentDto))
+                .contentType(MediaType.APPLICATION_JSON)
+                .principal(new Principal() {
+                    @Override
+                    public String getName() {
+                        return participant.getUser().getLogin();
+                    }
+                })
+            )
+            .andExpect(status().isOk());
+
+        AnswerResponse updatedRiskAssessment = answerResponseRepository.getOne(riskAssessment.getId());
+        assertThat(updatedRiskAssessment.getState()).isEqualTo(ResponseState.REFERRED);
+    }
+
+    @Test
+    @Transactional
+    public void testSubmitRiskAssessment() throws Exception {
+        AnswerResponse riskAssessment = participant.getProcedure().getRiskAssessmentResponse();
+        AnswerResponseDTO riskAssessmentDto = answerResponseMapper.toDto(riskAssessment);
+
+        restAnswerResponseMockMvc.perform(
+                put("/api/answer-responses/risk-assessment/submit")
+                .content(MockMvcUtil.convertObjectToJsonBytes(riskAssessmentDto))
+                .contentType(MediaType.APPLICATION_JSON)
+                .principal(new Principal() {
+                    @Override
+                    public String getName() {
+                        return participant.getUser().getLogin();
+                    }
+                })
+            )
+            .andExpect(status().isOk());
+
+        AnswerResponse updatedRiskAssessment = answerResponseRepository.getOne(riskAssessment.getId());
+        assertThat(updatedRiskAssessment.getState()).isEqualTo(ResponseState.VALIDATED);
+    }
+
+    @Test
+    @Transactional
+    public void testHasCompletedConsentQuestionnaire() throws Exception {
+        AnswerResponse consent = participant.getProcedure().getConsentResponse();
+        consent.setState(ResponseState.NOT_STARTED);
+        answerResponseRepository.save(consent);
+
+        restAnswerResponseMockMvc.perform(
+                get("/api/answer-responses/consent/complete")
                 .principal(new Principal() {
                     @Override
                     public String getName() {
@@ -133,28 +292,13 @@ public class AnswerResponseResourceIT {
                 })
             )
             .andExpect(status().isOk())
-            .andReturn();
+            .andExpect(content().string("false"));
+        
+        consent.setState(ResponseState.VALIDATED);
+        answerResponseRepository.save(consent);
 
-        String content = result.getResponse().getContentAsString();
-        assertThat(content).isEqualTo("");
-    }
-
-    @Test
-    @Transactional
-    public void getConsentAnswerResponseValidResult() throws Exception {
-        Participant participant;
-        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = DataFactory.createUpdatedParticipant(em);
-            em.persist(participant);
-            em.flush();
-        } else {
-            participant = TestUtil.findAll(em, Participant.class).get(0);
-        }
-
-        StudyId studyId = DataFactory.createStudyId(em, participant);
-
-        MvcResult result = restAnswerResponseMockMvc.perform(
-                get("/api/answer-responses/consent/" + studyId.getCode())
+        restAnswerResponseMockMvc.perform(
+                get("/api/answer-responses/consent/complete")
                 .principal(new Principal() {
                     @Override
                     public String getName() {
@@ -163,33 +307,18 @@ public class AnswerResponseResourceIT {
                 })
             )
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andReturn();
-
-        String content = result.getResponse().getContentAsString();
-        ObjectMapper mapper = new ObjectMapper();
-        AnswerResponseDTO response = mapper.readValue(content, AnswerResponseDTO.class);
-        assertThat(response.getQuestionnaireId()).isNotNull();
-        assertThat(response.getAnswerSections()).isNotNull();
-        assertThat(response.getId()).isNotNull();
-        assertThat(response.getAnswerSections().size() > 0).isEqualTo(true);
+            .andExpect(content().string("true"));
     }
 
     @Test
     @Transactional
-    public void getRiskAssessmentAnswerResponseEmptyResult() throws Exception {
+    public void testHasCompletedRiskAssessmentQuestionnaire() throws Exception {
+        AnswerResponse riskAssessment = participant.getProcedure().getRiskAssessmentResponse();
+        riskAssessment.setState(ResponseState.NOT_STARTED);
+        answerResponseRepository.save(riskAssessment);
 
-        Participant participant;
-        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = DataFactory.createUpdatedParticipant(em);
-            em.persist(participant);
-            em.flush();
-        } else {
-            participant = TestUtil.findAll(em, Participant.class).get(0);
-        }
-
-        MvcResult result = restAnswerResponseMockMvc.perform(
-                get("/api/answer-responses/risk-assessment/TST_1")
+        restAnswerResponseMockMvc.perform(
+                get("/api/answer-responses/risk-assessment/complete")
                 .principal(new Principal() {
                     @Override
                     public String getName() {
@@ -198,28 +327,13 @@ public class AnswerResponseResourceIT {
                 })
             )
             .andExpect(status().isOk())
-            .andReturn();
+            .andExpect(content().string("false"));
+        
+        riskAssessment.setState(ResponseState.VALIDATED);
+        answerResponseRepository.save(riskAssessment);
 
-        String content = result.getResponse().getContentAsString();
-        assertThat(content).isEqualTo("");
-    }
-
-    @Test
-    @Transactional
-    public void getRiskAssessmentAnswerResponseValidResult() throws Exception {
-        Participant participant;
-        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = DataFactory.createUpdatedParticipant(em);
-            em.persist(participant);
-            em.flush();
-        } else {
-            participant = TestUtil.findAll(em, Participant.class).get(0);
-        }
-
-        StudyId studyId = DataFactory.createStudyId(em, participant);
-
-        MvcResult result = restAnswerResponseMockMvc.perform(
-                get("/api/answer-responses/risk-assessment/" + studyId.getCode())
+        restAnswerResponseMockMvc.perform(
+                get("/api/answer-responses/risk-assessment/complete")
                 .principal(new Principal() {
                     @Override
                     public String getName() {
@@ -228,526 +342,49 @@ public class AnswerResponseResourceIT {
                 })
             )
             .andExpect(status().isOk())
-            .andReturn();
-
-        String content = result.getResponse().getContentAsString();
-        ObjectMapper mapper = new ObjectMapper();
-        AnswerResponseDTO response = mapper.readValue(content, AnswerResponseDTO.class);
-        assertThat(response.getQuestionnaireId()).isNotNull();
-        assertThat(response.getAnswerSections()).isNotNull();
-        assertThat(response.getId()).isNotNull();
-        assertThat(response.getAnswerSections().size() > 0).isEqualTo(true);
+            .andExpect(content().string("true"));
     }
 
     @Test
     @Transactional
-    @WithMockUser(value = "getUnauthorizedGetRiskAssessmentAnswer", authorities = {RoleManager.USER, RoleManager.MANAGER, RoleManager.ADMIN})
-    public void getUnauthorizedGetRiskAssessmentAnswer() throws Exception {
-        String login = "getUnauthorizedGetRiskAssessmentAnswer";
-        Participant participant;
-        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = DataFactory.createUpdatedParticipant(em, login);
-            em.persist(participant);
-            em.flush();
-        } else {
-            participant = TestUtil.findAll(em, Participant.class).get(0);
-        }
-
-        StudyId studyId = DataFactory.createStudyId(em, participant);
-
-        MvcResult result = securityRestMvc.perform(
-            get("/api/answer-responses/risk-assessment/" + studyId.getCode())
-            .with(csrf()))
-            .andExpect(status().is(403))
-            .andReturn();
-    }
-
-    @Test
-    @Transactional
-    public void saveConsentAnswerResponse() throws Exception {
-
-        // Initialize the database
-        Participant participant;
-        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = DataFactory.createUpdatedParticipant(em);
-            em.persist(participant);
-            em.flush();
-        } else {
-            participant = TestUtil.findAll(em, Participant.class).get(0);
-        }
-
-        int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
-
-        // Update the answerResponse
-        AnswerResponse updatedAnswerResponse =
-            answerResponseRepository.findById(
-                participant.getProcedure().getConsentResponse().getId()
-            ).get();
-
-        em.detach(updatedAnswerResponse);
-
-        updatedAnswerResponse
-            .state(DataFactory.UPDATED_STATE)
-            .status(DataFactory.UPDATED_STATUS)
-            .getAnswerSections().iterator().next()
-            .getAnswerGroups().iterator().next()
-            .getAnswers().iterator().next()
-            .setNumber(DataFactory.UPDATED_ANSWER_VALUE);
-
-        // Save
-        AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(updatedAnswerResponse);
-        restAnswerResponseMockMvc.perform(
-            put("/api/answer-responses/consent/save")
-            .principal(new Principal() {
-                @Override
-                public String getName() {
-                    return participant.getUser().getLogin();
-                }
-            })
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(answerResponseDTO)))
-            .andExpect(status().isOk());
-
-        // Validate the AnswerResponse in the database
-        List<AnswerResponse> answerResponseList = answerResponseRepository.findAll();
-        assertThat(answerResponseList).hasSize(databaseSizeBeforeUpdate);
-
-        // Check that State and Status cannot be modified via API
-        AnswerResponse testAnswerResponse =
-            answerResponseRepository.getOne(participant.getProcedure().getConsentResponse().getId());
-
-        assertThat(testAnswerResponse.getState()).isNotEqualTo(DataFactory.UPDATED_STATE);
-        assertThat(testAnswerResponse.getStatus()).isNotEqualTo(DataFactory.UPDATED_STATUS);
-
-        // Check State and Updated Answer
-        assertThat(testAnswerResponse.getState()).isEqualTo(ResponseState.IN_PROGRESS);
-        assertThat(
-            testAnswerResponse
-            .getAnswerSections().iterator().next()
-            .getAnswerGroups().iterator().next()
-            .getAnswers().iterator().next()
-            .getNumber()
-        ).isEqualTo(DataFactory.UPDATED_ANSWER_VALUE);
-    }
-
-    @Test
-    @Transactional
-    public void submitConsentAnswerResponse() throws Exception {
-
-        // Initialize the database
-        Participant participant;
-        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = DataFactory.createUpdatedParticipant(em);
-            em.persist(participant);
-            em.flush();
-        } else {
-            participant = TestUtil.findAll(em, Participant.class).get(0);
-        }
-
-        int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
-
-        // Update the answerResponse
-        AnswerResponse updatedAnswerResponse =
-            answerResponseRepository.findById(
-                participant.getProcedure().getConsentResponse().getId()
-            ).get();
-
-        em.detach(updatedAnswerResponse);
-
-        updatedAnswerResponse
-            .state(DataFactory.UPDATED_STATE)
-            .status(DataFactory.UPDATED_STATUS)
-            .getAnswerSections().iterator().next()
-            .getAnswerGroups().iterator().next()
-            .getAnswers().iterator().next()
-            .setNumber(DataFactory.UPDATED_ANSWER_VALUE);
-
-        // Save
-        AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(updatedAnswerResponse);
-        restAnswerResponseMockMvc.perform(
-            put("/api/answer-responses/consent/submit")
-            .principal(new Principal() {
-                @Override
-                public String getName() {
-                    return participant.getUser().getLogin();
-                }
-            })
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(answerResponseDTO)))
-            .andExpect(status().isOk());
-
-        // Validate the AnswerResponse in the database
-        List<AnswerResponse> answerResponseList = answerResponseRepository.findAll();
-        assertThat(answerResponseList).hasSize(databaseSizeBeforeUpdate);
-
-        // Check that State and Status cannot be modified via API
-        AnswerResponse testAnswerResponse =
-            answerResponseRepository.getOne(participant.getProcedure().getConsentResponse().getId());
-
-        assertThat(testAnswerResponse.getState()).isNotEqualTo(DataFactory.UPDATED_STATE);
-        assertThat(testAnswerResponse.getStatus()).isNotEqualTo(DataFactory.UPDATED_STATUS);
-
-        // Check State and Updated Answer
-        assertThat(testAnswerResponse.getState()).isEqualTo(ResponseState.SUBMITTED);
-        assertThat(
-            testAnswerResponse
-            .getAnswerSections().iterator().next()
-            .getAnswerGroups().iterator().next()
-            .getAnswers().iterator().next()
-            .getNumber()
-        ).isEqualTo(DataFactory.UPDATED_ANSWER_VALUE);
-    }
-
-    @Test
-    @Transactional
-    public void saveRiskAssessmentAnswerResponse() throws Exception {
-
-        // Initialize the database
-        Participant participant;
-        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = DataFactory.createUpdatedParticipant(em);
-            em.persist(participant);
-            em.flush();
-        } else {
-            participant = TestUtil.findAll(em, Participant.class).get(0);
-        }
-
-        int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
-
-        // Update the answerResponse
-        AnswerResponse updatedAnswerResponse =
-            answerResponseRepository.findById(
-                participant.getProcedure().getRiskAssessmentResponse().getId()
-            ).get();
-
-        em.detach(updatedAnswerResponse);
-
-        updatedAnswerResponse
-            .state(DataFactory.UPDATED_STATE)
-            .status(DataFactory.UPDATED_STATUS)
-            .getAnswerSections().iterator().next()
-            .getAnswerGroups().iterator().next()
-            .getAnswers().iterator().next()
-            .setNumber(DataFactory.UPDATED_ANSWER_VALUE);
-
-        // Save
-        AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(updatedAnswerResponse);
-        restAnswerResponseMockMvc.perform(
-            put("/api/answer-responses/risk-assessment/save")
-            .principal(new Principal() {
-                @Override
-                public String getName() {
-                    return participant.getUser().getLogin();
-                }
-            })
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(answerResponseDTO)))
-            .andExpect(status().isOk());
-
-        // Validate the AnswerResponse in the database
-        List<AnswerResponse> answerResponseList = answerResponseRepository.findAll();
-        assertThat(answerResponseList).hasSize(databaseSizeBeforeUpdate);
-
-        // Check that State and Status cannot be modified via API
-        AnswerResponse testAnswerResponse =
-            answerResponseRepository.getOne(participant.getProcedure().getRiskAssessmentResponse().getId());
-
-        assertThat(testAnswerResponse.getState()).isNotEqualTo(DataFactory.UPDATED_STATE);
-        assertThat(testAnswerResponse.getStatus()).isNotEqualTo(DataFactory.UPDATED_STATUS);
-
-        // Check State and Updated Answer
-        assertThat(testAnswerResponse.getState()).isEqualTo(ResponseState.IN_PROGRESS);
-        assertThat(
-            testAnswerResponse
-            .getAnswerSections().iterator().next()
-            .getAnswerGroups().iterator().next()
-            .getAnswers().iterator().next()
-            .getNumber()
-        ).isEqualTo(DataFactory.UPDATED_ANSWER_VALUE);
-    }
-
-    @Test
-    @Transactional
-    @WithMockUser(value = "unauthorizedSaveRiskAssessmentAnswerResponse", authorities = {RoleManager.USER, RoleManager.MANAGER, RoleManager.ADMIN})
-    public void unauthorizedSaveRiskAssessmentAnswerResponse() throws Exception {
-        // Initialize the database
-        Participant participant;
-        String login = "unauthorizedSaveRiskAssessmentAnswerResponse";
-        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = DataFactory.createUpdatedParticipant(em, login);
-            em.persist(participant);
-            em.flush();
-        } else {
-            participant = TestUtil.findAll(em, Participant.class).get(0);
-        }
-
-        int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
-
-        // Update the answerResponse
-        AnswerResponse updatedAnswerResponse =
-            answerResponseRepository.findById(
-                participant.getProcedure().getRiskAssessmentResponse().getId()
-            ).get();
-
-        em.detach(updatedAnswerResponse);
-
-        updatedAnswerResponse
-            .state(DataFactory.UPDATED_STATE)
-            .status(DataFactory.UPDATED_STATUS)
-            .getAnswerSections().iterator().next()
-            .getAnswerGroups().iterator().next()
-            .getAnswers().iterator().next()
-            .setNumber(DataFactory.UPDATED_ANSWER_VALUE);
-
-        // Save
-        AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(updatedAnswerResponse);
-        securityRestMvc.perform(
-            put("/api/answer-responses/risk-assessment/save")
-                .principal(new Principal() {
-                    @Override
-                    public String getName() {
-                        return participant.getUser().getLogin();
-                    }
-                })
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(answerResponseDTO))
-                .with(csrf()))
-            .andExpect(status().is(403));
-
-    }
-
-    @Test
-    @Transactional
-    public void submitRiskAssessmentAnswerResponse() throws Exception {
-
-        // Initialize the database
-        Participant participant;
-        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = DataFactory.createUpdatedParticipant(em);
-            em.persist(participant);
-            em.flush();
-        } else {
-            participant = TestUtil.findAll(em, Participant.class).get(0);
-        }
-
-        int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
-
-        // Update the answerResponse
-        AnswerResponse updatedAnswerResponse =
-            answerResponseRepository.findById(
-                participant.getProcedure().getRiskAssessmentResponse().getId()
-            ).get();
-
-        em.detach(updatedAnswerResponse);
-
-        updatedAnswerResponse
-            .state(DataFactory.UPDATED_STATE)
-            .status(DataFactory.UPDATED_STATUS)
-            .getAnswerSections().iterator().next()
-            .getAnswerGroups().iterator().next()
-            .getAnswers().iterator().next()
-            .setNumber(DataFactory.UPDATED_ANSWER_VALUE);
-
-        // Save
-        AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(updatedAnswerResponse);
-        restAnswerResponseMockMvc.perform(
-            put("/api/answer-responses/risk-assessment/submit")
-            .principal(new Principal() {
-                @Override
-                public String getName() {
-                    return participant.getUser().getLogin();
-                }
-            })
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(answerResponseDTO)))
-            .andExpect(status().isOk());
-
-        // Validate the AnswerResponse in the database
-        List<AnswerResponse> answerResponseList = answerResponseRepository.findAll();
-        assertThat(answerResponseList).hasSize(databaseSizeBeforeUpdate);
-
-        // Check that State and Status cannot be modified via API
-        AnswerResponse testAnswerResponse =
-            answerResponseRepository.getOne(participant.getProcedure().getRiskAssessmentResponse().getId());
-
-        assertThat(testAnswerResponse.getState()).isNotEqualTo(DataFactory.UPDATED_STATE);
-        assertThat(testAnswerResponse.getStatus()).isNotEqualTo(DataFactory.UPDATED_STATUS);
-
-        // Check State and Updated Answer
-        assertThat(testAnswerResponse.getState()).isEqualTo(ResponseState.VALIDATED);
-        assertThat(
-            testAnswerResponse
-            .getAnswerSections().iterator().next()
-            .getAnswerGroups().iterator().next()
-            .getAnswers().iterator().next()
-            .getNumber()
-        ).isEqualTo(DataFactory.UPDATED_ANSWER_VALUE);
-    }
-
-    @Test
-    @Transactional
-    @WithMockUser(value = "unauthorizedSubmitRiskAssessmentAnswerResponse", authorities = {RoleManager.USER, RoleManager.MANAGER, RoleManager.ADMIN})
-    public void unauthorizedSubmitRiskAssessmentAnswerResponse() throws Exception {
-        String login = "unauthorizedSubmitRiskAssessmentAnswerResponse";
-        // Initialize the database
-        Participant participant;
-        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = DataFactory.createUpdatedParticipant(em, login);
-            em.persist(participant);
-            em.flush();
-        } else {
-            participant = TestUtil.findAll(em, Participant.class).get(0);
-        }
-
-        int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
-
-        // Update the answerResponse
-        AnswerResponse updatedAnswerResponse =
-            answerResponseRepository.findById(
-                participant.getProcedure().getRiskAssessmentResponse().getId()
-            ).get();
-
-        em.detach(updatedAnswerResponse);
-
-        updatedAnswerResponse
-            .state(DataFactory.UPDATED_STATE)
-            .status(DataFactory.UPDATED_STATUS)
-            .getAnswerSections().iterator().next()
-            .getAnswerGroups().iterator().next()
-            .getAnswers().iterator().next()
-            .setNumber(DataFactory.UPDATED_ANSWER_VALUE);
-
-        // Save
-        AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(updatedAnswerResponse);
-        securityRestMvc.perform(
-            put("/api/answer-responses/risk-assessment/submit")
-                .principal(new Principal() {
-                    @Override
-                    public String getName() {
-                        return participant.getUser().getLogin();
-                    }
-                })
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(answerResponseDTO))
-                .with(csrf()))
+    @WithMockUser(authorities = {RoleManager.USER})
+    public void testUnauthorizedGetRiskAssessmentResponseFromStudyCode() throws Exception {
+        securityRestMvc.perform(get("/api/answer-responses/risk-assessment/TEST_CODE")
+            .contentType(MockMvcUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().is(403));
     }
 
     @Test
     @Transactional
-    public void referralRiskAssessmentAnswerResponse() throws Exception {
-
-        // Initialize the database
-        Participant participant;
-        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = DataFactory.createUpdatedParticipant(em);
-            em.persist(participant);
-            em.flush();
-        } else {
-            participant = TestUtil.findAll(em, Participant.class).get(0);
-        }
-
-        int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
-
-        // Update the answerResponse
-        AnswerResponse updatedAnswerResponse =
-            answerResponseRepository.findById(
-                participant.getProcedure().getRiskAssessmentResponse().getId()
-            ).get();
-
-        em.detach(updatedAnswerResponse);
-
-        updatedAnswerResponse
-            .state(DataFactory.UPDATED_STATE)
-            .status(DataFactory.UPDATED_STATUS)
-            .getAnswerSections().iterator().next()
-            .getAnswerGroups().iterator().next()
-            .getAnswers().iterator().next()
-            .setNumber(DataFactory.UPDATED_ANSWER_VALUE);
-
-        // Save
-        AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(updatedAnswerResponse);
-        restAnswerResponseMockMvc.perform(
-            put("/api/answer-responses/risk-assessment/referral")
-                .principal(new Principal() {
-                    @Override
-                    public String getName() {
-                        return participant.getUser().getLogin();
-                    }
-                })
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(answerResponseDTO)))
-            .andExpect(status().isOk());
-
-        // Validate the AnswerResponse in the database
-        List<AnswerResponse> answerResponseList = answerResponseRepository.findAll();
-        assertThat(answerResponseList).hasSize(databaseSizeBeforeUpdate);
-
-        // Check that State and Status cannot be modified via API
-        AnswerResponse testAnswerResponse =
-            answerResponseRepository.getOne(participant.getProcedure().getRiskAssessmentResponse().getId());
-
-        assertThat(testAnswerResponse.getState()).isNotEqualTo(DataFactory.UPDATED_STATE);
-        assertThat(testAnswerResponse.getStatus()).isNotEqualTo(DataFactory.UPDATED_STATUS);
-
-        // Check State and Updated Answer
-        assertThat(testAnswerResponse.getState()).isEqualTo(ResponseState.REFERRED);
-        assertThat(
-            testAnswerResponse
-                .getAnswerSections().iterator().next()
-                .getAnswerGroups().iterator().next()
-                .getAnswers().iterator().next()
-                .getNumber()
-        ).isEqualTo(DataFactory.UPDATED_ANSWER_VALUE);
+    @WithMockUser(authorities = {RoleManager.USER})
+    public void testUnauthorizedSaveRiskAssessment() throws Exception {
+        AnswerResponseDTO riskAssessmentDto = new AnswerResponseDTO();
+        securityRestMvc.perform(put("/api/answer-responses/risk-assessment/save")
+            .content(MockMvcUtil.convertObjectToJsonBytes(riskAssessmentDto))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().is(403));      
     }
 
     @Test
     @Transactional
-    @WithMockUser(value = "unauthorizedReferralRiskAssessmentAnswerResponse", authorities = {RoleManager.USER, RoleManager.MANAGER, RoleManager.ADMIN})
-    public void unauthorizedReferralRiskAssessmentAnswerResponse() throws Exception {
-        String login = "unauthorizedReferralRiskAssessmentAnswerResponse";
-        // Initialize the database
-        Participant participant;
-        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = DataFactory.createUpdatedParticipant(em, login);
-            em.persist(participant);
-            em.flush();
-        } else {
-            participant = TestUtil.findAll(em, Participant.class).get(0);
-        }
-
-        int databaseSizeBeforeUpdate = answerResponseRepository.findAll().size();
-
-        // Update the answerResponse
-        AnswerResponse updatedAnswerResponse =
-            answerResponseRepository.findById(
-                participant.getProcedure().getRiskAssessmentResponse().getId()
-            ).get();
-
-        em.detach(updatedAnswerResponse);
-
-        updatedAnswerResponse
-            .state(DataFactory.UPDATED_STATE)
-            .status(DataFactory.UPDATED_STATUS)
-            .getAnswerSections().iterator().next()
-            .getAnswerGroups().iterator().next()
-            .getAnswers().iterator().next()
-            .setNumber(DataFactory.UPDATED_ANSWER_VALUE);
-
-        // Save
-        AnswerResponseDTO answerResponseDTO = answerResponseMapper.toDto(updatedAnswerResponse);
-        securityRestMvc.perform(
-            put("/api/answer-responses/risk-assessment/referral")
-                .principal(new Principal() {
-                    @Override
-                    public String getName() {
-                        return participant.getUser().getLogin();
-                    }
-                })
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(answerResponseDTO))
-                .with(csrf()))
-            .andExpect(status().is(403));
-
+    @WithMockUser(authorities = {RoleManager.USER})
+    public void testUnauthorizedReferralRiskAssessment() throws Exception {
+        AnswerResponseDTO riskAssessmentDto = new AnswerResponseDTO();
+        securityRestMvc.perform(put("/api/answer-responses/risk-assessment/referral")
+            .content(MockMvcUtil.convertObjectToJsonBytes(riskAssessmentDto))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().is(403));      
     }
+
+    @Test
+    @Transactional
+    @WithMockUser(authorities = {RoleManager.USER})
+    public void testUnauthorizedSubmitRiskAssessment() throws Exception {
+        AnswerResponseDTO riskAssessmentDto = new AnswerResponseDTO();
+        securityRestMvc.perform(put("/api/answer-responses/risk-assessment/submit")
+            .content(MockMvcUtil.convertObjectToJsonBytes(riskAssessmentDto))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().is(403));      
+    }
+
 }

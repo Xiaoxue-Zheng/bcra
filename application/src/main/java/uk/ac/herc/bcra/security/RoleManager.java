@@ -1,12 +1,8 @@
 package uk.ac.herc.bcra.security;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import uk.ac.herc.bcra.domain.User;
 
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 /**

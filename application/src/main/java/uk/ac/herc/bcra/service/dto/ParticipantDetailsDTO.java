@@ -2,7 +2,6 @@ package uk.ac.herc.bcra.service.dto;
 
 import uk.ac.herc.bcra.domain.enumeration.ParticipantContactWay;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import javax.validation.constraints.NotEmpty;

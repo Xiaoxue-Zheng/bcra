@@ -1,4 +1,4 @@
-package uk.ac.herc.bcra.service;
+package uk.ac.herc.bcra.testutils;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.domain.Procedure;
 import uk.ac.herc.bcra.domain.Risk;
 import uk.ac.herc.bcra.domain.RiskAssessmentResult;
+import uk.ac.herc.bcra.domain.StudyId;
 import uk.ac.herc.bcra.domain.YearlyRisk;
 import uk.ac.herc.bcra.domain.User;
 import uk.ac.herc.bcra.domain.enumeration.ParticipantContactWay;
@@ -40,6 +42,7 @@ public class StudyUtil {
         User u = new User();
         u.setLogin(identifier);
         u.setPassword("PASSWORDPASSWORDPASSWORDPASSWORDPASSWORDPASSWORDPASSWORDPASS");
+        u.setEmail(identifier + "@" + RandomStringUtils.randomAlphabetic(5));
         u.setActivated(true);
 
         em.persist(u);
@@ -79,6 +82,19 @@ public class StudyUtil {
         em.flush();
 
         return p;
+    }
+
+    public StudyId createStudyIdForParticipant(EntityManager em, Participant participant) {
+        StudyId studyId = new StudyId();
+        studyId.setParticipant(participant);
+        studyId.setConsentResponse(participant.getProcedure().getConsentResponse());
+        studyId.setRiskAssessmentResponse(participant.getProcedure().getRiskAssessmentResponse());
+        studyId.setCode(participant.getUser().getLogin());
+        
+        em.persist(studyId);
+        em.flush();
+
+        return studyId;
     }
 
     public RiskAssessmentResult createRiskAssessmentResultForParticipant(EntityManager em, Participant participant) {

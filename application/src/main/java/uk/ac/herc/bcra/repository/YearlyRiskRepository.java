@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 /**
  * Spring Data  repository for the RiskFactor entity.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface YearlyRiskRepository extends JpaRepository<YearlyRisk, Long> {
 

@@ -3,7 +3,6 @@ package uk.ac.herc.bcra.service;
 import uk.ac.herc.bcra.domain.IdentifiableData;
 import uk.ac.herc.bcra.service.dto.IdentifiableDataDTO;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 

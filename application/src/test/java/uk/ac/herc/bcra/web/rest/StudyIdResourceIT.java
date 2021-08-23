@@ -6,6 +6,8 @@ import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.StudyIdService;
+import uk.ac.herc.bcra.testutils.MockMvcUtil;
+import uk.ac.herc.bcra.testutils.StudyUtil;
 import uk.ac.herc.bcra.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -26,16 +28,16 @@ import javax.persistence.EntityManager;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static uk.ac.herc.bcra.web.rest.TestUtil.createFormattingConversionService;
 
-import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static uk.ac.herc.bcra.testutils.MockMvcUtil.createFormattingConversionService;
 
 import uk.ac.herc.bcra.domain.StudyId;
 import uk.ac.herc.bcra.repository.StudyIdRepository;
@@ -66,6 +68,9 @@ public class StudyIdResourceIT {
 
     @Autowired
     private StudyIdService studyIdService;
+
+    @Autowired
+    private StudyUtil studyUtil;
 
     private StudyId studyId;
 
@@ -98,14 +103,9 @@ public class StudyIdResourceIT {
 
     @BeforeEach
     public void initTest() {
-        studyId = DataFactory.createStudyId(em);
-        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = DataFactory.createUpdatedParticipant(em);
-            em.persist(participant);
-            em.flush();
-        } else {
-            participant = TestUtil.findAll(em, Participant.class).get(0);
-        }
+        String studyCode = "TST_101";
+        participant = studyUtil.createParticipant(em, studyCode, LocalDate.now());
+        studyId = studyUtil.createStudyIdForParticipant(em, participant);
     }
 
     @Test
@@ -150,12 +150,6 @@ public class StudyIdResourceIT {
     @Test
     @Transactional
     public void getStudyCode() throws Exception {
-        // Add an assigned study id to the database.
-        StudyId studyIdAssigned = DataFactory.createStudyId(em);
-        studyIdAssigned.setParticipant(participant);
-
-        studyIdRepository.saveAndFlush(studyIdAssigned);
-
         MvcResult result = restStudyIdMockMvc.perform(
             get("/api/study-ids/current")
                 .principal(new Principal() {
@@ -169,7 +163,7 @@ public class StudyIdResourceIT {
             .andReturn();
 
         String returnedStudyCode = result.getResponse().getContentAsString();
-        assertThat(returnedStudyCode).isEqualTo("\"" + studyIdAssigned.getCode() + "\"");
+        assertThat(returnedStudyCode).isEqualTo("\"" + studyId.getCode() + "\"");
     }
 
     @Test
@@ -179,8 +173,8 @@ public class StudyIdResourceIT {
         List<String> studyIdList = new ArrayList<>();
         studyIdList.add("unauthorizedCreateSturdyId");
         securityRestMvc.perform(post("/api/study-ids")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(studyIdList)).with(csrf()))
+            .contentType(MockMvcUtil.APPLICATION_JSON_UTF8)
+            .content(MockMvcUtil.convertObjectToJsonBytes(studyIdList)).with(csrf()))
             .andExpect(status().is(403));
     }
 

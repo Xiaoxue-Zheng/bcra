@@ -5,11 +5,12 @@ import org.springframework.web.context.WebApplicationContext;
 import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.domain.Questionnaire;
-import uk.ac.herc.bcra.repository.QuestionnaireRepository;
 import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.QuestionnaireService;
 import uk.ac.herc.bcra.service.dto.QuestionnaireDTO;
 import uk.ac.herc.bcra.service.mapper.QuestionnaireMapper;
+import uk.ac.herc.bcra.testutils.MockMvcUtil;
+import uk.ac.herc.bcra.testutils.StudyUtil;
 import uk.ac.herc.bcra.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -29,14 +30,14 @@ import javax.persistence.EntityManager;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static uk.ac.herc.bcra.web.rest.TestUtil.createFormattingConversionService;
 
 import java.security.Principal;
+import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static uk.ac.herc.bcra.testutils.MockMvcUtil.createFormattingConversionService;
 
 import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 /**
@@ -52,9 +53,6 @@ public class QuestionnaireResourceIT {
     private static final Integer UPDATED_VERSION = 2;
     @Autowired
     private WebApplicationContext context;
-
-    @Autowired
-    private QuestionnaireRepository questionnaireRepository;
 
     @Autowired
     private QuestionnaireMapper questionnaireMapper;
@@ -77,11 +75,14 @@ public class QuestionnaireResourceIT {
     @Autowired
     private Validator validator;
 
+    @Autowired
+    private StudyUtil studyUtil;
+
     private MockMvc restQuestionnaireMockMvc;
 
     private MockMvc securityRestMvc;
 
-    private Questionnaire questionnaire;
+    private Participant participant;
 
     @BeforeEach
     public void setup() {
@@ -97,6 +98,8 @@ public class QuestionnaireResourceIT {
             .webAppContextSetup(context)
             .apply(springSecurity())
             .build();
+
+        participant = studyUtil.createParticipant(em, "TST_101", LocalDate.now());
     }
 
     /**
@@ -134,26 +137,6 @@ public class QuestionnaireResourceIT {
         return questionnaire;
     }
 
-    @BeforeEach
-    public void initTest() {
-        questionnaire = createEntity(em);
-    }
-
-    @Test
-    @Transactional
-    public void getAllQuestionnaires() throws Exception {
-        // Initialize the database
-        questionnaireRepository.saveAndFlush(questionnaire);
-
-        // Get all the questionnaireList
-        restQuestionnaireMockMvc.perform(get("/api/questionnaires?sort=id,desc"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(questionnaire.getId().intValue())))
-            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].version").value(hasItem(DEFAULT_VERSION)));
-    }
-
     @Test
     @Transactional
     public void getConsentQuestionnaire() throws Exception {
@@ -170,16 +153,6 @@ public class QuestionnaireResourceIT {
     @Test
     @Transactional
     public void getRiskAssessmentQuestionnaire() throws Exception {
-        // Initialize the database
-        Participant participant;
-        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = DataFactory.createParticipant(em);
-            em.persist(participant);
-            em.flush();
-        } else {
-            participant = TestUtil.findAll(em, Participant.class).get(0);
-        }
-
         // Get the questionnaire
         restQuestionnaireMockMvc.perform(
             get("/api/questionnaires/risk-assessment")
@@ -200,15 +173,6 @@ public class QuestionnaireResourceIT {
     @Transactional
     @WithMockUser(authorities = {RoleManager.MANAGER, RoleManager.USER, RoleManager.ADMIN})
     public void unauthorizedGetRiskAssessmentQuestionnaire() throws Exception {
-        // Initialize the database
-        String login = "unauthorizedGetRiskAssessmentQuestionnaire";
-        Participant participant;
-        if (TestUtil.findAll(em, Participant.class).isEmpty()) {
-            participant = DataFactory.createParticipantNoIdentifiableData(em, login);
-        } else {
-            participant = TestUtil.findAll(em, Participant.class).get(0);
-        }
-
         // Get the questionnaire
         securityRestMvc.perform(
             get("/api/questionnaires/risk-assessment")
@@ -233,7 +197,7 @@ public class QuestionnaireResourceIT {
     @Test
     @Transactional
     public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(Questionnaire.class);
+        MockMvcUtil.equalsVerifier(Questionnaire.class);
         Questionnaire questionnaire1 = new Questionnaire();
         questionnaire1.setId(1L);
         Questionnaire questionnaire2 = new Questionnaire();
@@ -248,7 +212,7 @@ public class QuestionnaireResourceIT {
     @Test
     @Transactional
     public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(QuestionnaireDTO.class);
+        MockMvcUtil.equalsVerifier(QuestionnaireDTO.class);
         QuestionnaireDTO questionnaireDTO1 = new QuestionnaireDTO();
         questionnaireDTO1.setId(1L);
         QuestionnaireDTO questionnaireDTO2 = new QuestionnaireDTO();

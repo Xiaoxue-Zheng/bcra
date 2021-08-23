@@ -10,6 +10,9 @@ import uk.ac.herc.bcra.domain.AnswerResponse;
 import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.service.util.OSValidator;
 import uk.ac.herc.bcra.service.util.TyrerCuzickPathUtil;
+import uk.ac.herc.bcra.testutils.QuestionnaireUtil;
+import uk.ac.herc.bcra.testutils.StudyUtil;
+import uk.ac.herc.bcra.testutils.TyrerCuzickTestFilesUtil;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -239,7 +242,7 @@ public class TyrerCuzickTestParticipantsIT {
 
     @Test
     @Transactional
-    public void assertThatEachTestParticipantProducesCorrectTyrerCuzickOutput() {
+    public void assertThatEachTestParticipantProducesCorrectTyrerCuzickOutput() throws Exception  {
         tyrerCuzickService.writeValidatedAnswerResponsesToFile();
         tyrerCuzickService.runTyrerCuzickExecutable();
 

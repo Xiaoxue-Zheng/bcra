@@ -11,12 +11,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.repository.RiskAssessmentResultRepository;
+import uk.ac.herc.bcra.service.util.FileSystemUtil;
 import uk.ac.herc.bcra.service.util.OSValidator;
 import uk.ac.herc.bcra.service.util.TyrerCuzickPathUtil;
+import uk.ac.herc.bcra.testutils.StudyUtil;
+import uk.ac.herc.bcra.testutils.TyrerCuzickTestFilesUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.File;
 import java.time.LocalDate;
 
 @SpringBootTest(classes = BcraApp.class)
@@ -64,24 +66,14 @@ public class TyrerCuzickServiceIT {
         studyUtil.answerQuestionnaireWithAnything(em, p.getProcedure().getRiskAssessmentResponse());
     }
 
-    private void checkFileExists(String filepath) {
-        File file = new File(filepath);
-        assertThat(file.exists()).isTrue();
-    }
-
-    private int countFilesInDirectory(String directoryPath) {
-        File dir = new File(directoryPath);
-        return dir.listFiles().length;
-    }
-
     @Test
     @Transactional
-    public void writeValidatedAnswerResponsesToFile() {
+    public void writeValidatedAnswerResponsesToFile() throws Exception {
         String testDirectory = TyrerCuzickTestFilesUtil.getTestDirectory();
 
-        int totalBeforeTC = countFilesInDirectory(testDirectory + "/input/");
+        int totalBeforeTC = FileSystemUtil.countFilesInDirectory(testDirectory + "/input/");
         tyrerCuzickService.writeValidatedAnswerResponsesToFile();
-        int totalAfterTC = countFilesInDirectory(testDirectory + "/input/");
+        int totalAfterTC = FileSystemUtil.countFilesInDirectory(testDirectory + "/input/");
 
         assertThat(totalAfterTC).isEqualTo(totalBeforeTC + 1);
         TyrerCuzickTestFilesUtil.cleanUpTcFiles();
@@ -89,17 +81,17 @@ public class TyrerCuzickServiceIT {
 
     @Test
     @Transactional
-    public void runTyrerCuzickExecutable() {
+    public void runTyrerCuzickExecutable() throws Exception  {
         String testDirectory = TyrerCuzickTestFilesUtil.getTestDirectory();
         TyrerCuzickTestFilesUtil.createTcInputFile();
         tyrerCuzickService.runTyrerCuzickExecutable();
-        checkFileExists(testDirectory + "/output/TST_IN-2021-01-01.txt");
+        assertThat(FileSystemUtil.checkFileExists(testDirectory + "/output/TST_IN-2021-01-01.txt")).isTrue();
         TyrerCuzickTestFilesUtil.cleanUpTcFiles();
     }
 
     @Test
     @Transactional
-    public void readTyrerCuzickOutput() {
+    public void readTyrerCuzickOutput() throws Exception  {
         TyrerCuzickTestFilesUtil.createTcOutputFile();
         tyrerCuzickService.readTyrerCuzickOutput();
         int total = riskAssessmentResultRepository.findAll().size();

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 /**
  * Spring Data  repository for the RiskAssessmentResult entity.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface RiskAssessmentResultRepository extends JpaRepository<RiskAssessmentResult, Long> {
 

@@ -3,20 +3,17 @@ package uk.ac.herc.bcra.service.impl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.ac.herc.bcra.domain.Authority;
 import uk.ac.herc.bcra.domain.TwoFactorAuthentication;
 import uk.ac.herc.bcra.domain.User;
 import uk.ac.herc.bcra.web.rest.errors.TwoFactorAuthenticationException;
 import uk.ac.herc.bcra.repository.TwoFactorAuthenticationRepository;
 import uk.ac.herc.bcra.repository.UserRepository;
-import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.MailService;
 import uk.ac.herc.bcra.service.TwoFactorAuthenticationService;
 import uk.ac.herc.bcra.service.dto.TwoFactorLoginResultDTO;
 
 import java.util.Date;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static uk.ac.herc.bcra.web.rest.errors.TwoFactorAuthenticationException.TwoFactorAuthenticationExceptionReason.PIN_NOT_MATCH;
 import static uk.ac.herc.bcra.web.rest.errors.TwoFactorAuthenticationException.TwoFactorAuthenticationExceptionReason.PIN_HAS_EXPIRED;
@@ -26,7 +23,6 @@ import static uk.ac.herc.bcra.web.rest.errors.TwoFactorAuthenticationException.T
 @Service
 @Transactional
 public class TwoFactorAuthenticationServiceImpl implements TwoFactorAuthenticationService {
-    private String EMAIL_FROM = "support@cfhealthhub.org";
     private String EMAIL_SUBJECT = "CFHealthHub Two-Factor Authentication";
     private String EMAIL_BODY = "\nSomeone (possibly not you) has attempted to log into your CFHealthHub account.\n\nIf this was not you then please ignore this email and continue to use your existing password.\n\nTo proceed with the two-factor authentication request, enter the pin below onto your device.\n\nThe pin is valid for 30 minutes from the time it was issued.\n\n";
 

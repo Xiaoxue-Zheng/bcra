@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 /**
  * Spring Data  repository for the IPRestriction entity.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface IPRestrictionRepository extends JpaRepository<IPRestriction, Long> {
     public Optional<IPRestriction> findOneByIpAddress(String ipAddress);

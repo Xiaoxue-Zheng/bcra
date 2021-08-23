@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 /**
  * Spring Data  repository for the CanRiskReport entity.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface CanRiskReportRepository extends JpaRepository<CanRiskReport, Long> {
     public List<CanRiskReport> findByUploadedBy(User uploadedByUser);

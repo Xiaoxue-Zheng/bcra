@@ -1,6 +1,5 @@
 package uk.ac.herc.bcra.web.rest;
 
-import io.github.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -21,6 +20,8 @@ import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.MailService;
 import uk.ac.herc.bcra.service.TwoFactorAuthenticationService;
 import uk.ac.herc.bcra.service.dto.TwoFactorLoginInitDTO;
+import uk.ac.herc.bcra.testutils.JhiUserUtil;
+import uk.ac.herc.bcra.testutils.MockMvcUtil;
 import uk.ac.herc.bcra.web.rest.errors.ExceptionTranslator;
 
 import javax.persistence.EntityManager;
@@ -36,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = BcraApp.class)
-public class LoginResourceT {
+public class LoginResourceIT {
 
     @Autowired
     private UserRepository userRepository;
@@ -61,9 +62,6 @@ public class LoginResourceT {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JHipsterProperties jHipsterProperties;
 
     @Autowired
     private WebApplicationContext context;
@@ -96,7 +94,7 @@ public class LoginResourceT {
         TwoFactorLoginInitDTO dto = new TwoFactorLoginInitDTO(login, rawPassword);
         securityRestMvc.perform(post("/api/login/two-factor-init")
             .with(csrf())
-            .content(TestUtil.convertObjectToJsonBytes(dto))
+            .content(MockMvcUtil.convertObjectToJsonBytes(dto))
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isUnauthorized());
@@ -108,11 +106,11 @@ public class LoginResourceT {
         String login = "AuthenticationResourceT.testWrongPassword".toLowerCase(Locale.ROOT);
         String rawPassword = "password";
         String password = passwordEncoder.encode(rawPassword);
-        DataFactory.createUser(em, login, password, RoleManager.ADMIN);
+        JhiUserUtil.createUser(em, login, password, RoleManager.ADMIN);
         TwoFactorLoginInitDTO dto = new TwoFactorLoginInitDTO(login, "wrongPassword");
         mvc.perform(post("/api/login/two-factor-init")
             .with(csrf())
-            .content(TestUtil.convertObjectToJsonBytes(dto))
+            .content(MockMvcUtil.convertObjectToJsonBytes(dto))
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isUnauthorized());
@@ -124,11 +122,11 @@ public class LoginResourceT {
         String login = "AuthenticationResourceT.testNotAdminTwoFactorInit".toLowerCase(Locale.ROOT);
         String rawPassword = "password";
         String password = passwordEncoder.encode(rawPassword);
-        DataFactory.createUser(em, login, password, RoleManager.USER);
+        JhiUserUtil.createUser(em, login, password, RoleManager.USER);
         TwoFactorLoginInitDTO dto = new TwoFactorLoginInitDTO(login, rawPassword);
         mvc.perform(post("/api/login/two-factor-init")
             .with(csrf())
-            .content(TestUtil.convertObjectToJsonBytes(dto))
+            .content(MockMvcUtil.convertObjectToJsonBytes(dto))
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -141,11 +139,11 @@ public class LoginResourceT {
         String login = "AuthenticationResourceT.testAdminTwoFactorInit".toLowerCase(Locale.ROOT);
         String rawPassword = "password";
         String password = passwordEncoder.encode(rawPassword);
-        DataFactory.createUser(em, login, password, RoleManager.ADMIN);
+        JhiUserUtil.createUser(em, login, password, RoleManager.ADMIN);
         TwoFactorLoginInitDTO dto = new TwoFactorLoginInitDTO(login, rawPassword);
         securityRestMvc.perform(post("/api/login/two-factor-init")
             .with(csrf())
-            .content(TestUtil.convertObjectToJsonBytes(dto))
+            .content(MockMvcUtil.convertObjectToJsonBytes(dto))
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())

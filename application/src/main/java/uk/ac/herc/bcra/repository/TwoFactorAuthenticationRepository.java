@@ -3,7 +3,6 @@ package uk.ac.herc.bcra.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
-import uk.ac.herc.bcra.domain.IdentifiableData;
 import uk.ac.herc.bcra.domain.TwoFactorAuthentication;
 
 import java.util.Optional;

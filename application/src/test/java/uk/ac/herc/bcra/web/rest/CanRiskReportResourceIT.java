@@ -1,8 +1,5 @@
 package uk.ac.herc.bcra.web.rest;
 
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -17,11 +14,9 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.xnio.FileAccess;
 
 import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.CanRiskReport;
@@ -32,17 +27,15 @@ import uk.ac.herc.bcra.service.CanRiskReportService;
 import uk.ac.herc.bcra.service.StudyIdService;
 import uk.ac.herc.bcra.service.UserService;
 import uk.ac.herc.bcra.service.dto.UserDTO;
+import uk.ac.herc.bcra.service.util.OSValidator;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.io.File;
 import java.security.Principal;
-import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -114,6 +107,7 @@ public class CanRiskReportResourceIT {
             }
         }
 
+        OSValidator.OPERATING_SYSTEM = "windows";
         String filename = studyCodes[0] + ".pdf";
         MultipartFile file = new MockMultipartFile(filename, filename, "text/plain", new byte[0]);
         canRiskReportService.createCanRiskReportFromUserAndFile(adminUser, file);

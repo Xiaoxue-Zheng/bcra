@@ -23,6 +23,7 @@ import uk.ac.herc.bcra.repository.RiskAssessmentResultRepository;
 import uk.ac.herc.bcra.repository.YearlyRiskRepository;
 import uk.ac.herc.bcra.repository.RiskRepository;
 import uk.ac.herc.bcra.service.util.TyrerCuzickPathUtil;
+import uk.ac.herc.bcra.testutils.StudyUtil;
 
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -1,4 +1,4 @@
-package uk.ac.herc.bcra.service;
+package uk.ac.herc.bcra.testutils;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;

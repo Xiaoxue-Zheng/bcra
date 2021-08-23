@@ -232,7 +232,11 @@ public class ParticipantServiceImpl implements ParticipantService {
         Optional<Participant> participantOptional = participantRepository.findOneByUserLogin(principal.getName());
         Participant participant = participantOptional.get();
 
-        IdentifiableData identifiableData = new IdentifiableData();
+        IdentifiableData identifiableData = participant.getIdentifiableData();
+        if (identifiableData == null) {
+            identifiableData = new IdentifiableData();
+        }
+
         identifiableData.setFirstname(participantDetailsDTO.getForename());
         identifiableData.setSurname(participantDetailsDTO.getSurname());
         identifiableData.setDateOfBirth(participant.getDateOfBirth());

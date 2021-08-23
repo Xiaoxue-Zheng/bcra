@@ -3,13 +3,13 @@ package uk.ac.herc.bcra.service.impl;
 import uk.ac.herc.bcra.service.CanRiskReportService;
 import uk.ac.herc.bcra.service.dto.CanRiskReportDTO;
 import uk.ac.herc.bcra.service.util.CanRiskUtil;
+import uk.ac.herc.bcra.service.util.FileSystemUtil;
 import uk.ac.herc.bcra.domain.CanRiskReport;
 import uk.ac.herc.bcra.domain.StudyId;
 import uk.ac.herc.bcra.domain.User;
 import uk.ac.herc.bcra.repository.CanRiskReportRepository;
 import uk.ac.herc.bcra.repository.StudyIdRepository;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -18,9 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -125,22 +122,16 @@ public class CanRiskReportServiceImpl implements CanRiskReportService {
         return filename.replace(".pdf", "");
     }
 
-    private String saveFileData(MultipartFile file) throws IOException, Exception {
+    private void saveFileData(MultipartFile file) throws Exception {
         String canRiskReportDirectory = CanRiskUtil.getCanRiskReportDirectory();
-
-        FileOutputStream stream = new FileOutputStream(canRiskReportDirectory + '/' + file.getOriginalFilename());
-        stream.write(file.getBytes());
-        stream.flush();
-        stream.close();
-
-        return file.getOriginalFilename();
+        String fullFilePath = canRiskReportDirectory + '/' + file.getOriginalFilename();
+        FileSystemUtil.writeBytesToFile(file.getBytes(), fullFilePath);
     }
 
-    private byte[] getFileData(CanRiskReport report) throws IOException, Exception {
+    private byte[] getFileData(CanRiskReport report) throws Exception {
         String canRiskReportDirectory = CanRiskUtil.getCanRiskReportDirectory();
         String fullFilePath = canRiskReportDirectory + report.getFilename();
-        File file = new File(fullFilePath);
-        return FileUtils.readFileToByteArray(file);
+        return FileSystemUtil.readBytesFromFile(fullFilePath);
     }
 
     private void throwExceptionIfFileSizeExceeds10MB(MultipartFile file) throws Exception {

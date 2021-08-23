@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 /**
  * Spring Data  repository for the StudyId entity.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface StudyIdRepository extends JpaRepository<StudyId, Long> {
     public Optional<StudyId> findOneByCode(String code);

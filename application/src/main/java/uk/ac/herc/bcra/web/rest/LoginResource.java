@@ -18,9 +18,7 @@ import uk.ac.herc.bcra.security.AuthenticationDetails;
 import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.TwoFactorAuthenticationService;
 import uk.ac.herc.bcra.service.dto.TwoFactorLoginInitDTO;
-import uk.ac.herc.bcra.web.rest.errors.AccountNotFoundException;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Optional;
 import java.util.stream.Collectors;

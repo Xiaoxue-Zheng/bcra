@@ -6,6 +6,8 @@ import uk.ac.herc.bcra.domain.PersistentAuditEvent;
 import uk.ac.herc.bcra.repository.PersistenceAuditEventRepository;
 
 import uk.ac.herc.bcra.service.AuditEventService;
+import uk.ac.herc.bcra.testutils.MockMvcUtil;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -151,7 +153,7 @@ public class AuditResourceIT {
     @Test
     @Transactional
     public void testPersistentAuditEventEquals() throws Exception {
-        TestUtil.equalsVerifier(PersistentAuditEvent.class);
+        MockMvcUtil.equalsVerifier(PersistentAuditEvent.class);
         PersistentAuditEvent auditEvent1 = new PersistentAuditEvent();
         auditEvent1.setId(1L);
         PersistentAuditEvent auditEvent2 = new PersistentAuditEvent();

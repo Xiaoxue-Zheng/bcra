@@ -1,36 +1,36 @@
-id,identifier,type,jhi_order,minimum,maximum,question_group_id,variable_name,text,hint,hint_text
-1,CONSENT_INFO_SHEET,RADIO,1,,,1,,"I confirm that I have read the information sheet for this study. I have had the opportunity to consider the information\, ask questions and have had these answered satisfactorily.",,
-2,CONSENT_WITHDRAWAL,TICKBOX_CONSENT,2,,,1,,"I understand that my participation is voluntary and that I am free to withdraw at any time without giving any reason\, without my medical care or legal rights being affected.",,
-3,CONSENT_DATA_TRUST,TICKBOX_CONSENT,3,,,1,,"I understand that relevant sections of my medical notes and data collected during the study may be looked at by individuals from regulatory authorities or from the NHS Trust, where it is relevant to my taking part in this research. I give permission for these individuals to have access to my records.",,
-4,CONSENT_DATA_RESEARCH,TICKBOX_CONSENT,4,,,1,,"I understand that the de-identified information collected about me could be used to support other ethically approved cancer research in the future\, and may be shared with other researchers but things that would make it possible for someone to work out who you are will not be passed on.",,
-5,CONSENT_DATA_UOM,TICKBOX_CONSENT,5,,,1,,"I agree to the storage and processing of my mammogram images\, breast cancer risk questionnaire data and genetic analysis results in cloud storage and longer term in secure storage at The University of Manchester.",,
-6,CONSENT_DATA_COMMERCIAL,TICKBOX_CONSENT,6,,,1,,I agree to the use of my anonymised data by commercial partners.,,
-7,CONSENT_INFORM_GP,TICKBOX_CONSENT,7,,,1,,I agree to my General Practitioner being informed of my participation in the study and I agree to my General Practitioner being sent my risk information.,,
-8,CONSENT_TAKE_PART,TICKBOX_CONSENT,8,,,1,,I agree to take part in the above study.,,
-9,CONSENT_BY_LETTER,TICKBOX_CONSENT,9,,,1,,I agree to receiving my breast cancer risk via letter.,,
-10,CONSENT_FUTURE_RESEARCH,RADIO,10,,,1,,I am happy to be contacted about participation in future research.,,
-12,FAMILY_BREAST_AFFECTED,CHECKBOX,1,1,,2,relativeAffectedBreast,Have any of these relatives been affected by breast cancer?,,
-13,FAMILY_OVARIAN_AFFECTED,CHECKBOX,2,1,,2,relativeAffectedOvarian,Have any of these relatives been affected by ovarian cancer?,,
-14,FAMILY_BREAST_HOW_MANY,RADIO,1,,,3,,How many {{relativeAffectedBreast}}s were affected by breast cancer?,,
-15,FAMILY_BREAST_AGE,NUMBER_UNKNOWN,2,10,130,3,,At what age was your {{relativeAffectedBreast}} affected by breast cancer?,,
-16,FAMILY_OVARIAN_HOW_MANY,RADIO,1,,,4,,How many {{relativeAffectedOvarian}}s were affected by ovarian cancer?,,
-17,FAMILY_OVARIAN_AGE,NUMBER_UNKNOWN,2,10,130,4,,At what age was your {{relativeAffectedOvarian}} affected by ovarian cancer?,,
-18,FAMILY_AFFECTED_GRANDMOTHER_SIDE,RADIO,1,,,5,,Was your affected grandmother on your:,,
-19,FAMILY_AFFECTED_GRANDMOTHER_MOTHERS_AGE,NUMBER_UNKNOWN,2,10,130,5,,"How old is your mother (or if your mother is not alive\, how old was she when she died)?",,
-20,FAMILY_AFFECTED_AUNT_SIDE,RADIO,1,,,6,,Was your affected aunt your:,,
-21,FAMILY_AFFECTED_AUNT_MOTHERS_AGE,NUMBER_UNKNOWN,2,10,130,6,,"How old is your mother (or if your mother is not alive\, how old was she when she died)?",,
-22,FAMILY_AFFECTED_NIECE_SIDE,RADIO,1,,,7,,Was your affected niece your:,,
-23,FAMILY_AFFECTED_NIECE_SISTERS_AGE,NUMBER_UNKNOWN,2,10,130,7,,"How old is this sister (or if this sister is not alive\, how old was she when she died)?",,
-24,FAMILY_AFFECTED_HALFSISTER_SIDE,RADIO,1,,,8,,Was your affected half-sister on your:,,
-25,FAMILY_AFFECTED_HALFSISTER_MOTHERS_AGE,NUMBER_UNKNOWN,2,10,130,8,,"How old is your mother (or if your mother is not alive\, how old was she when she died)?",,
-26,SELF_FIRST_PERIOD,NUMBER_UNKNOWN,3,5,30,9,,Approximately how old were you when you had your first period?,,
-27,SELF_PREMENOPAUSAL,RADIO,6,,,9,,Are you premenopausal?,What does premenopausal mean?,"<p>As this programme is for young women it is most likely that you are premenopausal. You can still be premenopausal without having regular periods for a number of reasons such as:<ol><li>Contraception such as the pill\, implant or Mirena coil.</li><li>Being overweight or underweight can stop your periods but this is not the same as the menopause because a return to normal weight is likely to mean that your periods start working again. Menopause means that your ovaries have stopped working altogether.</li></ol><br>If you have been told that you are menopausal\, for example after blood tests confirmed that your ovaries have stopped working or you have had both ovaries removed\, please tell us at what age this was in the next question.</p>"
-28,SELF_MENOPAUSAL_AGE,NUMBER,7,20,40,9,,At approximately what age did you become menopausal?,,
-29,SELF_PREGNANCIES,DROPDOWN_NUMBER,4,0,5,9,,How many pregnancies have you had that have continued into the third trimester (more than 28 weeks)?,,
-30,SELF_PREGNANCY_FIRST_AGE,NUMBER,5,10,40,9,,How old were you when you had your first pregnancy that continued into the third trimester (more than 28 weeks)?,,
-31,SELF_HEIGHT,NUMBER_HEIGHT,1,100,220,9,,What is your height?,,
-32,SELF_WEIGHT,NUMBER_WEIGHT,2,40,400,9,,What is your weight?,,
-33,SELF_BREAST_BIOPSY,RADIO,9,,,9,,Have you ever had a breast biopsy?,What is a biopsy?,"<p>A biopsy is when a small amount of tissue is removed or a larger amount of tissue is removed by cutting pieces from the breast\, or a lump is taken from the breast for further examination. A biopsy is the removal of tissue from the breast\, not the removal of fluid.</p>"
-34,SELF_BREAST_BIOPSY_DIAGNOSIS_RISK,RADIO,10,,,9,,Were you told that the diagnosis made on the removed tissue increased your risk of developing breast cancer?,,
-35,SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES,CHECKBOX,11,,,9,,Which of the following diagnosis were made?,,
-36,SELF_ASHKENAZI,RADIO,8,,,9,,Are you of Ashkenazi Jewish heritage?,Why is this relevant?,<p>Ashkenazi Jewish women have a much higher risk of having one of three mutations in the BRCA1 and BRCA2 genes. This is part of the reason why Ashkenazi Jewish women have a much higher-than-average risk of breast cancer. Therefore it is important to capture this information when assessing breast cancer risk.</p>
+id,identifier,type,jhi_order,minimum,maximum,question_group_id,variable_name,text,hint,hint_text,necessary
+1,CONSENT_INFO_SHEET,RADIO,1,,,1,,"I confirm that I have read the information sheet for this study. I have had the opportunity to consider the information\, ask questions and have had these answered satisfactorily.",,,TRUE
+2,CONSENT_WITHDRAWAL,TICKBOX_CONSENT,2,,,1,,"I understand that my participation is voluntary and that I am free to withdraw at any time without giving any reason\, without my medical care or legal rights being affected.",,,TRUE
+3,CONSENT_DATA_TRUST,TICKBOX_CONSENT,3,,,1,,"I understand that relevant sections of my medical notes and data collected during the study may be looked at by individuals from regulatory authorities or from the NHS Trust, where it is relevant to my taking part in this research. I give permission for these individuals to have access to my records.",,,TRUE
+4,CONSENT_DATA_RESEARCH,TICKBOX_CONSENT,4,,,1,,"I understand that the de-identified information collected about me could be used to support other ethically approved cancer research in the future\, and may be shared with other researchers but things that would make it possible for someone to work out who you are will not be passed on.",,,TRUE
+5,CONSENT_DATA_UOM,TICKBOX_CONSENT,5,,,1,,"I agree to the storage and processing of my mammogram images\, breast cancer risk questionnaire data and genetic analysis results in cloud storage and longer term in secure storage at The University of Manchester.",,,TRUE
+6,CONSENT_DATA_COMMERCIAL,TICKBOX_CONSENT,6,,,1,,I agree to the use of my anonymised data by commercial partners.,,,TRUE
+7,CONSENT_INFORM_GP,TICKBOX_CONSENT,7,,,1,,I agree to my General Practitioner being informed of my participation in the study and I agree to my General Practitioner being sent my risk information.,,,TRUE
+8,CONSENT_TAKE_PART,TICKBOX_CONSENT,8,,,1,,I agree to take part in the above study.,,,TRUE
+9,CONSENT_BY_LETTER,TICKBOX_CONSENT,9,,,1,,I agree to receiving my breast cancer risk via letter.,,,TRUE
+10,CONSENT_FUTURE_RESEARCH,RADIO,10,,,1,,I am happy to be contacted about participation in future research.,,,TRUE
+12,FAMILY_BREAST_AFFECTED,CHECKBOX,1,,,2,relativeAffectedBreast,Have any of these relatives been affected by breast cancer?,,,FALSE
+13,FAMILY_OVARIAN_AFFECTED,CHECKBOX,2,,,2,relativeAffectedOvarian,Have any of these relatives been affected by ovarian cancer?,,,FALSE
+14,FAMILY_BREAST_HOW_MANY,RADIO,1,,,3,,How many {{relativeAffectedBreast}}s were affected by breast cancer?,,,TRUE
+15,FAMILY_BREAST_AGE,NUMBER_UNKNOWN,2,10,130,3,,At what age was your {{relativeAffectedBreast}} affected by breast cancer?,,,TRUE
+16,FAMILY_OVARIAN_HOW_MANY,RADIO,1,,,4,,How many {{relativeAffectedOvarian}}s were affected by ovarian cancer?,,,TRUE
+17,FAMILY_OVARIAN_AGE,NUMBER_UNKNOWN,2,10,130,4,,At what age was your {{relativeAffectedOvarian}} affected by ovarian cancer?,,,TRUE
+18,FAMILY_AFFECTED_GRANDMOTHER_SIDE,RADIO,1,,,5,,Was your affected grandmother on your:,,,TRUE
+19,FAMILY_AFFECTED_GRANDMOTHER_MOTHERS_AGE,NUMBER_UNKNOWN,2,10,130,5,,"How old is your mother (or if your mother is not alive\, how old was she when she died)?",,,TRUE
+20,FAMILY_AFFECTED_AUNT_SIDE,RADIO,1,,,6,,Was your affected aunt your:,,,TRUE
+21,FAMILY_AFFECTED_AUNT_MOTHERS_AGE,NUMBER_UNKNOWN,2,10,130,6,,"How old is your mother (or if your mother is not alive\, how old was she when she died)?",,,TRUE
+22,FAMILY_AFFECTED_NIECE_SIDE,RADIO,1,,,7,,Was your affected niece your:,,,TRUE
+23,FAMILY_AFFECTED_NIECE_SISTERS_AGE,NUMBER_UNKNOWN,2,10,130,7,,"How old is this sister (or if this sister is not alive\, how old was she when she died)?",,,TRUE
+24,FAMILY_AFFECTED_HALFSISTER_SIDE,RADIO,1,,,8,,Was your affected half-sister on your:,,,TRUE
+25,FAMILY_AFFECTED_HALFSISTER_MOTHERS_AGE,NUMBER_UNKNOWN,2,10,130,8,,"How old is your mother (or if your mother is not alive\, how old was she when she died)?",,,TRUE
+26,SELF_FIRST_PERIOD,NUMBER_UNKNOWN,3,5,30,9,,Approximately how old were you when you had your first period?,,,TRUE
+27,SELF_PREMENOPAUSAL,RADIO,6,,,9,,Are you premenopausal?,What does premenopausal mean?,"<p>As this programme is for young women it is most likely that you are premenopausal. You can still be premenopausal without having regular periods for a number of reasons such as:<ol><li>Contraception such as the pill\, implant or Mirena coil.</li><li>Being overweight or underweight can stop your periods but this is not the same as the menopause because a return to normal weight is likely to mean that your periods start working again. Menopause means that your ovaries have stopped working altogether.</li></ol><br>If you have been told that you are menopausal\, for example after blood tests confirmed that your ovaries have stopped working or you have had both ovaries removed\, please tell us at what age this was in the next question.</p>",TRUE
+28,SELF_MENOPAUSAL_AGE,NUMBER,7,20,40,9,,At approximately what age did you become menopausal?,,,TRUE
+29,SELF_PREGNANCIES,DROPDOWN_NUMBER,4,0,5,9,,How many pregnancies have you had that have continued into the third trimester (more than 28 weeks)?,,,TRUE
+30,SELF_PREGNANCY_FIRST_AGE,NUMBER,5,10,40,9,,How old were you when you had your first pregnancy that continued into the third trimester (more than 28 weeks)?,,,TRUE
+31,SELF_HEIGHT,NUMBER_HEIGHT,1,100,220,9,,What is your height?,,,TRUE
+32,SELF_WEIGHT,NUMBER_WEIGHT,2,40,400,9,,What is your weight?,,,TRUE
+33,SELF_BREAST_BIOPSY,RADIO,9,,,9,,Have you ever had a breast biopsy?,What is a biopsy?,"<p>A biopsy is when a small amount of tissue is removed or a larger amount of tissue is removed by cutting pieces from the breast\, or a lump is taken from the breast for further examination. A biopsy is the removal of tissue from the breast\, not the removal of fluid.</p>",TRUE
+34,SELF_BREAST_BIOPSY_DIAGNOSIS_RISK,RADIO,10,,,9,,Were you told that the diagnosis made on the removed tissue increased your risk of developing breast cancer?,,,TRUE
+35,SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES,CHECKBOX,11,,,9,,Which of the following diagnosis were made?,,,TRUE
+36,SELF_ASHKENAZI,RADIO,8,,,9,,Are you of Ashkenazi Jewish heritage?,Why is this relevant?,<p>Ashkenazi Jewish women have a much higher risk of having one of three mutations in the BRCA1 and BRCA2 genes. This is part of the reason why Ashkenazi Jewish women have a much higher-than-average risk of breast cancer. Therefore it is important to capture this information when assessing breast cancer risk.</p>,TRUE

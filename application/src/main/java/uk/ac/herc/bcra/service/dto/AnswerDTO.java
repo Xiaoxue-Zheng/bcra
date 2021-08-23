@@ -18,6 +18,8 @@ public class AnswerDTO implements Serializable {
 
     private Integer number;
 
+    private Boolean dontKnow;
+
     private Boolean ticked;
 
     private AnswerUnits units;
@@ -82,6 +84,14 @@ public class AnswerDTO implements Serializable {
 
     public void setAnswerItems(Set<AnswerItemDTO> answerItems) {
         this.answerItems = answerItems;
+    }
+
+    public Boolean getDontKnow() {
+        return dontKnow;
+    }
+
+    public void setDontKnow(Boolean dontKnow) {
+        this.dontKnow = dontKnow;
     }
 
     @Override

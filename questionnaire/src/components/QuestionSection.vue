@@ -13,7 +13,7 @@
         ></component>
       </div>
       <PrimaryButton :readOnly="readOnly" :clickEvent="buttonClick">{{ buttonText }}</PrimaryButton>
-      <div v-if="buttonError">There was an error. Please try again or contact the study team.</div>
+      <div v-if="buttonError" style="color: red">{{ saveQuestionnaireErrorMessage }}</div>
       <div v-if="invalid">Please complete all of the questions above to continue.</div>
     </form>
   </div>
@@ -51,6 +51,7 @@ export default {
     'buttonText',
     'buttonAction',
     'buttonError',
+    'saveQuestionnaireErrorMessage',
     'questionVariables',
     'questionnaire',
     'answerResponse',

@@ -4,6 +4,7 @@ import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 import uk.ac.herc.bcra.domain.enumeration.ResponseState;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
 import uk.ac.herc.bcra.domain.AnswerResponse;
+import uk.ac.herc.bcra.service.dto.AnswerSectionDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +24,7 @@ public interface AnswerResponseService {
     AnswerResponse saveDto(AnswerResponseDTO answerResponseDTO);
     AnswerResponseDTO save(AnswerResponseDTO answerResponseDTO);
     boolean save(String login, AnswerResponseDTO answerResponseDTO, QuestionnaireType questionnaireType, ResponseState responseState);
+    boolean save(String login, AnswerSectionDTO answerSectionDTO);
 
     /**
      * Get all the answerResponses.
@@ -49,4 +51,6 @@ public interface AnswerResponseService {
     void delete(Long id);
 
     boolean isQuestionnaireComplete(String login, QuestionnaireType type);
+
+    void populateAnswerResponse(AnswerResponse answerResponse);
 }

@@ -75,6 +75,9 @@ public class Question implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<QuestionItem> questionItems = new HashSet<>();
 
+    @Column(name = "necessary")
+    private Boolean necessary;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -263,6 +266,15 @@ public class Question implements Serializable {
     public void setQuestionItems(Set<QuestionItem> questionItems) {
         this.questionItems = questionItems;
     }
+
+    public Boolean getNecessary() {
+        return necessary;
+    }
+
+    public void setNecessary(Boolean necessary) {
+        this.necessary = necessary;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override

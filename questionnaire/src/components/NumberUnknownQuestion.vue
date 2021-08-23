@@ -11,12 +11,13 @@
             <input
               type="number"
               class="pure-input-1"
-              v-model="answer.number"
+              v-model="answerNumber"
               :min="question.minimum"
               :max="question.maximum"
               step="1"
               :disabled="readOnly"
-            /></div>
+            />
+          </div>
             <div class="input-group-unit">Years</div>
         </div>
         <div class="items radios">
@@ -24,9 +25,9 @@
             type="radio"
             :id="questionIdentifier()"
             :name="questionIdentifier()"
-            :value="null"
-            v-model="answer.number"
             :disabled="readOnly"
+            v-model="answerDontknow"
+            :value="$getConst('DONT_KNOW')"
           />
           <label :for="questionIdentifier()">Don't know</label>
         </div>
@@ -44,6 +45,28 @@ export default {
   props: [
     'questionVariables'
   ],
+  computed: {
+    answerDontknow: {
+      get () {
+        return this.answer.dontKnow
+      },
+      set (val) {
+        if (val === 'dontknow') {
+          this.answer.dontKnow = true
+          this.answer.number = null
+        }
+      }
+    },
+    answerNumber: {
+      get () {
+        return this.answer.number
+      },
+      set (val) {
+        this.answer.dontKnow = null
+        this.answer.number = val
+      }
+    }
+  },
   methods: {
     questionIdentifier () {
       return this.question.identifier + '_dk'

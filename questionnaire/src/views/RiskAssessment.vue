@@ -7,6 +7,7 @@
       :buttonText="buttonText"
       :buttonAction="buttonAction"
       :buttonError="saveError"
+      :saveQuestionnaireErrorMessage = "saveQuestionnaireErrorMessage"
       :questionVariables="questionVariables"
       :questionnaire="questionnaire"
       :answerResponse="answerResponse"
@@ -49,6 +50,7 @@ export default {
       answerSection: null,
       progressStage: null,
       saveError: false,
+      saveQuestionnaireErrorMessage: 'Please complete all of the questions above to continue.',
       buttonText: null,
       buttonAction: null,
       infoComponent: null,
@@ -98,7 +100,7 @@ export default {
 
       this.buttonText = buttonText
 
-      if (this.readOnly === true) {
+      if (this.readOnly === true || this.infoComponent !== null) {
         this.buttonAction = this.continue
       } else {
         this.buttonAction = this.saveAndContinue
@@ -120,12 +122,18 @@ export default {
     },
     async saveQuestionnaire () {
       this.saveError = false
-      const saveResult = await AnswerResponseService.saveRiskAssessment(this.answerResponse)
-      if (saveResult.data === 'SAVED') {
-        this.proceedToNextRoute()
-      } else {
+      await AnswerResponseService.saveAnswerSection(this.answerSection).then((response) => {
+        if (response.status === 200 && response.data === 'SAVED') {
+          this.proceedToNextRoute()
+        } else {
+          this.saveError = true
+        }
+      }).catch((error) => {
+        if (error && error.response && error.response.data && error.response.data.title) {
+          this.saveQuestionnaireErrorMessage = error.response.data.title
+        }
         this.saveError = true
-      }
+      })
     },
     proceedToNextRoute () {
       this.referralConditions = ReferralConditionService.getNewReferralConditions(this.questionSection)

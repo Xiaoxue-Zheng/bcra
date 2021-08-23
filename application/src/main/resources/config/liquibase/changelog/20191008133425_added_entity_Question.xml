@@ -55,6 +55,10 @@
                 <constraints nullable="false" />
             </column>
 
+            <column name="necessary" type="boolean">
+                <constraints nullable="true" />
+            </column>
+
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
 
@@ -63,7 +67,7 @@
     <changeSet id="20191008133425-1-relations" author="jhipster">
 
     </changeSet>
-    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
+    <!-- jhipster-needle-liquibase-add-changeset - JHipsfter will add changesets here, do not remove-->
 
     <!--
         Load sample data generated with Faker.js
@@ -85,10 +89,11 @@
             <column name="minimum" type="numeric"/>
             <column name="maximum" type="numeric"/>
             <column name="question_group_id" type="numeric"/>
-            <column name="variable_name" type="string"/>            
+            <column name="variable_name" type="string"/>
             <column name="text" type="string"/>
             <column name="hint" type="string"/>
-            <column name="hint_text" type="string"/>            
+            <column name="hint_text" type="string"/>
+            <column name="necessary" type="boolean"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

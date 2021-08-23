@@ -6,8 +6,9 @@
         :questionVariables="questionVariables"
       />
       <div class="select-box">
-        <select :disabled="readOnly" :id="question.identifier" v-model="answerItemValue" class="select-css">
-            <option value="null">Don't know</option>
+        <select :disabled="readOnly" :id="question.identifier" v-model="answerItemValue" class="select-css" required>
+            <option value="" disabled selected>Please select a response</option>
+            <option :value="$getConst('DONT_KNOW')">Don't know</option>
             <option
               v-for="index in parseInt((question.maximum + 1) - question.minimum)"
               :key="index"
@@ -31,10 +32,20 @@ export default {
   computed: {
     answerItemValue: {
       get () {
-        return this.answer.number
+        if (this.answer.dontKnow) {
+          return 'dontknow'
+        } else {
+          return this.answer.number
+        }
       },
-      set (questionItemId) {
-        this.answer.number = questionItemId
+      set (val) {
+        if (val === 'dontknow') {
+          this.answer.dontKnow = true
+          this.answer.number = null
+        } else {
+          this.answer.dontKnow = null
+          this.answer.number = val
+        }
       }
     }
   },

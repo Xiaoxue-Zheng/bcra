@@ -17,7 +17,7 @@ describe('Risk Assessment - testing conditional display of sections', () => {
 
   after(function() {
     cy.deleteParticipants([UNREGISTERED_STUDY_CODE])
-    cy.clearTables(['study_id', 'answer_item', 'answer', 'answer_group', 'answer_section', 'answer_response'])
+    cy.clearTables(['study_id','participant', 'answer_item', 'answer', 'answer_group', 'answer_section', 'procedure', 'answer_response'])
   })
 
   beforeEach(function () {
@@ -54,6 +54,8 @@ describe('Risk Assessment - testing conditional display of sections', () => {
     let FAMILY_BREAST_AFFECTED_ITEMS = ['FAMILY_BREAST_AFFECTED_GRANDMOTHER']
     cy.setCheckboxAnswerItems('FAMILY_BREAST_AFFECTED', FAMILY_BREAST_AFFECTED_ITEMS)
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
+    cy.setRadioAnswerItem('FAMILY_BREAST_HOW_MANY_ONE')
+    cy.setNumberDontKnowAnswer('FAMILY_BREAST_AGE', 50)
     path = 'questionnaire/breast'
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
     cy.checkElementVisibility(true, 'FAMILY_AFFECTED_GRANDMOTHER')
@@ -66,6 +68,8 @@ describe('Risk Assessment - testing conditional display of sections', () => {
     let FAMILY_BREAST_AFFECTED_ITEMS = ['FAMILY_BREAST_AFFECTED_AUNT']
     cy.setCheckboxAnswerItems('FAMILY_BREAST_AFFECTED', FAMILY_BREAST_AFFECTED_ITEMS)
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
+    cy.setRadioAnswerItem('FAMILY_BREAST_HOW_MANY_ONE')
+    cy.setNumberDontKnowAnswer('FAMILY_BREAST_AGE', 50)
     path = 'questionnaire/breast'
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
     cy.checkElementVisibility(true, 'FAMILY_AFFECTED_AUNT')
@@ -78,6 +82,8 @@ describe('Risk Assessment - testing conditional display of sections', () => {
     let FAMILY_BREAST_AFFECTED_ITEMS = ['FAMILY_BREAST_AFFECTED_NIECE']
     cy.setCheckboxAnswerItems('FAMILY_BREAST_AFFECTED', FAMILY_BREAST_AFFECTED_ITEMS)
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
+    cy.setRadioAnswerItem('FAMILY_BREAST_HOW_MANY_ONE')
+    cy.setNumberDontKnowAnswer('FAMILY_BREAST_AGE', 50)
     path = 'questionnaire/breast'
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
     cy.checkElementVisibility(true, 'FAMILY_AFFECTED_NIECE')
@@ -90,10 +96,13 @@ describe('Risk Assessment - testing conditional display of sections', () => {
     let FAMILY_BREAST_AFFECTED_ITEMS = ['FAMILY_BREAST_AFFECTED_HALFSISTER']
     cy.setCheckboxAnswerItems('FAMILY_BREAST_AFFECTED', FAMILY_BREAST_AFFECTED_ITEMS)
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
+    cy.setRadioAnswerItem('FAMILY_BREAST_HOW_MANY_ONE')
+    cy.setNumberDontKnowAnswer('FAMILY_BREAST_AGE', 50)
     path = 'questionnaire/breast'
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
     cy.checkElementVisibility(true, 'FAMILY_AFFECTED_HALF_SISTER')
   })
+
   it('should direct ot questionnaire page if not completed', () => {
     cy.server()
     cy.visit('/signin')

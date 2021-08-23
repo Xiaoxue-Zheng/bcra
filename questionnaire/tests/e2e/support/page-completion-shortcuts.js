@@ -96,9 +96,9 @@ function enterMobilePhoneNumber(phoneNumber) {
 
 Cypress.Commands.add('completeRiskAssessment', () => {
     continueToRiskAssessment()
-    saveAndContinue()
+    fillFamilyHistory()
     continueToRiskAssessment()
-    saveAndContinue()
+    fillPersonalHistory()
     cy.url().should('include', 'submit')
     cy.get('.pure-button').contains('Submit Questionnaire').click()
 })
@@ -107,11 +107,35 @@ function continueToRiskAssessment() {
     cy.get('.pure-button').contains('Continue').click()
 }
 
-function selectMotherForBreastAndOvarian() {
-    cy.get('#FAMILY_BREAST_AFFECTED').contains('Mother').click()
-    cy.get('#FAMILY_OVARIAN_AFFECTED').contains('Mother').click()
-}
-
 function saveAndContinue() {
     cy.get('.pure-button').contains('Save and continue').click()
 }
+
+function fillFamilyHistory() {
+  cy.get('.pure-button').contains('Save and continue').click()
+}
+
+function fillPersonalHistory(){
+  let path = 'questionnaire/family'
+  cy.visitFamilyAffectedPrimarySection(true)
+  cy.submitAndAssertSuccessfulNavAwayFromPath(path)
+  path = 'questionnaire/yourhistorycontext'
+  cy.submitAndAssertSuccessfulNavAwayFromPath(path)
+  cy.setWeightHeightNumberAnswer('SELF_HEIGHT', 200)
+  cy.setWeightHeightNumberAnswer('SELF_WEIGHT', 50)
+  cy.setNumberDontKnowAnswer('SELF_FIRST_PERIOD', 'dontknow')
+  cy.setNumberDropdownAnswer('SELF_PREGNANCIES', 1)
+  cy.setNumberAnswer('SELF_PREGNANCY_FIRST_AGE', 10)
+
+  cy.setRadioAnswerItem('SELF_PREMENOPAUSAL_NO')
+  cy.setNumberAnswer('SELF_MENOPAUSAL_AGE', 20)
+  cy.setRadioAnswerItem('SELF_ASHKENAZI_YES')
+
+  cy.setRadioAnswerItem('SELF_BREAST_BIOPSY_YES')
+  cy.setRadioAnswerItem('SELF_BREAST_BIOPSY_DIAGNOSIS_RISK_YES')
+  let BIOPSY_DIAGNOSIS_TYPE_CHECKED_ITEMS = ['SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES_ADH']
+  cy.setCheckboxAnswerItems('SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES', BIOPSY_DIAGNOSIS_TYPE_CHECKED_ITEMS)
+  path = 'questionnaire/history'
+  cy.submitAndAssertSuccessfulNavAwayFromPath(path)
+}
+

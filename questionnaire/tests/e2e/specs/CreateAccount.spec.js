@@ -21,7 +21,7 @@ describe('CreateAccount', () => {
 
     after(function() {
         cy.deleteParticipants([UNREGISTERED_STUDY_CODE, REGISTERED_STUDY_CODE])
-        cy.clearTables(['study_id', 'answer_item', 'answer', 'answer_group', 'answer_section', 'answer_response'])
+        cy.clearTables(['study_id','participant', 'answer_item', 'answer', 'answer_group', 'answer_section', 'procedure', 'answer_response'])
     })
 
     beforeEach(function() {

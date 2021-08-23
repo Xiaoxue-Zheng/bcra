@@ -8,14 +8,12 @@ describe('Risk Assessment - testing conditional display of questons', () => {
     cy.completeRegisterPage(UNREGISTERED_STUDY_CODE)
     cy.completeConsentPage()
     cy.completeCreateAccountPage(UNREGISTERED_EMAIL_ADDRESS, STRONG_PASSWORD)
-    //cy.completeParticipantDetailsPage()
-
     cy.saveLocalStorage()
   })
 
   after(function() {
     cy.deleteParticipants([UNREGISTERED_STUDY_CODE])
-    cy.clearTables(['study_id', 'answer_item', 'answer', 'answer_group', 'answer_section', 'answer_response'])
+    cy.clearTables(['study_id','participant', 'answer_item', 'answer', 'answer_group', 'answer_section', 'procedure', 'answer_response'])
   })
 
   beforeEach(function () {
@@ -25,12 +23,30 @@ describe('Risk Assessment - testing conditional display of questons', () => {
 
   it('conditionally displays FAMILY_BREAST_HOW_MANY correctly', () => {
     let path = 'questionnaire/family'
-    cy.visitFamilyAffectedPrimarySection(true)
+    cy.visitFamilyAffectedPrimarySection(false)
+
+    let ALL_FAMILY_BREAST_AFFECTED_ITEMS = ['FAMILY_BREAST_AFFECTED_MOTHER',
+      'FAMILY_BREAST_AFFECTED_GRANDMOTHER', 'FAMILY_BREAST_AFFECTED_SISTER',
+      'FAMILY_BREAST_AFFECTED_HALFSISTER', 'FAMILY_BREAST_AFFECTED_AUNT',
+      'FAMILY_BREAST_AFFECTED_NIECE', 'FAMILY_BREAST_AFFECTED_FATHER',
+      'FAMILY_BREAST_AFFECTED_BROTHER', 'FAMILY_BREAST_AFFECTED_UNKNOWN'
+    ]
+    cy.checkAnswerItemsAreNotChecked(ALL_FAMILY_BREAST_AFFECTED_ITEMS)
+
+    let ALL_FAMILY_OVARIAN_AFFECTED_ITEMS = ['FAMILY_OVARIAN_AFFECTED_MOTHER',
+      'FAMILY_OVARIAN_AFFECTED_GRANDMOTHER', 'FAMILY_OVARIAN_AFFECTED_SISTER',
+      'FAMILY_OVARIAN_AFFECTED_HALFSISTER', 'FAMILY_OVARIAN_AFFECTED_AUNT',
+      'FAMILY_OVARIAN_AFFECTED_NIECE', 'FAMILY_OVARIAN_AFFECTED_UNKNOWN'
+    ]
+    cy.checkAnswerItemsAreNotChecked(ALL_FAMILY_OVARIAN_AFFECTED_ITEMS)
+
     let FAMILY_BREAST_AFFECTED_ITEMS = ['FAMILY_BREAST_AFFECTED_GRANDMOTHER']
     cy.setCheckboxAnswerItems('FAMILY_BREAST_AFFECTED', FAMILY_BREAST_AFFECTED_ITEMS)
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
 
     cy.checkElementVisibility(true, 'FAMILY_BREAST_HOW_MANY')
+    let ALL_HOW_MANY_ITEMS = ['FAMILY_BREAST_HOW_MANY_ONE', 'FAMILY_BREAST_HOW_MANY_MORE']
+    cy.checkAnswerItemsAreNotChecked(ALL_HOW_MANY_ITEMS)
 
     cy.backAndAssertSuccessfulNavToPath(path)
 
@@ -49,13 +65,17 @@ describe('Risk Assessment - testing conditional display of questons', () => {
     cy.setCheckboxAnswerItems('FAMILY_BREAST_AFFECTED', FAMILY_BREAST_AFFECTED_ITEMS)
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
     cy.checkElementVisibility(true, 'FAMILY_BREAST_AGE')
+    cy.checkNumberDontKnowAnswer('FAMILY_BREAST_AGE', '')
+
     cy.backAndAssertSuccessfulNavToPath(path)
     FAMILY_BREAST_AFFECTED_ITEMS = ['FAMILY_BREAST_AFFECTED_GRANDMOTHER']
     cy.setCheckboxAnswerItems('FAMILY_BREAST_AFFECTED', FAMILY_BREAST_AFFECTED_ITEMS)
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
     cy.checkElementVisibility(false, 'FAMILY_BREAST_AGE')
+
     cy.setRadioAnswerItem('FAMILY_BREAST_HOW_MANY_ONE')
     cy.checkElementVisibility(true, 'FAMILY_BREAST_AGE')
+    cy.checkNumberDontKnowAnswer('FAMILY_BREAST_AGE', '')
   })
 
   it('conditionally displays FAMILY_OVARIAN_HOW_MANY correctly', () => {
@@ -71,6 +91,8 @@ describe('Risk Assessment - testing conditional display of questons', () => {
     cy.setCheckboxAnswerItems('FAMILY_OVARIAN_AFFECTED', FAMILY_OVARIAN_AFFECTED_ITEMS)
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
     cy.checkElementVisibility(true, 'FAMILY_OVARIAN_HOW_MANY')
+    let ALL_HOW_MANY_ITEMS = ['FAMILY_OVARIAN_HOW_MANY_ONE', 'FAMILY_OVARIAN_HOW_MANY_MORE']
+    cy.checkAnswerItemsAreNotChecked(ALL_HOW_MANY_ITEMS)
   })
 
   it('conditionally displays FAMILY_OVARIAN_AGE correctly', () => {
@@ -80,6 +102,7 @@ describe('Risk Assessment - testing conditional display of questons', () => {
     cy.setCheckboxAnswerItems('FAMILY_OVARIAN_AFFECTED', FAMILY_OVARIAN_AFFECTED_ITEMS)
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
     cy.checkElementVisibility(true, 'FAMILY_OVARIAN_AGE')
+    cy.checkNumberDontKnowAnswer('FAMILY_OVARIAN_AGE', '')
     cy.backAndAssertSuccessfulNavToPath(path)
     FAMILY_OVARIAN_AFFECTED_ITEMS = ['FAMILY_OVARIAN_AFFECTED_GRANDMOTHER']
     cy.setCheckboxAnswerItems('FAMILY_OVARIAN_AFFECTED', FAMILY_OVARIAN_AFFECTED_ITEMS)
@@ -87,6 +110,7 @@ describe('Risk Assessment - testing conditional display of questons', () => {
     cy.checkElementVisibility(false, 'FAMILY_OVARIAN_AGE')
     cy.setRadioAnswerItem('FAMILY_OVARIAN_HOW_MANY_ONE')
     cy.checkElementVisibility(true, 'FAMILY_OVARIAN_AGE')
+    cy.checkNumberDontKnowAnswer('FAMILY_OVARIAN_AGE', '')
     cy.setNumberDontKnowAnswer('FAMILY_OVARIAN_AGE', 10)
     cy.setRadioAnswerItem('FAMILY_OVARIAN_HOW_MANY_MORE')
     cy.setRadioAnswerItem('FAMILY_OVARIAN_HOW_MANY_ONE')
@@ -99,7 +123,12 @@ describe('Risk Assessment - testing conditional display of questons', () => {
     cy.checkElementVisibility(false, 'FAMILY_AFFECTED_GRANDMOTHER_MOTHERS_AGE')
     cy.setRadioAnswerItem('FAMILY_AFFECTED_GRANDMOTHER_SIDE_MOTHER')
     cy.checkElementVisibility(true, 'FAMILY_AFFECTED_GRANDMOTHER_MOTHERS_AGE')
+    cy.checkNumberDontKnowAnswer('FAMILY_AFFECTED_GRANDMOTHER_MOTHERS_AGE', '')
+
     cy.setNumberDontKnowAnswer('FAMILY_AFFECTED_GRANDMOTHER_MOTHERS_AGE', 10)
+    cy.checkNumberDontKnowAnswer('FAMILY_AFFECTED_GRANDMOTHER_MOTHERS_AGE',10)
+    cy.setNumberDontKnowAnswer('FAMILY_AFFECTED_GRANDMOTHER_MOTHERS_AGE', 'dontknow')
+    cy.checkNumberDontKnowAnswer('FAMILY_AFFECTED_GRANDMOTHER_MOTHERS_AGE','dontknow')
     cy.setRadioAnswerItem('FAMILY_AFFECTED_GRANDMOTHER_SIDE_FATHER')
     cy.setRadioAnswerItem('FAMILY_AFFECTED_GRANDMOTHER_SIDE_MOTHER')
     cy.checkNumberDontKnowAnswer('FAMILY_AFFECTED_GRANDMOTHER_MOTHERS_AGE', '')
@@ -111,7 +140,12 @@ describe('Risk Assessment - testing conditional display of questons', () => {
     cy.checkElementVisibility(false, 'FAMILY_AFFECTED_AUNT_MOTHERS_AGE')
     cy.setRadioAnswerItem('FAMILY_AFFECTED_AUNT_SIDE_MOTHER')
     cy.checkElementVisibility(true, 'FAMILY_AFFECTED_AUNT_MOTHERS_AGE')
+    cy.checkNumberDontKnowAnswer('FAMILY_AFFECTED_AUNT_MOTHERS_AGE', '')
     cy.setNumberDontKnowAnswer('FAMILY_AFFECTED_AUNT_MOTHERS_AGE', 10)
+    cy.setRadioAnswerItem('FAMILY_AFFECTED_AUNT_SIDE_FATHER')
+    cy.setRadioAnswerItem('FAMILY_AFFECTED_AUNT_SIDE_MOTHER')
+    cy.checkNumberDontKnowAnswer('FAMILY_AFFECTED_AUNT_MOTHERS_AGE', '')
+    cy.setNumberDontKnowAnswer('FAMILY_AFFECTED_AUNT_MOTHERS_AGE', 'dontknow')
     cy.setRadioAnswerItem('FAMILY_AFFECTED_AUNT_SIDE_FATHER')
     cy.setRadioAnswerItem('FAMILY_AFFECTED_AUNT_SIDE_MOTHER')
     cy.checkNumberDontKnowAnswer('FAMILY_AFFECTED_AUNT_MOTHERS_AGE', '')
@@ -123,7 +157,12 @@ describe('Risk Assessment - testing conditional display of questons', () => {
     cy.checkElementVisibility(false, 'FAMILY_AFFECTED_NIECE_SISTERS_AGE')
     cy.setRadioAnswerItem('FAMILY_AFFECTED_NIECE_SIDE_SISTER')
     cy.checkElementVisibility(true, 'FAMILY_AFFECTED_NIECE_SISTERS_AGE')
+    cy.checkNumberDontKnowAnswer('FAMILY_AFFECTED_NIECE_SISTERS_AGE', '')
     cy.setNumberDontKnowAnswer('FAMILY_AFFECTED_NIECE_SISTERS_AGE', 10)
+    cy.setRadioAnswerItem('FAMILY_AFFECTED_NIECE_SIDE_BROTHER')
+    cy.setRadioAnswerItem('FAMILY_AFFECTED_NIECE_SIDE_SISTER')
+    cy.checkNumberDontKnowAnswer('FAMILY_AFFECTED_NIECE_SISTERS_AGE', '')
+    cy.setNumberDontKnowAnswer('FAMILY_AFFECTED_NIECE_SISTERS_AGE', 'dontknow')
     cy.setRadioAnswerItem('FAMILY_AFFECTED_NIECE_SIDE_BROTHER')
     cy.setRadioAnswerItem('FAMILY_AFFECTED_NIECE_SIDE_SISTER')
     cy.checkNumberDontKnowAnswer('FAMILY_AFFECTED_NIECE_SISTERS_AGE', '')
@@ -135,7 +174,12 @@ describe('Risk Assessment - testing conditional display of questons', () => {
     cy.checkElementVisibility(false, 'FAMILY_AFFECTED_HALFSISTER_MOTHERS_AGE')
     cy.setRadioAnswerItem('FAMILY_AFFECTED_HALFSISTER_SIDE_MOTHER')
     cy.checkElementVisibility(true, 'FAMILY_AFFECTED_HALFSISTER_MOTHERS_AGE')
+    cy.checkNumberDontKnowAnswer('FAMILY_AFFECTED_HALFSISTER_MOTHERS_AGE', '')
     cy.setNumberDontKnowAnswer('FAMILY_AFFECTED_HALFSISTER_MOTHERS_AGE', 10)
+    cy.setRadioAnswerItem('FAMILY_AFFECTED_HALFSISTER_SIDE_FATHER')
+    cy.setRadioAnswerItem('FAMILY_AFFECTED_HALFSISTER_SIDE_MOTHER')
+    cy.checkNumberDontKnowAnswer('FAMILY_AFFECTED_HALFSISTER_MOTHERS_AGE', '')
+    cy.setNumberDontKnowAnswer('FAMILY_AFFECTED_HALFSISTER_MOTHERS_AGE', 'dontknow')
     cy.setRadioAnswerItem('FAMILY_AFFECTED_HALFSISTER_SIDE_FATHER')
     cy.setRadioAnswerItem('FAMILY_AFFECTED_HALFSISTER_SIDE_MOTHER')
     cy.checkNumberDontKnowAnswer('FAMILY_AFFECTED_HALFSISTER_MOTHERS_AGE', '')
@@ -147,7 +191,10 @@ describe('Risk Assessment - testing conditional display of questons', () => {
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
     path = 'questionnaire/yourhistorycontext'
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
-    // cy.checkNumberDropdownAnswer('SELF_PREGNANCIES', null) - can't check null condition??
+    cy.checkNumberDropdownAnswer('SELF_PREGNANCIES', null) //- can't check null condition??
+    //select Don't Know
+    cy.setNumberDropdownAnswer('SELF_PREGNANCIES', 'Don\'t know')
+    cy.checkElementVisibility(false, 'SELF_PREGNANCY_FIRST_AGE')
     cy.setNumberDropdownAnswer('SELF_PREGNANCIES', 0)
     cy.checkElementVisibility(false, 'SELF_PREGNANCY_FIRST_AGE')
     cy.setNumberDropdownAnswer('SELF_PREGNANCIES', 1)
@@ -156,7 +203,7 @@ describe('Risk Assessment - testing conditional display of questons', () => {
     cy.checkNumberAnswer('SELF_PREGNANCY_FIRST_AGE', 10)
     cy.setNumberDropdownAnswer('SELF_PREGNANCIES', 0)
     cy.setNumberDropdownAnswer('SELF_PREGNANCIES', 1)
-    cy.checkNumberAnswer('SELF_PREGNANCY_FIRST_AGE', '')
+    cy.checkNumberAnswer('SELF_PREGNANCY_FIRST_AGE', null)
   })
 
   it('conditionally displays SELF_MENOPAUSAL_AGE correctly', () => {
@@ -171,6 +218,7 @@ describe('Risk Assessment - testing conditional display of questons', () => {
     cy.checkElementVisibility(false, 'SELF_MENOPAUSAL_AGE')
     cy.setRadioAnswerItem('SELF_PREMENOPAUSAL_NO')
     cy.checkElementVisibility(true, 'SELF_MENOPAUSAL_AGE')
+    cy.checkNumberAnswer('SELF_MENOPAUSAL_AGE', '')
     cy.setNumberAnswer('SELF_MENOPAUSAL_AGE', 20)
     cy.checkNumberAnswer('SELF_MENOPAUSAL_AGE', 20)
     cy.setRadioAnswerItem('SELF_PREMENOPAUSAL_YES')

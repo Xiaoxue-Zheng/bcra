@@ -2,7 +2,9 @@ package uk.ac.herc.bcra.service.impl;
 
 import uk.ac.herc.bcra.domain.*;
 import uk.ac.herc.bcra.domain.enumeration.ParticipantContactWay;
-import uk.ac.herc.bcra.repository.AuthorityRepository;
+import uk.ac.herc.bcra.questionnaire.AnswerCheck;
+import uk.ac.herc.bcra.questionnaire.AnswerChecker;
+import uk.ac.herc.bcra.repository.*;
 import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.IdentifiableDataService;
 import uk.ac.herc.bcra.service.ParticipantService;
@@ -10,13 +12,11 @@ import uk.ac.herc.bcra.service.AnswerResponseService;
 import uk.ac.herc.bcra.service.StudyIdService;
 import uk.ac.herc.bcra.service.ProcedureService;
 import uk.ac.herc.bcra.domain.enumeration.ResponseState;
-import uk.ac.herc.bcra.repository.IdentifiableDataRepository;
-import uk.ac.herc.bcra.repository.ParticipantRepository;
-import uk.ac.herc.bcra.repository.UserRepository;
 import uk.ac.herc.bcra.service.dto.ParticipantActivationDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantDetailsDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantExistsDTO;
+import uk.ac.herc.bcra.service.mapper.AnswerResponseMapper;
 import uk.ac.herc.bcra.service.mapper.ParticipantMapper;
 import uk.ac.herc.bcra.web.rest.errors.EmailAlreadyUsedException;
 
@@ -28,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.ac.herc.bcra.web.rest.errors.InvalidConsentException;
 
 import java.security.Principal;
 import java.time.Instant;
@@ -51,6 +52,8 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     private final ParticipantMapper participantMapper;
 
+    private final AnswerResponseMapper answerResponseMapper;
+
     private final IdentifiableDataService identifiableDataService;
 
     private final IdentifiableDataRepository identifiableDataRepository;
@@ -61,6 +64,8 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     private final AnswerResponseService answerResponseService;
 
+    private final AnswerResponseRepository answerResponseRepository;
+
     private final StudyIdService studyIdService;
 
     private final ProcedureService procedureService;
@@ -70,6 +75,7 @@ public class ParticipantServiceImpl implements ParticipantService {
     public ParticipantServiceImpl(
         ParticipantRepository participantRepository,
         ParticipantMapper participantMapper,
+        AnswerResponseMapper answerResponseMapper,
         IdentifiableDataService identifiableDataService,
         IdentifiableDataRepository identifiableDataRepository,
         UserRepository userRepository,
@@ -77,10 +83,12 @@ public class ParticipantServiceImpl implements ParticipantService {
         AnswerResponseService answerResponseService,
         StudyIdService studyIdService,
         ProcedureService procedureService,
-        AuthorityRepository authorityRepository
+        AuthorityRepository authorityRepository,
+        AnswerResponseRepository answerResponseRepository
     ) {
         this.participantRepository = participantRepository;
         this.participantMapper = participantMapper;
+        this.answerResponseMapper = answerResponseMapper;
         this.identifiableDataService = identifiableDataService;
         this.identifiableDataRepository = identifiableDataRepository;
         this.userRepository = userRepository;
@@ -89,6 +97,7 @@ public class ParticipantServiceImpl implements ParticipantService {
         this.studyIdService = studyIdService;
         this.procedureService = procedureService;
         this.authorityRepository = authorityRepository;
+        this.answerResponseRepository = answerResponseRepository;
     }
 
     /**
@@ -179,6 +188,36 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     @Override
     public void activate(ParticipantActivationDTO participantActivationDTO) {
+        AnswerResponse answerResponse = answerResponseMapper.toEntity(participantActivationDTO.getConsentResponse());
+        answerResponseService.populateAnswerResponse(answerResponse);
+        AnswerCheck answerCheck = AnswerChecker.checkConsentAnswersValid(answerResponse);
+        if(!answerCheck.isValid()){
+            throw new InvalidConsentException();
+        }
+        User user = activateUser(participantActivationDTO);
+        AnswerResponse consentResponse = answerResponseRepository.save(answerResponse);
+        consentResponse.setState(ResponseState.SUBMITTED);
+
+        Optional<StudyId> studyIdOptional = studyIdService.getStudyIdByCode(participantActivationDTO.getStudyCode());
+        StudyId studyId = studyIdOptional.get();
+
+        Procedure procedure = new Procedure();
+        procedure.setConsentResponse(consentResponse);
+        procedure.setRiskAssessmentResponse(studyId.getRiskAssessmentResponse());
+        procedureService.save(procedure);
+
+        Participant newParticipant = new Participant();
+        newParticipant.setUser(user);
+        newParticipant.setRegisterDatetime(Instant.now());
+        newParticipant.setProcedure(procedure);
+        newParticipant.setDateOfBirth(participantActivationDTO.getDateOfBirth());
+        participantRepository.save(newParticipant);
+
+        studyId.setParticipant(newParticipant);
+        studyIdService.save(studyId);
+    }
+
+    private User activateUser(ParticipantActivationDTO participantActivationDTO){
         String email = participantActivationDTO.getEmailAddress();
         if (
             identifiableDataService.findOne(
@@ -205,26 +244,7 @@ public class ParticipantServiceImpl implements ParticipantService {
         );
         user.setAuthorities(authorities);
         userRepository.save(user);
-        AnswerResponse consentResponse = answerResponseService.saveDto(participantActivationDTO.getConsentResponse());
-        consentResponse.setState(ResponseState.SUBMITTED);
-
-        Optional<StudyId> studyIdOptional = studyIdService.getStudyIdByCode(studyCode);
-        StudyId studyId = studyIdOptional.get();
-
-        Procedure procedure = new Procedure();
-        procedure.setConsentResponse(consentResponse);
-        procedure.setRiskAssessmentResponse(studyId.getRiskAssessmentResponse());
-        procedureService.save(procedure);
-
-        Participant newParticipant = new Participant();
-        newParticipant.setUser(user);
-        newParticipant.setRegisterDatetime(Instant.now());
-        newParticipant.setProcedure(procedure);
-        newParticipant.setDateOfBirth(participantActivationDTO.getDateOfBirth());
-        participantRepository.save(newParticipant);
-
-        studyId.setParticipant(newParticipant);
-        studyIdService.save(studyId);
+        return user;
     }
 
     @Override

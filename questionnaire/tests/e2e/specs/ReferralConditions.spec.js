@@ -20,7 +20,7 @@ describe('Referral Conditions Tests', () => {
 
   after(function() {
     cy.deleteParticipants([UNREGISTERED_STUDY_CODE])
-    cy.clearTables(['study_id', 'answer_item', 'answer', 'answer_group', 'answer_section', 'answer_response'])
+    cy.clearTables(['study_id','participant', 'answer_item', 'answer', 'answer_group', 'answer_section', 'procedure', 'answer_response'])
   })
 
   beforeEach(function () {
@@ -248,6 +248,7 @@ describe('Referral Conditions Tests', () => {
     path = 'questionnaire/ovarian'
 
     cy.setRadioAnswerItem('FAMILY_OVARIAN_HOW_MANY_ONE')
+    cy.setNumberDontKnowAnswer('FAMILY_OVARIAN_AGE', 10)
 
     cy.submitAndAssertSuccessfulNavAwayFromPath(path)
     cy.checkNotReferred()

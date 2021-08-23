@@ -13,7 +13,7 @@ describe('Register', () => {
 
     after(function () {
       cy.deleteParticipants([REGISTERED_STUDY_CODE, UNREGISTERED_STUDY_CODE])
-      cy.clearTables(['study_id', 'answer_item', 'answer', 'answer_group', 'answer_section', 'answer_response'])
+      cy.clearTables(['study_id','participant', 'answer_item', 'answer', 'answer_group', 'answer_section', 'answer_response'])
     })
 
     it('should open the register page', () => {

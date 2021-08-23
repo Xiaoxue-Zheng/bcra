@@ -23,6 +23,10 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="dont_know" type="boolean">
+                <constraints nullable="true" />
+            </column>
+
             <column name="units" type="varchar(255)">
                 <constraints nullable="true" />
             </column>

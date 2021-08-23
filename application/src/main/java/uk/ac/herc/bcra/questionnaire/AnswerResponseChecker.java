@@ -5,12 +5,11 @@ import java.util.Set;
 
 import uk.ac.herc.bcra.domain.*;
 import uk.ac.herc.bcra.domain.enumeration.*;
-import uk.ac.herc.bcra.questionnaire.AnswerChecker.AnswerCheck;
 
 public class AnswerResponseChecker {
 
     public static void checkAnswerResponsesValid(AnswerResponse answerResponse) {
-        
+
         AnswerCheck answerCheck = checkAnswerResponse(answerResponse);
 
         if (answerCheck.valid) {
@@ -89,7 +88,7 @@ public class AnswerResponseChecker {
     private static AnswerCheck checkAnswerGroup(AnswerGroup answerGroup) {
         Set<Answer> answers = answerGroup.getAnswers();
 
-        QuestionGroup questionGroup = 
+        QuestionGroup questionGroup =
             answerGroup
             .getAnswerSection()
             .getQuestionSection()
@@ -130,11 +129,11 @@ public class AnswerResponseChecker {
         }
 
         return new AnswerCheck(true);
-    } 
+    }
 
     private static AnswerCheck checkAnswer(Answer answer) {
         Set<AnswerItem> answerItems = answer.getAnswerItems();
-        
+
         Question question = answer.getQuestion();
         Set<QuestionItem> questionItems = question.getQuestionItems();
 

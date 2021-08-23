@@ -33,6 +33,9 @@ public class Answer implements Serializable {
     @Column(name = "ticked")
     private Boolean ticked;
 
+    @Column(name = "dont_know")
+    private Boolean dontKnow;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "units")
     private AnswerUnits units;
@@ -84,6 +87,14 @@ public class Answer implements Serializable {
 
     public void setTicked(Boolean ticked) {
         this.ticked = ticked;
+    }
+
+    public Boolean getDontKnow() {
+        return dontKnow;
+    }
+
+    public void setDontKnow(Boolean dontKnow) {
+        this.dontKnow = dontKnow;
     }
 
     public AnswerUnits getUnits() {

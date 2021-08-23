@@ -1,15 +1,14 @@
 package uk.ac.herc.bcra.service.impl;
 
+import uk.ac.herc.bcra.domain.*;
+import uk.ac.herc.bcra.questionnaire.AnswerCheck;
+import uk.ac.herc.bcra.questionnaire.AnswerChecker;
+import uk.ac.herc.bcra.repository.*;
 import uk.ac.herc.bcra.service.AnswerResponseService;
-import uk.ac.herc.bcra.domain.AnswerResponse;
-import uk.ac.herc.bcra.domain.Participant;
-import uk.ac.herc.bcra.domain.StudyId;
 import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 import uk.ac.herc.bcra.domain.enumeration.ResponseState;
-import uk.ac.herc.bcra.repository.AnswerResponseRepository;
-import uk.ac.herc.bcra.repository.ParticipantRepository;
-import uk.ac.herc.bcra.repository.StudyIdRepository;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
+import uk.ac.herc.bcra.service.dto.AnswerSectionDTO;
 import uk.ac.herc.bcra.service.mapper.AnswerResponseMapper;
 
 import org.slf4j.Logger;
@@ -17,10 +16,11 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.ac.herc.bcra.service.mapper.AnswerSectionMapper;
+import uk.ac.herc.bcra.web.rest.errors.InvalidAnswerException;
+import uk.ac.herc.bcra.web.rest.errors.InvalidConsentException;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -36,20 +36,41 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
 
     private final AnswerResponseMapper answerResponseMapper;
 
+    private final AnswerSectionMapper answerSectionMapper;
+
     private final ParticipantRepository participantRepository;
 
     private final StudyIdRepository studyIdRepository;
 
+    private final AnswerSectionRepository answerSectionRepository;
+
+    private final QuestionRepository questionRepository;
+
+    private final QuestionSectionRepository questionSectionRepository;
+
+    private final QuestionItemRepository questionItemRepository;
+
+
     public AnswerResponseServiceImpl(
         AnswerResponseRepository answerResponseRepository,
         AnswerResponseMapper answerResponseMapper,
+        AnswerSectionMapper answerSectionMapper,
         ParticipantRepository participantRepository,
-        StudyIdRepository studyIdRepository
+        StudyIdRepository studyIdRepository,
+        AnswerSectionRepository answerSectionRepository,
+        QuestionRepository questionRepository,
+        QuestionItemRepository questionItemRepository,
+        QuestionSectionRepository questionSectionRepository
     ) {
         this.answerResponseRepository = answerResponseRepository;
         this.answerResponseMapper = answerResponseMapper;
         this.participantRepository = participantRepository;
         this.studyIdRepository = studyIdRepository;
+        this.answerSectionMapper = answerSectionMapper;
+        this.answerSectionRepository = answerSectionRepository;
+        this.questionSectionRepository = questionSectionRepository;
+        this.questionItemRepository = questionItemRepository;
+        this.questionRepository = questionRepository;
     }
 
     /**
@@ -92,9 +113,30 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
                 answerResponseId = participantOptional.get().getProcedure().getRiskAssessmentResponse().getId();
                 save(answerResponseDTO, answerResponseId, responseState);
                 return true;
-            } 
+            }
         }
-        return false;        
+        return false;
+    }
+
+    @Override
+    public boolean save(String login, AnswerSectionDTO answerSectionDTO) {
+        log.debug("Request to save AnswerResponse");
+        Optional<Participant> participantOptional = participantRepository.findOneByUserLogin(login);
+        if (participantOptional.isPresent()) {
+            AnswerResponse answerResponse = participantOptional.get().getProcedure().getRiskAssessmentResponse();
+            AnswerSection answerSection = answerSectionMapper.toEntity(answerSectionDTO);
+            answerResponse.getAnswerSections().removeIf(it-> Objects.equals(it.getId(), answerSection.getId()));
+            answerResponse.getAnswerSections().add(answerSection);
+            populateAnswerSection(answerSection);
+            AnswerCheck answerCheck = AnswerChecker.checkAnswerSection(answerSection, answerResponse);
+            if(!answerCheck.isValid()){
+                throw new InvalidAnswerException(answerCheck.getReason());
+            }
+            answerResponse.setState(ResponseState.IN_PROGRESS);
+            answerResponseRepository.save(answerResponse);
+            return true;
+        }
+        return false;
     }
 
     private void save(AnswerResponseDTO answerResponseDTO, Long answerResponseId, ResponseState responseState) {
@@ -141,12 +183,12 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
         Optional<Participant> participantOptional = participantRepository.findOneByUserLogin(login);
         if (participantOptional.isPresent()) {
             if (questionnaireType == QuestionnaireType.CONSENT_FORM) {
-                return 
+                return
                     Optional
                     .of(participantOptional.get().getProcedure().getConsentResponse())
                     .map(answerResponseMapper::toDto);
             } else if (questionnaireType == QuestionnaireType.RISK_ASSESSMENT) {
-                return 
+                return
                     Optional
                     .of(participantOptional.get().getProcedure().getRiskAssessmentResponse())
                     .map(answerResponseMapper::toDto);
@@ -196,5 +238,21 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
         }
 
         return false;
+    }
+
+    public void populateAnswerResponse(AnswerResponse answerResponse){
+        answerResponse.getAnswerSections()
+            .forEach(this::populateAnswerSection);
+    }
+
+    public void populateAnswerSection(AnswerSection answerSection){
+        answerSection.setQuestionSection(questionSectionRepository.getOne(answerSection.getQuestionSection().getId()));
+        answerSection.getAnswerGroups().forEach(g->g.getAnswers()
+            .forEach(a->{
+                a.setQuestion(questionRepository.getOne(a.getQuestion().getId()));
+                a.getAnswerItems()
+                    .forEach(i->i.setQuestionItem(questionItemRepository.getOne(i.getQuestionItem().getId())));
+            })
+        );
     }
 }

@@ -1,15 +1,11 @@
 package uk.ac.herc.bcra.algorithm.mapping.answers1_tyrercuzick8;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
-import uk.ac.herc.bcra.domain.Answer;
-import uk.ac.herc.bcra.domain.AnswerGroup;
-import uk.ac.herc.bcra.domain.AnswerItem;
-import uk.ac.herc.bcra.domain.AnswerSection;
-import uk.ac.herc.bcra.domain.Question;
-import uk.ac.herc.bcra.domain.QuestionItem;
-import uk.ac.herc.bcra.domain.QuestionSection;
+import uk.ac.herc.bcra.domain.*;
 import uk.ac.herc.bcra.domain.enumeration.AnswerUnits;
 import uk.ac.herc.bcra.domain.enumeration.QuestionIdentifier;
 import uk.ac.herc.bcra.domain.enumeration.QuestionItemIdentifier;
@@ -21,6 +17,19 @@ public class MapperTestHelper {
     public static AnswerSection createAnswerSection(QuestionSectionIdentifier identifier, AnswerGroup answerGroup) {
         QuestionSection questionSection = new QuestionSection();
         questionSection.setIdentifier(identifier);
+
+        AnswerSection answerSection = new AnswerSection();
+        answerSection.setQuestionSection(questionSection);
+        answerSection.addAnswerGroup(answerGroup);
+
+        return answerSection;
+    }
+
+    public static AnswerSection createAnswerSectionWithDisplayCondition(QuestionSectionIdentifier identifier,
+                                                                      AnswerGroup answerGroup, DisplayCondition... displayConditions) {
+        QuestionSection questionSection = new QuestionSection();
+        questionSection.setIdentifier(identifier);
+        questionSection.setDisplayConditions(new HashSet<>(Arrays.asList(displayConditions)));
 
         AnswerSection answerSection = new AnswerSection();
         answerSection.setQuestionSection(questionSection);
@@ -63,7 +72,9 @@ public class MapperTestHelper {
         question.setIdentifier(questionIdentifier);
         question.setType(questionType);
         question.setMinimum(minimum);
-        
+        question.setNecessary(true);
+        question.setOrder(0);
+
         Answer answer = new Answer();
         answer.setQuestion(question);
 
@@ -81,7 +92,7 @@ public class MapperTestHelper {
             else {
                 answerItem.setSelected(false);
             }
-            
+
             if (exclusive > 0) {
                 questionItem.setExclusive(true);
                 exclusive--;
@@ -104,6 +115,7 @@ public class MapperTestHelper {
         answerGroup.addAnswer(answer);
     }
 
+
     public static void addAnswerAndItems(
         AnswerGroup answerGroup,
         QuestionIdentifier questionIdentifier,
@@ -113,7 +125,9 @@ public class MapperTestHelper {
         Question question = new Question();
         question.setIdentifier(questionIdentifier);
         question.setType(questionType);
-        
+        question.setNecessary(true);
+        question.setOrder(0);
+
         Answer answer = new Answer();
         answer.setQuestion(question);
 
@@ -163,7 +177,7 @@ public class MapperTestHelper {
             minimum,
             maximum
         );
-    }    
+    }
 
     public static void addAnswerNumberUnits(
         AnswerGroup answerGroup,
@@ -197,7 +211,74 @@ public class MapperTestHelper {
         question.setType(questionType);
         question.setMinimum(minimum);
         question.setMaximum(maximum);
-        
+        question.setNecessary(true);
+        question.setOrder(0);
+
+        Answer answer = new Answer();
+        answer.setQuestion(question);
+        answer.setNumber(number);
+        answer.setUnits(units);
+
+        answerGroup.addAnswer(answer);
+    }
+
+    public static void addDontKnowAnswerNumberUnitsMinMax(
+        AnswerGroup answerGroup,
+        QuestionIdentifier questionIdentifier,
+        QuestionType questionType,
+        AnswerUnits units,
+        Integer number,
+        Integer minimum,
+        Integer maximum
+    ) {
+        Question question = new Question();
+        question.setIdentifier(questionIdentifier);
+        question.setType(questionType);
+        question.setMinimum(minimum);
+        question.setMaximum(maximum);
+        question.setNecessary(true);
+        question.setOrder(0);
+
+        Answer answer = new Answer();
+        answer.setQuestion(question);
+        answer.setNumber(number);
+        answer.setUnits(units);
+        answer.setDontKnow(true);
+        answerGroup.addAnswer(answer);
+    }
+
+    public static void addAnswerAndItemsWithProperties(AnswerGroup answerGroup, QuestionIdentifier questionIdentifier, QuestionType questionType, Boolean ticked) {
+        Question question = new Question();
+        question.setIdentifier(questionIdentifier);
+        question.setType(questionType);
+        question.setNecessary(true);
+        question.setOrder(0);
+
+        Answer answer = new Answer();
+        answer.setQuestion(question);
+        answer.setTicked(ticked);
+        answerGroup.addAnswer(answer);
+    }
+
+    public static void addAnswerWithDisplayCondition(
+        AnswerGroup answerGroup,
+        QuestionIdentifier questionIdentifier,
+        QuestionType questionType,
+        AnswerUnits units,
+        Integer number,
+        Integer minimum,
+        Integer maximum,
+        DisplayCondition... displayCondition
+    ) {
+        Question question = new Question();
+        question.setIdentifier(questionIdentifier);
+        question.setDisplayConditions(new HashSet<>(Arrays.asList(displayCondition)));
+        question.setType(questionType);
+        question.setMinimum(minimum);
+        question.setMaximum(maximum);
+        question.setNecessary(true);
+        question.setOrder(0);
+
         Answer answer = new Answer();
         answer.setQuestion(question);
         answer.setNumber(number);

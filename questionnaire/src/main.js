@@ -5,6 +5,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router/'
 import store from './store/'
+import constPlugin from './components/ConstPlugin'
 
 import ApiService from './api/api.service'
 import Vidle from 'v-idle'
@@ -22,6 +23,7 @@ const app = new Vue({
 }).$mount('#app')
 
 Vue.use(Vidle)
+Vue.use(constPlugin)
 
 if (window.Cypress) {
   window.app = app

@@ -8,6 +8,7 @@
       <div :id="question.identifier">
         <div class="input-group-select">
           <input
+            :id="question.identifier"
             required
             type="text"
             v-model="bigValue"

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uk.ac.herc.bcra.service.dto.AnswerSectionDTO;
 
 import javax.validation.Valid;
 import java.net.URISyntaxException;
@@ -106,6 +107,20 @@ public class AnswerResponseResource {
             QuestionnaireType.RISK_ASSESSMENT,
             ResponseState.IN_PROGRESS
         )) {
+            return ResponseEntity.ok().body("SAVED");
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("FAILED");
+        }
+    }
+
+    @PutMapping("/answer-responses/risk-assessment/section/save")
+    @Secured(RoleManager.PARTICIPANT)
+    public ResponseEntity<String> saveRiskAssessmentAnswerSection(
+        Principal principal,
+        @Valid @RequestBody AnswerSectionDTO answerSectionDTO
+    ) throws URISyntaxException {
+        log.debug("REST request to save Risk Assessment AnswerSectionDTO: {}", answerSectionDTO);
+        if(answerResponseService.save(principal.getName(), answerSectionDTO)) {
             return ResponseEntity.ok().body("SAVED");
         } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("FAILED");

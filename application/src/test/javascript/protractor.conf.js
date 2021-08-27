@@ -6,6 +6,7 @@ exports.config = {
         './e2e/account/**/*.spec.ts',
         './e2e/admin/**/*.spec.ts',
         './e2e/study-id/*.spec.ts',
+        './e2e/participants/*.spec.ts',
         /* jhipster-needle-add-protractor-tests - JHipster will add protractors tests here */
     ],
 

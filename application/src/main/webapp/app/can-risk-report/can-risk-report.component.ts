@@ -56,23 +56,6 @@ export class CanRiskReportComponent implements OnInit {
   }
 
   viewCanRiskReport(selectedCanRiskReportId) {
-    this.canRiskReportService.getCanRiskReportById(selectedCanRiskReportId).subscribe(canRiskReportResponse => {
-      const decodedData = this.base64StringToArrayBuffer(canRiskReportResponse.body.fileData);
-      const file = new Blob([decodedData], { type: 'application/pdf' });
-      const fileURL = URL.createObjectURL(file);
-      window.open(fileURL);
-    });
-  }
-
-  base64StringToArrayBuffer(base64String) {
-    const input = base64String.substring(base64String.indexOf(',') + 1);
-    const binaryString = window.atob(input);
-    const binaryLen = binaryString.length;
-    const bytes = new Uint8Array(binaryLen);
-    for (let i = 0; i < binaryLen; i++) {
-      const ascii = binaryString.charCodeAt(i);
-      bytes[i] = ascii;
-    }
-    return bytes;
+    this.canRiskReportService.viewCanRiskReport(selectedCanRiskReportId);
   }
 }

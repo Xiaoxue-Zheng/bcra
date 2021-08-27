@@ -11,18 +11,13 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {UserMapper.class})
 public interface ParticipantMapper extends EntityMapper<ParticipantDTO, Participant> {
 
-    @Mapping(source = "identifiableData.nhsNumber", target = "nhsNumber")
-    @Mapping(source = "identifiableData.practiceName", target = "practiceName")
-    @Mapping(source = "user.createdDate", target = "importedDatetime")
     @Mapping(source = "participant.registerDatetime", target = "registerDatetime")
-    @Mapping(source = "participant.lastLoginDatetime", target = "lastLoginDatetime")
-    @Mapping(source = "participant.procedure.consentResponse.state", target = "consentStatus")
-    @Mapping(source = "participant.procedure.riskAssessmentResponse.state", target = "questionnaireStatus")
+    @Mapping(source = "participant.studyId.code", target = "studyID")
+    @Mapping(source = "participant.dateOfBirth", target = "dateOfBirth")
+    @Mapping(source = "participant.status", target = "status")
     ParticipantDTO toDto(Participant participant);
 
-    @Mapping(target = "identifiableData", ignore=true)
     @Mapping(target = "registerDatetime", ignore=true)
-    @Mapping(target = "lastLoginDatetime", ignore=true)
     Participant toEntity(ParticipantDTO participantDTO);
 
     default Participant fromId(Long id) {

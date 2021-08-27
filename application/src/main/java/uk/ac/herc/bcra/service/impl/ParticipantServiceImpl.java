@@ -211,6 +211,8 @@ public class ParticipantServiceImpl implements ParticipantService {
         newParticipant.setRegisterDatetime(Instant.now());
         newParticipant.setProcedure(procedure);
         newParticipant.setDateOfBirth(participantActivationDTO.getDateOfBirth());
+        newParticipant.setStatus(ResponseState.IN_PROGRESS.name());
+        newParticipant.setStudyId(studyId);
         participantRepository.save(newParticipant);
 
         studyId.setParticipant(newParticipant);
@@ -283,4 +285,5 @@ public class ParticipantServiceImpl implements ParticipantService {
 
         return participant.getIdentifiableData();
     }
+
 }

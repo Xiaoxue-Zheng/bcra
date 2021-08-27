@@ -3,6 +3,7 @@ import { DB } from '../db-commands/DB';
 
 export class NavBarPage {
   studyIdsMenu = element(by.css('[routerLink="study-id"]'));
+  participantsMenu = element(by.css('[routerLink="participants"]'));
   accountMenu = element(by.id('account-menu'));
   adminMenu: ElementFinder;
   signIn = element(by.id('login'));
@@ -47,6 +48,10 @@ export class NavBarPage {
 
   async clickOnStudyIds() {
     await element(by.css('[routerLink="study-id"]')).click();
+  }
+
+  async clickOnParticipants() {
+    await this.participantsMenu.click();
   }
 
   async clickOnAdmin(entityName: string) {

@@ -1,9 +1,11 @@
 package uk.ac.herc.bcra.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.criteria.JoinType;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,7 @@ import io.github.jhipster.service.QueryService;
 import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.domain.*; // for static metamodels
 import uk.ac.herc.bcra.repository.ParticipantRepository;
+import uk.ac.herc.bcra.service.dto.CanRiskReportDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantCriteria;
 import uk.ac.herc.bcra.service.dto.ParticipantDTO;
 import uk.ac.herc.bcra.service.mapper.ParticipantMapper;
@@ -37,9 +40,14 @@ public class ParticipantQueryService extends QueryService<Participant> {
 
     private final ParticipantMapper participantMapper;
 
-    public ParticipantQueryService(ParticipantRepository participantRepository, ParticipantMapper participantMapper) {
+    private final CanRiskReportService canRiskReportService;
+
+    public ParticipantQueryService(ParticipantRepository participantRepository
+        , ParticipantMapper participantMapper, CanRiskReportService canRiskReportService
+    ) {
         this.participantRepository = participantRepository;
         this.participantMapper = participantMapper;
+        this.canRiskReportService = canRiskReportService;
     }
 
     /**
@@ -65,7 +73,12 @@ public class ParticipantQueryService extends QueryService<Participant> {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<Participant> specification = createSpecification(criteria);
         return participantRepository.findAll(specification, page)
-            .map(participantMapper::toDto);
+            .map((participant)->{
+                ParticipantDTO participantDTO = participantMapper.toDto(participant);
+                Optional<CanRiskReportDTO> canRiskReportOptional = canRiskReportService.findOneByAssociatedStudyId(participant.getStudyId());
+                canRiskReportOptional.ifPresent(canRiskReportDTO -> participantDTO.setCanRiskReportId(canRiskReportDTO.getId()));
+                return participantDTO;
+            });
     }
 
     /**
@@ -88,31 +101,19 @@ public class ParticipantQueryService extends QueryService<Participant> {
     protected Specification<Participant> createSpecification(ParticipantCriteria criteria) {
         Specification<Participant> specification = Specification.where(null);
         if (criteria != null) {
-            if (criteria.getId() != null) {
-                specification = specification.and(buildSpecification(criteria.getId(), Participant_.id));
+            if (criteria.getStudyId() != null && StringUtils.isNotEmpty(criteria.getStudyId().getEquals())) {
+                specification = specification.and(buildSpecification(criteria.getStudyId(),
+                    root -> root.join(Participant_.studyId, JoinType.LEFT).get(StudyId_.code)));
             }
-            if (criteria.getRegisterDatetime() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getRegisterDatetime(), Participant_.registerDatetime));
+            if (criteria.getDateOfBirth() != null) {
+                specification = specification.and(buildSpecification(criteria.getDateOfBirth(),
+                    root -> root.get(Participant_.dateOfBirth)));
             }
-            if (criteria.getLastLoginDatetime() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getLastLoginDatetime(), Participant_.lastLoginDatetime));
+            if(criteria.getStatus() != null && StringUtils.isNotEmpty(criteria.getStatus().getEquals())) {
+                specification = specification.and(buildSpecification(criteria.getStatus(),
+                    root -> root.get(Participant_.status)));
             }
-            if (criteria.getUserId() != null) {
-                specification = specification.and(buildSpecification(criteria.getUserId(),
-                    root -> root.join(Participant_.user, JoinType.LEFT).get(User_.id)));
-            }
-            if (criteria.getIdentifiableDataId() != null) {
-                specification = specification.and(buildSpecification(criteria.getIdentifiableDataId(),
-                    root -> root.join(Participant_.identifiableData, JoinType.LEFT).get(IdentifiableData_.id)));
-            }
-            if (criteria.getProcedureId() != null) {
-                specification = specification.and(buildSpecification(criteria.getProcedureId(),
-                    root -> root.join(Participant_.procedure, JoinType.LEFT).get(Procedure_.id)));
-            }
-            if (criteria.getNhsNumber() != null) {
-                specification = specification.and(buildSpecification(criteria.getNhsNumber(),
-                    root -> root.join(Participant_.identifiableData, JoinType.LEFT).get(IdentifiableData_.nhsNumber)));
-            }
+
         }
         return specification;
     }

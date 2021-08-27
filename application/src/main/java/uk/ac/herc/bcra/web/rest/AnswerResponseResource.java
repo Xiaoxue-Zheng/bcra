@@ -50,67 +50,12 @@ public class AnswerResponseResource {
         return answerResponseDTO;
     }
 
-    @PutMapping("/answer-responses/consent/save")
-    public ResponseEntity<String> saveConsent(
-            Principal principal,
-            @Valid @RequestBody AnswerResponseDTO answerResponseDTO
-    ) throws URISyntaxException {
-        log.debug("REST request to save Consent AnswerResponse: {}", answerResponseDTO);
-        if(answerResponseService.save(
-            principal.getName(),
-            answerResponseDTO,
-            QuestionnaireType.CONSENT_FORM,
-            ResponseState.IN_PROGRESS
-        )) {
-            return ResponseEntity.ok().body("SAVED");
-        } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("FAILED");
-        }
-    }
-
-    @PutMapping("/answer-responses/consent/submit")
-    public ResponseEntity<String> submitConsent(
-            Principal principal,
-            @Valid @RequestBody AnswerResponseDTO answerResponseDTO
-    ) throws URISyntaxException {
-        log.debug("REST request to submit Consent AnswerResponse: {}", answerResponseDTO);
-        if(answerResponseService.save(
-            principal.getName(),
-            answerResponseDTO,
-            QuestionnaireType.CONSENT_FORM,
-            ResponseState.SUBMITTED
-        )) {
-            return ResponseEntity.ok().body("SUBMITTED");
-        } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("FAILED");
-        }
-    }
-
     @GetMapping("/answer-responses/risk-assessment/{studyCode}")
     @Secured(RoleManager.PARTICIPANT)
     public AnswerResponseDTO getRiskAssessmentResponseFromStudyCode(@PathVariable String studyCode) {
         log.debug("REST request to get Risk Assessment AnswerResponse");
         AnswerResponseDTO answerResponseDTO = studyIdService.getRiskAssessmentResponseFromStudyCode(studyCode);
         return answerResponseDTO;
-    }
-
-    @PutMapping("/answer-responses/risk-assessment/save")
-    @Secured(RoleManager.PARTICIPANT)
-    public ResponseEntity<String> saveRiskAssessment(
-            Principal principal,
-            @Valid @RequestBody AnswerResponseDTO answerResponseDTO
-    ) throws URISyntaxException {
-        log.debug("REST request to save Risk Assessment AnswerResponse: {}", answerResponseDTO);
-        if(answerResponseService.save(
-            principal.getName(),
-            answerResponseDTO,
-            QuestionnaireType.RISK_ASSESSMENT,
-            ResponseState.IN_PROGRESS
-        )) {
-            return ResponseEntity.ok().body("SAVED");
-        } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("FAILED");
-        }
     }
 
     @PutMapping("/answer-responses/risk-assessment/section/save")
@@ -134,12 +79,7 @@ public class AnswerResponseResource {
         @Valid @RequestBody AnswerResponseDTO answerResponseDTO
     ) throws URISyntaxException {
         log.debug("REST request to save Risk Assessment AnswerResponse: {}", answerResponseDTO);
-        if(answerResponseService.save(
-            principal.getName(),
-            answerResponseDTO,
-            QuestionnaireType.RISK_ASSESSMENT,
-            ResponseState.REFERRED
-        )) {
+        if(answerResponseService.referralAnswerResponse(principal.getName(), answerResponseDTO)) {
             return ResponseEntity.ok().body("REFERRED");
         } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("FAILED");
@@ -153,12 +93,7 @@ public class AnswerResponseResource {
             @Valid @RequestBody AnswerResponseDTO answerResponseDTO
     ) throws URISyntaxException {
         log.debug("REST request to submit Risk Assessment AnswerResponse: {}", answerResponseDTO);
-        if(answerResponseService.save(
-            principal.getName(),
-            answerResponseDTO,
-            QuestionnaireType.RISK_ASSESSMENT,
-            ResponseState.VALIDATED
-        )) {
+        if(answerResponseService.submitAnswerResponse(principal.getName(), answerResponseDTO)) {
             return ResponseEntity.ok().body("SUBMITTED");
         } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("FAILED");

@@ -27,12 +27,24 @@
                 <constraints nullable="false" />
             </column>
 
+            <column name="status" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+
             <column name="user_id" type="bigint">
                 <constraints unique="true" nullable="false" uniqueConstraintName="ux_participant_user_id" />
-            </column>            <column name="identifiable_data_id" type="bigint">
+            </column>
+
+            <column name="identifiable_data_id" type="bigint">
                 <constraints unique="true" nullable="true" uniqueConstraintName="ux_participant_identifiable_data_id" />
-            </column>            <column name="procedure_id" type="bigint">
+            </column>
+
+            <column name="procedure_id" type="bigint">
                 <constraints unique="true" nullable="false" uniqueConstraintName="ux_participant_procedure_id" />
+            </column>
+
+            <column name="study_id_id" type="bigint">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_participant_study_id_id" />
             </column>
 
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->

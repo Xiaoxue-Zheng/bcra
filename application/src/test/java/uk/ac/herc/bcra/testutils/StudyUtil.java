@@ -69,13 +69,22 @@ public class StudyUtil {
 
         em.persist(pr);
 
+        StudyId studyId = new StudyId();
+        studyId.setCode(identifier);
+        studyId.setConsentResponse(cr);
+        studyId.setRiskAssessmentResponse(rar);
+        em.persist(studyId);
+
         Participant p = new Participant();
         p.setUser(u);
         p.setIdentifiableData(id);
         p.setProcedure(pr);
         p.dateOfBirth(LocalDate.of(1990, 9, 15));
+        p.setStatus(ResponseState.IN_PROGRESS.name());
+        p.setStudyId(studyId);
         pr.setParticipant(p);
-
+        studyId.setParticipant(p);
+        em.persist(studyId);
         em.persist(p);
         em.persist(pr);
 
@@ -90,7 +99,7 @@ public class StudyUtil {
         studyId.setConsentResponse(participant.getProcedure().getConsentResponse());
         studyId.setRiskAssessmentResponse(participant.getProcedure().getRiskAssessmentResponse());
         studyId.setCode(participant.getUser().getLogin());
-        
+
         em.persist(studyId);
         em.flush();
 

@@ -1,10 +1,12 @@
 package uk.ac.herc.bcra.service;
 
 import uk.ac.herc.bcra.domain.CanRiskReport;
+import uk.ac.herc.bcra.domain.StudyId;
 import uk.ac.herc.bcra.domain.User;
 import uk.ac.herc.bcra.service.dto.CanRiskReportDTO;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +21,8 @@ public interface CanRiskReportService {
     List<CanRiskReportDTO> findAllAsDto(int page, int size) throws Exception ;
 
     CanRiskReportDTO findOneAsDto(Long id) throws Exception;
+
+    Optional<CanRiskReportDTO> findOneByAssociatedStudyId(StudyId studyId);
 
     void delete(Long id);
 

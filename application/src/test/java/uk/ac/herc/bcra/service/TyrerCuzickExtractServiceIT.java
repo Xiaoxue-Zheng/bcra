@@ -68,7 +68,7 @@ public class TyrerCuzickExtractServiceIT {
 
     private Participant createParticipant(String userIdentifier) {
         Participant p = studyUtil.createParticipant(em, userIdentifier, LocalDate.now());
-        studyUtil.answerQuestionnaireWithAnything(em, p.getProcedure().getRiskAssessmentResponse());
+        studyUtil.answerQuestionnaireWithAnything(em, p.getStudyId().getRiskAssessmentResponse());
         return p;
     }
 

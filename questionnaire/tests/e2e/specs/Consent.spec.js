@@ -32,7 +32,7 @@ describe('Consent', () => {
 
     after(function() {
         cy.deleteParticipants([UNREGISTERED_STUDY_CODE])
-        cy.clearTables(['study_id','participant', 'answer_item', 'answer', 'answer_group', 'answer_section', 'procedure', 'answer_response'])
+        cy.clearTables(['study_id','participant', 'answer_item', 'answer', 'answer_group', 'answer_section', 'answer_response'])
     })
 
     it('should open the consent page', () => {

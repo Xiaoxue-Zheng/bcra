@@ -75,7 +75,7 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
         log.debug("Request to save AnswerResponse");
         Optional<Participant> participantOptional = participantRepository.findOneByUserLogin(login);
         if (participantOptional.isPresent()) {
-            AnswerResponse answerResponse = participantOptional.get().getProcedure().getRiskAssessmentResponse();
+            AnswerResponse answerResponse = participantOptional.get().getStudyId().getRiskAssessmentResponse();
             AnswerSection answerSection = answerSectionMapper.toEntity(answerSectionDTO);
             answerResponse.getAnswerSections().removeIf(it-> Objects.equals(it.getId(), answerSection.getId()));
             answerResponse.getAnswerSections().add(answerSection);
@@ -129,12 +129,12 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
             if (questionnaireType == QuestionnaireType.CONSENT_FORM) {
                 return
                     Optional
-                    .of(participantOptional.get().getProcedure().getConsentResponse())
+                    .of(participantOptional.get().getStudyId().getConsentResponse())
                     .map(answerResponseMapper::toDto);
             } else if (questionnaireType == QuestionnaireType.RISK_ASSESSMENT) {
                 return
                     Optional
-                    .of(participantOptional.get().getProcedure().getRiskAssessmentResponse())
+                    .of(participantOptional.get().getStudyId().getRiskAssessmentResponse())
                     .map(answerResponseMapper::toDto);
             }
         }
@@ -205,7 +205,7 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
         Optional<Participant> participantOptional = participantRepository.findOneByUserLogin(login);
         if (participantOptional.isPresent()) {
             Participant participant = participantOptional.get();
-            Long answerResponseId = participant.getProcedure().getRiskAssessmentResponse().getId();
+            Long answerResponseId = participant.getStudyId().getRiskAssessmentResponse().getId();
             save(answerResponseDTO, answerResponseId, ResponseState.REFERRED);
             participant.setStatus(ResponseState.REFERRED.name());
             participantRepository.save(participant);
@@ -219,7 +219,7 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
         Optional<Participant> participantOptional = participantRepository.findOneByUserLogin(login);
         if (participantOptional.isPresent()) {
             Participant participant = participantOptional.get();
-            Long answerResponseId = participant.getProcedure().getRiskAssessmentResponse().getId();
+            Long answerResponseId = participant.getStudyId().getRiskAssessmentResponse().getId();
             save(answerResponseDTO, answerResponseId, ResponseState.VALIDATED);
             participant.setStatus(ResponseState.SUBMITTED.name());
             participantRepository.save(participant);

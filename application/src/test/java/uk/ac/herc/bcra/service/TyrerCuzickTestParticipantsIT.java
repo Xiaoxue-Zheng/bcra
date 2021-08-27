@@ -81,7 +81,7 @@ public class TyrerCuzickTestParticipantsIT {
 
     private void answerParticipantQuestionnaires() {
         Participant tst1 = testParticipants.get(0);
-        AnswerResponse rar1 = tst1.getProcedure().getRiskAssessmentResponse();
+        AnswerResponse rar1 = tst1.getStudyId().getRiskAssessmentResponse();
         questionnaireUtil.selectFamilyBreastAffected(em, rar1, QuestionnaireUtil.AUNT, true, 55);
         questionnaireUtil.selectFamilyMembersAffected(em, rar1, QuestionnaireUtil.AUNT, true);
 
@@ -93,7 +93,7 @@ public class TyrerCuzickTestParticipantsIT {
         questionnaireUtil.setBreastBiopsyStatus(em, rar1, QuestionnaireUtil.NO, "doesn't matter", "doesn't matter");
 
         Participant tst2 = testParticipants.get(1);
-        AnswerResponse rar2 = tst2.getProcedure().getRiskAssessmentResponse();
+        AnswerResponse rar2 = tst2.getStudyId().getRiskAssessmentResponse();
 
         questionnaireUtil.setHeightAndWeight(em, rar2, 160, 60);
         questionnaireUtil.setAgeOfFirstPeriod(em, rar2, 12);
@@ -103,7 +103,7 @@ public class TyrerCuzickTestParticipantsIT {
         questionnaireUtil.setBreastBiopsyStatus(em, rar2, QuestionnaireUtil.NO, "doesn't matter", "doesn't matter");
 
         Participant tst3 = testParticipants.get(2);
-        AnswerResponse rar3 = tst3.getProcedure().getRiskAssessmentResponse();
+        AnswerResponse rar3 = tst3.getStudyId().getRiskAssessmentResponse();
         questionnaireUtil.selectFamilyBreastAffected(em, rar3, QuestionnaireUtil.GRANDMOTHER, true, 50);
         questionnaireUtil.selectFamilyMembersAffected(em, rar3, QuestionnaireUtil.GRANDMOTHER, true);
 
@@ -115,7 +115,7 @@ public class TyrerCuzickTestParticipantsIT {
         questionnaireUtil.setBreastBiopsyStatus(em, rar3, QuestionnaireUtil.NO, "doesn't matter", "doesn't matter");
 
         Participant tst4 = testParticipants.get(3);
-        AnswerResponse rar4 = tst4.getProcedure().getRiskAssessmentResponse();
+        AnswerResponse rar4 = tst4.getStudyId().getRiskAssessmentResponse();
         questionnaireUtil.selectFamilyBreastAffected(em, rar4, QuestionnaireUtil.GRANDMOTHER, true, 50);
         questionnaireUtil.selectFamilyMembersAffected(em, rar4, QuestionnaireUtil.GRANDMOTHER, true);
 
@@ -127,7 +127,7 @@ public class TyrerCuzickTestParticipantsIT {
         questionnaireUtil.setBreastBiopsyStatus(em, rar4, QuestionnaireUtil.YES, QuestionnaireUtil.YES, QuestionnaireUtil.DONT_KNOW);
 
         Participant tst5 = testParticipants.get(4);
-        AnswerResponse rar5 = tst5.getProcedure().getRiskAssessmentResponse();
+        AnswerResponse rar5 = tst5.getStudyId().getRiskAssessmentResponse();
         questionnaireUtil.selectFamilyBreastAffected(em, rar5, QuestionnaireUtil.MOTHER, true, 40);
         questionnaireUtil.selectFamilyBreastAffected(em, rar5, QuestionnaireUtil.GRANDMOTHER, true, 50);
         questionnaireUtil.selectFamilyMembersAffected(em, rar5, QuestionnaireUtil.GRANDMOTHER, true);
@@ -140,7 +140,7 @@ public class TyrerCuzickTestParticipantsIT {
         questionnaireUtil.setBreastBiopsyStatus(em, rar5, QuestionnaireUtil.NO, "doesn't matter", "doesn't matter");
 
         Participant tst6 = testParticipants.get(5);
-        AnswerResponse rar6 = tst6.getProcedure().getRiskAssessmentResponse();
+        AnswerResponse rar6 = tst6.getStudyId().getRiskAssessmentResponse();
 
         questionnaireUtil.setHeightAndWeight(em, rar6, 160, 65);
         questionnaireUtil.setAgeOfFirstPeriod(em, rar6, 12);
@@ -150,7 +150,7 @@ public class TyrerCuzickTestParticipantsIT {
         questionnaireUtil.setBreastBiopsyStatus(em, rar6, QuestionnaireUtil.NO, "doesn't matter", "doesn't matter");
 
         Participant tst7 = testParticipants.get(6);
-        AnswerResponse rar7 = tst7.getProcedure().getRiskAssessmentResponse();
+        AnswerResponse rar7 = tst7.getStudyId().getRiskAssessmentResponse();
         questionnaireUtil.selectFamilyBreastAffected(em, rar7, QuestionnaireUtil.AUNT, true, 40);
         questionnaireUtil.selectFamilyMembersAffected(em, rar7, QuestionnaireUtil.AUNT, true);
 
@@ -162,7 +162,7 @@ public class TyrerCuzickTestParticipantsIT {
         questionnaireUtil.setBreastBiopsyStatus(em, rar7, QuestionnaireUtil.NO, "doesn't matter", "doesn't matter");
 
         Participant tst8 = testParticipants.get(7);
-        AnswerResponse rar8 = tst8.getProcedure().getRiskAssessmentResponse();
+        AnswerResponse rar8 = tst8.getStudyId().getRiskAssessmentResponse();
 
         questionnaireUtil.setHeightAndWeight(em, rar8, 160, 65);
         questionnaireUtil.setAgeOfFirstPeriod(em, rar8, 15);
@@ -172,7 +172,7 @@ public class TyrerCuzickTestParticipantsIT {
         questionnaireUtil.setBreastBiopsyStatus(em, rar8, QuestionnaireUtil.YES, QuestionnaireUtil.YES, QuestionnaireUtil.DIAG_ALH);
 
         Participant tst9 = testParticipants.get(8);
-        AnswerResponse rar9 = tst9.getProcedure().getRiskAssessmentResponse();
+        AnswerResponse rar9 = tst9.getStudyId().getRiskAssessmentResponse();
         questionnaireUtil.selectFamilyBreastAffected(em, rar9, QuestionnaireUtil.AUNT, true, 0);
         questionnaireUtil.selectFamilyMembersAffected(em, rar9, QuestionnaireUtil.AUNT, false);
 
@@ -184,7 +184,7 @@ public class TyrerCuzickTestParticipantsIT {
         questionnaireUtil.setBreastBiopsyStatus(em, rar9, QuestionnaireUtil.NO, "doesn't matter", "doesn't matter");
 
         Participant tst10 = testParticipants.get(9);
-        AnswerResponse rar10 = tst10.getProcedure().getRiskAssessmentResponse();
+        AnswerResponse rar10 = tst10.getStudyId().getRiskAssessmentResponse();
         questionnaireUtil.selectFamilyOvarianAffected(em, rar10, QuestionnaireUtil.GRANDMOTHER, true, 50);
         questionnaireUtil.selectFamilyMembersAffected(em, rar10, QuestionnaireUtil.GRANDMOTHER, true);
 
@@ -221,7 +221,7 @@ public class TyrerCuzickTestParticipantsIT {
             String identifier = participant.getUser().getLogin();
 
             LocalDate dateOfBirth = participant.getIdentifiableData().getDateOfBirth();
-            AnswerResponse response = participant.getProcedure().getRiskAssessmentResponse();
+            AnswerResponse response = participant.getStudyId().getRiskAssessmentResponse();
 
             if (!identifier.equals("TST_5")) {
                 String expectedOutput = getExpectedAlgorithmOutputForParticipant(identifier);

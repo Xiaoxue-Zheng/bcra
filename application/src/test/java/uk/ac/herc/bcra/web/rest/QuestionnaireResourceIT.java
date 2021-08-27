@@ -165,7 +165,7 @@ public class QuestionnaireResourceIT {
         )
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(participant.getProcedure().getRiskAssessmentResponse().getQuestionnaire().getId().intValue()))
+            .andExpect(jsonPath("$.id").value(participant.getStudyId().getRiskAssessmentResponse().getQuestionnaire().getId().intValue()))
             .andExpect(jsonPath("$.type").value(QuestionnaireType.RISK_ASSESSMENT.toString()));
     }
 

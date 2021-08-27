@@ -30,15 +30,6 @@
             "ownerSide": true
         },
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "procedure",
-            "otherEntityRelationshipName": "participant",
-            "relationshipValidateRules": "required",
-            "relationshipName": "procedure",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
             "relationshipType": "many-to-one",
             "otherEntityName": "csvFile",
             "otherEntityRelationshipName": "participant",

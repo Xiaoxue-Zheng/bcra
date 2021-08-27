@@ -5,7 +5,7 @@ Cypress.Commands.add('clearTables', (tables) => {
 
 Cypress.Commands.add('removeParticipant', (studyCode) => {
   cy.deleteParticipants([studyCode])
-  cy.clearTables(['study_id','participant',  'answer_item', 'answer', 'answer_group', 'answer_section', 'procedure', 'answer_response'])
+  cy.clearTables(['study_id','participant',  'answer_item', 'answer', 'answer_group', 'answer_section', 'answer_response'])
 })
 
 function clearNextTable(tables, currentTableIx) {

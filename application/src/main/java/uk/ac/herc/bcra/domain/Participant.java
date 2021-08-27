@@ -41,11 +41,6 @@ public class Participant implements Serializable {
     @JoinColumn(unique = true)
     private IdentifiableData identifiableData;
 
-    @OneToOne(optional = false)
-    @NotNull
-    @JoinColumn(unique = true)
-    private Procedure procedure;
-
     @NotNull
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
@@ -117,19 +112,6 @@ public class Participant implements Serializable {
 
     public void setIdentifiableData(IdentifiableData identifiableData) {
         this.identifiableData = identifiableData;
-    }
-
-    public Procedure getProcedure() {
-        return procedure;
-    }
-
-    public Participant procedure(Procedure procedure) {
-        this.procedure = procedure;
-        return this;
-    }
-
-    public void setProcedure(Procedure procedure) {
-        this.procedure = procedure;
     }
 
     public void setDateOfBirth(LocalDate dateOfBirth) {

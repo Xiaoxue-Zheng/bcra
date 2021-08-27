@@ -20,11 +20,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="identifiable_data"/>
 
-        <addForeignKeyConstraint baseColumnNames="procedure_id"
+        <addForeignKeyConstraint baseColumnNames="study_id_id"
                                  baseTableName="participant"
-                                 constraintName="fk_participant_procedure_id"
+                                 constraintName="fk_participant_study_id_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="procedure"/>
+                                 referencedTableName="study_id"/>
 
         <addForeignKeyConstraint baseColumnNames="study_id_id"
                                  baseTableName="participant"

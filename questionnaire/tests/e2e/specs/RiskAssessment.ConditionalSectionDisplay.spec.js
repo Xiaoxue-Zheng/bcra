@@ -17,7 +17,7 @@ describe('Risk Assessment - testing conditional display of sections', () => {
 
   after(function() {
     cy.deleteParticipants([UNREGISTERED_STUDY_CODE])
-    cy.clearTables(['study_id','participant', 'answer_item', 'answer', 'answer_group', 'answer_section', 'procedure', 'answer_response'])
+    cy.clearTables(['study_id','participant', 'answer_item', 'answer', 'answer_group', 'answer_section', 'answer_response'])
   })
 
   beforeEach(function () {

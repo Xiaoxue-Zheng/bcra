@@ -314,7 +314,6 @@ public class ParticipantResourceIT {
         User user = participant.getUser();
         assertThat(user.getEmail()).isEqualTo(emailAddress);
         assertThat(user.getLogin()).isEqualTo(studyCode);
-        assertThat(participant.getProcedure()).isNotNull();
         assertThat(participant.getIdentifiableData()).isNull();
     }
 

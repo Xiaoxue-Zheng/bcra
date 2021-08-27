@@ -377,15 +377,6 @@ relationship ManyToOne {
     Participant{CsvFile(fileName)} to CsvFile
 }
 
-/* Procedure */
-entity Procedure
-
-relationship OneToOne {
-    Participant{procedure required} to Procedure{participant required}
-    Procedure{consentResponse required} to AnswerResponse
-    Procedure{riskAssessmentResponse required} to AnswerResponse
-}
-
 /* Generation */
 dto * with mapstruct
 service * with serviceImpl

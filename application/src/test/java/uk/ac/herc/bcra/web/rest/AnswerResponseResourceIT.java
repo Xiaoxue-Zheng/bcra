@@ -146,7 +146,7 @@ public class AnswerResponseResourceIT {
 
         byte[] data = result.getResponse().getContentAsByteArray();
         AnswerResponseDTO consentDto = MockMvcUtil.convertJsonBytesToObject(AnswerResponseDTO.class, data);
-        assertThat(consentDto.getQuestionnaireId()).isEqualTo(participant.getProcedure().getConsentResponse().getQuestionnaire().getId());
+        assertThat(consentDto.getQuestionnaireId()).isEqualTo(participant.getStudyId().getConsentResponse().getQuestionnaire().getId());
     }
 
     @Test
@@ -158,13 +158,13 @@ public class AnswerResponseResourceIT {
 
         byte[] data = result.getResponse().getContentAsByteArray();
         AnswerResponseDTO riskAssessmentDto = MockMvcUtil.convertJsonBytesToObject(AnswerResponseDTO.class, data);
-        assertThat(riskAssessmentDto.getQuestionnaireId()).isEqualTo(participant.getProcedure().getRiskAssessmentResponse().getQuestionnaire().getId());
+        assertThat(riskAssessmentDto.getQuestionnaireId()).isEqualTo(participant.getStudyId().getRiskAssessmentResponse().getQuestionnaire().getId());
     }
 
     @Test
     @Transactional
     public void testReferralRiskAssessment() throws Exception {
-        AnswerResponse riskAssessment = participant.getProcedure().getRiskAssessmentResponse();
+        AnswerResponse riskAssessment = participant.getStudyId().getRiskAssessmentResponse();
         AnswerResponseDTO riskAssessmentDto = answerResponseMapper.toDto(riskAssessment);
 
         restAnswerResponseMockMvc.perform(
@@ -187,7 +187,7 @@ public class AnswerResponseResourceIT {
     @Test
     @Transactional
     public void testSubmitRiskAssessment() throws Exception {
-        AnswerResponse riskAssessment = participant.getProcedure().getRiskAssessmentResponse();
+        AnswerResponse riskAssessment = participant.getStudyId().getRiskAssessmentResponse();
         AnswerResponseDTO riskAssessmentDto = answerResponseMapper.toDto(riskAssessment);
 
         restAnswerResponseMockMvc.perform(
@@ -210,7 +210,7 @@ public class AnswerResponseResourceIT {
     @Test
     @Transactional
     public void testHasCompletedConsentQuestionnaire() throws Exception {
-        AnswerResponse consent = participant.getProcedure().getConsentResponse();
+        AnswerResponse consent = participant.getStudyId().getConsentResponse();
         consent.setState(ResponseState.NOT_STARTED);
         answerResponseRepository.save(consent);
 
@@ -245,7 +245,7 @@ public class AnswerResponseResourceIT {
     @Test
     @Transactional
     public void testHasCompletedRiskAssessmentQuestionnaire() throws Exception {
-        AnswerResponse riskAssessment = participant.getProcedure().getRiskAssessmentResponse();
+        AnswerResponse riskAssessment = participant.getStudyId().getRiskAssessmentResponse();
         riskAssessment.setState(ResponseState.NOT_STARTED);
         answerResponseRepository.save(riskAssessment);
 

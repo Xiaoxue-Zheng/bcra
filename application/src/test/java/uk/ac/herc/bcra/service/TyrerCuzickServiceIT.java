@@ -63,7 +63,7 @@ public class TyrerCuzickServiceIT {
 
     private void createParticipantAndRiskAssessment() {
         Participant p = studyUtil.createParticipant(em, USER_IDENTIFIER, LocalDate.now());
-        studyUtil.answerQuestionnaireWithAnything(em, p.getProcedure().getRiskAssessmentResponse());
+        studyUtil.answerQuestionnaireWithAnything(em, p.getStudyId().getRiskAssessmentResponse());
     }
 
     @Test

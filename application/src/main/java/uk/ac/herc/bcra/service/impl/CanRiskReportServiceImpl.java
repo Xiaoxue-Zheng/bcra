@@ -82,11 +82,7 @@ public class CanRiskReportServiceImpl implements CanRiskReportService {
         Page<CanRiskReport> reports = canRiskReportRepository.findAll(PageRequest.of(page, size));
         List<CanRiskReportDTO> reportDtos = new ArrayList<CanRiskReportDTO>();
         for (CanRiskReport report : reports) {
-            CanRiskReportDTO dto = new CanRiskReportDTO();
-            dto.setId(report.getId());
-            dto.setFilename(report.getFilename());
-            dto.setStudyId(report.getAssociatedStudyId().getCode());
-            dto.setUploadedBy(report.getUploadedBy().getLogin());
+            CanRiskReportDTO dto = buildCanRiskReportDTO(report);
             // Deliberately not getting the file data here, as this can cause huge overhead.
             // File data is only accessed within the findOneAsDto functionality.
 
@@ -96,22 +92,32 @@ public class CanRiskReportServiceImpl implements CanRiskReportService {
         return reportDtos;
     }
 
+
     @Override
     @Transactional(readOnly = true)
     public CanRiskReportDTO findOneAsDto(Long id) throws Exception {
         Optional<CanRiskReport> canRiskReportOptional = canRiskReportRepository.findById(id);
         if (canRiskReportOptional.isPresent()) {
             CanRiskReport report = canRiskReportOptional.get();
-            CanRiskReportDTO dto = new CanRiskReportDTO();
-            dto.setFileData(getFileData(report));
-            dto.setFilename(report.getFilename());
-            dto.setStudyId(report.getAssociatedStudyId().getCode());
-            dto.setUploadedBy(report.getUploadedBy().getLogin());
-
-            return dto;
+            return buildCanRiskReportDTOWithFileData(report);
         }
 
         return null;
+    }
+
+    public Optional<CanRiskReportDTO> findOneByAssociatedStudyId(StudyId studyIdId) {
+        Optional<CanRiskReport> canRiskReportOptional = canRiskReportRepository.findOneByAssociatedStudyId(studyIdId);
+        if (canRiskReportOptional.isPresent()) {
+            CanRiskReport report = canRiskReportOptional.get();
+            try {
+                CanRiskReportDTO dto = buildCanRiskReportDTO(report);
+                return Optional.of(dto);
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+                return Optional.empty();
+            }
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -161,5 +167,23 @@ public class CanRiskReportServiceImpl implements CanRiskReportService {
         if (file.getSize() > MAX_CAN_RISK_REPORT_SIZE) {
             throw new Exception("CanRisk report uploaded exceeds maximum file size.");
         }
+    }
+
+    private CanRiskReportDTO buildCanRiskReportDTO(CanRiskReport report) {
+        CanRiskReportDTO dto = new CanRiskReportDTO();
+        dto.setId(report.getId());
+        dto.setFilename(report.getFilename());
+        dto.setStudyId(report.getAssociatedStudyId().getCode());
+        dto.setUploadedBy(report.getUploadedBy().getLogin());
+        return dto;
+    }
+
+    private CanRiskReportDTO buildCanRiskReportDTOWithFileData(CanRiskReport report) throws Exception {
+        CanRiskReportDTO dto = new CanRiskReportDTO();
+        dto.setFileData(getFileData(report));
+        dto.setFilename(report.getFilename());
+        dto.setStudyId(report.getAssociatedStudyId().getCode());
+        dto.setUploadedBy(report.getUploadedBy().getLogin());
+        return dto;
     }
 }

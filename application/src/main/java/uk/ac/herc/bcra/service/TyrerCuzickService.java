@@ -2,20 +2,10 @@ package uk.ac.herc.bcra.service;
 
 import uk.ac.herc.bcra.algorithm.mapping.answers1_tyrercuzick8.Mapper;
 
-import uk.ac.herc.bcra.domain.Procedure;
-import uk.ac.herc.bcra.domain.Risk;
-import uk.ac.herc.bcra.domain.RiskAssessmentResult;
-import uk.ac.herc.bcra.domain.YearlyRisk;
-import uk.ac.herc.bcra.domain.Participant;
-import uk.ac.herc.bcra.domain.AnswerResponse;
+import uk.ac.herc.bcra.domain.*;
 import uk.ac.herc.bcra.domain.enumeration.ResponseState;
-import uk.ac.herc.bcra.repository.AnswerResponseRepository;
-import uk.ac.herc.bcra.repository.ParticipantRepository;
-import uk.ac.herc.bcra.repository.ProcedureRepository;
-import uk.ac.herc.bcra.repository.RiskAssessmentResultRepository;
-import uk.ac.herc.bcra.repository.RiskRepository;
+import uk.ac.herc.bcra.repository.*;
 import uk.ac.herc.bcra.service.util.TyrerCuzickPathUtil;
-import uk.ac.herc.bcra.repository.YearlyRiskRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +32,8 @@ public class TyrerCuzickService {
     public static String TC_OUTPUT_FILE_LOCATION;
 
     private AnswerResponseRepository answerResponseRepository;
-    private ProcedureRepository procedureRepository;
     private ParticipantRepository participantRepository;
+    private StudyIdRepository studyIdRepository;
     private RiskAssessmentResultRepository riskAssessmentResultRepository;
     private RiskRepository riskRepository;
     private YearlyRiskRepository yearlyRiskRepository;
@@ -51,18 +41,18 @@ public class TyrerCuzickService {
     private Mapper mapper;
 
     public TyrerCuzickService(
-        AnswerResponseRepository answerResponseRepository, 
-        Mapper mapper, 
-        ProcedureRepository procedureRepository, 
+        AnswerResponseRepository answerResponseRepository,
+        Mapper mapper,
         ParticipantRepository participantRepository,
-        RiskAssessmentResultRepository riskAssessmentResultRepository, 
+        StudyIdRepository studyIdRepository,
+        RiskAssessmentResultRepository riskAssessmentResultRepository,
         RiskRepository riskRepository,
         YearlyRiskRepository yearlyRiskRepository) {
 
         this.answerResponseRepository = answerResponseRepository;
         this.mapper = mapper;
-        this.procedureRepository = procedureRepository;
         this.participantRepository = participantRepository;
+        this.studyIdRepository = studyIdRepository;
         this.riskAssessmentResultRepository = riskAssessmentResultRepository;
         this.riskRepository = riskRepository;
         this.yearlyRiskRepository = yearlyRiskRepository;
@@ -88,12 +78,12 @@ public class TyrerCuzickService {
 
         List<AnswerResponse> answerResponses = getValidatedAnswerResponses();
         for (AnswerResponse answerResponse : answerResponses) {
-            Optional<Procedure> procedure = procedureRepository.findByRiskAssessmentResponse(answerResponse);
-            if (procedure.isPresent()) {
-                Participant participant = procedure.get().getParticipant();
+            Optional<StudyId> studyIdOptional = studyIdRepository.findByRiskAssessmentResponse(answerResponse);
+            if (studyIdOptional.isPresent()) {
+                Participant participant = studyIdOptional.get().getParticipant();
                 String participantIdentifier = participant.getUser().getLogin();
                 LocalDate dateOfBirth = participant.getIdentifiableData().getDateOfBirth();
-                
+
                 try {
                     String fileOutput = mapper.map(participantIdentifier, dateOfBirth, answerResponse);
                     writeDataToFile(participantIdentifier, fileOutput);
@@ -106,7 +96,7 @@ public class TyrerCuzickService {
 
                 answerResponseRepository.save(answerResponse);
             }
-        }   
+        }
     }
 
     private List<AnswerResponse> getValidatedAnswerResponses() {
@@ -137,7 +127,7 @@ public class TyrerCuzickService {
                 String inputLocation = new File(TC_INPUT_FILE_LOCATION + fileName).getAbsolutePath();
                 String outputLocation = new File(TC_OUTPUT_FILE_LOCATION + fileName).getAbsolutePath();
 
-                try {                    
+                try {
                     String tcCommand = TC_EXECUTABLE_COMMAND
                         .replace("<INPUT>", inputLocation)
                         .replace("<OUTPUT>", outputLocation);
@@ -167,7 +157,7 @@ public class TyrerCuzickService {
         } catch(Exception ex) {
             isDateValid = false;
         }
-        
+
         return isTxtFile && isDateValid;
     }
 

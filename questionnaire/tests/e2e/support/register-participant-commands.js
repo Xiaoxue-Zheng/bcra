@@ -12,7 +12,6 @@ function deleteNextParticipant(participantLogins, currentLoginIx) {
         return unassignParticipantFromStudyId(login).then(() => {
             return deleteParticipant(participant.id).then(() => {
                 return deleteIdentifiableData(participant.identifiable_data_id).then(() => {
-                    return deleteProcedure(participant.procedure_id).then(() => {
                         return deleteUserAuthority(participant.user_id).then(() => {
                             return deleteUser(login).then(() => {
                                 if (currentLoginIx == participantLogins.length-1) {
@@ -22,7 +21,6 @@ function deleteNextParticipant(participantLogins, currentLoginIx) {
                                 }
                             })
                       })
-                    })
                 })
             })
         })
@@ -73,16 +71,6 @@ function deleteParticipant(participantId) {
     })
 }
 
-function deleteProcedure(procedureId) {
-    return cy.task('query', {
-        sql: `
-            DELETE FROM procedure p
-            WHERE p.id = $1
-        `,
-        values: [procedureId]
-    })
-}
-
 function deleteUser(login) {
     return cy.task('query', {
         sql: `
@@ -105,13 +93,11 @@ function deleteUserAuthority(userId) {
 
 Cypress.Commands.add('registerPatientWithStudyCodeAndEmail', (studyCode, email) => {
     return getStudyIdFromStudyCode(studyCode).then((studyId) => {
-        return createProcedureFromStudyId(studyId).then((procedure) => {
             return createUserFromStudyIdAndEmail(studyId, email).then((user) => {
-                return createParticipantFromUserAndProcedure(user, procedure).then((participant) => {
+                return createParticipantFromUser(user).then((participant) => {
                     return assignParticipantToStudyId(participant, studyId)
                 })
             })
-        })
     })
 })
 
@@ -124,29 +110,6 @@ function getStudyIdFromStudyCode(studyCode) {
         values: [studyCode]
     }).then((studyIdRes) => {
         return studyIdRes.rows[0]
-    })
-}
-
-function createProcedureFromStudyId(studyId) {
-    return getNextIdForTable('procedure').then((next_id) => {
-        return cy.task('query', {
-            sql: `
-                INSERT INTO procedure
-                (id, consent_response_id, risk_assessment_response_id)
-                VALUES($1, $2, $3)
-            `,
-            values: [next_id, studyId.consent_response_id, studyId.risk_assessment_response_id]
-        }).then(() => {
-            return cy.task('query', {
-                sql: `
-                    SELECT * FROM procedure
-                    WHERE id = $1
-                `,
-                values: [next_id]
-            }).then((result) => {
-                return result.rows[0]
-            })
-        })
     })
 }
 
@@ -173,15 +136,15 @@ function createUserFromStudyIdAndEmail(studyId, email) {
     })
 }
 
-function createParticipantFromUserAndProcedure(user, procedure) {
+function createParticipantFromUser(user) {
     return getNextIdForTable('participant').then((next_id) => {
         return cy.task('query', {
             sql: `
                 INSERT INTO participant
-                (id, user_id, procedure_id,date_of_birth)
-                VALUES($1, $2, $3, '01/01/1990')
+                (id, user_id, date_of_birth, status)
+                VALUES($1, $2, '01/01/1990', 'IN_PROGRESS')
             `,
-            values: [next_id, user.id, procedure.id]
+            values: [next_id, user.id]
         }).then(() => {
             return cy.task('query', {
                 sql: `

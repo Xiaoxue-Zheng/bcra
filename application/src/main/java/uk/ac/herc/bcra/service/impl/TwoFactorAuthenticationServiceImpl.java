@@ -23,8 +23,8 @@ import static uk.ac.herc.bcra.web.rest.errors.TwoFactorAuthenticationException.T
 @Service
 @Transactional
 public class TwoFactorAuthenticationServiceImpl implements TwoFactorAuthenticationService {
-    private String EMAIL_SUBJECT = "CFHealthHub Two-Factor Authentication";
-    private String EMAIL_BODY = "\nSomeone (possibly not you) has attempted to log into your CFHealthHub account.\n\nIf this was not you then please ignore this email and continue to use your existing password.\n\nTo proceed with the two-factor authentication request, enter the pin below onto your device.\n\nThe pin is valid for 30 minutes from the time it was issued.\n\n";
+    private String EMAIL_SUBJECT = "High Risk Young Women Study Two-Factor Authentication";
+    private String EMAIL_BODY = "\nSomeone (possibly not you) has attempted to log into your High Risk Young Women Study account.\n\nIf this was not you then please ignore this email and continue to use your existing password.\n\nTo proceed with the two-factor authentication request, enter the pin below onto your device.\n\nThe pin is valid for 30 minutes from the time it was issued.\n\n";
 
     private long AUTHENTICATION_PIN_TIMEOUT = 30 * 60 * 1000; // 30 MINUTES
 

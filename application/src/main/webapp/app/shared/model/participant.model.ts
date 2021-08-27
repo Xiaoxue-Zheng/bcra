@@ -7,7 +7,6 @@ export interface IParticipant {
   userLogin?: string;
   userId?: number;
   identifiableDataId?: number;
-  procedureId?: number;
 }
 
 export class Participant implements IParticipant {
@@ -17,7 +16,6 @@ export class Participant implements IParticipant {
     public lastLoginDatetime?: Moment,
     public userLogin?: string,
     public userId?: number,
-    public identifiableDataId?: number,
-    public procedureId?: number
+    public identifiableDataId?: number
   ) {}
 }

@@ -4,10 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import io.github.jhipster.service.Criteria;
 
-import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.LongFilter;
-import io.github.jhipster.service.filter.StringFilter;
-import io.github.jhipster.service.filter.InstantFilter;
+import io.github.jhipster.service.filter.*;
 
 /**
  * Criteria class for the {@link uk.ac.herc.bcra.domain.Participant} entity. This class is used
@@ -22,31 +19,19 @@ public class ParticipantCriteria implements Serializable, Criteria {
 
     private static final long serialVersionUID = 1L;
 
-    private LongFilter id;
+    private StringFilter studyId;
 
-    private InstantFilter registerDatetime;
+    private StringFilter status;
 
-    private InstantFilter lastLoginDatetime;
-
-    private LongFilter userId;
-
-    private LongFilter identifiableDataId;
-
-    private LongFilter procedureId;
-
-    private StringFilter nhsNumber;
+    private LocalDateFilter dateOfBirth;
 
     public ParticipantCriteria(){
     }
 
     public ParticipantCriteria(ParticipantCriteria other){
-        this.id = other.id == null ? null : other.id.copy();
-        this.registerDatetime = other.registerDatetime == null ? null : other.registerDatetime.copy();
-        this.lastLoginDatetime = other.lastLoginDatetime == null ? null : other.lastLoginDatetime.copy();
-        this.userId = other.userId == null ? null : other.userId.copy();
-        this.nhsNumber = other.nhsNumber == null ? null : other.nhsNumber.copy();
-        this.identifiableDataId = other.identifiableDataId == null ? null : other.identifiableDataId.copy();
-        this.procedureId = other.procedureId == null ? null : other.procedureId.copy();
+        this.studyId = other.studyId == null? null : other.studyId.copy();
+        this.dateOfBirth = other.dateOfBirth == null ? null: other.dateOfBirth.copy();
+        this.status = other.status == null? null: other.status.copy();
     }
 
     @Override
@@ -54,107 +39,53 @@ public class ParticipantCriteria implements Serializable, Criteria {
         return new ParticipantCriteria(this);
     }
 
-    public LongFilter getId() {
-        return id;
+    public StringFilter getStudyId() {
+        return studyId;
     }
 
-    public void setId(LongFilter id) {
-        this.id = id;
+    public void setStudyId(StringFilter studyId) {
+        this.studyId = studyId;
     }
 
-    public InstantFilter getRegisterDatetime() {
-        return registerDatetime;
+    public StringFilter getStatus() {
+        return status;
     }
 
-    public void setRegisterDatetime(InstantFilter registerDatetime) {
-        this.registerDatetime = registerDatetime;
+    public void setStatus(StringFilter status) {
+        this.status = status;
     }
 
-    public InstantFilter getLastLoginDatetime() {
-        return lastLoginDatetime;
+    public LocalDateFilter getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setLastLoginDatetime(InstantFilter lastLoginDatetime) {
-        this.lastLoginDatetime = lastLoginDatetime;
-    }
-
-    public LongFilter getUserId() {
-        return userId;
-    }
-
-    public void setUserId(LongFilter userId) {
-        this.userId = userId;
-    }
-
-    public LongFilter getIdentifiableDataId() {
-        return identifiableDataId;
-    }
-
-    public void setIdentifiableDataId(LongFilter identifiableDataId) {
-        this.identifiableDataId = identifiableDataId;
-    }
-
-    public LongFilter getProcedureId() {
-        return procedureId;
-    }
-
-    public void setProcedureId(LongFilter procedureId) {
-        this.procedureId = procedureId;
-    }
-
-    public StringFilter getNhsNumber() {
-        return nhsNumber;
-    }
-
-    public void setNhsNumber(StringFilter nhsNumber) {
-        this.nhsNumber = nhsNumber;
+    public void setDateOfBirth(LocalDateFilter dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        final ParticipantCriteria that = (ParticipantCriteria) o;
-        return
-            Objects.equals(id, that.id) &&
-            Objects.equals(registerDatetime, that.registerDatetime) &&
-            Objects.equals(lastLoginDatetime, that.lastLoginDatetime) &&
-            Objects.equals(userId, that.userId) &&
-            Objects.equals(identifiableDataId, that.identifiableDataId) &&
-            Objects.equals(procedureId, that.procedureId) &&
-            Objects.equals(nhsNumber, that.nhsNumber);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ParticipantCriteria that = (ParticipantCriteria) o;
+        return Objects.equals(studyId, that.studyId) &&
+            Objects.equals(status, that.status) &&
+            Objects.equals(dateOfBirth, that.dateOfBirth);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
-        id,
-        registerDatetime,
-        lastLoginDatetime,
-        userId,
-        identifiableDataId,
-        procedureId,
-        nhsNumber
-        );
+            studyId, status,
+            dateOfBirth);
     }
 
     @Override
     public String toString() {
         return "ParticipantCriteria{" +
-                (id != null ? "id=" + id + ", " : "") +
-                (registerDatetime != null ? "registerDatetime=" + registerDatetime + ", " : "") +
-                (lastLoginDatetime != null ? "lastLoginDatetime=" + lastLoginDatetime + ", " : "") +
-                (userId != null ? "userId=" + userId + ", " : "") +
-                (identifiableDataId != null ? "identifiableDataId=" + identifiableDataId + ", " : "") +
-                (procedureId != null ? "procedureId=" + procedureId + ", " : "") +
-                (nhsNumber != null ? "nhsNumber=" + nhsNumber + ", " : "") +
-            "}";
+            ", studyCode=" + studyId +
+            ", state=" + status +
+            ", dateOfBirth=" + dateOfBirth +
+            '}';
     }
-
-
-
 }

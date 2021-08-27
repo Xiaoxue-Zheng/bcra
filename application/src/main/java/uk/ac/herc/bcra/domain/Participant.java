@@ -1,6 +1,8 @@
 package uk.ac.herc.bcra.domain;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import uk.ac.herc.bcra.domain.enumeration.ResponseState;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -39,14 +41,17 @@ public class Participant implements Serializable {
     @JoinColumn(unique = true)
     private IdentifiableData identifiableData;
 
-    @OneToOne(optional = false)
-    @NotNull
-    @JoinColumn(unique = true)
-    private Procedure procedure;
-
     @NotNull
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
+
+    @OneToOne(optional = true)
+    @JoinColumn(unique = true)
+    @JsonIgnore
+    private StudyId studyId;
+
+    @Column(name = "status")
+    private String status;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -109,19 +114,6 @@ public class Participant implements Serializable {
         this.identifiableData = identifiableData;
     }
 
-    public Procedure getProcedure() {
-        return procedure;
-    }
-
-    public Participant procedure(Procedure procedure) {
-        this.procedure = procedure;
-        return this;
-    }
-
-    public void setProcedure(Procedure procedure) {
-        this.procedure = procedure;
-    }
-
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
@@ -133,6 +125,22 @@ public class Participant implements Serializable {
     public Participant dateOfBirth(LocalDate dateOfBirth){
         this.dateOfBirth = dateOfBirth;
         return this;
+    }
+
+    public StudyId getStudyId() {
+        return studyId;
+    }
+
+    public void setStudyId(StudyId studyId) {
+        this.studyId = studyId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove

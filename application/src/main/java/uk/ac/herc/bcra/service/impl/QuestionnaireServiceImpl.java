@@ -103,14 +103,14 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
         Optional<Participant> participantOptional = participantRepository.findOneByUserLogin(login);
         if (participantOptional.isPresent()) {
             if (questionnaireType == QuestionnaireType.CONSENT_FORM) {
-                return 
+                return
                     Optional
-                    .of(participantOptional.get().getProcedure().getConsentResponse().getQuestionnaire())
+                    .of(participantOptional.get().getStudyId().getConsentResponse().getQuestionnaire())
                     .map(questionnaireMapper::toDto);
             } else if (questionnaireType == QuestionnaireType.RISK_ASSESSMENT) {
-                return 
+                return
                     Optional
-                    .of(participantOptional.get().getProcedure().getRiskAssessmentResponse().getQuestionnaire())
+                    .of(participantOptional.get().getStudyId().getRiskAssessmentResponse().getQuestionnaire())
                     .map(questionnaireMapper::toDto);
             }
         }

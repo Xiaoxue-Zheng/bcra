@@ -1,5 +1,6 @@
 package uk.ac.herc.bcra.web.rest;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.web.context.WebApplicationContext;
 import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.AnswerResponse;
@@ -13,6 +14,7 @@ import uk.ac.herc.bcra.service.dto.AnswerGroupDTO;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
 import uk.ac.herc.bcra.service.dto.AnswerSectionDTO;
 import uk.ac.herc.bcra.service.mapper.AnswerResponseMapper;
+import uk.ac.herc.bcra.service.util.RandomUtil;
 import uk.ac.herc.bcra.testutils.MockMvcUtil;
 import uk.ac.herc.bcra.testutils.StudyUtil;
 import uk.ac.herc.bcra.web.rest.errors.ExceptionTranslator;
@@ -133,7 +135,6 @@ public class AnswerResponseResourceIT {
     @BeforeEach
     public void initTest() {
         participant = studyUtil.createParticipant(em, STUDY_CODE, LocalDate.now());
-        studyUtil.createStudyIdForParticipant(em, participant);
     }
 
     @Test
@@ -142,58 +143,10 @@ public class AnswerResponseResourceIT {
         MvcResult result = restAnswerResponseMockMvc.perform(get("/api/answer-responses/consent/" + STUDY_CODE))
             .andExpect(status().isOk())
             .andReturn();
-        
+
         byte[] data = result.getResponse().getContentAsByteArray();
         AnswerResponseDTO consentDto = MockMvcUtil.convertJsonBytesToObject(AnswerResponseDTO.class, data);
-        assertThat(consentDto.getQuestionnaireId()).isEqualTo(participant.getProcedure().getConsentResponse().getQuestionnaire().getId());
-    }
-
-    @Test
-    @Transactional
-    public void testSaveConsent() throws Exception {
-        AnswerResponse consent = participant.getProcedure().getConsentResponse();
-        AnswerResponseDTO consentDto = answerResponseMapper.toDto(consent);
-        setAnswerResponseDtoAnswerNumbersTo(consentDto, 99);
-
-        restAnswerResponseMockMvc.perform(
-                put("/api/answer-responses/consent/save")
-                .content(MockMvcUtil.convertObjectToJsonBytes(consentDto))
-                .contentType(MediaType.APPLICATION_JSON)
-                .principal(new Principal() {
-                    @Override
-                    public String getName() {
-                        return participant.getUser().getLogin();
-                    }
-                })
-            )
-            .andExpect(status().isOk());
-
-        AnswerResponseDTO updatedConsentDto = answerResponseService.findOne(participant.getUser().getLogin(), QuestionnaireType.CONSENT_FORM).get();
-        assertThatAnswerResponseDtoAnswersEqual(updatedConsentDto, 99);
-    }
-
-    @Test
-    @Transactional
-    public void testSubmitConsent() throws Exception {
-        AnswerResponse consent = participant.getProcedure().getConsentResponse();
-        AnswerResponseDTO consentDto = answerResponseMapper.toDto(consent);
-
-        restAnswerResponseMockMvc.perform(
-                put("/api/answer-responses/consent/submit")
-                .content(MockMvcUtil.convertObjectToJsonBytes(consentDto))
-                .contentType(MediaType.APPLICATION_JSON)
-                .principal(new Principal() {
-                    @Override
-                    public String getName() {
-                        return participant.getUser().getLogin();
-                    }
-                })
-            )
-            .andExpect(status().isOk());
-
-        AnswerResponseDTO updatedConsentDto = answerResponseService.findOne(participant.getUser().getLogin(), QuestionnaireType.CONSENT_FORM).get();
-        AnswerResponse updatedConsent = answerResponseMapper.toEntity(updatedConsentDto);
-        assertThat(updatedConsent.getState()).isEqualTo(ResponseState.SUBMITTED);
+        assertThat(consentDto.getQuestionnaireId()).isEqualTo(participant.getStudyId().getConsentResponse().getQuestionnaire().getId());
     }
 
     @Test
@@ -202,41 +155,16 @@ public class AnswerResponseResourceIT {
         MvcResult result = restAnswerResponseMockMvc.perform(get("/api/answer-responses/risk-assessment/" + STUDY_CODE))
             .andExpect(status().isOk())
             .andReturn();
-        
+
         byte[] data = result.getResponse().getContentAsByteArray();
         AnswerResponseDTO riskAssessmentDto = MockMvcUtil.convertJsonBytesToObject(AnswerResponseDTO.class, data);
-        assertThat(riskAssessmentDto.getQuestionnaireId()).isEqualTo(participant.getProcedure().getRiskAssessmentResponse().getQuestionnaire().getId());
-    }
-
-    @Test
-    @Transactional
-    public void testSaveRiskAssessment() throws Exception {
-        AnswerResponse riskAssessment = participant.getProcedure().getRiskAssessmentResponse();
-        AnswerResponseDTO riskAssessmentDto = answerResponseMapper.toDto(riskAssessment);
-        setAnswerResponseDtoAnswerNumbersTo(riskAssessmentDto, 99);
-
-        restAnswerResponseMockMvc.perform(
-                put("/api/answer-responses/risk-assessment/save")
-                .content(MockMvcUtil.convertObjectToJsonBytes(riskAssessmentDto))
-                .contentType(MediaType.APPLICATION_JSON)
-                .principal(new Principal() {
-                    @Override
-                    public String getName() {
-                        return participant.getUser().getLogin();
-                    }
-                })
-            )
-            .andExpect(status().isOk());
-
-        
-        AnswerResponseDTO updatedRiskAssessmentDto = answerResponseService.findOne(participant.getUser().getLogin(), QuestionnaireType.RISK_ASSESSMENT).get();
-        assertThatAnswerResponseDtoAnswersEqual(updatedRiskAssessmentDto, 99);
+        assertThat(riskAssessmentDto.getQuestionnaireId()).isEqualTo(participant.getStudyId().getRiskAssessmentResponse().getQuestionnaire().getId());
     }
 
     @Test
     @Transactional
     public void testReferralRiskAssessment() throws Exception {
-        AnswerResponse riskAssessment = participant.getProcedure().getRiskAssessmentResponse();
+        AnswerResponse riskAssessment = participant.getStudyId().getRiskAssessmentResponse();
         AnswerResponseDTO riskAssessmentDto = answerResponseMapper.toDto(riskAssessment);
 
         restAnswerResponseMockMvc.perform(
@@ -259,7 +187,7 @@ public class AnswerResponseResourceIT {
     @Test
     @Transactional
     public void testSubmitRiskAssessment() throws Exception {
-        AnswerResponse riskAssessment = participant.getProcedure().getRiskAssessmentResponse();
+        AnswerResponse riskAssessment = participant.getStudyId().getRiskAssessmentResponse();
         AnswerResponseDTO riskAssessmentDto = answerResponseMapper.toDto(riskAssessment);
 
         restAnswerResponseMockMvc.perform(
@@ -282,7 +210,7 @@ public class AnswerResponseResourceIT {
     @Test
     @Transactional
     public void testHasCompletedConsentQuestionnaire() throws Exception {
-        AnswerResponse consent = participant.getProcedure().getConsentResponse();
+        AnswerResponse consent = participant.getStudyId().getConsentResponse();
         consent.setState(ResponseState.NOT_STARTED);
         answerResponseRepository.save(consent);
 
@@ -297,7 +225,7 @@ public class AnswerResponseResourceIT {
             )
             .andExpect(status().isOk())
             .andExpect(content().string("false"));
-        
+
         consent.setState(ResponseState.VALIDATED);
         answerResponseRepository.save(consent);
 
@@ -317,7 +245,7 @@ public class AnswerResponseResourceIT {
     @Test
     @Transactional
     public void testHasCompletedRiskAssessmentQuestionnaire() throws Exception {
-        AnswerResponse riskAssessment = participant.getProcedure().getRiskAssessmentResponse();
+        AnswerResponse riskAssessment = participant.getStudyId().getRiskAssessmentResponse();
         riskAssessment.setState(ResponseState.NOT_STARTED);
         answerResponseRepository.save(riskAssessment);
 
@@ -332,7 +260,7 @@ public class AnswerResponseResourceIT {
             )
             .andExpect(status().isOk())
             .andExpect(content().string("false"));
-        
+
         riskAssessment.setState(ResponseState.VALIDATED);
         answerResponseRepository.save(riskAssessment);
 
@@ -366,7 +294,7 @@ public class AnswerResponseResourceIT {
         securityRestMvc.perform(put("/api/answer-responses/risk-assessment/save")
             .content(MockMvcUtil.convertObjectToJsonBytes(riskAssessmentDto))
             .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().is(403));      
+            .andExpect(status().is(403));
     }
 
     @Test
@@ -377,7 +305,7 @@ public class AnswerResponseResourceIT {
         securityRestMvc.perform(put("/api/answer-responses/risk-assessment/referral")
             .content(MockMvcUtil.convertObjectToJsonBytes(riskAssessmentDto))
             .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().is(403));      
+            .andExpect(status().is(403));
     }
 
     @Test
@@ -388,7 +316,7 @@ public class AnswerResponseResourceIT {
         securityRestMvc.perform(put("/api/answer-responses/risk-assessment/submit")
             .content(MockMvcUtil.convertObjectToJsonBytes(riskAssessmentDto))
             .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().is(403));      
+            .andExpect(status().is(403));
     }
 
 }

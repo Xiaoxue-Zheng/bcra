@@ -15,15 +15,7 @@ import java.util.Optional;
  */
 public interface AnswerResponseService {
 
-    /**
-     * Save a answerResponse.
-     *
-     * @param answerResponseDTO the entity to save.
-     * @return the persisted entity.
-     */
-    AnswerResponse saveDto(AnswerResponseDTO answerResponseDTO);
-    AnswerResponseDTO save(AnswerResponseDTO answerResponseDTO);
-    boolean save(String login, AnswerResponseDTO answerResponseDTO, QuestionnaireType questionnaireType, ResponseState responseState);
+
     boolean save(String login, AnswerSectionDTO answerSectionDTO);
 
     /**
@@ -53,4 +45,8 @@ public interface AnswerResponseService {
     boolean isQuestionnaireComplete(String login, QuestionnaireType type);
 
     void populateAnswerResponse(AnswerResponse answerResponse);
+
+    boolean referralAnswerResponse(String login, AnswerResponseDTO answerResponseDTO);
+
+    boolean submitAnswerResponse(String login, AnswerResponseDTO answerResponseDTO);
 }

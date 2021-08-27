@@ -42,8 +42,6 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
 
     private final StudyIdRepository studyIdRepository;
 
-    private final AnswerSectionRepository answerSectionRepository;
-
     private final QuestionRepository questionRepository;
 
     private final QuestionSectionRepository questionSectionRepository;
@@ -67,55 +65,9 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
         this.participantRepository = participantRepository;
         this.studyIdRepository = studyIdRepository;
         this.answerSectionMapper = answerSectionMapper;
-        this.answerSectionRepository = answerSectionRepository;
         this.questionSectionRepository = questionSectionRepository;
         this.questionItemRepository = questionItemRepository;
         this.questionRepository = questionRepository;
-    }
-
-    /**
-     * Save a answerResponse.
-     *
-     * @param answerResponseDTO the entity to save.
-     * @return the persisted entity.
-     */
-    @Override
-    public AnswerResponseDTO save(AnswerResponseDTO answerResponseDTO) {
-        log.debug("Request to save AnswerResponse : {}", answerResponseDTO);
-        AnswerResponse answerResponse = answerResponseMapper.toEntity(answerResponseDTO);
-        answerResponse = answerResponseRepository.save(answerResponse);
-        return answerResponseMapper.toDto(answerResponse);
-    }
-
-    @Override
-    public AnswerResponse saveDto(AnswerResponseDTO answerResponseDTO) {
-        log.debug("Request to save AnswerResponse : {}" , answerResponseDTO);
-        AnswerResponse answerResponse = answerResponseMapper.toEntity(answerResponseDTO);
-        return answerResponseRepository.save(answerResponse);
-    }
-
-    @Override
-    public boolean save(
-        String login,
-        AnswerResponseDTO answerResponseDTO,
-        QuestionnaireType questionnaireType,
-        ResponseState responseState
-    ) {
-        log.debug("Request to save AnswerResponse");
-        Optional<Participant> participantOptional = participantRepository.findOneByUserLogin(login);
-        if (participantOptional.isPresent()) {
-            Long answerResponseId;
-            if (questionnaireType == QuestionnaireType.CONSENT_FORM) {
-                answerResponseId = participantOptional.get().getProcedure().getConsentResponse().getId();
-                save(answerResponseDTO, answerResponseId, responseState);
-                return true;
-            } else if (questionnaireType == QuestionnaireType.RISK_ASSESSMENT) {
-                answerResponseId = participantOptional.get().getProcedure().getRiskAssessmentResponse().getId();
-                save(answerResponseDTO, answerResponseId, responseState);
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override
@@ -123,7 +75,7 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
         log.debug("Request to save AnswerResponse");
         Optional<Participant> participantOptional = participantRepository.findOneByUserLogin(login);
         if (participantOptional.isPresent()) {
-            AnswerResponse answerResponse = participantOptional.get().getProcedure().getRiskAssessmentResponse();
+            AnswerResponse answerResponse = participantOptional.get().getStudyId().getRiskAssessmentResponse();
             AnswerSection answerSection = answerSectionMapper.toEntity(answerSectionDTO);
             answerResponse.getAnswerSections().removeIf(it-> Objects.equals(it.getId(), answerSection.getId()));
             answerResponse.getAnswerSections().add(answerSection);
@@ -137,14 +89,6 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
             return true;
         }
         return false;
-    }
-
-    private void save(AnswerResponseDTO answerResponseDTO, Long answerResponseId, ResponseState responseState) {
-        AnswerResponse answerResponse = answerResponseMapper.toEntity(answerResponseDTO);
-        answerResponse.setId(answerResponseId);
-        answerResponse.setState(responseState);
-        answerResponse.setStatus("");
-        answerResponseRepository.save(answerResponse);
     }
 
     /**
@@ -185,12 +129,12 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
             if (questionnaireType == QuestionnaireType.CONSENT_FORM) {
                 return
                     Optional
-                    .of(participantOptional.get().getProcedure().getConsentResponse())
+                    .of(participantOptional.get().getStudyId().getConsentResponse())
                     .map(answerResponseMapper::toDto);
             } else if (questionnaireType == QuestionnaireType.RISK_ASSESSMENT) {
                 return
                     Optional
-                    .of(participantOptional.get().getProcedure().getRiskAssessmentResponse())
+                    .of(participantOptional.get().getStudyId().getRiskAssessmentResponse())
                     .map(answerResponseMapper::toDto);
             }
         }
@@ -254,5 +198,42 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
                     .forEach(i->i.setQuestionItem(questionItemRepository.getOne(i.getQuestionItem().getId())));
             })
         );
+    }
+
+    @Override
+    public boolean referralAnswerResponse(String login, AnswerResponseDTO answerResponseDTO) {
+        Optional<Participant> participantOptional = participantRepository.findOneByUserLogin(login);
+        if (participantOptional.isPresent()) {
+            Participant participant = participantOptional.get();
+            Long answerResponseId = participant.getStudyId().getRiskAssessmentResponse().getId();
+            save(answerResponseDTO, answerResponseId, ResponseState.REFERRED);
+            participant.setStatus(ResponseState.REFERRED.name());
+            participantRepository.save(participant);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean submitAnswerResponse(String login, AnswerResponseDTO answerResponseDTO) {
+        Optional<Participant> participantOptional = participantRepository.findOneByUserLogin(login);
+        if (participantOptional.isPresent()) {
+            Participant participant = participantOptional.get();
+            Long answerResponseId = participant.getStudyId().getRiskAssessmentResponse().getId();
+            save(answerResponseDTO, answerResponseId, ResponseState.VALIDATED);
+            participant.setStatus(ResponseState.SUBMITTED.name());
+            participantRepository.save(participant);
+            return true;
+        }
+        return false;
+    }
+
+
+    private void save(AnswerResponseDTO answerResponseDTO, Long answerResponseId, ResponseState responseState) {
+        AnswerResponse answerResponse = answerResponseMapper.toEntity(answerResponseDTO);
+        answerResponse.setId(answerResponseId);
+        answerResponse.setState(responseState);
+        answerResponse.setStatus("");
+        answerResponseRepository.save(answerResponse);
     }
 }

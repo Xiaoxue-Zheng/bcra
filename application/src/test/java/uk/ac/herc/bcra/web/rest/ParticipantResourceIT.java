@@ -7,9 +7,11 @@ import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.domain.*;
 import uk.ac.herc.bcra.domain.enumeration.ParticipantContactWay;
 import uk.ac.herc.bcra.repository.ParticipantRepository;
+import uk.ac.herc.bcra.repository.QuestionItemRepository;
 import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.IdentifiableDataService;
 import uk.ac.herc.bcra.service.ParticipantService;
+import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
 import uk.ac.herc.bcra.service.dto.AnswerDTO;
 import uk.ac.herc.bcra.service.dto.AnswerGroupDTO;
 import uk.ac.herc.bcra.service.dto.AnswerItemDTO;
@@ -59,6 +61,9 @@ public class ParticipantResourceIT {
 
     @Autowired
     private ParticipantRepository participantRepository;
+
+    @Autowired
+    private QuestionItemRepository questionItemRepository;
 
     @Autowired
     private ParticipantMapper participantMapper;
@@ -176,49 +181,41 @@ public class ParticipantResourceIT {
 
     @Test
     @Transactional
-    public void getAllParticipantsByUserIsEqualToSomething() throws Exception {
+    public void getAllParticipantsByStudyIDIsEqualToSomething() throws Exception {
         // Get already existing entity
-        User user = participant.getUser();
         participantRepository.saveAndFlush(participant);
-        Long userId = user.getId();
 
         // Get all the participantList where user equals to userId
-        defaultParticipantShouldBeFound("userId.equals=" + userId);
+        defaultParticipantShouldBeFound("studyId.equals=" + participant.getStudyId().getCode());
 
         // Get all the participantList where user equals to userId + 1
-        defaultParticipantShouldNotBeFound("userId.equals=" + (userId + 1000));
+        defaultParticipantShouldNotBeFound("studyId.equals=" + (participant.getStudyId().getCode() + 1000));
     }
-
 
     @Test
     @Transactional
-    public void getAllParticipantsByIdentifiableDataIsEqualToSomething() throws Exception {
+    public void getAllParticipantsByStatusIsEqualToSomething() throws Exception {
         // Get already existing entity
-        IdentifiableData identifiableData = participant.getIdentifiableData();
         participantRepository.saveAndFlush(participant);
-        Long identifiableDataId = identifiableData.getId();
 
-        // Get all the participantList where identifiableData equals to identifiableDataId
-        defaultParticipantShouldBeFound("identifiableDataId.equals=" + identifiableDataId);
+        // Get all the participantList where user equals to userId
+        defaultParticipantShouldBeFound("status.equals=" + participant.getStatus());
 
-        // Get all the participantList where identifiableData equals to identifiableDataId + 1
-        defaultParticipantShouldNotBeFound("identifiableDataId.equals=" + (identifiableDataId + 1000));
+        // Get all the participantList where user equals to userId + 1
+        defaultParticipantShouldNotBeFound("status.equals=" + (participant.getStatus() + 1000));
     }
-
 
     @Test
     @Transactional
-    public void getAllParticipantsByProcedureIsEqualToSomething() throws Exception {
+    public void getAllParticipantsByDateOfBirthIsEqualToSomething() throws Exception {
         // Get already existing entity
-        Procedure procedure = participant.getProcedure();
         participantRepository.saveAndFlush(participant);
-        Long procedureId = procedure.getId();
 
-        // Get all the participantList where procedure equals to procedureId
-        defaultParticipantShouldBeFound("procedureId.equals=" + procedureId);
+        // Get all the participantList where user equals to userId
+        defaultParticipantShouldBeFound("dateOfBirth.equals=" + participant.getDateOfBirth());
 
-        // Get all the participantList where procedure equals to procedureId + 1
-        defaultParticipantShouldNotBeFound("procedureId.equals=" + (procedureId + 1000));
+        // Get all the participantList where user equals to userId + 1
+        defaultParticipantShouldNotBeFound("dateOfBirth.equals=" + (participant.getDateOfBirth().minusDays(1)));
     }
 
     /**
@@ -301,23 +298,9 @@ public class ParticipantResourceIT {
         request.setEmailAddress(emailAddress);
         request.setPassword(RandomStringUtils.randomAlphabetic(6));
         request.setStudyCode(studyCode);
-        request.setConsentResponse(studyIdService.getConsentResponseFromStudyCode(studyCode));
-
-        for (AnswerSectionDTO section : request.getConsentResponse().getAnswerSections()) {
-            for (AnswerGroupDTO group : section.getAnswerGroups()) {
-                for (AnswerDTO answer : group.getAnswers()) {
-                    boolean tickedYes = false;
-                    for (AnswerItemDTO item : answer.getAnswerItems()) {
-                        if (!tickedYes) {
-                            item.setSelected(true);
-                            tickedYes = true;
-                        }
-                    }
-                    answer.setTicked(true);
-                }
-            }
-        }
-
+        AnswerResponseDTO consentResponse = studyIdService.getConsentResponseFromStudyCode(studyCode);
+        consentAllItems(consentResponse);
+        request.setConsentResponse(consentResponse);
         restParticipantMockMvc.perform(post("/api/participants/activate")
             .content(MockMvcUtil.convertObjectToJsonBytes(request))
             .contentType(MockMvcUtil.APPLICATION_JSON_UTF8)
@@ -331,8 +314,20 @@ public class ParticipantResourceIT {
         User user = participant.getUser();
         assertThat(user.getEmail()).isEqualTo(emailAddress);
         assertThat(user.getLogin()).isEqualTo(studyCode);
-        assertThat(participant.getProcedure()).isNotNull();
         assertThat(participant.getIdentifiableData()).isNull();
+    }
+
+    private void consentAllItems(AnswerResponseDTO consentResponse) {
+        consentResponse.getAnswerSections().forEach(s -> s.getAnswerGroups()
+            .forEach(g -> g.getAnswers().forEach(a->{
+                a.setTicked(true);
+                a.getAnswerItems().forEach(i -> {
+                    QuestionItem questionItem = questionItemRepository.getOne(i.getQuestionItemId());
+                    if(questionItem.isNecessary()){
+                        i.setSelected(true);
+                    }
+                });
+            })));
     }
 
     @Test
@@ -357,7 +352,7 @@ public class ParticipantResourceIT {
             .contentType(MockMvcUtil.APPLICATION_JSON_UTF8)
             .accept(MockMvcUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
-            
+
         Optional<IdentifiableData> identifiableDataOptional = identifiableDataService.findOne(participant.getUser().getEmail());
         assertThat(identifiableDataOptional.isPresent()).isTrue();
         IdentifiableData identifiableData = identifiableDataOptional.get();

@@ -2,6 +2,7 @@ package uk.ac.herc.bcra.service.dto;
 
 import java.time.Instant;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Objects;
 
 import uk.ac.herc.bcra.domain.enumeration.ResponseState;
@@ -13,19 +14,13 @@ public class ParticipantDTO implements Serializable {
 
     private static final long serialVersionUID = 1614416367273587447L;
 
-    // Basics
     private Long id;
-    private String nhsNumber;
-    private String practiceName;
-
-    // User Row
-    private Instant importedDatetime;
+    private String studyID;
+    private LocalDate dateOfBirth;
+    private String status;
     private Instant registerDatetime;
-    private Instant lastLoginDatetime;
+    private Long canRiskReportId;
 
-    // Process
-    private ResponseState consentStatus;
-    private ResponseState questionnaireStatus;
     //private SwabState swabState;
     //private MammoKILOState mamoKILOState;
 
@@ -48,52 +43,36 @@ public class ParticipantDTO implements Serializable {
         this.registerDatetime = registerDatetime;
     }
 
-    public String getNhsNumber() {
-        return nhsNumber;
+    public String getStudyID() {
+        return studyID;
     }
 
-    public void setNhsNumber(String nhsNumber) {
-        this.nhsNumber = nhsNumber;
+    public void setStudyID(String studyID) {
+        this.studyID = studyID;
     }
 
-    public String getPracticeName() {
-        return practiceName;
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setPracticeName(String practiceName) {
-        this.practiceName = practiceName;
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
-    public Instant getImportedDatetime() {
-        return importedDatetime;
+    public String getStatus() {
+        return status;
     }
 
-    public void setImportedDatetime(Instant importedDatetime) {
-        this.importedDatetime = importedDatetime;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public Instant getLastLoginDatetime() {
-        return lastLoginDatetime;
+    public Long getCanRiskReportId() {
+        return canRiskReportId;
     }
 
-    public void setLastLoginDatetime(Instant lastLoginDatetime) {
-        this.lastLoginDatetime = lastLoginDatetime;
-    }
-    
-    public ResponseState getConsentStatus() {
-        return consentStatus;
-    }
-
-    public void setConsentStatus(ResponseState consentStatus) {
-        this.consentStatus = consentStatus;
-    }
-
-    public ResponseState getQuestionnaireStatus() {
-        return questionnaireStatus;
-    }
-
-    public void setQuestionnaireStatus(ResponseState questionnaireStatus) {
-        this.questionnaireStatus = questionnaireStatus;
+    public void setCanRiskReportId(Long canRiskReportId) {
+        this.canRiskReportId = canRiskReportId;
     }
 
     @Override
@@ -118,19 +97,4 @@ public class ParticipantDTO implements Serializable {
     }
 
 
-    @Override
-    public String toString() {
-        return "ParticipantDTO [" 
-            + ", id=" + id
-            + ", importedDatetime=" + importedDatetime 
-            + ", lastLoginDatetime=" + lastLoginDatetime 
-            + ", nhsNumber=" + nhsNumber
-            + ", practiceName=" + practiceName
-            + ", questionnaireStatus=" + questionnaireStatus 
-            + ", registerDatetime=" + registerDatetime
-            + ", lastLoginDatetime=" + lastLoginDatetime
-            + ", consentStatus=" + consentStatus
-            + ", questionnaireStatus=" + questionnaireStatus            
-            + "]";
-    }
 }

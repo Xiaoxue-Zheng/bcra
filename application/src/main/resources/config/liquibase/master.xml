@@ -28,7 +28,6 @@
     <include file="config/liquibase/changelog/20191105113559_added_entity_ReferralCondition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191119110520_added_entity_Participant.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191119110521_added_entity_IdentifiableData.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200115171045_added_entity_Procedure.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210210150449_added_entity_StudyId.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210219085250_added_entity_YearlyRisk.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210219085821_added_entity_Risk.xml" relativeToChangelogFile="false"/>
@@ -47,7 +46,6 @@
     <include file="config/liquibase/changelog/20191008133432_added_entity_constraints_DisplayCondition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191105113559_added_entity_constraints_ReferralCondition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20191119110520_added_entity_constraints_Participant.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200115171045_added_entity_constraints_Procedure.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210210150449_added_entity_constraints_StudyId.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210219085250_added_entity_constraints_YearlyRisk.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210219090346_added_entity_constraints_RiskAssessmentResult.xml" relativeToChangelogFile="false"/>

@@ -105,7 +105,7 @@ public class StudyIdResourceIT {
     public void initTest() {
         String studyCode = "TST_101";
         participant = studyUtil.createParticipant(em, studyCode, LocalDate.now());
-        studyId = studyUtil.createStudyIdForParticipant(em, participant);
+        studyId = participant.getStudyId();
     }
 
     @Test
@@ -121,6 +121,7 @@ public class StudyIdResourceIT {
         assertThat(content1).isEqualTo("false");
 
         // Add the default study id to the database.
+        studyId.setParticipant(null);
         studyIdRepository.saveAndFlush(studyId);
 
         // Try call again, this time with a study that exists - should be true.

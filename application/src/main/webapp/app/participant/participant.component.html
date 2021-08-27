@@ -1,77 +1,66 @@
 <div *ngIf="participants">
     <h1>Participants</h1>
 
-    <div>
-        Show:
-        <select [(ngModel)] ="selectedFilter" (change)="loadParticipants()">
-            <option [ngValue]="filter.parameters" *ngFor="let filter of filters">{{ filter.caption }}</option>
-        </select>
-    </div>
+    <form name="searchForm" class="col-md-12 input-group form-inline" role="form" novalidate (ngSubmit)="loadParticipants()" [formGroup]="searchForm">
+            <jhi-alert-error></jhi-alert-error>
+            <div class="form-row col-sm-2">
+                <label class="col-sm-3 col-form-label">StudyID</label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" name="studyId" id ="studyIdInput" formControlName="studyId">
+                </div>
+            </div>
 
-    <div>
-        Order by:
-        <select [(ngModel)] ="selectedOrder" (change)="loadParticipants()">
-            <option [ngValue]="order.sorts" *ngFor="let order of orders">{{ order.caption }}</option>
-        </select>
-    </div>
+            <div class="form-row col-sm-3">
+                <label class="col-sm-4 col-form-label">Date of Birth</label>
+                <div class="col-sm-7">
+                    <input type="date" class="form-control" name="dateOfBirth"  id="dateOfBirthInput" formControlName="dateOfBirth"/>
+                </div>
+            </div>
 
-    <div class="custom-control custom-switch show-details">
-        <input [(ngModel)]="showDetails" type="checkbox" class="custom-control-input" id="showDetails">
-        <label class="custom-control-label" for="showDetails">Show full details</label>
-    </div>
+            <div class="form-row col-sm-3">
+                <label class="col-form-label">Status</label>
+                    <select class="col-sm-7" name="status" style="margin-bottom:10px" id="statusSelector" formControlName="status">
+                        <option selected value="null">ALL</option>
+                        <option>REFERRED</option>
+                        <option>SUBMITTED</option>
+                    </select>
+            </div>
+        <div>
+            <button type="button" class="btn btn-secondary" id ="clearButton" (click)="clear()">
+                Clear
+            </button>
+            <button type="submit" class="btn btn-primary" id = "searchButton">
+                Search
+            </button>
+        </div>
+    </form>
 
-    <table class="participant" *ngFor="let participant of participants">
-
-        <tbody [hidden]="!showDetails">
-            <tr>
-                <td rowspan="2" class="icon"><fa-icon icon="user" fixedWidth="true"></fa-icon></td>
-                <th>Imported</th>
-                <th>Registered</th>
-                <th>Login</th>
-                <td></td>
+    <div class="table-responsive" *ngIf="participants">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+                <th jhiSortBy="id"><span>StudyID</span> </th>
+                <th jhiSortBy="login"><span>Date Of Birth</span> </th>
+                <th jhiSortBy="status"><span>Status</span> </th>
+                <th jhiSortBy="swab"><span>Swab</span> </th>
+                <th jhiSortBy="mammogram"><span>Mammogram</span></th>
+                <th jhiSortBy="registeredDate"><span>Register Date</span> </th>
+                <th jhiSortBy="canRiskReport"><span>Can Risk Report</span></th>
             </tr>
-            <tr>
-                <td>{{ participant.importedDatetime | date: 'shortDate' | defaultValue: '-' }}</td>
+            </thead>
+            <tbody *ngIf ="participants">
+            <tr *ngFor="let participant of participants; trackBy: trackIdentity">
+                <td>{{participant.studyID}}</td>
+                <td>{{participant.dateOfBirth | date: 'shortDate'}}</td>
+                <td>{{participant.status}}</td>
+                <td>{{participant.swab | defaultValue: '-'}}</td>
+                <td>{{participant.mammogram | defaultValue: '-'}}</td>
                 <td>{{ participant.registerDatetime | date: 'shortDate' | defaultValue: '-' }}</td>
-                <td>{{ participant.lastLoginDatetime | date: 'shortDate' | defaultValue: '-' }}</td>
-                <td></td>
+                <td ><a *ngIf="participant.canRiskReportId" href="javascript:void(0);" (click)="viewCanRiskReport(participant.canRiskReportId)">[view]</a></td>
             </tr>
-
-            <tr>
-                <td rowspan="2" class="icon"><fa-icon icon="clipboard-list" fixedWidth="true"></fa-icon></td>
-                <th>Consent</th>
-                <th>Questionnaire</th>
-                <th>Swab</th>
-                <th>Mammogram</th>
-            </tr>
-            <tr>
-                <td>{{ participant.consentStatus }}</td>
-                <td>{{ participant.questionnaireStatus }}</td>
-                <td>-</td>
-                <td>-</td>
-            </tr>
-
-            <tr>
-                <td rowspan="3" class="icon"><fa-icon icon="envelope" fixedWidth="true"></fa-icon></td>
-                <th>Invitation</th>
-                <th>Saliva Letter</th>
-                <th>Mammo Letter</th>
-                <th>Outcome</th>
-            </tr>
-            <tr>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-            </tr>
-            <tr>
-                <td><a class="button" href="/api/letter" target="new">Download</a></td>
-                <td><a class="button" href="/api/letter" target="new">Download</a></td>
-                <td><a class="button" href="/api/letter" target="new">Download</a></td>
-                <td><a class="button" href="/api/letter" target="new">Download</a></td>
-            </tr>
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 
     <div [hidden]="participants?.length === 0">
         <div class="row justify-content-center">

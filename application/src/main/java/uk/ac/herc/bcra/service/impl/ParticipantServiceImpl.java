@@ -10,7 +10,6 @@ import uk.ac.herc.bcra.service.IdentifiableDataService;
 import uk.ac.herc.bcra.service.ParticipantService;
 import uk.ac.herc.bcra.service.AnswerResponseService;
 import uk.ac.herc.bcra.service.StudyIdService;
-import uk.ac.herc.bcra.service.ProcedureService;
 import uk.ac.herc.bcra.domain.enumeration.ResponseState;
 import uk.ac.herc.bcra.service.dto.ParticipantActivationDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantDTO;
@@ -68,8 +67,6 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     private final StudyIdService studyIdService;
 
-    private final ProcedureService procedureService;
-
     private final AuthorityRepository authorityRepository;
 
     public ParticipantServiceImpl(
@@ -82,7 +79,6 @@ public class ParticipantServiceImpl implements ParticipantService {
         PasswordEncoder passwordEncoder,
         AnswerResponseService answerResponseService,
         StudyIdService studyIdService,
-        ProcedureService procedureService,
         AuthorityRepository authorityRepository,
         AnswerResponseRepository answerResponseRepository
     ) {
@@ -95,7 +91,6 @@ public class ParticipantServiceImpl implements ParticipantService {
         this.passwordEncoder = passwordEncoder;
         this.answerResponseService = answerResponseService;
         this.studyIdService = studyIdService;
-        this.procedureService = procedureService;
         this.authorityRepository = authorityRepository;
         this.answerResponseRepository = answerResponseRepository;
     }
@@ -201,16 +196,12 @@ public class ParticipantServiceImpl implements ParticipantService {
         Optional<StudyId> studyIdOptional = studyIdService.getStudyIdByCode(participantActivationDTO.getStudyCode());
         StudyId studyId = studyIdOptional.get();
 
-        Procedure procedure = new Procedure();
-        procedure.setConsentResponse(consentResponse);
-        procedure.setRiskAssessmentResponse(studyId.getRiskAssessmentResponse());
-        procedureService.save(procedure);
-
         Participant newParticipant = new Participant();
         newParticipant.setUser(user);
         newParticipant.setRegisterDatetime(Instant.now());
-        newParticipant.setProcedure(procedure);
         newParticipant.setDateOfBirth(participantActivationDTO.getDateOfBirth());
+        newParticipant.setStatus(ResponseState.IN_PROGRESS.name());
+        newParticipant.setStudyId(studyId);
         participantRepository.save(newParticipant);
 
         studyId.setParticipant(newParticipant);
@@ -283,4 +274,5 @@ public class ParticipantServiceImpl implements ParticipantService {
 
         return participant.getIdentifiableData();
     }
+
 }

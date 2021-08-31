@@ -23,7 +23,9 @@
     </ul>
     <PrimaryButton v-if="!authenticated" to="/register">Register to take part</PrimaryButton>
     <SecondaryButton v-if="!authenticated" to="/signin">Sign in</SecondaryButton>
-    <PrimaryButton v-if="authenticated" to="/consent">Start Questionnaire</PrimaryButton>
+    <SecondaryButton v-if="authenticated && !completedRiskAssessment" to="/questionnaire/familyhistorycontext">Start Risk Assessment</SecondaryButton>
+    <SecondaryButton v-if="authenticated && !completedParticipantDetails" to="/participant-details">Update Contact Details</SecondaryButton>
+    <SecondaryButton v-if="authenticated && canViewCanRiskReport" to="/canriskreport">View CanRisk Report</SecondaryButton>
     <div class="info-box">
       <h3>Participation in this trial requires the following:</h3>
       <ul>
@@ -47,7 +49,11 @@
 import Accordion from '@/components/Accordion.vue'
 import PrimaryButton from '@/components/PrimaryButton.vue'
 import SecondaryButton from '@/components/SecondaryButton.vue'
-import { createHelpers } from 'vuex-map-fields'
+import { createHelpers, getField } from 'vuex-map-fields'
+
+import { CanRiskReportService } from '@/api/can-risk-report.service'
+import { AnswerResponseService } from '@/api/answer-response.service'
+import { ParticipantDetailsService } from '@/api/participant-details.service'
 
 const { mapFields } = createHelpers({
   getterType: 'security/isAuthenticated'
@@ -75,13 +81,23 @@ export default {
           title: '3. Mammogram',
           text: 'We will arrange for you to have a low-dose mammogram (breast X-ray) to measure your breast density. Your mammogram, spit sample and questionnaire results will enable us to calculate your breast cancer risk.'
         }
-      ]
+      ],
+      completedRiskAssessment: false,
+      completedParticipantDetails: false,
+      canViewCanRiskReport: false
     }
   },
   computed: {
     ...mapFields([
       'authenticated'
     ])
+  },
+  async created () {
+    if (getField('authenticated')) {
+      this.completedRiskAssessment = await AnswerResponseService.hasCompletedRiskAssessment()
+      this.completedParticipantDetails = await ParticipantDetailsService.hasCompletedParticipantDetails()
+      this.canViewCanRiskReport = await CanRiskReportService.isParticipantsCanRiskReportReady()
+    }
   }
 }
 </script>

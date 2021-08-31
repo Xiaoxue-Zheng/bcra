@@ -24,8 +24,15 @@ export const AnswerResponseService = {
   referralRiskAssessment (answerResponse) {
     return ApiService.put('answer-responses/risk-assessment/referral', answerResponse)
   },
-
   submitRiskAssessment (answerResponse) {
     return ApiService.put('answer-responses/risk-assessment/submit', answerResponse)
+  },
+  async hasCompletedConsent () {
+    let completeConsent = await ApiService.get('/answer-responses/consent/complete')
+    return completeConsent.data
+  },
+  async hasCompletedRiskAssessment () {
+    let completRiskAssessment = await ApiService.get('/answer-responses/risk-assessment/complete')
+    return completRiskAssessment.data
   }
 }

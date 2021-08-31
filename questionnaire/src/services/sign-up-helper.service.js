@@ -1,5 +1,4 @@
 import { StorageService } from './storage.service'
-import ApiService from '../api/api.service'
 
 export const SignUpHelperService = {
   setStudyCode (studyCode) {
@@ -30,20 +29,5 @@ export const SignUpHelperService = {
     StorageService.remove('STUDY_CODE')
     StorageService.remove('DATE_OF_BIRTH')
     StorageService.remove('CONSENT_RESPONSE')
-  },
-
-  async hasCompletedConsent () {
-    let completeConsent = await ApiService.get('/answer-responses/consent/complete')
-    return completeConsent.data
-  },
-
-  async hasCompletedRiskAssessment () {
-    let completRiskAssessment = await ApiService.get('/answer-responses/risk-assessment/complete')
-    return completRiskAssessment.data
-  },
-
-  async hasCompletedParticipantDetails () {
-    let completeDetails = await ApiService.get('/participants/details')
-    return completeDetails.data
   }
 }

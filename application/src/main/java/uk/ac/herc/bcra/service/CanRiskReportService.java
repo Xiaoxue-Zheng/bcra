@@ -21,4 +21,7 @@ public interface CanRiskReportService {
     CanRiskReportDTO findOneAsDto(Long id) throws Exception;
 
     void delete(Long id);
+
+    CanRiskReportDTO getCanRiskReportForParticipantLogin(String participantLogin) throws Exception;
+    boolean hasCanRiskReportBeenUploadedForPatient(String participantLogin) throws Exception;
 }

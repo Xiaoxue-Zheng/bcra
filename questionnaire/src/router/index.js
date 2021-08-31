@@ -80,6 +80,11 @@ const router = new Router({
       path: '/reset/finish',
       name: 'passwordResetFinish',
       component: () => import('../views/PasswordResetFinish.vue')
+    },
+    {
+      path: '/canriskreport',
+      name: 'canRiskReport',
+      component: () => import('../views/CanRisk.vue')
     }
   ],
   scrollBehavior (to, from, savedPosition) {

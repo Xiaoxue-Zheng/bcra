@@ -63,6 +63,9 @@ Cypress.Commands.add('completeParticipantDetailsPage', () => {
     enterSurname('TEST')
     enterAddress(['TEST','TEST','TEST','TEST','TEST'])
     enterPostCode('AA1 1AA')
+    enterHomePhoneNumber('07700123123')
+    enterMobilePhoneNumber('07700123123')
+    selectPreferredContactMethods(true, true, true, true)
 
     cy.get('.pure-button').contains('Save details').click()
     cy.url().should('include', 'end')
@@ -92,6 +95,13 @@ function enterHomePhoneNumber(phoneNumber) {
 
 function enterMobilePhoneNumber(phoneNumber) {
   return cy.get('input').eq(9).type(phoneNumber)
+}
+
+function selectPreferredContactMethods(email, sms, call, mail) {
+  if (email) cy.get('label').contains('Email').click()
+  if (sms) cy.get('label').contains('SMS').click()
+  if (call) cy.get('label').contains('Call').click()
+  if (mail) cy.get('label').contains('Mail').click()
 }
 
 Cypress.Commands.add('completeRiskAssessment', () => {
@@ -138,4 +148,3 @@ function fillPersonalHistory(){
   path = 'questionnaire/history'
   cy.submitAndAssertSuccessfulNavAwayFromPath(path)
 }
-

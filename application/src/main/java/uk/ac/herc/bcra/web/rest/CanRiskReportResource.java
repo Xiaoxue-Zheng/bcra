@@ -81,4 +81,20 @@ public class CanRiskReportResource {
         log.debug("REST request to check if a StudyId is available for a CanRiskReport");
         return studyIdService.doesStudyIdExistAndNotAssignedToCanRiskReport(studyCode);
     }
+
+    @GetMapping("/can-risk-report/participant")
+    @Secured({RoleManager.PARTICIPANT})
+    public CanRiskReportDTO getCanRiskReportForParticipant(Principal principal) throws Exception {
+        log.debug("REST request to get single CanRiskReport for currently logged in participant");
+        String login = principal.getName();
+        return canRiskReportService.getCanRiskReportForParticipantLogin(login);
+    }
+
+    @GetMapping("/can-risk-report/participant/isready")
+    @Secured({RoleManager.PARTICIPANT})
+    public boolean getHasCanRiskReportBeenUploadedForPatient(Principal principal) throws Exception {
+        log.debug("REST request to check if a CanRiskReport has been uploaded for the currently logged in participant");
+        String login = principal.getName();
+        return canRiskReportService.hasCanRiskReportBeenUploadedForPatient(login);
+    }
 }

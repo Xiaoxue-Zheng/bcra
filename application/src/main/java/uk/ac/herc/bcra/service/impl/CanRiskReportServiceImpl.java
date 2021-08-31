@@ -37,7 +37,9 @@ public class CanRiskReportServiceImpl implements CanRiskReportService {
 
     private final StudyIdRepository studyIdRepository;
 
-    public CanRiskReportServiceImpl(CanRiskReportRepository canRiskReportRepository, StudyIdRepository studyIdRepository) {
+    public CanRiskReportServiceImpl(
+        CanRiskReportRepository canRiskReportRepository, 
+        StudyIdRepository studyIdRepository) {
         this.canRiskReportRepository = canRiskReportRepository;
         this.studyIdRepository = studyIdRepository;
     }
@@ -115,6 +117,27 @@ public class CanRiskReportServiceImpl implements CanRiskReportService {
     @Override
     public void delete(Long id) {
         canRiskReportRepository.deleteById(id);
+    }
+
+    @Override
+    public CanRiskReportDTO getCanRiskReportForParticipantLogin(String participantLogin) throws Exception {
+        StudyId studyId = studyIdRepository.findOneByCode(participantLogin).get();
+        CanRiskReport report = canRiskReportRepository.findOneByAssociatedStudyId(studyId).get();
+
+        CanRiskReportDTO reportDto = new CanRiskReportDTO();
+        reportDto.setFileData(getFileData(report));
+        reportDto.setFilename(report.getFilename());
+        reportDto.setStudyId(report.getAssociatedStudyId().getCode());
+        reportDto.setUploadedBy(report.getUploadedBy().getLogin());
+
+        return reportDto;
+    }
+
+    @Override
+    public boolean hasCanRiskReportBeenUploadedForPatient(String participantLogin) throws Exception {
+        StudyId studyId = studyIdRepository.findOneByCode(participantLogin).get();
+        Optional<CanRiskReport> report = canRiskReportRepository.findOneByAssociatedStudyId(studyId);
+        return report.isPresent();
     }
 
     private String getStudyCodeFromFile(MultipartFile file) {

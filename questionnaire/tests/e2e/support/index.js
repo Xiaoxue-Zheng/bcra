@@ -21,6 +21,7 @@ import './study-generation-commands'
 import './register-participant-commands'
 import './page-completion-shortcuts'
 import './local-storage-persistence-commands'
+import './can-risk-commands'
 import 'cypress-promise/register'
 
 // Alternatively you can use CommonJS syntax:

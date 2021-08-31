@@ -10,6 +10,10 @@ import uk.ac.herc.bcra.repository.ParticipantRepository;
 import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.IdentifiableDataService;
 import uk.ac.herc.bcra.service.ParticipantService;
+import uk.ac.herc.bcra.service.dto.AnswerDTO;
+import uk.ac.herc.bcra.service.dto.AnswerGroupDTO;
+import uk.ac.herc.bcra.service.dto.AnswerItemDTO;
+import uk.ac.herc.bcra.service.dto.AnswerSectionDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantActivationDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantDetailsDTO;
@@ -298,6 +302,22 @@ public class ParticipantResourceIT {
         request.setPassword(RandomStringUtils.randomAlphabetic(6));
         request.setStudyCode(studyCode);
         request.setConsentResponse(studyIdService.getConsentResponseFromStudyCode(studyCode));
+
+        for (AnswerSectionDTO section : request.getConsentResponse().getAnswerSections()) {
+            for (AnswerGroupDTO group : section.getAnswerGroups()) {
+                for (AnswerDTO answer : group.getAnswers()) {
+                    boolean tickedYes = false;
+                    for (AnswerItemDTO item : answer.getAnswerItems()) {
+                        if (!tickedYes) {
+                            item.setSelected(true);
+                            tickedYes = true;
+                        }
+                    }
+                    answer.setTicked(true);
+                }
+            }
+        }
+
         restParticipantMockMvc.perform(post("/api/participants/activate")
             .content(MockMvcUtil.convertObjectToJsonBytes(request))
             .contentType(MockMvcUtil.APPLICATION_JSON_UTF8)

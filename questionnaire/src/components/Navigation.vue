@@ -5,6 +5,7 @@
             <li class="pure-menu-item"><router-link class="pure-menu-link" to="/">Home</router-link></li>
             <li v-if="!authenticated" class="pure-menu-item"><router-link class="pure-menu-link" to="/register">Register</router-link></li>
             <li v-if="!authenticated" class="pure-menu-item"><router-link class="pure-menu-link" to="/signin">Sign in</router-link></li>
+            <li v-if="authenticated" class="pure-menu-item"><router-link class="pure-menu-link" to="/canriskreport">CanRisk report</router-link></li>
             <li v-if="authenticated" v-on:click="logout" class="pure-menu-item"><a href="#" class="pure-menu-link">Sign out</a></li>
         </ul>
         <IdleChecker></IdleChecker>

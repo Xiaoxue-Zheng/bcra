@@ -8,7 +8,10 @@ import uk.ac.herc.bcra.repository.AnswerResponseRepository;
 import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.AnswerResponseService;
 import uk.ac.herc.bcra.service.StudyIdService;
+import uk.ac.herc.bcra.service.dto.AnswerDTO;
+import uk.ac.herc.bcra.service.dto.AnswerGroupDTO;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
+import uk.ac.herc.bcra.service.dto.AnswerSectionDTO;
 import uk.ac.herc.bcra.service.mapper.AnswerResponseMapper;
 import uk.ac.herc.bcra.testutils.MockMvcUtil;
 import uk.ac.herc.bcra.testutils.StudyUtil;
@@ -107,6 +110,25 @@ public class AnswerResponseResourceIT {
             .build();
     }
 
+    private void setAnswerResponseDtoAnswerNumbersTo(AnswerResponseDTO answerResponseDto, Integer number) {
+        for (AnswerSectionDTO section : answerResponseDto.getAnswerSections()) {
+            for (AnswerGroupDTO group : section.getAnswerGroups()) {
+                for (AnswerDTO answer : group.getAnswers()) {
+                    answer.setNumber(number);
+                }
+            }
+        }
+    }
+
+    private void assertThatAnswerResponseDtoAnswersEqual(AnswerResponseDTO answerResponseDto, Integer number) {
+        for (AnswerSectionDTO section : answerResponseDto.getAnswerSections()) {
+            for (AnswerGroupDTO group : section.getAnswerGroups()) {
+                for (AnswerDTO answer : group.getAnswers()) {
+                    assertThat(answer.getNumber()).isEqualTo(number);
+                }
+            }
+        }
+    }
 
     @BeforeEach
     public void initTest() {
@@ -131,10 +153,7 @@ public class AnswerResponseResourceIT {
     public void testSaveConsent() throws Exception {
         AnswerResponse consent = participant.getProcedure().getConsentResponse();
         AnswerResponseDTO consentDto = answerResponseMapper.toDto(consent);
-        consentDto.getAnswerSections().iterator().next()
-            .getAnswerGroups().iterator().next()
-            .getAnswers().iterator().next()
-            .setNumber(99);
+        setAnswerResponseDtoAnswerNumbersTo(consentDto, 99);
 
         restAnswerResponseMockMvc.perform(
                 put("/api/answer-responses/consent/save")
@@ -150,13 +169,7 @@ public class AnswerResponseResourceIT {
             .andExpect(status().isOk());
 
         AnswerResponseDTO updatedConsentDto = answerResponseService.findOne(participant.getUser().getLogin(), QuestionnaireType.CONSENT_FORM).get();
-        AnswerResponse updatedConsent = answerResponseMapper.toEntity(updatedConsentDto);
-        Integer number = updatedConsent
-             .getAnswerSections().iterator().next()
-             .getAnswerGroups().iterator().next()
-             .getAnswers().iterator().next()
-             .getNumber();
-        assertThat(number).isEqualTo(99);
+        assertThatAnswerResponseDtoAnswersEqual(updatedConsentDto, 99);
     }
 
     @Test
@@ -200,10 +213,7 @@ public class AnswerResponseResourceIT {
     public void testSaveRiskAssessment() throws Exception {
         AnswerResponse riskAssessment = participant.getProcedure().getRiskAssessmentResponse();
         AnswerResponseDTO riskAssessmentDto = answerResponseMapper.toDto(riskAssessment);
-        riskAssessmentDto.getAnswerSections().iterator().next()
-            .getAnswerGroups().iterator().next()
-            .getAnswers().iterator().next()
-            .setNumber(99);
+        setAnswerResponseDtoAnswerNumbersTo(riskAssessmentDto, 99);
 
         restAnswerResponseMockMvc.perform(
                 put("/api/answer-responses/risk-assessment/save")
@@ -220,13 +230,7 @@ public class AnswerResponseResourceIT {
 
         
         AnswerResponseDTO updatedRiskAssessmentDto = answerResponseService.findOne(participant.getUser().getLogin(), QuestionnaireType.RISK_ASSESSMENT).get();
-        AnswerResponse updatedRiskAssessment = answerResponseMapper.toEntity(updatedRiskAssessmentDto);
-        Integer number = updatedRiskAssessment
-             .getAnswerSections().iterator().next()
-             .getAnswerGroups().iterator().next()
-             .getAnswers().iterator().next()
-             .getNumber();
-        assertThat(number).isEqualTo(99);
+        assertThatAnswerResponseDtoAnswersEqual(updatedRiskAssessmentDto, 99);
     }
 
     @Test

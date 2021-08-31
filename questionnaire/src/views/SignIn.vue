@@ -32,7 +32,9 @@
 </template>
 
 <script>
-import { SignUpHelperService } from '@/services/sign-up-helper.service.js'
+import { AnswerResponseService } from '@/api/answer-response.service'
+import { ParticipantDetailsService } from '@/api/participant-details.service'
+import { CanRiskReportService } from '@/api/can-risk-report.service'
 
 export default {
   name: 'signin',
@@ -75,19 +77,24 @@ export default {
       }
     },
     async navigateToIncompleteSection () {
-      let completeConsent = await SignUpHelperService.hasCompletedConsent()
+      let completeConsent = await AnswerResponseService.hasCompletedConsent()
       if (!completeConsent) {
         this.$router.push('/consent')
       } else {
-        let completeRiskAssessment = await SignUpHelperService.hasCompletedRiskAssessment()
+        let completeRiskAssessment = await AnswerResponseService.hasCompletedRiskAssessment()
         if (!completeRiskAssessment) {
           this.$router.push('/questionnaire/familyhistorycontext')
         } else {
-          let completeParticipantDetails = await SignUpHelperService.hasCompletedParticipantDetails()
+          let completeParticipantDetails = await ParticipantDetailsService.hasCompletedParticipantDetails()
           if (!completeParticipantDetails) {
             this.$router.push('/participant-details')
           } else {
-            this.$router.push('/end')
+            let canRiskReportReady = await CanRiskReportService.isParticipantsCanRiskReportReady()
+            if (canRiskReportReady) {
+              this.$router.push('/canriskreport')
+            } else {
+              this.$router.push('/end')
+            }
           }
         }
       }

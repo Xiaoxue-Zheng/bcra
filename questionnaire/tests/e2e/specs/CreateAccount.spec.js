@@ -93,7 +93,15 @@ describe('CreateAccount', () => {
         getPasswordField().type(STRONG_PASSWORD)
         getPasswordConfirmationField().type(STRONG_PASSWORD)
         cy.get('button').contains('Create account').click()
-        cy.get('.error-message').contains('Something went wrong. Please try again.')
+        cy.get('.error-message').contains('Email is already in use!')
+    })
+
+    it('should not allow registration with a bad-formed email address', () => {
+      getEmailField().type('bad-formed')
+      getPasswordField().type(STRONG_PASSWORD)
+      getPasswordConfirmationField().type(STRONG_PASSWORD)
+      cy.get('button').contains('Create account').click()
+      cy.get('.error-message').contains('must be a well-formed email address')
     })
 
     it('should register the user and navigate them to the participant details page', () => {

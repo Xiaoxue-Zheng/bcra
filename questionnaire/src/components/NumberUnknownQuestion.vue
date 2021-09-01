@@ -23,6 +23,7 @@
         <div class="items radios">
           <input
             type="radio"
+            ref="dontKnowRadio"
             :id="questionIdentifier()"
             :name="questionIdentifier()"
             :disabled="readOnly"
@@ -54,6 +55,8 @@ export default {
         if (val === 'dontknow') {
           this.answer.dontKnow = true
           this.answer.number = null
+        } else {
+          this.answer.dontKnow = false
         }
       }
     },
@@ -62,8 +65,9 @@ export default {
         return this.answer.number
       },
       set (val) {
-        this.answer.dontKnow = null
+        this.answer.dontKnow = false
         this.answer.number = val
+        this.$refs.dontKnowRadio.checked = null
       }
     }
   },

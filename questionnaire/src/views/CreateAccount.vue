@@ -27,7 +27,7 @@
           </fieldset>
           <div class="error-message" v-if="password != repeatPassword">Your passwords don't match!</div>
           <div class="error-message" v-if="passwordScore < MINIMUM_PASSWORD_SCORE && password != 0">Please pick a stronger password.</div>
-          <div class="error-message" v-if="displayErrorMessage">Something went wrong. Please try again.</div>
+          <div class="error-message" v-if="displayErrorMessage">{{ errorMessage }}</div>
           <button class="pure-button pure-button-primary" type="submit" :disabled="!emailAddress || password != repeatPassword || passwordScore < MINIMUM_PASSWORD_SCORE">Create account</button>
         </form>
       </div>
@@ -39,6 +39,7 @@
 import Password from 'vue-password-strength-meter'
 import { SecurityService } from '@/api/security.service'
 import { SignUpHelperService } from '@/services/sign-up-helper.service'
+import ApiService from '../api/api.service'
 
 const MINIMUM_PASSWORD_SCORE = 4
 
@@ -52,6 +53,7 @@ export default {
       repeatPassword: '',
       passwordScore: 0,
       displayErrorMessage: false,
+      errorMessage: '',
       MINIMUM_PASSWORD_SCORE: MINIMUM_PASSWORD_SCORE
     }
   },
@@ -71,7 +73,8 @@ export default {
 
         SecurityService.createAccount(signUpInformation).then(() => {
           this.autoLogin()
-        }).catch(() => {
+        }).catch((error) => {
+          this.errorMessage = ApiService.extractErrorMessage(error)
           this.displayErrorMessage = true
         })
       }

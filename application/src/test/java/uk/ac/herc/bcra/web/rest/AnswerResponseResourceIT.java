@@ -146,7 +146,7 @@ public class AnswerResponseResourceIT {
 
         byte[] data = result.getResponse().getContentAsByteArray();
         AnswerResponseDTO consentDto = MockMvcUtil.convertJsonBytesToObject(AnswerResponseDTO.class, data);
-        assertThat(consentDto.getQuestionnaireId()).isEqualTo(participant.getStudyId().getConsentResponse().getQuestionnaire().getId());
+        assertThat(consentDto.getQuestionnaireId()).isEqualTo(participant.getProcedure().getConsentResponse().getQuestionnaire().getId());
     }
 
     @Test
@@ -158,7 +158,7 @@ public class AnswerResponseResourceIT {
 
         byte[] data = result.getResponse().getContentAsByteArray();
         AnswerResponseDTO riskAssessmentDto = MockMvcUtil.convertJsonBytesToObject(AnswerResponseDTO.class, data);
-        assertThat(riskAssessmentDto.getQuestionnaireId()).isEqualTo(participant.getStudyId().getRiskAssessmentResponse().getQuestionnaire().getId());
+        assertThat(riskAssessmentDto.getQuestionnaireId()).isEqualTo(participant.getProcedure().getRiskAssessmentResponse().getQuestionnaire().getId());
     }
 
     @Test

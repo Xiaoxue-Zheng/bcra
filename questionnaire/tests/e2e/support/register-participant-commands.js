@@ -94,7 +94,7 @@ function deleteUserAuthority(userId) {
 Cypress.Commands.add('registerPatientWithStudyCodeAndEmail', (studyCode, email) => {
     return getStudyIdFromStudyCode(studyCode).then((studyId) => {
             return createUserFromStudyIdAndEmail(studyId, email).then((user) => {
-                return createParticipantFromUser(user).then((participant) => {
+                return createParticipantFromUser(user, studyId).then((participant) => {
                     return assignParticipantToStudyId(participant, studyId)
                 })
             })
@@ -136,15 +136,15 @@ function createUserFromStudyIdAndEmail(studyId, email) {
     })
 }
 
-function createParticipantFromUser(user) {
+function createParticipantFromUser(user, studyId) {
     return getNextIdForTable('participant').then((next_id) => {
         return cy.task('query', {
             sql: `
                 INSERT INTO participant
-                (id, user_id, date_of_birth, status)
-                VALUES($1, $2, '01/01/1990', 'IN_PROGRESS')
+                (id, user_id, date_of_birth, status, study_id_id)
+                VALUES($1, $2, '01/01/1990', 'IN_PROGRESS', $3)
             `,
-            values: [next_id, user.id]
+            values: [next_id, user.id, studyId.id]
         }).then(() => {
             return cy.task('query', {
                 sql: `

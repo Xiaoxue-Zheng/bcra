@@ -64,10 +64,7 @@ public class AccountResource {
      */
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
-        if (!checkPasswordLength(managedUserVM.getPassword())) {
-            throw new InvalidPasswordException();
-        }
+    public void registerAccount(@RequestBody @Valid ManagedUserVM managedUserVM) {
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
         mailService.sendActivationEmail(user);
     }
@@ -142,10 +139,7 @@ public class AccountResource {
      */
     @PostMapping(path = "/account/change-password")
     @Secured({RoleManager.USER})
-    public void changePassword(@RequestBody PasswordChangeDTO passwordChangeDto) {
-        if (!checkPasswordLength(passwordChangeDto.getNewPassword())) {
-            throw new InvalidPasswordException();
-        }
+    public void changePassword(@RequestBody @Valid PasswordChangeDTO passwordChangeDto) {
         userService.changePassword(passwordChangeDto.getCurrentPassword(), passwordChangeDto.getNewPassword());
     }
 
@@ -216,10 +210,7 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the password could not be reset.
      */
     @PostMapping(path = "/account/reset-password/finish")
-    public void finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
-        if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
-            throw new InvalidPasswordException();
-        }
+    public void finishPasswordReset(@RequestBody @Valid KeyAndPasswordVM keyAndPassword) {
         Optional<User> user =
             userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 

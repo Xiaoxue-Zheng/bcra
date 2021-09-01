@@ -15,9 +15,6 @@ export const AnswerResponseService = {
     const response = await ApiService.get('answer-responses/risk-assessment/' + studyCode)
     return response.data
   },
-  saveRiskAssessment (answerResponse) {
-    return ApiService.put('answer-responses/risk-assessment/save', answerResponse)
-  },
   saveAnswerSection (answerSection) {
     return ApiService.put('answer-responses/risk-assessment/section/save', answerSection)
   },

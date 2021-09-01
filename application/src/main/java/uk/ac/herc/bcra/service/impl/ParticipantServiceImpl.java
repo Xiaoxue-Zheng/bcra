@@ -211,9 +211,7 @@ public class ParticipantServiceImpl implements ParticipantService {
     private User activateUser(ParticipantActivationDTO participantActivationDTO){
         String email = participantActivationDTO.getEmailAddress();
         if (
-            identifiableDataService.findOne(
-                email
-            ).isPresent()
+            identifiableDataService.findOne(email).isPresent() || userRepository.findOneByEmailIgnoreCase(email).isPresent()
         ) {
             throw new EmailAlreadyUsedException();
         }

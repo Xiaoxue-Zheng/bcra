@@ -26,5 +26,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="study_id"/>
 
+        <addForeignKeyConstraint baseColumnNames="study_id_id"
+                                 baseTableName="participant"
+                                 constraintName="fk_participant_study_id_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="study_id"/>
+
     </changeSet>
 </databaseChangeLog>

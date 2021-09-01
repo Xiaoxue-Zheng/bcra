@@ -1,13 +1,13 @@
 package uk.ac.herc.bcra.web.rest.errors;
 
-import org.zalando.problem.AbstractThrowableProblem;
 import org.zalando.problem.Status;
+import uk.ac.herc.bcra.exception.HRYWException;
 
-public class EmailNotFoundException extends AbstractThrowableProblem {
+public class EmailNotFoundException extends HRYWException {
 
     private static final long serialVersionUID = 1L;
 
     public EmailNotFoundException() {
-        super(ErrorConstants.EMAIL_NOT_FOUND_TYPE, "Email address not registered", Status.BAD_REQUEST);
+        super("Email address not registered", Status.BAD_REQUEST);
     }
 }

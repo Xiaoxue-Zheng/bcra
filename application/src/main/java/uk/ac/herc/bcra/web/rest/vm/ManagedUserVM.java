@@ -1,6 +1,10 @@
 package uk.ac.herc.bcra.web.rest.vm;
 
+import org.hibernate.validator.constraints.Length;
 import uk.ac.herc.bcra.service.dto.UserDTO;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -12,7 +16,8 @@ public class ManagedUserVM extends UserDTO {
 
     public static final int PASSWORD_MAX_LENGTH = 100;
 
-    @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
+    @Length(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
+    @NotEmpty
     private String password;
 
     public ManagedUserVM() {

@@ -79,12 +79,12 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
     public ResponseEntity<Problem> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, @Nonnull NativeWebRequest request) {
         BindingResult result = ex.getBindingResult();
         List<FieldErrorVM> fieldErrors = result.getFieldErrors().stream()
-            .map(f -> new FieldErrorVM(f.getObjectName(), f.getField(), f.getCode()))
+            .map(f -> new FieldErrorVM(f.getObjectName(), f.getField(), f.getDefaultMessage()))
             .collect(Collectors.toList());
 
         Problem problem = Problem.builder()
             .withType(ErrorConstants.CONSTRAINT_VIOLATION_TYPE)
-            .withTitle("Method argument not valid")
+            .withTitle(fieldErrors.isEmpty()?"Please check your input" : fieldErrors.get(0).getMessage())
             .withStatus(defaultConstraintViolationStatus())
             .with(MESSAGE_KEY, ErrorConstants.ERR_VALIDATION)
             .with(FIELD_ERRORS_KEY, fieldErrors)
@@ -97,6 +97,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
         Problem problem = Problem.builder()
             .withStatus(Status.NOT_FOUND)
             .with(MESSAGE_KEY, ErrorConstants.ENTITY_NOT_FOUND_TYPE)
+            .withTitle("Not found")
             .build();
         return create(ex, problem, request);
     }

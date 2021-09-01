@@ -34,9 +34,7 @@ export default {
 
   get (resource, slug = '') {
     var template = this.getTemplateFromSlug(slug, resource)
-    return axios.get(template).catch(error => {
-      throw new Error(`HRYWS ApiService ${error}`)
-    })
+    return axios.get(template)
   },
 
   post (resource, params) {
@@ -64,5 +62,16 @@ export default {
     return axios.delete(resource).catch(error => {
       throw new Error(`[RWV] ApiService ${error}`)
     })
+  },
+
+  extractErrorMessage (error) {
+    // Internal server error
+    if (error.response.data.status === 500) {
+      return 'Something went wrong. Please try again.'
+    }
+    if (error && error.response && error.response.data && error.response.data.title) {
+      return error.response.data.title
+    }
+    return 'Something went wrong. Please try again.'
   }
 }

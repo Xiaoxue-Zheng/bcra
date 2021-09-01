@@ -94,9 +94,6 @@ public class ParticipantResource {
     @PostMapping("/participants/activate")
     @ResponseStatus(HttpStatus.CREATED)
     public void activateParticipant(@Valid @RequestBody ParticipantActivationDTO participantActivationDTO){
-        if (!AccountResource.checkPasswordLength(participantActivationDTO.getPassword())) {
-            throw new InvalidPasswordException();
-        }
 
         if (!studyIdService.isStudyCodeAvailable(participantActivationDTO.getStudyCode())) {
             throw new InvalidOrActivatedStudyCodeException();

@@ -42,13 +42,13 @@ describe('RiskAssessment.vue', () => {
         riskAssessment = shallowMount(RiskAssessment,{ localVue, router, stubs: ['router-link', 'router-view'] })
         riskAssessment.vm.proceedToNextRoute = () => {} // prevent calls to $router service
 
-        AnswerResponseService.saveRiskAssessment = saveRiskAssessmentMock
+        AnswerResponseService.saveAnswerSection = saveRiskAssessmentMock
 
         jest.spyOn(riskAssessment.vm, 'configureButtonPropertiesForQuestionSection')
         jest.spyOn(riskAssessment.vm, 'saveQuestionnaire')
         jest.spyOn(riskAssessment.vm, 'proceedToNextRoute')
         jest.spyOn(QuestionSectionService, 'clearUntakenSectionAnswers')
-        jest.spyOn(AnswerResponseService, 'saveRiskAssessment')
+        jest.spyOn(AnswerResponseService, 'saveAnswerSection')
         jest.spyOn(QuestionSectionService, 'getSectionInfoComponent')
         jest.spyOn(riskAssessment.vm.$router, 'push')
     })
@@ -153,7 +153,7 @@ describe('RiskAssessment.vue', () => {
         it('should save the riskAssessment to cache memory', () => {
             populateQuestionnaire()
             riskAssessment.vm.saveQuestionnaire()
-            expect(AnswerResponseService.saveRiskAssessment).toHaveBeenCalled()
+            expect(AnswerResponseService.saveAnswerSection).toHaveBeenCalled()
         })
 
         it('should call proceed to next route if the risk assessment is saved successfully', async (done) => {

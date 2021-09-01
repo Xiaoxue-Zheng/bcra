@@ -68,8 +68,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public BcraAuthenticationSuccessHandler bcraAuthenticationSuccessHandler() {
-        return new BcraAuthenticationSuccessHandler();
+    public HRYWSAuthenticationSuccessHandler bcraAuthenticationSuccessHandler() {
+        return new HRYWSAuthenticationSuccessHandler();
     }
 
     @Bean

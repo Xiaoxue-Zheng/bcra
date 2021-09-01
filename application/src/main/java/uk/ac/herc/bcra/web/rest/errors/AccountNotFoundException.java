@@ -1,14 +1,15 @@
 package uk.ac.herc.bcra.web.rest.errors;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.zalando.problem.Status;
+import uk.ac.herc.bcra.exception.HRYWException;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class AccountNotFoundException extends RuntimeException {
-    public AccountNotFoundException(String message) {
-        super(message);
-    }
+public class AccountNotFoundException extends HRYWException {
 
     public AccountNotFoundException() {
+        super("User not found", Status.NOT_FOUND);
+    }
+
+    public AccountNotFoundException(String message) {
+        super(message, Status.NOT_FOUND);
     }
 }

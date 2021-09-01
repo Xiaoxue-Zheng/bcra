@@ -107,7 +107,7 @@ Cypress.Commands.add('registerPatientWithStudyCodeAndEmail', (studyCode, email) 
     return getStudyIdFromStudyCode(studyCode).then((studyId) => {
         return createProcedureFromStudyId(studyId).then((procedure) => {
             return createUserFromStudyIdAndEmail(studyId, email).then((user) => {
-                return createParticipantFromUserAndProcedure(user, procedure).then((participant) => {
+                return createParticipantFromUserAndProcedure(user, procedure, studyId).then((participant) => {
                     return assignParticipantToStudyId(participant, studyId)
                 })
             })
@@ -173,15 +173,15 @@ function createUserFromStudyIdAndEmail(studyId, email) {
     })
 }
 
-function createParticipantFromUserAndProcedure(user, procedure) {
+function createParticipantFromUserAndProcedure(user, procedure, studyId) {
     return getNextIdForTable('participant').then((next_id) => {
         return cy.task('query', {
             sql: `
                 INSERT INTO participant
-                (id, user_id, procedure_id,date_of_birth)
-                VALUES($1, $2, $3, '01/01/1990')
+                (id, user_id, procedure_id,date_of_birth,status,study_id_id)
+                VALUES($1, $2, $3, '01/01/1990','IN_PROGRESS', $4)
             `,
-            values: [next_id, user.id, procedure.id]
+            values: [next_id, user.id, procedure.id, studyId.id]
         }).then(() => {
             return cy.task('query', {
                 sql: `

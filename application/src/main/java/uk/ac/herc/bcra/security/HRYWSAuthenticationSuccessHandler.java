@@ -1,4 +1,4 @@
-package uk.ac.herc.bcra.config;
+package uk.ac.herc.bcra.security;
 
 import java.time.Instant;
 
@@ -20,7 +20,7 @@ import uk.ac.herc.bcra.repository.UserRepository;
 import uk.ac.herc.bcra.security.RoleManager;
 
 @Component
-public class BcraAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class HRYWSAuthenticationSuccessHandler implements org.springframework.security.web.authentication.AuthenticationSuccessHandler {
 
     @Autowired
     AuthorityRepository authorityRepository;

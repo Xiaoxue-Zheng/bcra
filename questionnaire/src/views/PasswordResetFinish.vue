@@ -28,6 +28,8 @@
 
 <script>
 import { SecurityService } from '../api/security.service'
+import ApiService from '../api/api.service'
+
 export default {
   name: 'PasswordResetFinish',
   data () {
@@ -46,7 +48,8 @@ export default {
     async confirmReset () {
       this.clearErrors()
       if (this.newPassword !== this.confirmPassword) {
-        this.setErrorMessage('The password and its confirmation do not match!')
+        this.errorMessage = 'The password and its confirmation do not match!'
+        this.displayErrorMessage = true
       } else {
         SecurityService.resetPasswordFinish(this.$route.query.key, this.newPassword).then(() => {
           this.success = true
@@ -60,10 +63,7 @@ export default {
       this.errorMessage = ''
     },
     setErrorMessage (error) {
-      this.errorMessage = error
-      if (error.response && error.response.data && error.response.data.detail) {
-        this.errorMessage = error.response.data.detail
-      }
+      this.errorMessage = ApiService.extractErrorMessage(error)
       this.displayErrorMessage = true
     }
   }

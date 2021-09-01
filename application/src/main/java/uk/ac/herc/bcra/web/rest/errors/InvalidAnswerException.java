@@ -1,9 +1,10 @@
 package uk.ac.herc.bcra.web.rest.errors;
 
-import org.zalando.problem.AbstractThrowableProblem;
+import org.zalando.problem.Status;
+import uk.ac.herc.bcra.exception.HRYWException;
 
-public class InvalidAnswerException extends AbstractThrowableProblem {
+public class InvalidAnswerException extends HRYWException {
     public InvalidAnswerException(String message) {
-        super(ErrorConstants.DEFAULT_TYPE, message);
+        super(message, Status.BAD_REQUEST);
     }
 }

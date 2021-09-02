@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +16,6 @@ import uk.ac.herc.bcra.domain.User;
 import uk.ac.herc.bcra.repository.AuthorityRepository;
 import uk.ac.herc.bcra.repository.ParticipantRepository;
 import uk.ac.herc.bcra.repository.UserRepository;
-import uk.ac.herc.bcra.security.RoleManager;
 
 @Component
 public class HRYWSAuthenticationSuccessHandler implements org.springframework.security.web.authentication.AuthenticationSuccessHandler {

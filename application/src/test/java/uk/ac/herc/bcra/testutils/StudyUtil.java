@@ -21,8 +21,11 @@ import uk.ac.herc.bcra.domain.AnswerResponse;
 import uk.ac.herc.bcra.domain.AnswerSection;
 import uk.ac.herc.bcra.domain.IdentifiableData;
 import uk.ac.herc.bcra.domain.Participant;
+import uk.ac.herc.bcra.domain.Risk;
+import uk.ac.herc.bcra.domain.RiskAssessmentResult;
 import uk.ac.herc.bcra.domain.StudyId;
 import uk.ac.herc.bcra.domain.User;
+import uk.ac.herc.bcra.domain.YearlyRisk;
 import uk.ac.herc.bcra.domain.enumeration.ParticipantContactWay;
 import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 import uk.ac.herc.bcra.domain.enumeration.ResponseState;
@@ -93,5 +96,51 @@ public class StudyUtil {
                 }
             }
         }
+    }
+
+    public RiskAssessmentResult createRiskAssessmentResultForParticipant(EntityManager em, Participant participant) {
+        RiskAssessmentResult rar = new RiskAssessmentResult();
+        String userId = participant.getUser().getLogin();
+        rar.setFilename("tcResult" + userId + ".txt");
+        rar.setIndividualRisk(createRisk(em));
+        rar.setPopulationRisk(createRisk(em));
+        rar.setParticipant(participant);
+
+        em.persist(rar);
+        em.flush();
+        return rar;
+    }
+
+    private Risk createRisk(EntityManager em) {
+        Random random = new Random();
+
+        Risk risk = new Risk();
+        risk.setLifetimeRisk(random.nextDouble());
+        risk.setProbBcra1(random.nextDouble());
+        risk.setProbBcra2(random.nextDouble());
+        risk.setProbNotBcra(random.nextDouble());
+
+        Set<YearlyRisk> yearlyRisks = new HashSet<YearlyRisk>();
+        for (int i = 0; i < 20; i++) {
+            YearlyRisk rf = createRiskFactorForRisk(em, risk, i+1);
+            yearlyRisks.add(rf);
+        }
+
+        risk.setYearlyRisks(yearlyRisks);
+
+        em.persist(risk);
+        return risk;
+    }
+
+    private YearlyRisk createRiskFactorForRisk(EntityManager em, Risk risk, int year) {
+        Random random = new Random();
+
+        YearlyRisk yearlyRisk = new YearlyRisk();
+        yearlyRisk.setRisk(risk);
+        yearlyRisk.setRiskFactor(random.nextDouble());
+        yearlyRisk.setYear(year);
+
+        em.persist(yearlyRisk);
+        return yearlyRisk;
     }
 }

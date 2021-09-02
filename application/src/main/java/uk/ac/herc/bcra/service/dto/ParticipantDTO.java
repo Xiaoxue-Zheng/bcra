@@ -5,8 +5,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import uk.ac.herc.bcra.domain.enumeration.ResponseState;
-
 /**
  * A DTO for the {@link uk.ac.herc.bcra.domain.Participant} entity.
  */

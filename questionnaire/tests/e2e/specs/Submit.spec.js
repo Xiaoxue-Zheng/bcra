@@ -10,7 +10,7 @@ describe('Submit', () => {
         cy.completeConsentPage()
         cy.completeCreateAccountPage(UNREGISTERED_EMAIL_ADDRESS, STRONG_PASSWORD)
         cy.completeRiskAssessment()
-        //cy.completeParticipantDetailsPage()
+        cy.restartRiskAssessmentForStudyCode(UNREGISTERED_STUDY_CODE)
         cy.saveLocalStorage()
     })
 
@@ -43,14 +43,7 @@ describe('Submit', () => {
         cy.get('.pure-button').contains('Submit Questionnaire')
     })
 
-    it('should send the risk assessment questionnaire to the server backend', () => {
-        authenticateSelf()
-
-        cy.get('.pure-button').contains('Submit Questionnaire').click()
-        cy.wait('@submitRiskAssessment').its('status').should('be', 200)
-    })
-
-    it('should navigate the user to the participant detail page', () => {
+    it('should send the risk assessment questionnaire to the server backend and navigate to the detail page', () => {
         authenticateSelf()
 
         cy.get('.pure-button').contains('Submit Questionnaire').click()

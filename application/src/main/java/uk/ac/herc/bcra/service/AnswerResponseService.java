@@ -1,7 +1,6 @@
 package uk.ac.herc.bcra.service;
 
 import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
-import uk.ac.herc.bcra.domain.enumeration.ResponseState;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
 import uk.ac.herc.bcra.domain.AnswerResponse;
 import uk.ac.herc.bcra.service.dto.AnswerSectionDTO;

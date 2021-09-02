@@ -1,8 +1,8 @@
 package uk.ac.herc.bcra.web.rest;
 
 import org.springframework.security.access.annotation.Secured;
+
 import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
-import uk.ac.herc.bcra.domain.enumeration.ResponseState;
 import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.AnswerResponseService;
 import uk.ac.herc.bcra.service.StudyIdService;
@@ -44,17 +44,21 @@ public class AnswerResponseResource {
     }
 
     @GetMapping("/answer-responses/consent/{studyCode}")
-    public AnswerResponseDTO getConsentAnswerResponseFromStudyCode(@PathVariable String studyCode) {
+    public AnswerResponseDTO getConsentAnswerResponseFromStudyCode(@PathVariable String studyCode) throws Exception {
         log.debug("REST request to get Consent AnswerResponse");
+        throwExceptionIfAttemptToModifyAlreadyCompletedAnswerResponse(studyCode, QuestionnaireType.CONSENT_FORM);
+
         AnswerResponseDTO answerResponseDTO = studyIdService.getConsentResponseFromStudyCode(studyCode);
         return answerResponseDTO;
     }
 
-    @GetMapping("/answer-responses/risk-assessment/{studyCode}")
+    @GetMapping("/answer-responses/risk-assessment/")
     @Secured(RoleManager.PARTICIPANT)
-    public AnswerResponseDTO getRiskAssessmentResponseFromStudyCode(@PathVariable String studyCode) {
+    public AnswerResponseDTO getRiskAssessmentResponse(Principal principal) throws Exception {
         log.debug("REST request to get Risk Assessment AnswerResponse");
-        AnswerResponseDTO answerResponseDTO = studyIdService.getRiskAssessmentResponseFromStudyCode(studyCode);
+        throwExceptionIfAttemptToModifyAlreadyCompletedAnswerResponse(principal.getName(), QuestionnaireType.RISK_ASSESSMENT);
+
+        AnswerResponseDTO answerResponseDTO = studyIdService.getRiskAssessmentResponseFromStudyCode(principal.getName());
         return answerResponseDTO;
     }
 
@@ -63,8 +67,10 @@ public class AnswerResponseResource {
     public ResponseEntity<String> saveRiskAssessmentAnswerSection(
         Principal principal,
         @Valid @RequestBody AnswerSectionDTO answerSectionDTO
-    ) throws URISyntaxException {
+    ) throws URISyntaxException, Exception {
         log.debug("REST request to save Risk Assessment AnswerSectionDTO: {}", answerSectionDTO);
+        throwExceptionIfAttemptToModifyAlreadyCompletedAnswerResponse(principal.getName(), QuestionnaireType.RISK_ASSESSMENT);
+
         if(answerResponseService.save(principal.getName(), answerSectionDTO)) {
             return ResponseEntity.ok().body("SAVED");
         } else {
@@ -110,5 +116,11 @@ public class AnswerResponseResource {
     public boolean hasCompletedRiskAssessmentQuestionnaire(Principal principal) {
         log.debug("REST request to determine if consent questionnaire is complete");
         return answerResponseService.isQuestionnaireComplete(principal.getName(), QuestionnaireType.RISK_ASSESSMENT);
+    }
+
+    private void throwExceptionIfAttemptToModifyAlreadyCompletedAnswerResponse(String login, QuestionnaireType type) throws Exception {
+        if (answerResponseService.isQuestionnaireComplete(login, type)) {
+            throw new RuntimeException("Attempt to access already completed form of type: " + type.toString());
+        }
     }
 }

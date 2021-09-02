@@ -10,7 +10,6 @@ describe('Risk Assessment - testing conditional display of sections', () => {
     cy.completeRegisterPage(UNREGISTERED_STUDY_CODE)
     cy.completeConsentPage()
     cy.completeCreateAccountPage(UNREGISTERED_EMAIL_ADDRESS, STRONG_PASSWORD)
-    //cy.completeParticipantDetailsPage()
 
     cy.saveLocalStorage()
   })
@@ -25,6 +24,8 @@ describe('Risk Assessment - testing conditional display of sections', () => {
     cy.restoreLocalStorage()
     path = 'questionnaire/family'
     cy.visitFamilyAffectedPrimarySection(true)
+
+    cy.restartRiskAssessmentForStudyCode(UNREGISTERED_STUDY_CODE)
   })
 
   it('conditionally displays the FAMILY_BREAST section correctly', () => {

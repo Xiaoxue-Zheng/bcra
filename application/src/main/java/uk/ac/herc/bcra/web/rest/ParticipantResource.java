@@ -4,7 +4,6 @@ import org.springframework.security.access.annotation.Secured;
 import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.ParticipantService;
 import uk.ac.herc.bcra.service.StudyIdService;
-import uk.ac.herc.bcra.web.rest.errors.InvalidPasswordException;
 import uk.ac.herc.bcra.web.rest.errors.InvalidOrActivatedStudyCodeException;
 import uk.ac.herc.bcra.service.dto.ParticipantDTO;
 import uk.ac.herc.bcra.service.dto.ParticipantActivationDTO;

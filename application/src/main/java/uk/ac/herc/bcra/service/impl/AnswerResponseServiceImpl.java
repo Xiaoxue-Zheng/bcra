@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.herc.bcra.service.mapper.AnswerSectionMapper;
 import uk.ac.herc.bcra.web.rest.errors.InvalidAnswerException;
-import uk.ac.herc.bcra.web.rest.errors.InvalidConsentException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -55,7 +54,6 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
         AnswerSectionMapper answerSectionMapper,
         ParticipantRepository participantRepository,
         StudyIdRepository studyIdRepository,
-        AnswerSectionRepository answerSectionRepository,
         QuestionRepository questionRepository,
         QuestionItemRepository questionItemRepository,
         QuestionSectionRepository questionSectionRepository

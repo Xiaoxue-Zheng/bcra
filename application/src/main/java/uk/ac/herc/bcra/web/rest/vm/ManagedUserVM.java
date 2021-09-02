@@ -4,8 +4,6 @@ import org.hibernate.validator.constraints.Length;
 import uk.ac.herc.bcra.service.dto.UserDTO;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  * View Model extending the UserDTO, which is meant to be used in the user management UI.

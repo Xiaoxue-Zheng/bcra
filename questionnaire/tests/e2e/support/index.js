@@ -27,5 +27,6 @@ import 'cypress-promise/register'
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 Cypress.Cookies.defaults({
-  whitelist: "XSRF-TOKEN"
+  whitelist: "XSRF-TOKEN",
+  preserve: "session_id"
 })

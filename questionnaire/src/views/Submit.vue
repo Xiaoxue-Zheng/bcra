@@ -2,8 +2,8 @@
   <div class="content">
     <h1>Submit Questionnaire<ProgressState :progressStage="getFinalProgressStage"></ProgressState></h1>
     <p>You are about to submit, and you can never go back.<p>
-    <PrimaryButton :clickEvent="submit">Submit Questionnaire</PrimaryButton>
-    <div v-if="submitError">There was an error. Please try again or contact the study team.</div>
+    <PrimaryButton :disabled="submitDisabled" :clickEvent="submit">Submit Questionnaire</PrimaryButton>
+    <div v-if="submitError">{{ submitError }}</div>
 </div>
 </template>
 
@@ -21,9 +21,9 @@ export default {
   },
   data () {
     return {
-      questionnaire: null,
       answerResponse: null,
-      submitError: null
+      submitError: null,
+      submitDisabled: false
     }
   },
   computed: {
@@ -31,15 +31,26 @@ export default {
       return ProgressState.data().PROGRESS_STAGE_COUNT + 1
     }
   },
-  async created () {
-    this.questionnaire = await this.$store.dispatch('submit/getQuestionnaire')
-    this.answerResponse = await this.$store.dispatch('submit/getAnswerResponse')
-    AnswerHelperService.initialise(this.questionnaire, this.answerResponse)
-  },
   methods: {
-    submit () {
-      AnswerResponseService.submitRiskAssessment(this.answerResponse)
-      this.$router.push('/participant-details')
+    async submit () {
+      this.answerResponse = await this.$store.dispatch('submit/getAnswerResponse')
+
+      this.submitDisabled = true
+      const hasCompletedRiskAssessment = await AnswerResponseService.hasCompletedRiskAssessment();
+      if (!hasCompletedRiskAssessment) {
+        AnswerResponseService.submitRiskAssessment(this.answerResponse)
+          .then(() => {
+            this.$router.push('/participant-details')
+          })
+          .catch(error => {
+            console.log(error)
+            this.submitDisabled = false
+            this.submitError = "There was an error submitting your risk assessment. Please try again or contact the study team.";
+          })
+      } else {
+        this.submitDisabled = false
+        this.submitError = "This risk assessment has already been submitted. Please do not submit more than once. If you believe you are receiving this message in error, please contact the study team."
+      }
     }
   }
 }

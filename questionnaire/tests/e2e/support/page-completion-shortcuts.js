@@ -143,3 +143,23 @@ function fillPersonalHistory(){
   path = 'questionnaire/history'
   cy.submitAndAssertSuccessfulNavAwayFromPath(path)
 }
+
+Cypress.Commands.add('restartRiskAssessmentForStudyCode', (studyCode) => {
+    return getRiskAssessmentFromStudyCode(studyCode).then((riskAssessmentId) => {
+        return resetRiskAssessmentState(riskAssessmentId)
+    })
+})
+
+function getRiskAssessmentFromStudyCode(studyCode) {
+    return cy.task('query', {
+        sql: "SELECT risk_assessment_response_id FROM study_id WHERE code = '" + studyCode + "'"
+    }).then((response) => {
+        return response.rows[0].risk_assessment_response_id
+    })
+}
+
+function resetRiskAssessmentState(riskAssessmentId) {
+    return cy.task('query', {
+        sql: "UPDATE answer_response SET state = 'NOT_STARTED' WHERE id = " + riskAssessmentId
+    })
+}

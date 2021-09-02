@@ -2,7 +2,6 @@ package uk.ac.herc.bcra.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import uk.ac.herc.bcra.domain.enumeration.ResponseState;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;

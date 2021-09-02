@@ -13,7 +13,6 @@ describe('Referral Conditions Tests', () => {
     cy.completeRegisterPage(UNREGISTERED_STUDY_CODE)
     cy.completeConsentPage()
     cy.completeCreateAccountPage(UNREGISTERED_EMAIL_ADDRESS, STRONG_PASSWORD)
-    //cy.completeParticipantDetailsPage()
 
     cy.saveLocalStorage()
   })
@@ -27,6 +26,8 @@ describe('Referral Conditions Tests', () => {
     Cypress.Cookies.preserveOnce('JSESSIONID')
     cy.restoreLocalStorage()
     path = 'questionnaire/family'
+
+    cy.restartRiskAssessmentForStudyCode(UNREGISTERED_STUDY_CODE)
   })
 
   function resetPage() {

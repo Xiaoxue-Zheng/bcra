@@ -19,6 +19,8 @@ describe('Risk Assessment - testing conditional display of questons', () => {
   beforeEach(function () {
     Cypress.Cookies.preserveOnce('JSESSIONID')
     cy.restoreLocalStorage()
+
+    cy.restartRiskAssessmentForStudyCode(UNREGISTERED_STUDY_CODE)
   })
 
 

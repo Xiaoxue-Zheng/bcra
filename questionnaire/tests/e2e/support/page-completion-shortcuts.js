@@ -61,10 +61,9 @@ function getPasswordConfirmationField() {
 Cypress.Commands.add('completeParticipantDetailsPage', () => {
     enterFirstName('TEST')
     enterSurname('TEST')
-    enterAddress(['TEST','TEST','TEST','TEST','TEST'])
-    enterPostCode('AA1 1AA')
     enterHomePhoneNumber('07700123123')
     enterMobilePhoneNumber('07700123123')
+    enterPostCodeAndSelectAddress('AA1 1AA', '1 HIGH STREET, CRAFTY VALLEY')
     selectPreferredContactMethods(true, true, true, true)
 
     cy.get('.pure-button').contains('Save details').click()
@@ -79,22 +78,18 @@ function enterSurname(surname) {
     return cy.get('input').eq(1).type(surname)
 }
 
-function enterAddress(addressLines) {
-    for (let i = 0; i < addressLines.length; i++) {
-        cy.get('input').eq(2+i).type(addressLines[i])
-    }
-}
-
-function enterPostCode(postcode) {
-    return cy.get('input').eq(7).type(postcode)
+function enterPostCodeAndSelectAddress(postcode, address) {
+    cy.get('input').eq(2).type(postcode)
+    cy.get('a').contains('Search postcode').click()
+    cy.get('#postcodeSelect').select(address)
 }
 
 function enterHomePhoneNumber(phoneNumber) {
-  return cy.get('input').eq(8).type(phoneNumber)
+  return cy.get('input').eq(3).type(phoneNumber)
 }
 
 function enterMobilePhoneNumber(phoneNumber) {
-  return cy.get('input').eq(9).type(phoneNumber)
+  return cy.get('input').eq(4).type(phoneNumber)
 }
 
 function selectPreferredContactMethods(email, sms, call, mail) {

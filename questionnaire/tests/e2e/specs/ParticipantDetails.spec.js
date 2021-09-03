@@ -11,7 +11,6 @@ describe('PartiicipantDetails', () => {
     before(function () {
         cy.createStudyIdFromCode(REGISTERED_STUDY_CODE)
         cy.registerPatientWithStudyCodeAndEmail(REGISTERED_STUDY_CODE, REGISTERED_EMAIL)
-        cy.updateParticipantDetails(REGISTERED_STUDY_CODE)
 
         cy.createStudyIdFromCode(UNREGISTERED_STUDY_CODE)
         cy.completeRegisterPage(UNREGISTERED_STUDY_CODE)
@@ -21,6 +20,7 @@ describe('PartiicipantDetails', () => {
 
         cy.saveLocalStorage()
         Cypress.Cookies.preserveOnce('JSESSIONID')
+        Cypress.Cookies.preserveOnce('CSRF')
 
     })
 
@@ -43,50 +43,40 @@ describe('PartiicipantDetails', () => {
         return cy.get('input').eq(1)
     }
 
-    function getAddressField(number) {
-        return cy.get('input').eq(2+number)
-    }
-
     function getPostCodeField() {
-        return cy.get('input').eq(7)
+        return cy.get('input').eq(2)
     }
 
     function getHomePhoneNumberField() {
-        return cy.get('input').eq(8)
+        return cy.get('input').eq(3)
     }
 
     function getMobilePhoneNumberField() {
-        return cy.get('input').eq(9)
+        return cy.get('input').eq(4)
     }
 
-    function getPreferWayToContactField() {
-        return cy.get('[type="checkbox"]').first() // Check checkbox element
+    function getPreferWayToContactField(fieldName) {
+        return cy.get('label').contains(fieldName)
     }
 
     function fillMandatoryFields() {
         getFirstNameField().type("Barry")
         getSurnameField().type("Smith")
-        getAddressField(0).type("Address line 1")
         getPostCodeField().type("AA1 1AA")
-        getPreferWayToContactField().check({force: true})
+        cy.get('a').contains('Search postcode').click()
+        cy.get('#postcodeSelect').select('1 HIGH STREET, CRAFTY VALLEY')
+        getPreferWayToContactField('Email').click()
     }
 
     function fillNonMandatoryFields() {
-        getAddressField(1).type("Address line 2")
-        getAddressField(2).type("Address line 3")
-        getAddressField(3).type("Address line 4")
-        getAddressField(4).type("Address line 5")
         getHomePhoneNumberField("0123912390")
         getMobilePhoneNumberField("0123912390")
     }
 
     function clearFields() {
-        for (let i = 0; i < 10; i++) {
-            cy.get('input').eq(i).clear()
-        }
-        for (let i = 10; i < 14; i++) {
-            cy.get('input').eq(i).uncheck({force: true})
-        }
+        getFirstNameField().clear();
+        getSurnameField().clear();
+        getPostCodeField().clear();
     }
 
     function authenticateSelf() {

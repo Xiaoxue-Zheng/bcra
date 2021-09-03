@@ -22,18 +22,7 @@
           </fieldset>
 
           <fieldset>
-            <label>Address</label>
-            <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-1-3">
-              <input required v-model="addressLine1" type="text" class="pure-input-1"/>
-              <input v-model="addressLine2" type="text" class="pure-input-1"/>
-              <input v-model="addressLine3" type="text" class="pure-input-1"/>
-              <input v-model="addressLine4" type="text" class="pure-input-1"/>
-              <input v-model="addressLine5" type="text" class="pure-input-1"/>
-            </div>
-            <label>Post Code</label>
-            <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-1-3">
-              <input required v-model="postCode" type="text" class="pure-input-1"/>
-            </div>
+            <PostcodeLookup v-on:addressChanged="updateAddress"></PostcodeLookup>
           </fieldset>
 
           <fieldset>
@@ -70,6 +59,7 @@
 <script>
 import { ParticipantDetailsService } from '@/api/participant-details.service.js'
 import { createHelpers } from 'vuex-map-fields'
+import PostcodeLookup from '@/components/PostcodeLookup.vue'
 
 const { mapFields } = createHelpers({
   getterType: 'security/getActivationField',
@@ -95,6 +85,7 @@ export default {
       addressLine4: null,
       addressLine5: null,
       postCode: null,
+      manuallyEnterAddress: false,
       homePhoneNumber: null,
       mobilePhoneNumber: null,
       preferredContactWays: [],
@@ -102,6 +93,7 @@ export default {
     }
   },
   components: {
+    PostcodeLookup
   },
   computed: {
     ...mapFields([
@@ -123,7 +115,7 @@ export default {
         forename: this.forename,
         surname: this.surname,
         addressLine1: this.addressLine1,
-        addressLine2: this.addressLine1,
+        addressLine2: this.addressLine2,
         addressLine3: this.addressLine3,
         addressLine4: this.addressLine4,
         addressLine5: this.addressLine5,
@@ -146,6 +138,14 @@ export default {
 
     clearMessages () {
       this.failure = false
+    },
+
+    updateAddress (newAddressData) {
+      this.addressLine1 = newAddressData.line1
+      this.addressLine2 = newAddressData.line2
+      this.addressLine3 = newAddressData.line3
+      this.addressLine4 = newAddressData.line4
+      this.postCode = newAddressData.postcode
     }
   }
 }

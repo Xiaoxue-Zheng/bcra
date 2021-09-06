@@ -11,12 +11,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import uk.ac.herc.bcra.exception.HRYWException;
 
 public class FileSystemUtil {
+
     public static final Charset DEFAULT_CHARACTER_ENCODING = StandardCharsets.UTF_8;
 
     public static void writeBytesToFile(byte[] bytes, String filepath) throws FileNotFoundException, IOException {
@@ -30,6 +34,23 @@ public class FileSystemUtil {
         writeBytesToFile(text.getBytes(DEFAULT_CHARACTER_ENCODING), filepath);
     }
 
+    public static void writeInputStreamToFile(InputStream inputStream, String filePath, boolean executable){
+        File targetFile = new File(filePath);
+        try {
+            java.nio.file.Files.copy(
+                inputStream,
+                targetFile.toPath(),
+                StandardCopyOption.REPLACE_EXISTING);
+            boolean success = targetFile.setExecutable(true);
+            if(!success){
+                throw new HRYWException("grant permission fail");
+            }
+        } catch (IOException e) {
+            throw new HRYWException(e.getMessage());
+        }
+
+        IOUtils.closeQuietly(inputStream);
+    }
     public static byte[] readBytesFromFile(String filepath) throws FileNotFoundException, IOException {
         File file = new File(filepath);
         return FileUtils.readFileToByteArray(file);
@@ -56,7 +77,7 @@ public class FileSystemUtil {
                 new FileInputStream(pathFrom));
             OutputStream out = new BufferedOutputStream(
                 new FileOutputStream(pathTo))) {
-    
+
             byte[] buffer = new byte[1024];
             int lengthRead;
             while ((lengthRead = in.read(buffer)) > 0) {

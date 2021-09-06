@@ -56,6 +56,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
             .withType(Problem.DEFAULT_TYPE.equals(problem.getType()) ? ErrorConstants.DEFAULT_TYPE : problem.getType())
             .withStatus(problem.getStatus())
             .withTitle(problem.getTitle())
+            .with(MESSAGE_KEY, problem.getTitle())
             .with(PATH_KEY, request.getNativeRequest(HttpServletRequest.class).getRequestURI());
 
         if (problem instanceof ConstraintViolationProblem) {

@@ -181,3 +181,7 @@ Cypress.Commands.add('checkAnswerItemValues', (answerItems, identifier, itemIden
     }
   }
 })
+
+Cypress.Commands.add('checkParticipantDetailFormLoaded', () => {
+  cy.get('button').contains('Save details').should('be.visible')
+})

@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.ac.herc.bcra.web.rest.errors.DuplicateStudyIdException;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,12 +34,12 @@ public class StudyIdServiceImpl implements StudyIdService {
     private final AnswerResponseGenerator answerResponseGenerator;
     private final CanRiskReportRepository canRiskReportRepository;
 
-    public StudyIdServiceImpl(StudyIdRepository studyIdRepository, 
-        AnswerResponseMapper answerResponseMapper, 
+    public StudyIdServiceImpl(StudyIdRepository studyIdRepository,
+        AnswerResponseMapper answerResponseMapper,
         ParticipantRepository participantRepository,
         AnswerResponseGenerator answerResponseGenerator,
         CanRiskReportRepository canRiskReportRepository) {
-            
+
         this.studyIdRepository = studyIdRepository;
         this.answerResponseMapper = answerResponseMapper;
         this.participantRepository = participantRepository;
@@ -63,7 +64,8 @@ public class StudyIdServiceImpl implements StudyIdService {
     @Override
     public void createStudyIdFromCode(String studyCode) {
         log.debug("Creating study id with code: {}", studyCode);
-        
+        studyIdRepository.findOneByCode(studyCode)
+            .ifPresent(studyId -> {throw new DuplicateStudyIdException("StudyID already exists "+studyCode);});
         AnswerResponse consentForm = answerResponseGenerator.generateAnswerResponseToQuestionnaire(
             QuestionnaireType.CONSENT_FORM
         );

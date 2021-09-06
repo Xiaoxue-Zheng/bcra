@@ -3,6 +3,7 @@ package uk.ac.herc.bcra.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.springframework.test.context.TestPropertySource;
 import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.algorithm.AlgorithmException;
 import uk.ac.herc.bcra.algorithm.mapping.answers1_tyrercuzick8.Mapper;
@@ -201,7 +202,7 @@ public class TyrerCuzickTestParticipantsIT {
         em.flush();
     }
 
-    private void configureTyrerCuzickService() throws Exception {
+    private void configureTyrerCuzickService() {
         String testDir = TyrerCuzickTestFilesUtil.getTestDirectory();
         TyrerCuzickService.TC_EXECUTABLE_COMMAND = TyrerCuzickPathUtil.getTyrerCuzickCommand();
         if (OSValidator.isUnix()) {
@@ -244,6 +245,10 @@ public class TyrerCuzickTestParticipantsIT {
     @Transactional
     public void assertThatEachTestParticipantProducesCorrectTyrerCuzickOutput() throws Exception  {
         tyrerCuzickService.writeValidatedAnswerResponsesToFile();
+        if(OSValidator.isMac()){
+            //The TyrerCuzick Executable doesn't support Mac system
+            return;
+        }
         tyrerCuzickService.runTyrerCuzickExecutable();
 
         for (Participant participant : testParticipants) {

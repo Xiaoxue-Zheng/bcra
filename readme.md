@@ -93,33 +93,14 @@ In the other window run `npm run e2e`
 ### Add New Entity to Model
 `jhipster entity Question`
 
+### Access Local File System Access
+
+Make sure the application have write access to the following directory:
+For Mac: /usr/local/share
+For Windows and Linux: /home
+This directory will be used to store Tyrercuzick process files(/tyrercuzick) and CanRiskReport files(/canrisk)
+
 ### Tyrercuzick process
-
-#### Set-up
-
-When a risk assessment is completed, it is ran through our tyrercuzick process. This requires a directory structure to be set up.
-
-Before the application is started, be sure that you have the following directory structure:
-
-/home/tyrercuzick/input/
-/home/tyrercuzick/output/
-/home/tyrercuzick/extract/
-
-As well as this, make sure to place the tyrercuzick.exe application (which is found in the ./application directory), as well as the extract sql file (found in the ./scripts/sql directory) into the following directory:
-
-/home/tyrercuzick/tyrercuzick.exe
-/home/tyrercuzick/extract/risk_assessment_extract.sql
-
-If you are on an iOS system, then use the following directory structure for the tyrer cuzick files (tcuzick file also found in the ./application directory):
-
-/usr/local/share/tyrercuzick/input/
-/usr/local/share/tyrercuzick/output/
-/usr/local/share/tyrercuzick/extract/
-
-And place the mac appropriate files into the following directory:
-
-/usr/local/share/tyrercuzick/tcuzick
-/usr/local/share/tyrercuzick/extract/risk_assessment_extract_ios.sql
 
 #### Manual testing
 
@@ -149,12 +130,6 @@ We can run an extract of our TC data from the admin dashboard of the web applica
 
 This requires some setup that will be done in the setup phase of the server. If this is the first time you have ran the software on your local machine, you will have to do this.
 
-To set up:
-1. Enter the tyrercuzick directory.
-2. Create the subdirectory /extract/
-3. From the <PROJECT_DIR>/scripts/sql directory, copy the risk_assessment_extract.sql file
-4. Place this file in the newly created /extract/ directory.
-
 To run this process:
 1. Run the backend application.
 2. Run the questionnaire application.
@@ -162,17 +137,6 @@ To run this process:
 4. Head to the Tyrer Cuzick Test page from the navigation bar.
 5. Select the "Trigger TC Extract Test" button.
 6. This should create an extract file in the tyrercuzick directory under a subdirectory titled /extract/.
-
-### CanRisk report folder
-
-When setting up a new server, be sure that you have created the CanRisk report directory for these files to be stored.
-This is shown below:
-
-/home/canrisk/
-
-or, for iOS:
-
-/usr/local/share/canrisk/
  
 ## Questionnaire
 

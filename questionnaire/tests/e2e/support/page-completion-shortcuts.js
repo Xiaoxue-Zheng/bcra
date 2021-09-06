@@ -108,6 +108,11 @@ Cypress.Commands.add('completeRiskAssessment', () => {
     cy.get('.pure-button').contains('Submit Questionnaire').click()
 })
 
+Cypress.Commands.add('completeRiskAssessmentAndReferred', () => {
+    continueToRiskAssessment()
+    fillFamilyHistoryWithReferredCondition()
+})
+
 function continueToRiskAssessment() {
     cy.get('.pure-button').contains('Continue').click()
 }
@@ -118,6 +123,13 @@ function saveAndContinue() {
 
 function fillFamilyHistory() {
   cy.get('.pure-button').contains('Save and continue').click()
+}
+
+function fillFamilyHistoryWithReferredCondition() {
+  let FAMILY_BREAST_AFFECTED_ITEMS = ['FAMILY_BREAST_AFFECTED_AUNT', 'FAMILY_BREAST_AFFECTED_NIECE']
+  cy.setCheckboxAnswerItems('FAMILY_BREAST_AFFECTED', FAMILY_BREAST_AFFECTED_ITEMS)
+  cy.get('.pure-button').contains('Save and continue').click()
+  cy.checkReferredWithCorrectReason('Two or more of your family members have been affected by breast cancer')
 }
 
 function fillPersonalHistory(){
@@ -163,3 +175,82 @@ function resetRiskAssessmentState(riskAssessmentId) {
         sql: "UPDATE answer_response SET state = 'NOT_STARTED' WHERE id = " + riskAssessmentId
     })
 }
+
+
+function getFirstNameField() {
+    return cy.get('input').eq(0)
+}
+
+function getSurnameField() {
+    return cy.get('input').eq(1)
+}
+
+function getPostCodeField() {
+    return cy.get('input').eq(2)
+}
+
+function getHomePhoneNumberField() {
+    return cy.get('input').eq(3)
+}
+
+function getMobilePhoneNumberField() {
+    return cy.get('input').eq(4)
+}
+
+function getPreferWayToContactField(fieldName) {
+    return cy.get('label').contains(fieldName)
+}
+
+Cypress.Commands.add('fillMandatoryFields', () => {
+    getFirstNameField().type("Barry")
+    getSurnameField().type("Smith")
+    getPostCodeField().type("AA1 1AA")
+    cy.get('a').contains('Search postcode').click()
+    cy.get('#postcodeSelect').select('1 HIGH STREET, CRAFTY VALLEY')
+    getPreferWayToContactField('Email').click()
+})
+
+Cypress.Commands.add('fillNonMandatoryFields', () => {
+    getHomePhoneNumberField("0123912390")
+    getMobilePhoneNumberField("0123912390")
+})
+
+Cypress.Commands.add('clearFields', () => {
+    getFirstNameField().clear();
+    getSurnameField().clear();
+    getPostCodeField().clear();
+})
+
+Cypress.Commands.add('signOut', () => {
+  cy.get('a').contains('Sign out').click()
+  cy.url().should('include', '/signin')
+})
+
+Cypress.Commands.add('signIn', (email, password) => {
+  cy.get('a').contains('Sign in').click()
+  cy.get('input').first().clear().type(email)
+  cy.get('input').last().clear().type(password)
+  cy.get('button').contains('Sign in').click()
+})
+
+Cypress.Commands.add('checkCanRiskReport', (uploaded) => {
+  if(uploaded){
+    cy.contains('h1', 'CanRisk Report')
+    cy.url().should('include', '/canriskreport')
+    cy.contains('div', 'Loading CanRisk report, please wait...')
+  }else{
+    cy.url().should('include', 'end')
+    cy.contains('h1', 'Thank you for submitting your questionnaire.')
+  }
+})
+
+Cypress.Commands.add('clickAndCheckCanRiskReport', (uploaded) => {
+  cy.get('a').contains('CanRisk report').click()
+  cy.url().should('include', '/canriskreport')
+  cy.contains('h1', 'CanRisk Report')
+  if(uploaded){
+    cy.contains('div', 'Loading CanRisk report, please wait...')
+  }else {
+    cy.contains('p', 'Your risk report will be available to view here once it has been uploaded.')
+  }
+})

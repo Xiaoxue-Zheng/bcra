@@ -1,31 +1,39 @@
 package uk.ac.herc.bcra.service.util;
 
+import uk.ac.herc.bcra.service.FileManager;
+
+
 public class TyrerCuzickPathUtil {
-    private static final String WIN_TC_PATH = "/home/tyrercuzick/";
-    private static final String MAC_TC_PATH = "/usr/local/share/tyrercuzick/";
-    private static final String UNX_TC_PATH = "/home/tyrercuzick/";
+    private static final String TC_PATH = FileManager.getFileSystemBaseDir()+"/tyrercuzick";
 
-    private static final String WIN_TC_COMMAND = "/home/tyrercuzick/tyrercuzick.exe -i <INPUT> -o <OUTPUT>";
-    private static final String MAC_TC_COMMAND = "/usr/local/share/tyrercuzick/tcuzick <INPUT> <OUTPUT>";
-    private static final String UNX_TC_COMMAND = "/usr/local/lib/glibc-2.29-bin/lib64/ld-linux-x86-64.so.2 --library-path /usr/local/lib/glibc-2.29-bin/lib64:/usr/lib64 /home/tyrercuzick/tcuzick <INPUT> <OUTPUT>";
-
-    private static final String WIN_TC_EXTRACT_SQL_PATH = WIN_TC_PATH + "extract/risk_assessment_extract.sql";
-    private static final String MAC_TC_EXTRACT_SQL_PATH = MAC_TC_PATH + "extract/risk_assessment_extract_ios.sql";
-    private static final String UNX_TC_EXTRACT_SQL_PATH = UNX_TC_PATH + "extract/risk_assessment_extract.sql";
-
-    public static String getTyrerCuzickPath() throws Exception {
-        if (OSValidator.isWindows()) {
-            return WIN_TC_PATH;
-        } else if (OSValidator.isMac()) {
-            return MAC_TC_PATH;
-        } else if (OSValidator.isUnix()) {
-            return UNX_TC_PATH;
-        } else {
-            throw new Exception("Unsupported operating system: " + OSValidator.OPERATING_SYSTEM);
+    static {
+        if(null != FileManager.getInstance()){
+            FileManager.getInstance().registerDir(TC_PATH);
+            if(OSValidator.isUnix() || OSValidator.isMac()){
+                FileManager.getInstance().registerFile("tyrercuzick/tcuzick", TC_PATH + "/tcuzick");
+            }else{
+                FileManager.getInstance().registerFile("tyrercuzick/tyrercuzick.exe", TC_PATH + "/tyrercuzick.exe");
+            }
         }
     }
 
-    public static String getTyrerCuzickCommand() throws Exception {
+    private static final String WIN_TC_COMMAND = TC_PATH+"/tyrercuzick.exe -i <INPUT> -o <OUTPUT>";
+    private static final String MAC_TC_COMMAND = TC_PATH+"/tcuzick <INPUT> <OUTPUT>";
+    private static final String UNX_TC_COMMAND = "/usr/local/lib/glibc-2.29-bin/lib64/ld-linux-x86-64.so.2 --library-path /usr/local/lib/glibc-2.29-bin/lib64:/usr/lib64 " +
+        TC_PATH + "/tcuzick <INPUT> <OUTPUT>";
+
+    private static final String TC_EXTRACT_FILE = TC_PATH + "/extract/tyrer_cuzick_extract.csv";
+
+
+    public static String getTyrerCuzickPath() {
+        return TC_PATH;
+    }
+
+    public static String getTyrerCuzickExtractFile(){
+        return TC_EXTRACT_FILE;
+    }
+
+    public static String getTyrerCuzickCommand() {
         if (OSValidator.isWindows()) {
             return WIN_TC_COMMAND;
         } else if (OSValidator.isMac()) {
@@ -33,19 +41,9 @@ public class TyrerCuzickPathUtil {
         } else if (OSValidator.isUnix()) {
             return UNX_TC_COMMAND;
         } else {
-            throw new Exception("Unsupported operating system: " + OSValidator.OPERATING_SYSTEM);
+            throw new RuntimeException("Unsupported operating system: " + OSValidator.OPERATING_SYSTEM);
         }
     }
 
-    public static String getTyrerCuzickExtractSql() throws Exception {
-        if (OSValidator.isWindows()) {
-            return WIN_TC_EXTRACT_SQL_PATH;
-        } else if (OSValidator.isMac()) {
-            return MAC_TC_EXTRACT_SQL_PATH;
-        } else if (OSValidator.isUnix()) {
-            return UNX_TC_EXTRACT_SQL_PATH;
-        } else {
-            throw new Exception("Unsupported operating system: " + OSValidator.OPERATING_SYSTEM);
-        }
-    }
+
 }

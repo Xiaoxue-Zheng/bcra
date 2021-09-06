@@ -1,4 +1,4 @@
-describe('PartiicipantDetails', () => {
+describe('ParticipantDetails', () => {
     const getStore = () => cy.window().its('app.$store')
     const UNREGISTERED_STUDY_CODE = "CYPRESS_TST_2"
     const UNREGISTERED_EMAIL_ADDRESS = "test2@test.com"
@@ -26,58 +26,15 @@ describe('PartiicipantDetails', () => {
 
     after(function() {
         cy.deleteParticipants([UNREGISTERED_STUDY_CODE, REGISTERED_STUDY_CODE])
-        cy.clearTables(['study_id','participant', 'answer_item', 'answer', 'answer_group', 'answer_section', 'answer_response'])
+        cy.removeParticipant(UNREGISTERED_STUDY_CODE)
     })
 
     beforeEach(function() {
         cy.visit('participant-details')
         cy.removeIdentifiableDataForParticipant(UNREGISTERED_STUDY_CODE)
-        clearFields()
+        cy.clearFields()
     })
 
-    function getFirstNameField() {
-        return cy.get('input').eq(0)
-    }
-
-    function getSurnameField() {
-        return cy.get('input').eq(1)
-    }
-
-    function getPostCodeField() {
-        return cy.get('input').eq(2)
-    }
-
-    function getHomePhoneNumberField() {
-        return cy.get('input').eq(3)
-    }
-
-    function getMobilePhoneNumberField() {
-        return cy.get('input').eq(4)
-    }
-
-    function getPreferWayToContactField(fieldName) {
-        return cy.get('label').contains(fieldName)
-    }
-
-    function fillMandatoryFields() {
-        getFirstNameField().type("Barry")
-        getSurnameField().type("Smith")
-        getPostCodeField().type("AA1 1AA")
-        cy.get('a').contains('Search postcode').click()
-        cy.get('#postcodeSelect').select('1 HIGH STREET, CRAFTY VALLEY')
-        getPreferWayToContactField('Email').click()
-    }
-
-    function fillNonMandatoryFields() {
-        getHomePhoneNumberField("0123912390")
-        getMobilePhoneNumberField("0123912390")
-    }
-
-    function clearFields() {
-        getFirstNameField().clear();
-        getSurnameField().clear();
-        getPostCodeField().clear();
-    }
 
     function authenticateSelf() {
         cy.server()
@@ -106,7 +63,7 @@ describe('PartiicipantDetails', () => {
     it('should remain on the current page when mandatory details have not been entered', () => {
         authenticateSelf()
 
-        fillNonMandatoryFields()
+        cy.fillNonMandatoryFields()
 
         cy.get('.pure-button').contains('Save details').click()
         cy.url().should('include', 'participant-details')
@@ -115,8 +72,8 @@ describe('PartiicipantDetails', () => {
     it('should navigate to the risk assessment questionnaire if all mandatory and non-mandatory details have been entered', () => {
         authenticateSelf()
 
-        fillMandatoryFields()
-        fillNonMandatoryFields()
+        cy.fillMandatoryFields()
+        cy.fillNonMandatoryFields()
 
         cy.get('.pure-button').contains('Save details').click()
         cy.url().should('include', 'end')

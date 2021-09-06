@@ -19,7 +19,7 @@ describe('CanRisk', () => {
 
     after(function() {
         cy.deleteParticipants([UNREGISTERED_STUDY_CODE])
-        cy.clearTables(['can_risk_report', 'participant', 'study_id', 'answer_item', 'answer', 'answer_group', 'answer_section', 'answer_response'])
+        cy.removeParticipant(UNREGISTERED_STUDY_CODE)
     })
 
     afterEach(function() {

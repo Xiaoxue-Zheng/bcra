@@ -28,7 +28,7 @@
                         <div class="alert alert-warning text-center" role="alert" id="validate-pin-fail-message"><b> {{failedPinValidationAttempts}} failed pin validation attempt(s)! <br>Login for user will be locked after 5 failed attempts</b></div>
                     </div>
                     <label class="form-control-label">Pin</label>
-                    <input class="form-control" type="text" name="pin" id="pin" formControlName="pin" placeholder="Enter Pin">
+                    <input class="form-control" type="text" name="pin" id="pin" formControlName="pin" placeholder="Enter the Pin sent to your register email">
                 </div>
                 <button type="submit" class="btn btn-primary" (click)="login()" id="sign-in-button" *ngIf="!twoFactorAuthentication">Sign in</button>
                 <button type="submit" class="btn btn-primary" (click)="validatePin()" id="confirm-pin-button" *ngIf="twoFactorAuthentication">Sign in</button>

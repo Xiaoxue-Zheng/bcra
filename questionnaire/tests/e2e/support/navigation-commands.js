@@ -9,7 +9,6 @@ Cypress.Commands.add('backAndAssertSuccessfulNavToPath', (currentPath) => {
 })
 
 Cypress.Commands.add('navigateToFamilyBreastSection', (precondition, currentPath) => {
-
   let FAMILY_BREAST_AFFECTED_ITEMS = [precondition]
   cy.setCheckboxAnswerItems('FAMILY_BREAST_AFFECTED', FAMILY_BREAST_AFFECTED_ITEMS)
   cy.submitAndAssertSuccessfulNavAwayFromPath(currentPath)

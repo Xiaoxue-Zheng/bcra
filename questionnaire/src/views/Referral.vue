@@ -1,27 +1,23 @@
 <template>
   <div class="content">
-    <p >You will be referred because...</p>
-    <div v-for="condition in referralConditions" v-bind:key='condition.id'>
-      <strong>{{ formatConditionText(condition.reason) }}</strong>
-    </div>
+    <ParticipantComponent :referralConditions="referralConditions"></ParticipantComponent>
   </div>
 </template>
 <script>
 import { AnswerHelperService } from '@/services/answer-helper.service.js'
 import { ReferralConditionService } from '@/services/referral-condition.service.js'
+import ParticipantDetails from './ParticipantDetails'
 
 export default {
   name: 'referral',
+  components: {
+    ParticipantComponent: ParticipantDetails
+  },
   data () {
     return {
       questionnaire: null,
       answerResponse: null,
       referralConditions: []
-    }
-  },
-  methods: {
-    formatConditionText (text) {
-      return '- ' + text.substring(0, 1).toUpperCase() + text.substring(1) + '.'
     }
   },
 

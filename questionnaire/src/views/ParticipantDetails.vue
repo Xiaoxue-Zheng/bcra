@@ -1,6 +1,12 @@
 <template>
   <div class="content">
     <h1>Thank you for completing the questionnaire.</h1>
+    <div v-if="referralConditions">
+      <p class="introduction">You will be referred because...</p>
+      <div v-for="condition in referralConditions" v-bind:key='condition.id'>
+        <strong>{{ formatConditionText(condition.reason) }}</strong>
+      </div>
+    </div>
     <p class="introduction">
        We will now invite you to a risk assessment appointment to complete a low dose mammogram and provide a saliva sample.
     </p>
@@ -67,13 +73,15 @@ const { mapFields } = createHelpers({
 })
 
 export default {
+  name: 'ParticipantDetails',
   props: {
     contactWays: {
       type: Array,
       default: function () {
         return ['Email', 'SMS', 'Call', 'Mail']
       }
-    }
+    },
+    referralConditions: []
   },
   data () {
     return {
@@ -146,6 +154,10 @@ export default {
       this.addressLine3 = newAddressData.line3
       this.addressLine4 = newAddressData.line4
       this.postCode = newAddressData.postcode
+    },
+
+    formatConditionText (text) {
+      return '- ' + text.substring(0, 1).toUpperCase() + text.substring(1) + '.'
     }
   }
 }

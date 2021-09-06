@@ -40,7 +40,12 @@ describe('StudyId e2e test', () => {
 
   it('should create and save StudyIds', async () => {
     const studyIdsBeforeCreate = await studyIdComponentsPage.countStudyIds();
-
+    let studyIdsExpected = studyIdsBeforeCreate + 1;
+    // table title not counted when there are no studyIds,
+    // after create first study id, the count will be 2(including the table title)
+    if (studyIdsBeforeCreate === 0) {
+      studyIdsExpected = 2;
+    }
     await studyIdComponentsPage.clickOnCreateButton();
 
     const studyId = 'TST_SINGLE_' + studyIdsBeforeCreate;
@@ -52,7 +57,7 @@ describe('StudyId e2e test', () => {
     await waitForStudyIdPage();
 
     const studyIdsAfterCreate = await studyIdComponentsPage.countStudyIds();
-    expect(studyIdsAfterCreate).to.eq(studyIdsBeforeCreate + 1, 'Expected one more entry in the table');
+    expect(studyIdsAfterCreate).to.eq(studyIdsExpected, 'Expected one more entry in the table');
   });
 
   it('should create multiple StudyIds', async () => {

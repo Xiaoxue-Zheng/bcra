@@ -61,15 +61,13 @@ public class TyrerCuzickService {
     }
 
     private void setUpPathVariables() {
-        try {
-            String tyrerCuzickRoot = TyrerCuzickPathUtil.getTyrerCuzickPath();
-            String tyrerCuzickCommand = TyrerCuzickPathUtil.getTyrerCuzickCommand();
-            TC_EXECUTABLE_COMMAND = tyrerCuzickCommand;
-            TC_INPUT_FILE_LOCATION = tyrerCuzickRoot + "input/";
-            TC_OUTPUT_FILE_LOCATION = tyrerCuzickRoot + "output/";
-        } catch(Exception ex) {
-            ex.printStackTrace();
-        }
+        String tyrerCuzickRoot = TyrerCuzickPathUtil.getTyrerCuzickPath();
+        String tyrerCuzickCommand = TyrerCuzickPathUtil.getTyrerCuzickCommand();
+        TC_EXECUTABLE_COMMAND = tyrerCuzickCommand;
+        TC_INPUT_FILE_LOCATION = tyrerCuzickRoot + "/input/";
+        TC_OUTPUT_FILE_LOCATION = tyrerCuzickRoot + "/output/";
+        FileManager.getInstance().registerDir(TC_INPUT_FILE_LOCATION);
+        FileManager.getInstance().registerDir(TC_OUTPUT_FILE_LOCATION);
     }
 
     @Scheduled(cron = "0 0 0 * * *")
@@ -133,12 +131,14 @@ public class TyrerCuzickService {
                         .replace("<OUTPUT>", outputLocation);
                     Runtime rt = Runtime.getRuntime();
                     Process p = rt.exec(tcCommand);
-                    p.waitFor();
-
+                    int i = p.waitFor();
+                    if(i != 0){
+                        log.error("Failed to execute tyrercuzick executable, exit code: {}, command {}", i, tcCommand);
+                    }
                     fileEntry.delete();
                     log.info("Executed tyrercuzick command: " + tcCommand);
                 } catch(Exception ex) {
-                    log.info("Failed to execute tyrercuzick executable, reason: " + ex.getMessage());
+                    log.error("Failed to execute tyrercuzick executable, reason: " + ex.getMessage());
                 }
             }
         }

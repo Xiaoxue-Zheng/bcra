@@ -126,10 +126,7 @@ public class TyrerCuzickExtractServiceIT {
     }
 
     private File getExtractCsv() throws Exception {
-        String sqlPath = TyrerCuzickPathUtil.getTyrerCuzickExtractSql();
-        File sqlFile = new File(sqlPath);
-        String csvPath = sqlFile.getParent() + "/tyrer_cuzick_extract.csv";
-
+        String csvPath = TyrerCuzickPathUtil.getTyrerCuzickExtractFile();
         return new File(csvPath);
     }
 

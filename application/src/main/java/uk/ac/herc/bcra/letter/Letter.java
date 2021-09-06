@@ -1,5 +1,7 @@
 package uk.ac.herc.bcra.letter;
 
+import uk.ac.herc.bcra.exception.HRYWException;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,11 +25,11 @@ public class Letter {
         Integer contentRows
     ) {
         if (address.size() > MAXIMUM_ADDRESS_ROWS) {
-            throw new RuntimeException("TOO MANY ROWS IN ADDRESS" + address);
+            throw new HRYWException("TOO MANY ROWS IN ADDRESS" + address);
         }
 
         if (contentRows > MAXIMUM_CONTENT_ROWS) {
-            throw new RuntimeException("TOO MANY ROWS IN CONTENT" + content);
+            throw new HRYWException("TOO MANY ROWS IN CONTENT" + content);
         }
 
         String fullName = firstName + " " + lastName;

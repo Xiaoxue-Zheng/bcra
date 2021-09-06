@@ -50,7 +50,7 @@ public class TyrerCuzickServiceIT {
         em.flush();
     }
 
-    private void configureTyrerCuzickService() throws Exception {
+    private void configureTyrerCuzickService() {
         String testDirectory = TyrerCuzickTestFilesUtil.getTestDirectory();
         TyrerCuzickService.TC_EXECUTABLE_COMMAND = TyrerCuzickPathUtil.getTyrerCuzickCommand();
         if (OSValidator.isUnix()) {
@@ -82,6 +82,10 @@ public class TyrerCuzickServiceIT {
     @Test
     @Transactional
     public void runTyrerCuzickExecutable() throws Exception  {
+        if(OSValidator.isMac()){
+            //The TyrerCuzick Executable doesn't support Mac system
+            return;
+        }
         String testDirectory = TyrerCuzickTestFilesUtil.getTestDirectory();
         TyrerCuzickTestFilesUtil.createTcInputFile();
         tyrerCuzickService.runTyrerCuzickExecutable();

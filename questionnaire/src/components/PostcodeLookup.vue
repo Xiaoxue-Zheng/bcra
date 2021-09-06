@@ -52,17 +52,17 @@ export default {
           this.postCodeSearched = true
           this.noResults = false
         })
-        .catch(error => {
+        .catch(() => {
           this.noResults = true
-          console.log(error)
         })
     },
     toggleManualAddress () {
       this.manuallyEnterAddress = !this.manuallyEnterAddress
 
       if (this.manuallyEnterAddress) {
-        if (!this.selectedAddress || !this.selectedAddress.line1)
+        if (!this.selectedAddress || !this.selectedAddress.line1) {
           this.selectedAddress = {}
+        }
       } else {
         this.clearFormData()
       }
@@ -71,7 +71,7 @@ export default {
       this.selectedAddress.postcode = this.postcode
       this.$emit('addressChanged', this.selectedAddress)
     },
-    clearFormData() {
+    clearFormData () {
       this.addressList = []
       this.postCodeSearched = false
       this.noResults = false

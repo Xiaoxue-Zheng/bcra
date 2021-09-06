@@ -1,8 +1,9 @@
 package uk.ac.herc.bcra.service.impl;
 
+import uk.ac.herc.bcra.exception.HRYWException;
 import uk.ac.herc.bcra.service.CanRiskReportService;
+import uk.ac.herc.bcra.service.FileManager;
 import uk.ac.herc.bcra.service.dto.CanRiskReportDTO;
-import uk.ac.herc.bcra.service.util.CanRiskUtil;
 import uk.ac.herc.bcra.service.util.FileSystemUtil;
 import uk.ac.herc.bcra.domain.CanRiskReport;
 import uk.ac.herc.bcra.domain.StudyId;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +32,16 @@ import java.util.Optional;
 public class CanRiskReportServiceImpl implements CanRiskReportService {
 
     public static final int MAX_CAN_RISK_REPORT_SIZE = 10 * 1024 * 1024;
+    private static final String CAN_RISK_DIR = FileManager.getFileSystemBaseDir()+"/canrisk/";
+
+    @PostConstruct
+    public void postConstruct() {
+        FileManager.getInstance().registerDir(getCanRiskReportDirectory());
+    }
+
+    public static String getCanRiskReportDirectory() {
+        return CAN_RISK_DIR;
+    }
 
     private final Logger log = LoggerFactory.getLogger(CanRiskReportServiceImpl.class);
 
@@ -38,7 +50,7 @@ public class CanRiskReportServiceImpl implements CanRiskReportService {
     private final StudyIdRepository studyIdRepository;
 
     public CanRiskReportServiceImpl(
-        CanRiskReportRepository canRiskReportRepository, 
+        CanRiskReportRepository canRiskReportRepository,
         StudyIdRepository studyIdRepository) {
         this.canRiskReportRepository = canRiskReportRepository;
         this.studyIdRepository = studyIdRepository;
@@ -46,7 +58,7 @@ public class CanRiskReportServiceImpl implements CanRiskReportService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void createCanRiskReportFromUserAndFile(User user, MultipartFile file) throws Exception {
+    public void createCanRiskReportFromUserAndFile(User user, MultipartFile file) {
         throwExceptionIfFileSizeExceeds10MB(file);
 
         CanRiskReport report = new CanRiskReport();
@@ -58,7 +70,7 @@ public class CanRiskReportServiceImpl implements CanRiskReportService {
         if (studyIdOptional.isPresent()) {
             report.setAssociatedStudyId(studyIdOptional.get());
         } else {
-            throw new Exception("Study ID {" + studyCode + "} in CanRisk report does not match any valid Study ID");
+            throw new HRYWException("Study ID {" + studyCode + "} in CanRisk report does not match any valid Study ID");
         }
 
         try {
@@ -66,7 +78,7 @@ public class CanRiskReportServiceImpl implements CanRiskReportService {
             saveFileData(file);
         } catch(Exception ex) {
             log.error(ex.getMessage());
-            throw new Exception("Failed to save CanRisk report with Study Id {" + studyCode + "}");
+            throw new HRYWException("Failed to save CanRisk report with Study Id {" + studyCode + "}");
         }
     }
 
@@ -78,7 +90,7 @@ public class CanRiskReportServiceImpl implements CanRiskReportService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CanRiskReportDTO> findAllAsDto(int page, int size) throws Exception {
+    public List<CanRiskReportDTO> findAllAsDto(int page, int size) {
         Page<CanRiskReport> reports = canRiskReportRepository.findAll(PageRequest.of(page, size));
         List<CanRiskReportDTO> reportDtos = new ArrayList<CanRiskReportDTO>();
         for (CanRiskReport report : reports) {
@@ -152,20 +164,20 @@ public class CanRiskReportServiceImpl implements CanRiskReportService {
     }
 
     private void saveFileData(MultipartFile file) throws Exception {
-        String canRiskReportDirectory = CanRiskUtil.getCanRiskReportDirectory();
+        String canRiskReportDirectory = getCanRiskReportDirectory();
         String fullFilePath = canRiskReportDirectory + '/' + file.getOriginalFilename();
         FileSystemUtil.writeBytesToFile(file.getBytes(), fullFilePath);
     }
 
     private byte[] getFileData(CanRiskReport report) throws Exception {
-        String canRiskReportDirectory = CanRiskUtil.getCanRiskReportDirectory();
+        String canRiskReportDirectory = getCanRiskReportDirectory();
         String fullFilePath = canRiskReportDirectory + report.getFilename();
         return FileSystemUtil.readBytesFromFile(fullFilePath);
     }
 
-    private void throwExceptionIfFileSizeExceeds10MB(MultipartFile file) throws Exception {
+    private void throwExceptionIfFileSizeExceeds10MB(MultipartFile file) {
         if (file.getSize() > MAX_CAN_RISK_REPORT_SIZE) {
-            throw new Exception("CanRisk report uploaded exceeds maximum file size.");
+            throw new HRYWException("CanRisk report uploaded exceeds maximum file size.");
         }
     }
 

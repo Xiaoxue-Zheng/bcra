@@ -107,7 +107,6 @@ public class CanRiskReportResourceIT {
             }
         }
 
-        OSValidator.OPERATING_SYSTEM = "windows";
         String filename = studyCodes[0] + ".pdf";
         MultipartFile file = new MockMultipartFile(filename, filename, "text/plain", new byte[0]);
         canRiskReportService.createCanRiskReportFromUserAndFile(adminUser, file);
@@ -132,9 +131,9 @@ public class CanRiskReportResourceIT {
         MvcResult result = restAuditMockMvc.perform(get("/api/can-risk-reports/count"))
             .andExpect(status().isOk())
             .andReturn();
-        
+
         String content = result.getResponse().getContentAsString();
-        assertThat(content).isEqualTo("1");   
+        assertThat(content).isEqualTo("1");
     }
 
     @Test
@@ -163,7 +162,7 @@ public class CanRiskReportResourceIT {
                 }
             }))
             .andExpect(status().isOk());
-        
+
         List<CanRiskReport> canRiskReports = canRiskReportService.findAll();
         assertThat(canRiskReports.size()).isEqualTo(2);
     }
@@ -177,7 +176,7 @@ public class CanRiskReportResourceIT {
             .param("studyCode", newStudyCode))
             .andExpect(status().isOk())
             .andReturn();
-        
+
         String content = result.getResponse().getContentAsString();
         assertThat(content).isEqualTo("true");
     }
@@ -189,7 +188,7 @@ public class CanRiskReportResourceIT {
             .param("studyCode", "NO_SUCH_STUDY_CODE"))
             .andExpect(status().isOk())
             .andReturn();
-        
+
         String content = result.getResponse().getContentAsString();
         assertThat(content).isEqualTo("false");
     }
@@ -202,7 +201,7 @@ public class CanRiskReportResourceIT {
             .param("studyCode", canRiskReport.getAssociatedStudyId().getCode()))
             .andExpect(status().isOk())
             .andReturn();
-        
+
         String content = result.getResponse().getContentAsString();
         assertThat(content).isEqualTo("false");
     }
@@ -215,6 +214,6 @@ public class CanRiskReportResourceIT {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }  
-    
+    }
+
 }

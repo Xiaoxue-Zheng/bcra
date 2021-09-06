@@ -3,6 +3,7 @@ package uk.ac.herc.bcra.web.rest;
 import org.springframework.security.access.annotation.Secured;
 
 import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
+import uk.ac.herc.bcra.exception.HRYWException;
 import uk.ac.herc.bcra.security.RoleManager;
 import uk.ac.herc.bcra.service.AnswerResponseService;
 import uk.ac.herc.bcra.service.StudyIdService;
@@ -44,7 +45,7 @@ public class AnswerResponseResource {
     }
 
     @GetMapping("/answer-responses/consent/{studyCode}")
-    public AnswerResponseDTO getConsentAnswerResponseFromStudyCode(@PathVariable String studyCode) throws Exception {
+    public AnswerResponseDTO getConsentAnswerResponseFromStudyCode(@PathVariable String studyCode) {
         log.debug("REST request to get Consent AnswerResponse");
         throwExceptionIfAttemptToModifyAlreadyCompletedAnswerResponse(studyCode, QuestionnaireType.CONSENT_FORM);
 
@@ -54,7 +55,7 @@ public class AnswerResponseResource {
 
     @GetMapping("/answer-responses/risk-assessment/")
     @Secured(RoleManager.PARTICIPANT)
-    public AnswerResponseDTO getRiskAssessmentResponse(Principal principal) throws Exception {
+    public AnswerResponseDTO getRiskAssessmentResponse(Principal principal) {
         log.debug("REST request to get Risk Assessment AnswerResponse");
         throwExceptionIfAttemptToModifyAlreadyCompletedAnswerResponse(principal.getName(), QuestionnaireType.RISK_ASSESSMENT);
 
@@ -67,7 +68,7 @@ public class AnswerResponseResource {
     public ResponseEntity<String> saveRiskAssessmentAnswerSection(
         Principal principal,
         @Valid @RequestBody AnswerSectionDTO answerSectionDTO
-    ) throws URISyntaxException, Exception {
+    ) {
         log.debug("REST request to save Risk Assessment AnswerSectionDTO: {}", answerSectionDTO);
         throwExceptionIfAttemptToModifyAlreadyCompletedAnswerResponse(principal.getName(), QuestionnaireType.RISK_ASSESSMENT);
 
@@ -83,7 +84,7 @@ public class AnswerResponseResource {
     public ResponseEntity<String> referralRiskAssessment(
         Principal principal,
         @Valid @RequestBody AnswerResponseDTO answerResponseDTO
-    ) throws URISyntaxException {
+    ) {
         log.debug("REST request to save Risk Assessment AnswerResponse: {}", answerResponseDTO);
         if(answerResponseService.referralAnswerResponse(principal.getName(), answerResponseDTO)) {
             return ResponseEntity.ok().body("REFERRED");
@@ -97,7 +98,7 @@ public class AnswerResponseResource {
     public ResponseEntity<String> submitRiskAssessment(
             Principal principal,
             @Valid @RequestBody AnswerResponseDTO answerResponseDTO
-    ) throws URISyntaxException {
+    ) {
         log.debug("REST request to submit Risk Assessment AnswerResponse: {}", answerResponseDTO);
         if(answerResponseService.submitAnswerResponse(principal.getName(), answerResponseDTO)) {
             return ResponseEntity.ok().body("SUBMITTED");
@@ -118,9 +119,9 @@ public class AnswerResponseResource {
         return answerResponseService.isQuestionnaireComplete(principal.getName(), QuestionnaireType.RISK_ASSESSMENT);
     }
 
-    private void throwExceptionIfAttemptToModifyAlreadyCompletedAnswerResponse(String login, QuestionnaireType type) throws Exception {
+    private void throwExceptionIfAttemptToModifyAlreadyCompletedAnswerResponse(String login, QuestionnaireType type) {
         if (answerResponseService.isQuestionnaireComplete(login, type)) {
-            throw new RuntimeException("Attempt to access already completed form of type: " + type.toString());
+            throw new HRYWException("Attempt to access already completed form of type: " + type.toString());
         }
     }
 }

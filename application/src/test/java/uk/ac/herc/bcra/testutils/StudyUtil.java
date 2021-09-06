@@ -65,12 +65,6 @@ public class StudyUtil {
         studyId.setRiskAssessmentResponse(rar);
         em.persist(studyId);
 
-        StudyId studyId = new StudyId();
-        studyId.setCode(identifier);
-        studyId.setConsentResponse(cr);
-        studyId.setRiskAssessmentResponse(rar);
-        em.persist(studyId);
-
         Participant p = new Participant();
         p.setUser(u);
         p.setIdentifiableData(id);

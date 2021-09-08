@@ -9,8 +9,8 @@ id,identifier,type,jhi_order,minimum,maximum,question_group_id,variable_name,tex
 8,CONSENT_TAKE_PART,TICKBOX_CONSENT,8,,,1,,I agree to take part in the above study.,,,TRUE
 9,CONSENT_BY_LETTER,TICKBOX_CONSENT,9,,,1,,I agree to receiving my breast cancer risk via letter.,,,TRUE
 10,CONSENT_FUTURE_RESEARCH,RADIO,10,,,1,,I am happy to be contacted about participation in future research.,,,TRUE
-12,FAMILY_BREAST_AFFECTED,CHECKBOX,1,,,2,relativeAffectedBreast,Have any of these relatives been affected by breast cancer?,,,FALSE
-13,FAMILY_OVARIAN_AFFECTED,CHECKBOX,2,,,2,relativeAffectedOvarian,Have any of these relatives been affected by ovarian cancer?,,,FALSE
+12,FAMILY_BREAST_AFFECTED,CHECKBOX,1,,,2,relativeAffectedBreast,Have any of these relatives been affected by breast cancer?,What does "Don't know" mean?,"<p>If you believe that someone in your close family MAY have been affected by breast cancer, then select the 'Don't know' option.</p><p>Select nothing if nobody in your close family has been affected by breast cancer.</p>",FALSE
+13,FAMILY_OVARIAN_AFFECTED,CHECKBOX,2,,,2,relativeAffectedOvarian,Have any of these relatives been affected by ovarian cancer?,What does "Don't know" mean?,"<p>If you believe that someone in your close family MAY have been affected by ovarian cancer, then select the 'Don't know' option.</p><p>Select nothing if nobody in your close family has been affected by ovarian cancer.",FALSE
 14,FAMILY_BREAST_HOW_MANY,RADIO,1,,,3,,How many {{relativeAffectedBreast}}s were affected by breast cancer?,,,TRUE
 15,FAMILY_BREAST_AGE,NUMBER_UNKNOWN,2,10,130,3,,At what age was your {{relativeAffectedBreast}} affected by breast cancer?,,,TRUE
 16,FAMILY_OVARIAN_HOW_MANY,RADIO,1,,,4,,How many {{relativeAffectedOvarian}}s were affected by ovarian cancer?,,,TRUE

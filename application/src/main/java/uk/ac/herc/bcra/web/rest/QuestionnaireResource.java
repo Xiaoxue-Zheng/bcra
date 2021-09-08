@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -52,5 +53,12 @@ public class QuestionnaireResource {
                     QuestionnaireType.RISK_ASSESSMENT
             );
         return ResponseUtil.wrapOrNotFound(questionnaireDTO);
+    }
+
+    @GetMapping("/questionnaires")
+    @Secured({RoleManager.MANAGER, RoleManager.ADMIN})
+    public List<QuestionnaireDTO> getAllQuestionnaires() {
+        log.debug("REST request to get all Questionnaires");
+        return questionnaireService.findAll();
     }
 }

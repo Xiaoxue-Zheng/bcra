@@ -18,7 +18,7 @@ export class CanRiskReportUploadComponent {
 
   canRiskReports = [];
   isError = false;
-  error = {};
+  error: any = <any>{};
 
   constructor(protected canRiskReportService: CanRiskReportService, protected http: HttpClient, protected router: Router) {}
 

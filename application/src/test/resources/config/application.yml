@@ -91,6 +91,8 @@ spring:
         size: 1
   thymeleaf:
     mode: HTML
+  profiles:
+    active:
 
 server:
   port: 10344
@@ -139,3 +141,5 @@ application:
     url: http://localhost:8080
   questionnaire:
     url: http://localhost:3210
+  security:
+    two-factor-auth: true

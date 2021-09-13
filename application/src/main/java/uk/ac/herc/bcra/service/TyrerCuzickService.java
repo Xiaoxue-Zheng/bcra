@@ -80,7 +80,7 @@ public class TyrerCuzickService {
             if (studyIdOptional.isPresent()) {
                 Participant participant = studyIdOptional.get().getParticipant();
                 String participantIdentifier = participant.getUser().getLogin();
-                LocalDate dateOfBirth = participant.getIdentifiableData().getDateOfBirth();
+                LocalDate dateOfBirth = participant.getDateOfBirth();
 
                 try {
                     String fileOutput = mapper.map(participantIdentifier, dateOfBirth, answerResponse);

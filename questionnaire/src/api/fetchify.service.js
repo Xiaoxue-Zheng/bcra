@@ -31,7 +31,11 @@ export const FetchifyService = {
       }
       addresses.push(address)
     }
-
+    addresses.sort(function (a, b) {
+      if (a.line1 < b.line1) { return -1 }
+      if (a.line1 > b.line1) { return 1 }
+      return a.line2.localeCompare(b.line2)
+    })
     return addresses
   }
 }

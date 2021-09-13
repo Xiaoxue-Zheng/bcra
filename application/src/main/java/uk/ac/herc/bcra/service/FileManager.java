@@ -4,6 +4,7 @@ import com.google.common.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import uk.ac.herc.bcra.BcraApp;
 import uk.ac.herc.bcra.exception.HRYWException;
 import uk.ac.herc.bcra.service.util.FileSystemUtil;
 import uk.ac.herc.bcra.service.util.OSValidator;
@@ -22,7 +23,7 @@ public class FileManager {
     @VisibleForTesting
     public FileManager() {
         instance = this;
-        FileSystemUtil.createDirectory(getFileSystemBaseDir());
+        registerDir(getFileSystemBaseDir());
     }
 
     public void registerDir(String dir){
@@ -31,7 +32,10 @@ public class FileManager {
         }
         if(!SYSTEM_DIRS.contains(dir)){
             SYSTEM_DIRS.add(dir);
-            FileSystemUtil.createDirectory(dir);
+            File file = FileSystemUtil.createDirectory(dir);
+            file.setWritable(true, false);
+            file.setExecutable(true, false);
+            file.setReadable(true, false);
         }
     }
 
@@ -39,7 +43,7 @@ public class FileManager {
         File file = new File(filePath);
         if(!file.exists() || file.isDirectory()){
             InputStream inputStream = null;
-            inputStream = this.getClass().getClassLoader().getResourceAsStream(source);
+            inputStream = BcraApp.class.getClassLoader().getResourceAsStream(source);
             FileSystemUtil.writeInputStreamToFile(inputStream, filePath, true);
         }
     }

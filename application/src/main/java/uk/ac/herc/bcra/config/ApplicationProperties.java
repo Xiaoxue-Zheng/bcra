@@ -16,6 +16,8 @@ public class ApplicationProperties {
 
     private final QuestionnaireApp questionnaire = new QuestionnaireApp();
 
+    private final SecurityProperties security = new SecurityProperties();
+
     public AdminApp getAdmin() {
         return admin;
     }
@@ -26,6 +28,10 @@ public class ApplicationProperties {
 
     public Email getEmail() {
         return email;
+    }
+
+    public SecurityProperties getSecurity() {
+        return security;
     }
 
     public static class Email{
@@ -63,5 +69,17 @@ public class ApplicationProperties {
             this.url = url;
         }
 
+    }
+
+    public static class SecurityProperties{
+        private boolean twoFactorAuth;
+
+        public boolean getTwoFactorAuth() {
+            return twoFactorAuth;
+        }
+
+        public void setTwoFactorAuth(boolean twoFactorAuth) {
+            this.twoFactorAuth = twoFactorAuth;
+        }
     }
 }

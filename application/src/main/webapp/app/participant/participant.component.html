@@ -38,7 +38,7 @@
     <div class="table-responsive" *ngIf="participants">
         <table class="table table-striped">
             <thead>
-            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <tr jhiSort>
                 <th jhiSortBy="id"><span>StudyID</span> </th>
                 <th jhiSortBy="login"><span>Date Of Birth</span> </th>
                 <th jhiSortBy="status"><span>Status</span> </th>
@@ -49,13 +49,13 @@
             </tr>
             </thead>
             <tbody *ngIf ="participants">
-            <tr *ngFor="let participant of participants; trackBy: trackIdentity">
+            <tr *ngFor="let participant of participants;">
                 <td>{{participant.studyID}}</td>
-                <td>{{participant.dateOfBirth | date: 'shortDate'}}</td>
+                <td>{{participant.dateOfBirth | date: 'd MMM y'}}</td>
                 <td>{{participant.status}}</td>
                 <td>{{participant.swab | defaultValue: '-'}}</td>
                 <td>{{participant.mammogram | defaultValue: '-'}}</td>
-                <td>{{ participant.registerDatetime | date: 'shortDate' | defaultValue: '-' }}</td>
+                <td>{{ participant.registerDatetime | date: 'd MMM y' | defaultValue: '-' }}</td>
                 <td ><a *ngIf="participant.canRiskReportId" href="javascript:void(0);" (click)="viewCanRiskReport(participant.canRiskReportId)">[view]</a></td>
             </tr>
             </tbody>

@@ -174,3 +174,5 @@ jhipster:
 application:
   email:
     from: donotreply@manchester.ac.uk
+  security:
+    two-factor-auth: true

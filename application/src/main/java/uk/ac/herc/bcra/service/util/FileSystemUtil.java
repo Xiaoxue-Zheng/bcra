@@ -97,11 +97,12 @@ public class FileSystemUtil {
         return dir.listFiles().length;
     }
 
-    public static void createDirectory(String directoryPath) {
+    public static File createDirectory(String directoryPath) {
         File dir = new File(directoryPath);
         if (!dir.exists()) {
             dir.mkdirs();
         }
+        return dir;
     }
 
     public static void deleteDirectory(String directoryPath) throws IOException {

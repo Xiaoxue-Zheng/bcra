@@ -221,7 +221,7 @@ public class TyrerCuzickTestParticipantsIT {
         for (Participant participant : testParticipants) {
             String identifier = participant.getUser().getLogin();
 
-            LocalDate dateOfBirth = participant.getIdentifiableData().getDateOfBirth();
+            LocalDate dateOfBirth = participant.getDateOfBirth();
             AnswerResponse response = participant.getStudyId().getRiskAssessmentResponse();
 
             if (!identifier.equals("TST_5")) {

@@ -11,6 +11,7 @@ Note:
 Scenario: A Participant opens the Participant Details Form
 	Given the Participant has opened the Questionnaire application
     And the Participant has previously created their account
+    And the Participant has completed their questionnaire(include referred)
     When the Participant is forwarded to the Participant Details Form
 	Then the page has the title 'Participant details'
     And there are several fields to enter their participant details.

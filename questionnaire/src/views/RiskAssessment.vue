@@ -156,7 +156,6 @@ export default {
     },
 
     submitReferralAndProceed () {
-      AnswerResponseService.referralRiskAssessment(this.answerResponse)
       this.proceedToReferral()
     },
 

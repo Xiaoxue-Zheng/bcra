@@ -6,6 +6,7 @@ Scenario: A Participant has more than one type of relative affected by breast ca
 	When the Participant clicks the Save and Continue button
 	Then the Participant is forwarded to the Referral Page
 	And the Participant is informed why they will be referred
+	And the Participant is asked to input their contact details
 
 Scenario: A Participant has more than one type of relative affected by ovarian cancer
 	Given the Participant is completing the Family History section of the Questionnaire
@@ -13,6 +14,7 @@ Scenario: A Participant has more than one type of relative affected by ovarian c
 	When the Participant clicks the Save and Continue button
 	Then the Participant is forwarded to the Referral Page
 	And the Participant is informed why they will be referred
+	And the Participant is asked to input their contact details
 
 Scenario: A Participant has at least one relative affected by breast and ovarian cancer
 	Given the Participant is completing the Family History section of the Questionnaire
@@ -21,6 +23,8 @@ Scenario: A Participant has at least one relative affected by breast and ovarian
 	When the Participant clicks the Save and Continue button
 	Then the Participant is forwarded to the Referral Page
 	And the Participant is informed why they will be referred
+	And the Participant is asked to input their contact details
+
 
 Scenario: A Participant a male relative affected by breast cancer
 	Given the Participant is completing the Family History section of the Questionnaire
@@ -28,6 +32,7 @@ Scenario: A Participant a male relative affected by breast cancer
 	When the Participant clicks the Save and Continue button
 	Then the Participant is forwarded to the Referral Page
 	And the Participant is informed why they will be referred
+	And the Participant is asked to input their contact details
 
 Scenario: A Participant has more than one of the same type of relative affected by breast cancer
 	Given the Participant is completing the Family History section of the Questionnaire
@@ -37,6 +42,7 @@ Scenario: A Participant has more than one of the same type of relative affected 
 	When the Participant clicks the Save and Continue button
 	Then the Participant is forwarded to the Referral Page
 	And the Participant is informed why they will be referred
+	And the Participant is asked to input their contact details
 
 Scenario: A Participant has more than one of the same type of relative affected by ovarian cancer
 	Given the Participant is completing the Family History section of the Questionnaire
@@ -46,6 +52,7 @@ Scenario: A Participant has more than one of the same type of relative affected 
 	When the Participant clicks the Save and Continue button
 	Then the Participant is forwarded to the Referral Page
 	And the Participant is informed why they will be referred
+	And the Participant is asked to input their contact details
 
 Scenario: A Participant has a relative affected by breast cancer at an early age
 	Given the Participant is completing the Family History section of the Questionnaire
@@ -56,6 +63,7 @@ Scenario: A Participant has a relative affected by breast cancer at an early age
 	When the Participant clicks the Save and Continue button
 	Then the Participant is forwarded to the Referral Page
 	And the Participant is informed why they will be referred
+	And the Participant is asked to input their contact details
 
 Scenario: A Participant submits a risk assessment questionnaire and is referred
 	Given the Participant has completed the Family History section of the Questionnaire
@@ -65,6 +73,7 @@ Scenario: A Participant submits a risk assessment questionnaire and is referred
 	Then their risk assessment questionnaire is submitted with a 'referred' status
 	And the Participant will receive a referral letter (mechanism t.b.d.)
 	And the Participant will not be proceeded to genetic test or mammogram
+	And the Participant is asked to input their contact details
 
 Scenario: A Participant who changes their answers should not be referred
 	Given a Participant has completed part of the Family History section of the questionnaire
@@ -74,6 +83,7 @@ Scenario: A Participant who changes their answers should not be referred
 	And the new answers do not result in referral
 	When the Participant saves and proceeds to the next section of the Questionnaire
 	Then the Participant should not be forwarded to the referral page
+	And the Participant is asked to input their contact details
 
 Scenario: A Participant who refreshes the referral submission page should see their referral reason
 	Given a Participant has completed part of the Family History section of the questionnaire
@@ -82,3 +92,4 @@ Scenario: A Participant who refreshes the referral submission page should see th
 	And the Participant can see the reason why they were referred
 	When the Participant refreshes the referral page
 	Then the Participant can see the same reasons why they were referred
+	And the Participant is asked to input their contact details

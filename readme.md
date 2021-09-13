@@ -199,3 +199,20 @@ Place both the zip files into the tomcat webapps folder.
 
 Restart tomcat:
 `service tomcat restart`
+
+### Deploy with the script
+There is a deploy script named deploy.sh can be used to deploy.
+Before you deploy, you should set up password-free login with the host you will deploy the application. 
+The command is ssh-copy-id USER@host, example: ssh-copy-id b75865xz@130.88.96.158
+
+The parameter you must specify is:
+-p: your project directory
+
+The parameters you can optionaly specify are:
+-q: if to deploy questionnaire application, default false
+-c: if to deploy clinitian interface, default false
+-v: the new version, it is used to upgrade the verion and create a release, but we now fix it as 0.0.1, after we change to GitHub, we can reconsider how to do upgrade version and create a release
+-p: the profile you want to deploy, the value can be: test(will deploy to hubble.mhealthherc.com); prod(will deploy to AWS(not applied now))
+
+The following command will deploy quesitonnaire application and clinician interface to hubble.mhealthherc.com
+./deploy.sh -v=0.0.1 -d=/Users/user/ideaProjects/bcra/ -q=true -c=true -p=test

@@ -32,7 +32,7 @@ public class TyrerCuzickExtractService {
 
     private void initialisePathVariables() {
         try {
-            FileManager.getInstance().registerDir(TyrerCuzickPathUtil.getTyrerCuzickExtractFile());
+            FileManager.getInstance().registerDir(TyrerCuzickPathUtil.getTyrerCuzickPath()+"/extract");
             InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("tyrercuzick/risk_assessment_extract.sql");
             String s = IOUtils.toString(inputStream);
             SQL_COMMAND = s.replace("#{risk_assessment_extract_file}",TyrerCuzickPathUtil.getTyrerCuzickExtractFile());

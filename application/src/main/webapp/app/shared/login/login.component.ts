@@ -132,7 +132,6 @@ export class JhiLoginModalComponent implements AfterViewInit {
         })
         .then((response: any) => {
           this.authenticationError = false;
-          console.log(response);
           if (response !== null && response.authenticated !== null && !response.authenticated) {
             this.showFailedPinValidationAlert = true;
             this.failedPinValidationAttempts = response.failedAttempts;

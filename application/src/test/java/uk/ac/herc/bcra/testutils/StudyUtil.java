@@ -71,7 +71,7 @@ public class StudyUtil {
         Participant p = new Participant();
         p.setUser(u);
         p.setIdentifiableData(id);
-        p.dateOfBirth(LocalDate.of(1990, 9, 15));
+        p.dateOfBirth(dateOfBirth);
         p.setStatus(ResponseState.IN_PROGRESS.name());
         p.setStudyId(studyId);
         studyId.setParticipant(p);

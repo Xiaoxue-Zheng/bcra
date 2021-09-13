@@ -11,9 +11,9 @@
     <button type="submit" class="btn btn-primary uploadButton" [disabled]="!canUploadCanRiskReports()" (click)="uploadCanRiskReports()">
         <span>Upload CanRisk reports</span>
     </button>
-    
+
     <div>
-        <div>Please be aware that the file selected for upload must be named in the format STUDY_ID.pdf. Refreshing this page will remove all selected files.</div> 
+        <div>Please be aware that the file selected for upload must be named in the format STUDY_ID.pdf. Refreshing this page will remove all selected files.</div>
     </div>
 
     <div *ngIf="isError">
@@ -25,7 +25,7 @@
 
     <div *ngIf="canRiskReports?.length > 0">
         <table class="canRiskReports">
-            <tr class="canRiskReport" *ngFor="let canRiskReport of canRiskReports ;trackBy: trackId">
+            <tr class="canRiskReport" *ngFor="let canRiskReport of canRiskReports ;">
                 <td class="info filename">{{ canRiskReport.name }}</td>
                 <td class="info studyId">{{ getStudyId(canRiskReport) }}</td>
                 <td class="info fileSize">{{ canRiskReport.fileSize | number }} bytes</td>

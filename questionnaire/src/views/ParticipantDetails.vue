@@ -1,12 +1,6 @@
 <template>
   <div class="content">
     <h1>Thank you for completing the questionnaire.</h1>
-    <div v-if="referralConditions">
-      <p class="introduction">You will be referred because...</p>
-      <div v-for="condition in referralConditions" v-bind:key='condition.id'>
-        <strong>{{ formatConditionText(condition.reason) }}</strong>
-      </div>
-    </div>
     <p class="introduction">
        We will now invite you to a risk assessment appointment to complete a low dose mammogram and provide a saliva sample.
     </p>
@@ -54,7 +48,7 @@
               </div>
             </div>
           </fieldset>
-          <div class="error-message" v-if="failure">Failed to update details on the server. Please contact support team.</div>
+          <div class="error-message" v-if="failure">{{errorMessage}}</div>
           <button class="pure-button pure-button-primary" type="submit">Save details</button>
         </form>
       </div>
@@ -66,6 +60,7 @@
 import { ParticipantDetailsService } from '@/api/participant-details.service.js'
 import { createHelpers } from 'vuex-map-fields'
 import PostcodeLookup from '@/components/PostcodeLookup.vue'
+import ApiService from '@/api/api.service'
 
 const { mapFields } = createHelpers({
   getterType: 'security/getActivationField',
@@ -80,8 +75,7 @@ export default {
       default: function () {
         return ['Email', 'SMS', 'Call', 'Mail']
       }
-    },
-    referralConditions: []
+    }
   },
   data () {
     return {
@@ -97,7 +91,8 @@ export default {
       homePhoneNumber: null,
       mobilePhoneNumber: null,
       preferredContactWays: [],
-      failure: false
+      failure: false,
+      errorMessage: null
     }
   },
   components: {
@@ -118,7 +113,10 @@ export default {
   methods: {
     async register () {
       this.clearMessages()
-
+      if (this.postCode == null || this.addressLine1 == null) {
+        this.fail = true
+        this.errorMessage = 'please input your post code and address'
+      }
       var participantDetailsDto = {
         forename: this.forename,
         surname: this.surname,
@@ -139,13 +137,15 @@ export default {
         } else {
           this.failure = true
         }
-      }).catch(() => {
+      }).catch((error) => {
         this.failure = true
+        this.errorMessage = ApiService.extractErrorMessage(error)
       })
     },
 
     clearMessages () {
       this.failure = false
+      this.errorMessage = null
     },
 
     updateAddress (newAddressData) {
@@ -154,10 +154,6 @@ export default {
       this.addressLine3 = newAddressData.line3
       this.addressLine4 = newAddressData.line4
       this.postCode = newAddressData.postcode
-    },
-
-    formatConditionText (text) {
-      return '- ' + text.substring(0, 1).toUpperCase() + text.substring(1) + '.'
     }
   }
 }

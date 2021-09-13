@@ -9,8 +9,13 @@ export default {
     axios.interceptors.response.use(function (response) {
       return response
     }, function (error) {
+      console.log(error)
       if (error.response.status === 401) {
-        if (!Object.is(error.response.data.path, '/api/account') && !Object.is(window.location.pathname, '/signin')) {
+        if (!Object.is(error.response.data.path, '/api/account') &&
+        // Home page shouldn't be navigated to signin page
+        !Object.is(window.location.pathname, '/') &&
+        !Object.is(window.location.pathname, '/hryws') &&
+        !Object.is(window.location.pathname, '/signin')) {
           router.push('/signin')
         }
       }

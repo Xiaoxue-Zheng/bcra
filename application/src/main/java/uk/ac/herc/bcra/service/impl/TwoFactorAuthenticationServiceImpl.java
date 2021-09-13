@@ -1,8 +1,10 @@
 package uk.ac.herc.bcra.service.impl;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.ac.herc.bcra.config.ApplicationProperties;
 import uk.ac.herc.bcra.domain.TwoFactorAuthentication;
 import uk.ac.herc.bcra.domain.User;
 import uk.ac.herc.bcra.web.rest.errors.TwoFactorAuthenticationException;
@@ -13,6 +15,8 @@ import uk.ac.herc.bcra.service.TwoFactorAuthenticationService;
 import uk.ac.herc.bcra.service.dto.TwoFactorLoginResultDTO;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static uk.ac.herc.bcra.web.rest.errors.TwoFactorAuthenticationException.TwoFactorAuthenticationExceptionReason.PIN_NOT_MATCH;
@@ -31,13 +35,19 @@ public class TwoFactorAuthenticationServiceImpl implements TwoFactorAuthenticati
     private final UserRepository userRepository;
     private final TwoFactorAuthenticationRepository twoFactorAuthenticationRepository;
     private final MailService mailService;
+    private ApplicationProperties applicationProperties;
+
+    @Value("${spring.profiles.active}")
+    private List<String> activeProfile;
 
     public TwoFactorAuthenticationServiceImpl(UserRepository userRepository,
                                               TwoFactorAuthenticationRepository twoFactorAuthenticationRepository,
-                                              MailService mailService) {
+                                              MailService mailService,
+                                              ApplicationProperties applicationProperties) {
         this.userRepository = userRepository;
         this.twoFactorAuthenticationRepository = twoFactorAuthenticationRepository;
         this.mailService = mailService;
+        this.applicationProperties = applicationProperties;
     }
 
     @Override
@@ -49,6 +59,9 @@ public class TwoFactorAuthenticationServiceImpl implements TwoFactorAuthenticati
 
     @Override
     public TwoFactorLoginResultDTO validatePin(UserDetails user, String pin) {
+        if(skipValidate(pin)){
+            return new TwoFactorLoginResultDTO(true, 0);
+        }
         Optional<TwoFactorAuthentication> authenticationOptional = getTwoFactorAuthenticationForUser(user.getUsername());
         if(!authenticationOptional.isPresent()){
             return new TwoFactorLoginResultDTO(false, PIN_NOT_EXIST);
@@ -70,6 +83,12 @@ public class TwoFactorAuthenticationServiceImpl implements TwoFactorAuthenticati
             }
             return new TwoFactorLoginResultDTO(isPinValid, authentication.getFailedAttempts());
         }
+    }
+
+    private boolean skipValidate(String pin) {
+        return activeProfile.contains("test")
+            && !applicationProperties.getSecurity().getTwoFactorAuth()
+            && Objects.equals(pin, "111111");
     }
 
     private Optional<TwoFactorAuthentication> getTwoFactorAuthenticationForUser(String login) {

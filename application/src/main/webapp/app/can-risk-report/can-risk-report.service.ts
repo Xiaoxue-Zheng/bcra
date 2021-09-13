@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared/util/request-util';
 import { ICanRiskReport } from 'app/shared/model/can-risk-report.model';
@@ -16,13 +15,13 @@ export class CanRiskReportService {
   constructor(protected http: HttpClient) {}
 
   getCanRiskReportById(id: number) {
-    const params = new HttpParams().set('canRiskReportId', id.toString());
-    return this.http.get<ICanRiskReport>('api/can-risk-report', { params: params, observe: 'response' });
+    const httpParams = new HttpParams().set('canRiskReportId', id.toString());
+    return this.http.get<ICanRiskReport>('api/can-risk-report', { params: httpParams, observe: 'response' });
   }
 
   findAll(page: number, pageSize: number): Observable<EntityArrayResponseType> {
-    const params = new HttpParams().set('page', page.toString()).set('size', pageSize.toString());
-    return this.http.get<ICanRiskReport[]>(this.resourceUrl, { params: params, observe: 'response' });
+    const httpParams = new HttpParams().set('page', page.toString()).set('size', pageSize.toString());
+    return this.http.get<ICanRiskReport[]>(this.resourceUrl, { params: httpParams, observe: 'response' });
   }
 
   countCanRiskReports() {
@@ -30,8 +29,8 @@ export class CanRiskReportService {
   }
 
   isStudyIdAvailable(studyCode: string) {
-    const params = new HttpParams().set('studyCode', studyCode);
-    return this.http.get<boolean>(this.resourceUrl + '/study-id', { params: params, observe: 'response' });
+    const httpParams = new HttpParams().set('studyCode', studyCode);
+    return this.http.get<boolean>(this.resourceUrl + '/study-id', { params: httpParams, observe: 'response' });
   }
 
   uploadCanRiskReportFile(canRiskReportFile: any): Observable<HttpResponse<void>> {

@@ -29,9 +29,18 @@ Scenario: A Participant submits an incomplete Consent Form
 	Then the form is not submitted
     And a message is displayed prompting the participant to complete all questions
 
+Scenario: A Participant submits a rejected Consent Form
+    Given the Participant has the Consent Form open
+    And the Participant has selected all checkbox responses
+    And the Participant has rejected the first of the radio button responses
+    And the Participant has either accepted or rejected the second of the radio button responses
+    When the Participant clicks the form submission button
+    Then the form is not submitted
+    And a message is displayed prompting the participant to complete all questions
+
 Scenario: A Participant submits an complete Consent Form
-	Given the Participant has s the Consent Form open
+	Given the Participant has the Consent Form open
     And the Participant has affirmed all necessary questions
     When the Participant clicks the form submission button
 	Then the form is submitted
-    And the participant is forwarded to the Register page
+    And the participant is forwarded to the Create Account page

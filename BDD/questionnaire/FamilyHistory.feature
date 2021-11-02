@@ -1,10 +1,20 @@
 Feature: Family History
 
+Scenario: A Participant opens the introduction to the Family History questionnaire
+    Given the Participant has opened the Questionnaire application
+    And the Participant has signed in
+    And the Participant has completed Consent
+    When the Participant is forwarded to the Family History questionnaire
+    Then the page has the title 'Family History'
+    And there is an indicator of the Participant's Progress
+    And there are several paragraphs explaining the relevance of finding out a Families history of cancer.
+
 Scenario: A Participant opens the Family History questionnaire
 	Given the Participant has opened the Questionnaire application
     And the Participant has signed in
     And the Participant has completed Consent
-    When the Participant is forwarded to the Family History questionnaire
+    And the Participant is on the initial Family History introduction page
+    When the Participant selects the 'Continue' button
 	Then the page has the title 'Family History'
     And there is an indicator of the Participant's Progress
     And there are questions about the Participant's relatives

@@ -44,6 +44,8 @@ public class QuestionDTO implements Serializable {
 
     private Set<DisplayConditionDTO> displayConditions = new HashSet<>();
 
+    private Boolean necessary;
+
     public Long getId() {
         return id;
     }
@@ -138,7 +140,15 @@ public class QuestionDTO implements Serializable {
 
     public void setDisplayConditions(Set<DisplayConditionDTO> displayConditions) {
         this.displayConditions = displayConditions;
-    }  
+    }
+
+    public void setNecessary(Boolean necessary) {
+        this.necessary = necessary;
+    }
+
+    public Boolean getNecessary() {
+        return necessary;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -176,6 +186,7 @@ public class QuestionDTO implements Serializable {
             ", hintText='" + getHintText() + "'" +
             ", questionItems=" + getQuestionItems() +
             ", displayConditions=" + getDisplayConditions() +
+            ", necessary=" + getNecessary() +
             "}";
     }
 }

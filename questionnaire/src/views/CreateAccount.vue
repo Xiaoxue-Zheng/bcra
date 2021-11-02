@@ -16,7 +16,13 @@
           <fieldset>
             <label>Create a password</label>
             <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-2-5">
-              <password v-model="password" @score="setScore" class="pure-input-1"/>
+              <password v-model="password" @score="setScore" @feedback="feedback" class="pure-input-1"/>
+            </div>
+            <div v-if="password.length > 0">
+              <div class="suggestions" v-for="suggestion in passwordSuggestions" :key="suggestion">
+                <div class="suggestion">{{ suggestion }}</div>
+              </div>
+              <div class="error-message" v-if="passwordWarning">{{ passwordWarning }}</div>
             </div>
           </fieldset>
           <fieldset>
@@ -26,7 +32,6 @@
             </div>
           </fieldset>
           <div class="error-message" v-if="password != repeatPassword">Your passwords don't match!</div>
-          <div class="error-message" v-if="passwordScore < MINIMUM_PASSWORD_SCORE && password != 0">Please pick a stronger password.</div>
           <div class="error-message" v-if="displayErrorMessage">{{ errorMessage }}</div>
           <button class="pure-button pure-button-primary" type="submit" :disabled="!emailAddress || password != repeatPassword || passwordScore < MINIMUM_PASSWORD_SCORE">Create account</button>
         </form>
@@ -41,7 +46,7 @@ import { SecurityService } from '@/api/security.service'
 import { SignUpHelperService } from '@/services/sign-up-helper.service'
 import ApiService from '../api/api.service'
 
-const MINIMUM_PASSWORD_SCORE = 4
+const MINIMUM_PASSWORD_SCORE = 3
 
 export default {
   name: 'createaccount',
@@ -54,7 +59,9 @@ export default {
       passwordScore: 0,
       displayErrorMessage: false,
       errorMessage: '',
-      MINIMUM_PASSWORD_SCORE: MINIMUM_PASSWORD_SCORE
+      MINIMUM_PASSWORD_SCORE: MINIMUM_PASSWORD_SCORE,
+      passwordSuggestions: [],
+      passwordWarning: ''
     }
   },
   computed: {
@@ -82,6 +89,10 @@ export default {
     setScore (score) {
       this.passwordScore = score
     },
+    feedback (feedback) {
+      this.passwordSuggestions = feedback.suggestions
+      this.passwordWarning = feedback.warning
+    },
     formValid () {
       if (this.password === this.repeatPassword) {
         if (this.passwordScore >= MINIMUM_PASSWORD_SCORE) {
@@ -106,3 +117,14 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .suggestion {
+    font-weight: 700;
+    color: rgb(150, 150, 150);
+    font-size: 0.8em;
+  }
+
+  .suggestion:first-of-type {
+    margin-top: 2em;
+  }
+</style>

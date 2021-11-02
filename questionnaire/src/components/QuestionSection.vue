@@ -120,14 +120,32 @@ export default {
       return !answer.ticked
     },
     radioInvalid (question, answer) {
+      const necessaryQuestionAnswered = this.ensureNecessaryQuestionIsAnswered(question, answer)
+      const necessaryQuestionItemsAnswered = this.ensureNecessaryQuestionItemsAreAnswered(question, answer)
+      return !necessaryQuestionAnswered || !necessaryQuestionItemsAnswered
+    },
+    ensureNecessaryQuestionIsAnswered(question, answer) {
+      if (question.necessary && DisplayConditionService.isDisplayed(question)) {
+        let atLeastOneAnswered = false
+        for (const questionItem of question.questionItems) {
+          const answerItem = answer.answerItems.find(answerItem => answerItem.questionItemId === questionItem.id)
+          if (answerItem.selected) {
+            atLeastOneAnswered = true
+          }
+        }
+        return atLeastOneAnswered
+      }
+      return true
+    },
+    ensureNecessaryQuestionItemsAreAnswered(question, answer) {
       let necessaryQuestionItem =
         question.questionItems.find(questionItem => questionItem.necessary)
       if (necessaryQuestionItem) {
         let necessaryAnswerItem =
           answer.answerItems.find(answerItem => answerItem.questionItemId === necessaryQuestionItem.id)
-        return !necessaryAnswerItem.selected
+        return necessaryAnswerItem.selected
       }
-      return false
+      return true
     },
     getTitle () {
       let readOnlyWarning = this.readOnly === true ? ' (READ-ONLY)' : ''

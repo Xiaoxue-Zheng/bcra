@@ -1,5 +1,5 @@
 <template>
-  <div class="reset password content">
+  <main class="reset password content">
     <h1>Reset Password</h1>
 
     <div class="alert alert-warning" v-if="!success">
@@ -24,7 +24,7 @@
         </form>
       </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>

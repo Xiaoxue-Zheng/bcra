@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <main class="content">
     <p >You will be referred because...</p>
     <div v-for="condition in referralConditions" v-bind:key='condition.id'>
       <strong>{{ formatConditionText(condition.reason) }}</strong>
@@ -7,7 +7,7 @@
     <p>You are about to submit, and you can never go back.<p>
     <PrimaryButton :disabled="submitDisabled" :clickEvent="submit">Submit Questionnaire</PrimaryButton>
     <div v-if="submitError">{{ submitError }}</div>
-  </div>
+  </main>
 </template>
 <script>
 import PrimaryButton from '@/components/PrimaryButton.vue'

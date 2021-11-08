@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <main class="content">
     <h1>Thank you for completing the questionnaire.</h1>
     <p class="introduction">
        We will now invite you to a risk assessment appointment to complete a low dose mammogram and provide a saliva sample.
@@ -11,13 +11,13 @@
       <div class="pure-u-1">
         <form @submit.prevent="register" class="pure-form pure-form-stacked">
           <fieldset>
-            <label>First name</label>
+            <label for="form-first-name">First name</label>
             <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-1-3">
-              <input required v-model="forename" type="text" class="pure-input-1" value="test"/>
+              <input id="form-first-name" required v-model="forename" type="text" class="pure-input-1" value="test"/>
             </div>
-            <label>Surname</label>
+            <label for="form-surname">Surname</label>
             <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-1-3">
-              <input required v-model="surname" type="text" class="pure-input-1"/>
+              <input id="form-surname" required v-model="surname" type="text" class="pure-input-1"/>
             </div>
           </fieldset>
 
@@ -26,15 +26,15 @@
           </fieldset>
 
           <fieldset>
-            <label>Home phone number</label>
+            <label for="form-phone-home">Home phone number</label>
             <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-1-3">
-              <input v-model="homePhoneNumber" type="text" class="pure-input-1"/>
+              <input id="form-phone-home" v-model="homePhoneNumber" type="text" class="pure-input-1"/>
             </div>
           </fieldset>
 
           <fieldset>
-            <label>Mobile phone number</label>
-            <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-1-3">
+            <label for="form-phone-mobile">Mobile phone number</label>
+            <div id="form-phone-mobile" class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-1-3">
               <input v-model="mobilePhoneNumber" type="text" class="pure-input-1"/>
             </div>
           </fieldset>
@@ -53,7 +53,7 @@
         </form>
       </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>

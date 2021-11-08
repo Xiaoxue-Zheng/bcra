@@ -1,5 +1,5 @@
 <template>
-  <div class="password reset content">
+  <main class="password reset content">
     <div class="alert alert-success" v-if="success">
       <p>Your password has been reset. Please <router-link to="/SignIn">Sign in</router-link></p>
     </div>
@@ -23,7 +23,7 @@
         </form>
       </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>

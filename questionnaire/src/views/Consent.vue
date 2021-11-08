@@ -1,5 +1,5 @@
 <template>
-  <div v-if="questionSection != null && answerSection != null">
+  <main class="content" v-if="questionSection != null && answerSection != null">
     <QuestionSection
       progressStage="1"
       :questionSection="questionSection"
@@ -15,7 +15,7 @@
         and agree to the terms.
       </p>
     </QuestionSection>
-  </div>
+  </main>
 </template>
 
 <script>

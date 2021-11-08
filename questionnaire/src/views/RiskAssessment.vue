@@ -1,24 +1,26 @@
 <template>
-  <div v-if="questionSection != null && answerSection != null">
-    <QuestionSection
-      :progressStage="progressStage"
-      :questionSection="questionSection"
-      :answerSection="answerSection"
-      :buttonText="buttonText"
-      :buttonAction="buttonAction"
-      :buttonError="saveError"
-      :saveQuestionnaireErrorMessage = "saveQuestionnaireErrorMessage"
-      :questionVariables="questionVariables"
-      :questionnaire="questionnaire"
-      :answerResponse="answerResponse"
-      :readOnly="readOnly"
-    >
-      <component
-      :is="infoComponent">
-      </component>
-    </QuestionSection>
+  <main class="content">
+    <div v-if="questionSection != null && answerSection != null">
+      <QuestionSection
+        :progressStage="progressStage"
+        :questionSection="questionSection"
+        :answerSection="answerSection"
+        :buttonText="buttonText"
+        :buttonAction="buttonAction"
+        :buttonError="saveError"
+        :saveQuestionnaireErrorMessage = "saveQuestionnaireErrorMessage"
+        :questionVariables="questionVariables"
+        :questionnaire="questionnaire"
+        :answerResponse="answerResponse"
+        :readOnly="readOnly"
+      >
+        <component
+        :is="infoComponent">
+        </component>
+      </QuestionSection>
 
-  </div>
+    </div>
+  </main>
 </template>
 
 <script>

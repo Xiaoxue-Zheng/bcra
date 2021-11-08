@@ -1,5 +1,5 @@
 <template>
-  <div class="tabs content">
+  <main class="tabs content">
     <h1>Welcome</h1>
     <hr>
     <p>We are conducting a research study looking for new ways to identify young women at increased risk of breast cancer. This includes a questionnaire, a saliva (spit) sample to assess your genes and a low dose breast X-ray (mammogram).</p>
@@ -72,7 +72,7 @@
       <p>If you want to know more then click the button below. You will be taken to the registration page and then to the consent section before the questionnaire itself. The whole process should only take 10-15 minutes.</p>
     <hr>
     <router-link class="pure-button pure-button-primary" to="/Register">Join the study</router-link>
-  </div>
+  </main>
 </template>
 
 <script>

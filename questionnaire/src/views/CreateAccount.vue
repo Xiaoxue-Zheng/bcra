@@ -1,5 +1,5 @@
 <template>
-  <div class="signin content">
+  <main class="signin content">
     <h1>Create your account</h1>
     <hr>
     <p>An email address and password will help to keep your personal details safe and secure.</p>
@@ -8,15 +8,15 @@
       <div class="pure-u-1">
         <form @submit.prevent="createAccount" class="pure-form pure-form-stacked">
           <fieldset>
-            <label>Your email address</label>
+            <label for="form-email">Your email address</label>
             <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-2-5">
-              <input required v-model="emailAddress" type="text" class="pure-input-1"/>
+              <input id="form-email" required v-model="emailAddress" type="text" class="pure-input-1"/>
             </div>
           </fieldset>
           <fieldset>
-            <label>Create a password</label>
+            <label for="form-password">Create a password</label>
             <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-2-5">
-              <password v-model="password" @score="setScore" @feedback="feedback" class="pure-input-1"/>
+              <password id="form-password" v-model="password" @score="setScore" @feedback="feedback" class="pure-input-1"/>
             </div>
             <div v-if="password.length > 0">
               <div class="suggestions" v-for="suggestion in passwordSuggestions" :key="suggestion">
@@ -26,9 +26,9 @@
             </div>
           </fieldset>
           <fieldset>
-            <label>Repeat your password</label>
+            <label for="form-repeat-password">Repeat your password</label>
             <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-2-5">
-              <input required v-model="repeatPassword" type="password" class="pure-input-1"/>
+              <input id="form-repeat-password" required v-model="repeatPassword" type="password" class="pure-input-1"/>
             </div>
           </fieldset>
           <div class="error-message" v-if="password != repeatPassword">Your passwords don't match!</div>
@@ -37,7 +37,7 @@
         </form>
       </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>

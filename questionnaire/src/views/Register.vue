@@ -1,5 +1,5 @@
 <template>
-  <div class="register content">
+  <main class="register content">
     <h1>Register</h1>
     <p class="introduction">
       If you have already registered, you can <router-link to="/SignIn">sign in here</router-link>. Otherwise please enter your unique study identifier in the form below.
@@ -8,15 +8,15 @@
       <div class="pure-u-1">
         <form @submit.prevent="register" class="pure-form pure-form-stacked">
           <fieldset>
-            <label>Unique study ID</label>
+            <label for="form-study-id">Unique study ID</label>
             <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-1-3">
-              <input required v-model="studyCode" type="text" class="pure-input-1"/>
+              <input id="form-study-id" required v-model="studyCode" type="text" class="pure-input-1"/>
             </div>
           </fieldset>
           <fieldset>
-            <label>Date of birth</label>
+            <label for="form-dob">Date of birth</label>
             <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-1-3">
-              <input required v-model="dateOfBirth" type="date" :min="getMinBirthDate()" :max="getMaxBirthDate()" />
+              <input id="form-dob" required v-model="dateOfBirth" type="date" :min="getMinBirthDate()" :max="getMaxBirthDate()" />
             </div>
           </fieldset>
           <div class="error-message" v-if="failure">This study code is either in use or otherwise not available. Please double check code or contact the study team.</div>
@@ -24,7 +24,7 @@
         </form>
       </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>

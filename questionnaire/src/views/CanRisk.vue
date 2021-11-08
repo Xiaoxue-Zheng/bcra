@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <main class="content">
     <h1>CanRisk Report</h1>
     <div v-if="!canRiskReportReady">
       <p>Your risk report will be available to view here once it has been uploaded.
@@ -17,7 +17,7 @@
         <PDFViewerCanRisk class="canRiskPdf" :base64Data="canRiskReportBase64Data" />
       </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>

@@ -10,7 +10,7 @@
     </div>
 
     <div v-if="postCodeSearched && !manuallyEnterAddress">
-      <label>Select your address</label>
+      <label for="postcodeSelect">Select your address</label>
       <select id="postcodeSelect" v-model="selectedAddress" v-on:change="emitAddress">
         <option value='' selected>Please select</option>
         <option :value="item" v-for="(item, index) in addressList" :key="index">{{item.line1 + ', ' + item.line2}}</option>
@@ -20,11 +20,20 @@
 
     <label v-if="selectedAddress || manuallyEnterAddress">Address</label>
     <div v-if="selectedAddress || manuallyEnterAddress" class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-1-3">
-      <input v-on:change="emitAddress" :disabled="!manuallyEnterAddress" required v-model="selectedAddress.line1" type="text" class="pure-input-1"/>
-      <input v-on:change="emitAddress" :disabled="!manuallyEnterAddress" v-model="selectedAddress.line2" type="text" class="pure-input-1"/>
-      <input v-on:change="emitAddress" :disabled="!manuallyEnterAddress" v-model="selectedAddress.line3" type="text" class="pure-input-1"/>
-      <input v-on:change="emitAddress" :disabled="!manuallyEnterAddress" v-model="selectedAddress.line4" type="text" class="pure-input-1"/>
-      <input v-on:change="emitAddress" :disabled="!manuallyEnterAddress" v-model="selectedAddress.line5" type="text" class="pure-input-1"/>
+      <label for="form-address-line-1" style="display: none;">Building and street 1/2</label>
+      <input id="form-address-line-1" v-on:change="emitAddress" :disabled="!manuallyEnterAddress" required v-model="selectedAddress.line1" type="text" class="pure-input-1"/>
+      
+      <label for="form-address-line-2" style="display: none;">Building and street 2/2</label>
+      <input id="form-address-line-2" v-on:change="emitAddress" :disabled="!manuallyEnterAddress" v-model="selectedAddress.line2" type="text" class="pure-input-1"/>
+      
+      <label for="form-address-line-3" style="display: none;">Town or city</label>
+      <input id="form-address-line-3" v-on:change="emitAddress" :disabled="!manuallyEnterAddress" v-model="selectedAddress.line3" type="text" class="pure-input-1"/>
+      
+      <label for="form-address-line-4" style="display: none;">County</label>
+      <input id="form-address-line-4" v-on:change="emitAddress" :disabled="!manuallyEnterAddress" v-model="selectedAddress.line4" type="text" class="pure-input-1"/>
+      
+      <label for="form-address-line-5" style="display: none;">Post code</label>
+      <input id="form-address-line-5" v-on:change="emitAddress" :disabled="!manuallyEnterAddress" v-model="selectedAddress.line5" type="text" class="pure-input-1"/>
     </div>
   </div>
 </template>

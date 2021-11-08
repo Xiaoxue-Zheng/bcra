@@ -1,5 +1,5 @@
 <template>
-  <div class="home content">
+  <main class="home content">
     <h1>Welcome</h1>
     <div class="pure-g hero-img">
       <div class="pure-u-1-3">
@@ -42,7 +42,7 @@
       </ul>
       Please read the <a href="#">Participant Information Sheet</a> for more information.
     </div>
-  </div>
+  </main>
 </template>
 
 <script>

@@ -1,10 +1,10 @@
 <template>
-  <div class="content">
+  <main class="content">
     <h1>Submit Questionnaire<ProgressState :progressStage="getFinalProgressStage"></ProgressState></h1>
     <p>You are about to submit, and you can never go back.<p>
     <PrimaryButton :disabled="submitDisabled" :clickEvent="submit">Submit Questionnaire</PrimaryButton>
     <div v-if="submitError">{{ submitError }}</div>
-</div>
+</main>
 </template>
 
 <script>

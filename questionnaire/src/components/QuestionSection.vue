@@ -1,5 +1,5 @@
 <template>
-  <div class="content" :id="questionSection.identifier">
+  <main class="content" :id="questionSection.identifier">
     <h1>{{getTitle()}}<ProgressState :progressStage="progressStage"></ProgressState></h1>
     <slot></slot>
     <form class="pure-form">
@@ -16,7 +16,7 @@
       <div v-if="buttonError" style="color: red">{{ saveQuestionnaireErrorMessage }}</div>
       <div v-if="invalid">Please complete all of the questions above to continue.</div>
     </form>
-  </div>
+  </main>
 </template>
 
 <script>

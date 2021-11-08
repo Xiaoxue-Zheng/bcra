@@ -85,6 +85,11 @@ const router = new Router({
       path: '/canriskreport',
       name: 'canRiskReport',
       component: () => import('../views/CanRisk.vue')
+    },
+    {
+      path: '/accessibility',
+      name: 'accessibility',
+      component: () => import('../views/Accessibility.vue')
     }
   ],
   scrollBehavior (to, from, savedPosition) {

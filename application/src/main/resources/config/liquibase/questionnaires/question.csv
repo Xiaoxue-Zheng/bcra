@@ -29,7 +29,7 @@ id,identifier,type,jhi_order,minimum,maximum,question_group_id,variable_name,tex
 29,SELF_PREGNANCIES,DROPDOWN_NUMBER,4,0,5,9,,How many pregnancies have you had that have continued into the third trimester (more than 28 weeks)?,,,TRUE
 30,SELF_PREGNANCY_FIRST_AGE,NUMBER,5,10,40,9,,How old were you when you had your first pregnancy that continued into the third trimester (more than 28 weeks)?,,,TRUE
 31,SELF_HEIGHT,NUMBER_HEIGHT,1,100,220,9,,What is your height?,,,TRUE
-32,SELF_WEIGHT,NUMBER_WEIGHT,2,40,400,9,,What is your weight?,,,TRUE
+32,SELF_WEIGHT,NUMBER_WEIGHT,2,30,300,9,,What is your weight?,,,TRUE
 33,SELF_BREAST_BIOPSY,RADIO,9,,,9,,Have you ever had a breast biopsy?,What is a biopsy?,"<p>A biopsy is when a small amount of tissue is removed or a larger amount of tissue is removed by cutting pieces from the breast\, or a lump is taken from the breast for further examination. A biopsy is the removal of tissue from the breast\, not the removal of fluid.</p>",TRUE
 34,SELF_BREAST_BIOPSY_DIAGNOSIS_RISK,RADIO,10,,,9,,Were you told that the diagnosis made on the removed tissue increased your risk of developing breast cancer?,,,TRUE
 35,SELF_BREAST_BIOPSY_DIAGNOSIS_TYPES,CHECKBOX,11,,,9,,Which of the following diagnosis were made?,,,TRUE

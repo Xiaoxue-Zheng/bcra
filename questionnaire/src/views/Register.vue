@@ -16,7 +16,7 @@
           <fieldset>
             <label>Date of birth</label>
             <div class="pure-u-1 pure-u-sm-2-3 pure-u-md-1-2 pure-u-xl-1-3">
-              <input required v-model="dateOfBirth" type="date"/>
+              <input required v-model="dateOfBirth" type="date" :min="getMinBirthDate()" :max="getMaxBirthDate()" />
             </div>
           </fieldset>
           <div class="error-message" v-if="failure">This study code is either in use or otherwise not available. Please double check code or contact the study team.</div>
@@ -30,12 +30,16 @@
 <script>
 import { StudyService } from '@/api/study.service.js'
 import { SignUpHelperService } from '@/services/sign-up-helper.service.js'
+import { DateService } from '@/services/date.service.js'
 import { createHelpers } from 'vuex-map-fields'
 
 const { mapFields } = createHelpers({
   getterType: 'security/getActivationField',
   mutationType: 'security/setActivationField'
 })
+
+const MIN_AGE = 30
+const MAX_AGE = 40
 
 export default {
   data () {
@@ -70,6 +74,14 @@ export default {
       this.notFound = false
       this.alreadyRegistered = false
       this.failure = false
+    },
+
+    getMinBirthDate () {
+      return DateService.getDateNYearsAgo(MAX_AGE).format('YYYY-MM-DD')
+    },
+
+    getMaxBirthDate () {
+      return DateService.getDateNYearsAgo(MIN_AGE).format('YYYY-MM-DD')
     }
   }
 }

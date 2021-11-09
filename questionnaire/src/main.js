@@ -10,6 +10,9 @@ import constPlugin from './components/ConstPlugin'
 import ApiService from './api/api.service'
 import Vidle from 'v-idle'
 
+import VueMoment from 'vue-moment'
+import moment from 'moment-timezone'
+
 Vue.config.productionTip = false
 
 ApiService.init()
@@ -24,6 +27,8 @@ const app = new Vue({
 
 Vue.use(Vidle)
 Vue.use(constPlugin)
+Vue.use(VueMoment)
+Vue.use(moment)
 
 if (window.Cypress) {
   window.app = app

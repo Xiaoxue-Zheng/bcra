@@ -114,33 +114,42 @@ export default {
     async register () {
       this.clearMessages()
       if (this.postCode == null || this.addressLine1 == null) {
-        this.fail = true
-        this.errorMessage = 'please input your post code and address'
-      }
-      var participantDetailsDto = {
-        forename: this.forename,
-        surname: this.surname,
-        addressLine1: this.addressLine1,
-        addressLine2: this.addressLine2,
-        addressLine3: this.addressLine3,
-        addressLine4: this.addressLine4,
-        addressLine5: this.addressLine5,
-        postCode: this.postCode,
-        homePhoneNumber: this.homePhoneNumber,
-        mobilePhoneNumber: this.mobilePhoneNumber,
-        preferredContactWays: this.preferredContactWays
+        this.failure = true
+        this.errorMessage = 'Please input your post code and address'
       }
 
-      ParticipantDetailsService.updateParticipantDetails(participantDetailsDto).then((response) => {
-        if (response.status === 200) {
-          this.$router.push('/end')
-        } else {
-          this.failure = true
-        }
-      }).catch((error) => {
+      if (!this.isCallOrSmsSelectionValid()) {
         this.failure = true
-        this.errorMessage = ApiService.extractErrorMessage(error)
-      })
+        this.errorMessage = 'You have selected you would prefer to be contacted by phone. Please input at least one of these.'
+      }
+
+      if (!this.failure) {
+        var participantDetailsDto = {
+          forename: this.forename,
+          surname: this.surname,
+          addressLine1: this.addressLine1,
+          addressLine2: this.addressLine2,
+          addressLine3: this.addressLine3,
+          addressLine4: this.addressLine4,
+          addressLine5: this.addressLine5,
+          postCode: this.postCode,
+          homePhoneNumber: this.homePhoneNumber,
+          mobilePhoneNumber: this.mobilePhoneNumber,
+          preferredContactWays: this.preferredContactWays
+        }
+
+        ParticipantDetailsService.updateParticipantDetails(participantDetailsDto).then((response) => {
+          if (response.status === 200) {
+            this.$router.push('/end')
+          } else {
+            this.failure = true
+            console.log(response)
+          }
+        }).catch((error) => {
+          this.failure = true
+          this.errorMessage = ApiService.extractErrorMessage(error)
+        })
+      }
     },
 
     clearMessages () {
@@ -154,6 +163,15 @@ export default {
       this.addressLine3 = newAddressData.line3
       this.addressLine4 = newAddressData.line4
       this.postCode = newAddressData.postcode
+    },
+
+    isCallOrSmsSelectionValid () {
+      if (this.preferredContactWays.includes('SMS')) {
+        return this.mobilePhoneNumber
+      } else if (this.preferredContactWays.includes('Call')) {
+        return this.mobilePhoneNumber || this.homePhoneNumber
+      }
+      return true
     }
   }
 }

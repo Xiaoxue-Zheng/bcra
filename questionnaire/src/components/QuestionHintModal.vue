@@ -6,7 +6,7 @@
         <p class="modal-body" id="modalDescription" v-html="question.hintText"/>
         <footer class="modal-footer">
           <slot name="modal-footer">
-            <a href="#" aria-label="Close modal" onclick="close">
+            <a href="javascript:void(0);" aria-label="Close modal" onclick="close">
               Close
             </a>
           </slot>

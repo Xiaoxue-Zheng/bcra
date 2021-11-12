@@ -41,6 +41,7 @@ import static uk.ac.herc.bcra.testutils.MockMvcUtil.createFormattingConversionSe
 
 import uk.ac.herc.bcra.domain.StudyId;
 import uk.ac.herc.bcra.repository.StudyIdRepository;
+import uk.ac.herc.bcra.repository.UserRepository;
 
 @SpringBootTest(classes = BcraApp.class)
 public class StudyIdResourceIT {
@@ -70,6 +71,9 @@ public class StudyIdResourceIT {
     private StudyIdService studyIdService;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private StudyUtil studyUtil;
 
     private StudyId studyId;
@@ -85,7 +89,7 @@ public class StudyIdResourceIT {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         final StudyIdResource studyIdResource = new StudyIdResource(
-            studyIdService
+            studyIdService, userRepository
         );
         this.restStudyIdMockMvc = MockMvcBuilders
             .standaloneSetup(studyIdResource)

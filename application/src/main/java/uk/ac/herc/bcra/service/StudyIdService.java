@@ -1,6 +1,7 @@
 package uk.ac.herc.bcra.service;
 
 import uk.ac.herc.bcra.domain.StudyId;
+import uk.ac.herc.bcra.domain.User;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
 
 import java.util.Optional;
@@ -11,7 +12,7 @@ public interface StudyIdService {
     List<StudyId> getStudyIds();
 
     void createStudyIdFromCode(String studyCode);
-    void createStudyIdsFromCodes(List<String> studyCodes);
+    void createStudyIdsFromCodes(User requestBy, List<String> studyCodes);
 
     boolean isStudyCodeAvailable(String code);
 

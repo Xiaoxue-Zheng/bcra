@@ -2,7 +2,7 @@
   <div class="modal-example" v-if="question.hint">
     <div class="pure-g">
       <div class="pure-u-1">
-        <a class="info-link" href="#" @click="showModal">{{question.hint}}</a>
+        <a class="info-link" href="javascript:void(0);" @click="showModal">{{question.hint}}</a>
       </div>
     </div>
     <div class="pure-g">

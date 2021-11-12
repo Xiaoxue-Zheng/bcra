@@ -1,5 +1,6 @@
 package uk.ac.herc.bcra.service.impl;
 
+import uk.ac.herc.bcra.service.MailService;
 import uk.ac.herc.bcra.service.StudyIdService;
 import uk.ac.herc.bcra.service.mapper.AnswerResponseMapper;
 import uk.ac.herc.bcra.service.dto.AnswerResponseDTO;
@@ -7,6 +8,7 @@ import uk.ac.herc.bcra.domain.AnswerResponse;
 import uk.ac.herc.bcra.domain.CanRiskReport;
 import uk.ac.herc.bcra.domain.Participant;
 import uk.ac.herc.bcra.domain.StudyId;
+import uk.ac.herc.bcra.domain.User;
 import uk.ac.herc.bcra.domain.enumeration.QuestionnaireType;
 import uk.ac.herc.bcra.questionnaire.AnswerResponseGenerator;
 import uk.ac.herc.bcra.repository.CanRiskReportRepository;
@@ -14,11 +16,12 @@ import uk.ac.herc.bcra.repository.ParticipantRepository;
 import uk.ac.herc.bcra.repository.StudyIdRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.herc.bcra.web.rest.errors.DuplicateStudyIdException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,18 +36,21 @@ public class StudyIdServiceImpl implements StudyIdService {
     private final ParticipantRepository participantRepository;
     private final AnswerResponseGenerator answerResponseGenerator;
     private final CanRiskReportRepository canRiskReportRepository;
+    private final MailService mailService;
 
     public StudyIdServiceImpl(StudyIdRepository studyIdRepository,
         AnswerResponseMapper answerResponseMapper,
         ParticipantRepository participantRepository,
         AnswerResponseGenerator answerResponseGenerator,
-        CanRiskReportRepository canRiskReportRepository) {
+        CanRiskReportRepository canRiskReportRepository,
+        MailService mailService) {
 
         this.studyIdRepository = studyIdRepository;
         this.answerResponseMapper = answerResponseMapper;
         this.participantRepository = participantRepository;
         this.answerResponseGenerator = answerResponseGenerator;
         this.canRiskReportRepository = canRiskReportRepository;
+        this.mailService = mailService;
     }
 
     @Override
@@ -54,10 +60,22 @@ public class StudyIdServiceImpl implements StudyIdService {
     }
 
     @Override
-    public void createStudyIdsFromCodes(List<String> studyCodes) {
+    @Async
+    public void createStudyIdsFromCodes(User requestBy, List<String> studyCodes) {
         log.debug("Creating multiple study ids from study code");
+        List<String> failedStudyCodes = new ArrayList<String>();
         for (String studyCode : studyCodes) {
-            createStudyIdFromCode(studyCode);
+            try {
+                createStudyIdFromCode(studyCode);
+            } catch(Exception ex) {
+                failedStudyCodes.add(studyCode);
+            }
+        }
+
+        if (failedStudyCodes.size() == 0) {
+            mailService.sendStudyCodeCreationSuccessEmail(requestBy, studyCodes);
+        } else {
+            mailService.sendStudyCodeCreationFailureEmail(requestBy, studyCodes, failedStudyCodes);
         }
     }
 
@@ -66,6 +84,7 @@ public class StudyIdServiceImpl implements StudyIdService {
         log.debug("Creating study id with code: {}", studyCode);
         studyIdRepository.findOneByCode(studyCode)
             .ifPresent(studyId -> {throw new DuplicateStudyIdException("StudyID already exists "+studyCode);});
+
         AnswerResponse consentForm = answerResponseGenerator.generateAnswerResponseToQuestionnaire(
             QuestionnaireType.CONSENT_FORM
         );

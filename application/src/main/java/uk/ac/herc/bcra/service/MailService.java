@@ -4,6 +4,7 @@ import uk.ac.herc.bcra.config.ApplicationProperties;
 import uk.ac.herc.bcra.domain.User;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Locale;
 import javax.mail.internet.MimeMessage;
 
@@ -120,5 +121,30 @@ public class MailService {
             return applicationProperties.getQuestionnaire().getUrl();
         }
         return applicationProperties.getAdmin().getUrl();
+    }
+
+    @Async
+    public void sendStudyCodeCreationSuccessEmail(User user, List<String> createdStudyCodes) {
+        String content = 
+            "Dear " + user.getLogin() + ",\n\n" + 
+            "All " + createdStudyCodes.size() + " of the requested study codes were created successfully. \n\n" + 
+            "Kind regards,\nHigh Risk Young Woman Study Team";
+        sendEmail(user.getEmail(), "Study code creation SUCCESS", content, false, false);
+    }
+
+    @Async
+    public void sendStudyCodeCreationFailureEmail(User user, List<String> createdStudyCodes, List<String> failedStudyCodes) {
+        String content = 
+            "Dear " + user.getLogin() + ",\n\n" + 
+            (createdStudyCodes.size() - failedStudyCodes.size()) + " of the requested study codes were created successfully. \n\n" + 
+            failedStudyCodes.size() + " failed to be created due to either internal server issues, or because they already exist. \n\n" +
+            "These are as follows: \n";
+        
+        for (String studyCode : failedStudyCodes) {
+            content += " - " + studyCode + "\n";
+        }
+            
+        content += "\nPlease check over these to be sure they aren't already registered.\n\nKind regards,\nHigh Risk Young Woman Study Team";
+        sendEmail(user.getEmail(), "Study code creation FAILURE", content, false, false);
     }
 }

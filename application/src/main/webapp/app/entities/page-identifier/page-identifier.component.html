@@ -1,0 +1,43 @@
+<div>
+    <h2 id="page-heading">
+        <span>Page Identifiers</span>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="pageIdentifiers?.length === 0">
+        <span>No pageIdentifiers found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="pageIdentifiers?.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr>
+                    <th scope="col" ><span>ID</span></th>
+                    <th scope="col" ><span>Identifier</span></th>
+                    <th scope="col" ><span>Display Name</span></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let pageIdentifier of pageIdentifiers ;trackBy: trackId">
+                    <td><a [routerLink]="['/page-identifier', pageIdentifier.id, 'view']">{{ pageIdentifier.id }}</a></td>
+                    <td>{{ pageIdentifier.identifier }}</td>
+                    <td>{{ pageIdentifier.display_name }}</td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/page-identifier', pageIdentifier.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline">View</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

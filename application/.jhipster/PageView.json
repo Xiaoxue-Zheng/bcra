@@ -1,0 +1,39 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "pageIdentifier",
+            "otherEntityName": "pageIdentifier",
+            "relationshipType": "many-to-one",
+            "otherEntityRelationshipName": "pageView",
+            "relationshipValidateRules": [
+                "required"
+            ]
+        },{
+            "relationshipName": "user",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "otherEntityRelationshipName": "pageView",
+            "relationshipValidateRules": []
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "date",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20211207144421",
+    "dto": "yes",
+    "searchEngine": false,
+    "service": "serviceImpl",
+    "entityTableName": "pageView",
+    "databaseType": "sql",
+    "readOnly": false,
+    "jpaMetamodelFiltering": false,
+    "pagination": "no"
+}

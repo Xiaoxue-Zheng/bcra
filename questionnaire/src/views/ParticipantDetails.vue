@@ -71,6 +71,7 @@ import { ParticipantDetailsService } from '@/api/participant-details.service.js'
 import { createHelpers } from 'vuex-map-fields'
 import PostcodeLookup from '@/components/PostcodeLookup.vue'
 import ApiService from '@/api/api.service'
+import { PageViewAuditService } from '@/api/page-view-audit.service'
 
 const { mapFields } = createHelpers({
   getterType: 'security/getActivationField',
@@ -183,7 +184,7 @@ export default {
     },
 
     qualtricsSurveyLinkClicked () {
-      // TODO: Update to send log to PageView service of CLIN-1447
+      PageViewAuditService.logPageView('QUALTRICS_SURVEY')
       var qualtricsLink = 'https://www.qualtrics.manchester.ac.uk/jfe/form/SV_6Ek35HhzTOCkq7Y'
       window.open(qualtricsLink)
     }

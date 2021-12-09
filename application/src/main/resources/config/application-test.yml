@@ -142,6 +142,6 @@ application:
   admin:
     url: https://hubble.mhealthherc.com/bcra
   questionnaire:
-    url: https://hubble.mhealthherc.com/hryws
+    url: https://hubble.mhealthherc.com/bcanray
   security:
     two-factor-auth: false

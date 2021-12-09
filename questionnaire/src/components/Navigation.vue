@@ -1,6 +1,6 @@
 <template>
     <header id="nav" class="home-menu pure-menu pure-menu-horizontal">
-        <router-link class="pure-menu-heading" to="/">HRYWS</router-link>
+        <router-link class="header-logo pure-menu-heading" to="/"></router-link>
         <ul class="pure-menu-list">
             <li class="pure-menu-item"><router-link class="pure-menu-link" to="/">Home</router-link></li>
             <li v-if="!authenticated" class="pure-menu-item"><router-link class="pure-menu-link" to="/register">Register</router-link></li>
@@ -41,3 +41,12 @@ export default {
 }
 
 </script>
+<style scoped>
+  .header-logo {
+    background-image: url('../assets/bcan-ray-logo.svg');
+    background-size: cover;
+    background-position: center;
+    height: 1em;
+    width: 200px;
+  }
+</style>

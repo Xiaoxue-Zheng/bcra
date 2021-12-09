@@ -136,7 +136,7 @@ jhipster:
 
 application:
   email:
-    from: HRYWS@localhost
+    from: BCANRAY@localhost
   admin:
     url: http://localhost:8080
   questionnaire:

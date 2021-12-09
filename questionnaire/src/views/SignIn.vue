@@ -85,15 +85,20 @@ export default {
         if (!completeRiskAssessment) {
           this.$router.push('/questionnaire/familyhistorycontext')
         } else {
-          let completeParticipantDetails = await ParticipantDetailsService.hasCompletedParticipantDetails()
-          if (!completeParticipantDetails) {
-            this.$router.push('/participant-details')
+          let hasBeenReferred = await AnswerResponseService.hasBeenReferred()
+          if (hasBeenReferred) {
+            this.$router.push('/referral')
           } else {
-            let canRiskReportReady = await CanRiskReportService.isParticipantsCanRiskReportReady()
-            if (canRiskReportReady) {
-              this.$router.push('/canriskreport')
+            let completeParticipantDetails = await ParticipantDetailsService.hasCompletedParticipantDetails()
+            if (!completeParticipantDetails) {
+              this.$router.push('/participant-details')
             } else {
-              this.$router.push('/end')
+              let canRiskReportReady = await CanRiskReportService.isParticipantsCanRiskReportReady()
+              if (canRiskReportReady) {
+                this.$router.push('/canriskreport')
+              } else {
+                this.$router.push('/end')
+              }
             }
           }
         }

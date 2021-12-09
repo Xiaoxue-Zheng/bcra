@@ -31,5 +31,9 @@ export const AnswerResponseService = {
   async hasCompletedRiskAssessment () {
     let completRiskAssessment = await ApiService.get('/answer-responses/risk-assessment/complete')
     return completRiskAssessment.data
+  },
+  async hasBeenReferred () {
+    let hasBeenReferred = await ApiService.get('/answer-responses/risk-assessment/referral')
+    return hasBeenReferred.data
   }
 }

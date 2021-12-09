@@ -1,12 +1,22 @@
 <template>
   <main class="content">
-    <p >You will be referred because...</p>
-    <div v-for="condition in referralConditions" v-bind:key='condition.id'>
-      <strong>{{ formatConditionText(condition.reason) }}</strong>
+    <div v-if="!referralSubmitted">
+      <p >You will be referred because...</p>
+      <div v-for="condition in referralConditions" v-bind:key='condition.id'>
+        <strong>{{ formatConditionText(condition.reason) }}</strong>
+      </div>
+      <p>You are about to submit, and you can never go back.<p>
+      <PrimaryButton :disabled="submitDisabled" :clickEvent="submit">Submit Questionnaire</PrimaryButton>
+      <div v-if="submitError">{{ submitError }}</div>
     </div>
-    <p>You are about to submit, and you can never go back.<p>
-    <PrimaryButton :disabled="submitDisabled" :clickEvent="submit">Submit Questionnaire</PrimaryButton>
-    <div v-if="submitError">{{ submitError }}</div>
+    <div v-if="referralSubmitted">
+      <p>
+        The answers you have provided within the family history section of this questionnaire indicate you are ineligible
+        to participate in the BCAN-RAY Study. We will use the information you have provided to generate a letter to your
+        GP asking them to refer you into our Family History Risk and Prevention Clinic at The Nightingale Centre based in
+        Wythenshawe, Manchester.
+      </p>
+    </div>
   </main>
 </template>
 <script>
@@ -26,7 +36,8 @@ export default {
       answerResponse: null,
       referralConditions: [],
       submitError: null,
-      submitDisabled: false
+      submitDisabled: false,
+      referralSubmitted: false
     }
   },
   methods: {
@@ -40,7 +51,7 @@ export default {
       if (!hasCompletedRiskAssessment) {
         AnswerResponseService.referralRiskAssessment(this.answerResponse)
           .then(() => {
-            this.$router.push('/participant-details')
+            this.referralSubmitted = true
           })
           .catch(() => {
             this.submitDisabled = false
@@ -54,10 +65,13 @@ export default {
   },
 
   async created () {
-    this.questionnaire = await this.$store.dispatch('referral/getQuestionnaire')
-    this.answerResponse = await this.$store.dispatch('referral/getAnswerResponse')
-    AnswerHelperService.initialise(this.questionnaire, this.answerResponse)
-    this.referralConditions = ReferralConditionService.getHistoricalReferralConditions(this.questionnaire)
+    this.referralSubmitted = await AnswerResponseService.hasBeenReferred()
+    if (!this.referralSubmitted) {
+      this.questionnaire = await this.$store.dispatch('referral/getQuestionnaire')
+      this.answerResponse = await this.$store.dispatch('referral/getAnswerResponse')
+      AnswerHelperService.initialise(this.questionnaire, this.answerResponse)
+      this.referralConditions = ReferralConditionService.getHistoricalReferralConditions(this.questionnaire)
+    }
   }
 }
 </script>

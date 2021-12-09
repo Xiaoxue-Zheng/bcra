@@ -116,6 +116,11 @@ Cypress.Commands.add('completeRiskAssessmentAndReferred', () => {
     cy.get('.pure-button').contains('Submit Questionnaire').click()
 })
 
+Cypress.Commands.add('completeRiskAssessmentAndReferredWithoutSubmit', () => {
+    continueToRiskAssessment()
+    fillFamilyHistoryWithReferredCondition()
+})
+
 function continueToRiskAssessment() {
     cy.get('.pure-button').contains('Continue').click()
 }

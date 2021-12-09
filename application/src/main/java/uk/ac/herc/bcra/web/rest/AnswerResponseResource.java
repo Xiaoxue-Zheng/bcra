@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import uk.ac.herc.bcra.service.dto.AnswerSectionDTO;
 
 import javax.validation.Valid;
-import java.net.URISyntaxException;
 import java.security.Principal;
 
 /**
@@ -91,6 +90,13 @@ public class AnswerResponseResource {
         } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("FAILED");
         }
+    }
+
+    @GetMapping("/answer-responses/risk-assessment/referral")
+    @Secured(RoleManager.PARTICIPANT)
+    public boolean hasBeenReferred(Principal principal) {
+        log.debug("REST request to check whether participant {} has been referred", principal.getName());
+        return answerResponseService.isParticipantReferred(principal.getName());
     }
 
     @PutMapping("/answer-responses/risk-assessment/submit")

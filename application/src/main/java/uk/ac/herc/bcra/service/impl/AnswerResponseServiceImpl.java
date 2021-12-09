@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import uk.ac.herc.bcra.service.mapper.AnswerSectionMapper;
 import uk.ac.herc.bcra.web.rest.errors.InvalidAnswerException;
 
@@ -233,5 +234,16 @@ public class AnswerResponseServiceImpl implements AnswerResponseService {
         answerResponse.setState(responseState);
         answerResponse.setStatus("");
         answerResponseRepository.save(answerResponse);
+    }
+
+    @Override
+    public boolean isParticipantReferred(String login) {
+        Optional<Participant> participantOptional = participantRepository.findOneByUserLogin(login);
+        if (participantOptional.isPresent()) {
+            Participant participant = participantOptional.get();
+            return participant.getStudyId().getRiskAssessmentResponse().getState() == ResponseState.REFERRED;
+        }
+
+        return false;
     }
 }

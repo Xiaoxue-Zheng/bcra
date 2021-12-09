@@ -48,4 +48,6 @@ public interface AnswerResponseService {
     boolean referralAnswerResponse(String login, AnswerResponseDTO answerResponseDTO);
 
     boolean submitAnswerResponse(String login, AnswerResponseDTO answerResponseDTO);
+
+    boolean isParticipantReferred(String login);
 }

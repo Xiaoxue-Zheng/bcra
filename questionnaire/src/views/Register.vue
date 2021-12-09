@@ -45,7 +45,6 @@ import { StudyService } from '@/api/study.service.js'
 import { SignUpHelperService } from '@/services/sign-up-helper.service.js'
 import { DateService } from '@/services/date.service.js'
 import { createHelpers } from 'vuex-map-fields'
-import TickboxQuestion from '@/components/TickboxQuestion.vue'
 
 const { mapFields } = createHelpers({
   getterType: 'security/getActivationField',
@@ -65,7 +64,6 @@ export default {
     }
   },
   components: {
-    'TickboxQuestion': TickboxQuestion,
   },
   computed: {
     ...mapFields([

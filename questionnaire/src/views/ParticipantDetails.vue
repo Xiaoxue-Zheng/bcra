@@ -7,6 +7,16 @@
     <p class="introduction">
        Please provide your contact details Telephone/Postal Address/Email and indicate how you would prefer to be contacted.
     </p>
+    <div class="info-box">
+      <p>
+        We are asking women to complete online questionnaires looking at women's wellbeing and the impact of taking part in BCAN-RAY.
+        This involves completing 3 questionnaires: one before your appointment at the Nightingale Centre, one 6 weeks after receiving
+        your risk results and the final one 6 months after receiving your risk results.
+      </p>
+      <p>
+        To take part, please click this link: <a class="qualtricsLink" @click="qualtricsSurveyLinkClicked()">Qualtrics Survey</a>.
+      </p>
+    </div>
     <div class="pure-g">
       <div class="pure-u-1">
         <form @submit.prevent="register" class="pure-form pure-form-stacked">
@@ -73,7 +83,7 @@ export default {
     contactWays: {
       type: Array,
       default: function () {
-        return ['Email', 'SMS', 'Call', 'Mail']
+        return ['Email', 'Call', 'Mail']
       }
     }
   },
@@ -118,7 +128,7 @@ export default {
         this.errorMessage = 'Please input your post code and address'
       }
 
-      if (!this.isCallOrSmsSelectionValid()) {
+      if (!this.isCallSelectionValid()) {
         this.failure = true
         this.errorMessage = 'You have selected you would prefer to be contacted by phone. Please input at least one of these.'
       }
@@ -165,13 +175,17 @@ export default {
       this.postCode = newAddressData.postcode
     },
 
-    isCallOrSmsSelectionValid () {
-      if (this.preferredContactWays.includes('SMS')) {
-        return this.mobilePhoneNumber
-      } else if (this.preferredContactWays.includes('Call')) {
+    isCallSelectionValid () {
+      if (this.preferredContactWays.includes('Call')) {
         return this.mobilePhoneNumber || this.homePhoneNumber
       }
       return true
+    },
+
+    qualtricsSurveyLinkClicked () {
+      // TODO: Update to send log to PageView service of CLIN-1447
+      var qualtricsLink = 'https://www.qualtrics.manchester.ac.uk/jfe/form/SV_6Ek35HhzTOCkq7Y'
+      window.open(qualtricsLink)
     }
   }
 }
@@ -266,5 +280,9 @@ export default {
 .items input[type="checkbox"]:checked + label::before {
   background-color: #2277CC;
   transition: all 0.5s ease;
+}
+
+.qualtricsLink {
+  cursor: pointer;
 }
 </style>

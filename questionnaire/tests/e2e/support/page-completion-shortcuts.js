@@ -2,8 +2,9 @@ Cypress.Commands.add('completeRegisterPage', (studyId) => {
     cy.visit('/register')
     cy.contains('h1', 'Register')
 
-    cy.get('input').first().clear().type(studyId)
-    cy.get('input').eq(1).clear().type('1990-01-01')
+    cy.get('input').first().check()
+    cy.get('input').eq(1).clear().type(studyId)
+    cy.get('input').eq(2).clear().type('1990-01-01')
     cy.get('button').contains('Next').click()
 })
 
@@ -13,6 +14,7 @@ Cypress.Commands.add('completeConsentPage', (studyId) => {
         clickConsentCheckbox(i)
     }
     clickConsentOption("CONSENT_FUTURE_RESEARCH", 'yes')
+    clickConsentOption("CONSENT_OPTIONAL_INTERVIEW", 'yes')
     clickConsentButton()
 })
 
@@ -64,7 +66,7 @@ Cypress.Commands.add('completeParticipantDetailsPage', () => {
     enterHomePhoneNumber('07700123123')
     enterMobilePhoneNumber('07700123123')
     enterPostCodeAndSelectAddress('AA1 1AA', '1 HIGH STREET, CRAFTY VALLEY')
-    selectPreferredContactMethods(true, true, true, true)
+    selectPreferredContactMethods(true, true, true)
 
     cy.get('.pure-button').contains('Save details').click()
     cy.url().should('include', 'end')
@@ -92,9 +94,8 @@ function enterMobilePhoneNumber(phoneNumber) {
   return cy.get('input').eq(4).type(phoneNumber)
 }
 
-function selectPreferredContactMethods(email, sms, call, mail) {
+function selectPreferredContactMethods(email, call, mail) {
   if (email) cy.get('label').contains('Email').click()
-  if (sms) cy.get('label').contains('SMS').click()
   if (call) cy.get('label').contains('Call').click()
   if (mail) cy.get('label').contains('Mail').click()
 }

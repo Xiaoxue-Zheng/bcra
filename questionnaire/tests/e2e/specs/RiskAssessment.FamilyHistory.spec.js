@@ -34,7 +34,7 @@ describe('Risk Assessment - testing conditional display of questons', () => {
     path = 'questionnaire/breast'
     cy.get('[type="submit"]').click()
     cy.url().should('include', path)
-    cy.contains('div', 'Please select one option for question: How many grandmothers were affected by breast cancer?')
+    cy.contains('div', 'Please complete all of the questions above to continue.')
 
   })
 
@@ -71,7 +71,7 @@ describe('Risk Assessment - testing conditional display of questons', () => {
     path = 'questionnaire/grandmother'
     cy.get('[type="submit"]').click()
     cy.url().should('include', path)
-    cy.contains('div', 'Please select one option for question: Was your affected grandmother on your:')
+    cy.contains('div', 'Please complete all of the questions above to continue.')
 
   })
 

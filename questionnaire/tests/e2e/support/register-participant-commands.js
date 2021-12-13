@@ -10,17 +10,19 @@ function deleteNextParticipant(participantLogins, currentLoginIx) {
     const login = participantLogins[currentLoginIx]
     return getParticipantByLogin(login).then((participant) => {
         return unassignParticipantFromStudyId(login).then(() => {
-            return deleteParticipant(participant.id).then(() => {
-                return deleteIdentifiableData(participant.identifiable_data_id).then(() => {
-                        return deleteUserAuthority(participant.user_id).then(() => {
-                            return deleteUser(login).then(() => {
-                                if (currentLoginIx == participantLogins.length-1) {
-                                    return 'DONE'
-                                } else {
-                                    return deleteNextParticipant(participantLogins, currentLoginIx+1)
-                                }
-                            })
-                      })
+            return deletePageViewData(login).then(() => {
+                return deleteParticipant(participant.id).then(() => {
+                    return deleteIdentifiableData(participant.identifiable_data_id).then(() => {
+                            return deleteUserAuthority(participant.user_id).then(() => {
+                                return deleteUser(login).then(() => {
+                                    if (currentLoginIx == participantLogins.length-1) {
+                                        return 'DONE'
+                                    } else {
+                                        return deleteNextParticipant(participantLogins, currentLoginIx+1)
+                                    }
+                                })
+                        })
+                    })
                 })
             })
         })
@@ -58,6 +60,19 @@ function deleteIdentifiableData(identifiable_data_id) {
             WHERE id = $1
         `,
         values: [identifiable_data_id]
+    })
+}
+
+function deletePageViewData(userLogin) {
+    return cy.task('query', {
+        sql: `
+            DELETE FROM page_view pv
+            WHERE pv.user_id IN (
+                SELECT id FROM jhi_user
+                WHERE login = $1
+            )
+        `,
+        values: [userLogin]
     })
 }
 

@@ -4,16 +4,10 @@ describe('SignIn', () => {
     const TO_REGISTER_STUDY_CODE = "CYPRESS_TST_2"
     const TO_REGISTER_EMAIL_ADDRESS = "test2@test.com"
     const STRONG_PASSWORD = "hard2Crack!!"
-    before(function () {
 
-    })
-
-    after(function() {
-
-    })
-
-    beforeEach(function() {
-
+    after(function () {
+      cy.deleteParticipants([TO_REGISTER_STUDY_CODE])
+      cy.removeParticipant(TO_REGISTER_STUDY_CODE)
     })
 
     function authenticateSelf(email, password) {
@@ -52,6 +46,5 @@ describe('SignIn', () => {
       cy.get('input').first().type(TO_REGISTER_EMAIL_ADDRESS)
       cy.get('.pure-button').contains('Reset').click()
       cy.contains('p','Check your emails for details on how to reset your password.')
-      cy.removeParticipant(TO_REGISTER_STUDY_CODE)
     })
 })

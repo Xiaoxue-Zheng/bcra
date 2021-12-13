@@ -11,11 +11,12 @@ export default {
     }, function (error) {
       if (error.response.status === 401) {
         if (!Object.is(error.response.data.path, '/api/account') &&
-        // Home page shouldn't be navigated to signin page
+        // Home page and register page shouldn't be navigated to signin page
         !Object.is(window.location.pathname, '/') &&
         !Object.is(window.location.pathname, '/hryws/') &&
         !Object.is(window.location.pathname, '/hryws') &&
-        !Object.is(window.location.pathname, '/signin')) {
+        !Object.is(window.location.pathname, '/signin') &&
+        !Object.is(window.location.pathname, '/register')) {
           router.push('/signin')
         }
       }

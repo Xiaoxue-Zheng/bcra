@@ -27,8 +27,9 @@ describe('Register', () => {
       cy.visit('/register')
       cy.contains('h1', 'Register')
 
-      cy.get('input').first().should('have.value', '')
+      cy.get('input').first().should('not.be.checked')
       cy.get('input').eq(1).should('have.value', '')
+      cy.get('input').eq(2).should('have.value', '')
 
       cy.wait('@getAccount')
     })
@@ -61,6 +62,22 @@ describe('Register', () => {
       cy.get('div').contains('This study code is either in use or otherwise not available. Please double check code or contact the study team.').should('exist')
 
       cy.wait('@getAccount')
+    })
+
+    it('should display an error when a the page is incomplete', () => {
+      cy.server()
+      cy.route({
+        method: 'GET',
+        url: '/api/account'
+      })
+      .as('getAccount')
+
+      cy.get('input').first().uncheck()
+      cy.get('input').eq(1).type(UNREGISTERED_STUDY_CODE)
+      cy.get('input').eq(2).type('1990-01-01')
+      cy.get('button').contains('Next').click()
+
+      cy.url().should('include', 'register')
     })
 
     it('should navigate to the consent page when a valid study code is entered', () => {

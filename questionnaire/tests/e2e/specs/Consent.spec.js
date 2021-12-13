@@ -3,6 +3,7 @@ describe('Consent', () => {
     const UNREGISTERED_STUDY_CODE = "CYPRESS_TST_2"
     const INFO_SHEET_RADIO_GROUP = "CONSENT_INFO_SHEET"
     const FUTURE_RESEARCH_RADIO_GROUP = "CONSENT_FUTURE_RESEARCH"
+    const OPTIONAL_INTERVIEW_RADIO_GROUP = "CONSENT_OPTIONAL_INTERVIEW"
 
     function clickConsentButton() {
         cy.get('.pure-button').contains('I give my consent').first().click()
@@ -55,6 +56,7 @@ describe('Consent', () => {
         clickConsentOption(INFO_SHEET_RADIO_GROUP, 'no')
         clickAllConsentCheckboxes()
         clickConsentOption(FUTURE_RESEARCH_RADIO_GROUP, 'no')
+        clickConsentOption(OPTIONAL_INTERVIEW_RADIO_GROUP, 'no')
 
         clickConsentButton()
         cy.contains('Please complete all of the questions above to continue.')
@@ -64,6 +66,7 @@ describe('Consent', () => {
         clickConsentOption(INFO_SHEET_RADIO_GROUP, 'yes')
         clickAllConsentCheckboxes()
         clickConsentOption(FUTURE_RESEARCH_RADIO_GROUP, 'yes')
+        clickConsentOption(OPTIONAL_INTERVIEW_RADIO_GROUP, 'yes')
 
         clickConsentButton()
         cy.url().should('include', 'account')
